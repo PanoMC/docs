@@ -80,7 +80,7 @@ export default defineConfig({
           },
         ],
         editLink: {
-          pattern: "https://github.com/panomc/docs/edit/main/:path",
+          pattern: "https://github.com/PanoMC/docs/edit/main/:path",
           text: "Edit this page on GitHub",
         },
       },
@@ -136,7 +136,7 @@ export default defineConfig({
           },
         ],
         editLink: {
-          pattern: "https://github.com/ParsekDev/website/edit/main/:path",
+          pattern: "https://github.com/PanoMC/pano/edit/main/:path",
           text: "Bu sayfayı GitHub'da düzenle",
         },
       },
