@@ -1,0 +1,14 @@
+{
+  "name": "pano-docs",
+  "dependencies": {
+    "hocon-parser": "^1.0.1",
+    "shiki": "^3.13.0",
+    "vitepress": "^1.6.4"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "type": "module"
+}
