@@ -93,8 +93,65 @@ You’ll see the **Setup Wizard**, guiding you through five simple steps:
 To finish the setup, click **Finish**.  
 Pano will finalize the installation and automatically redirect you to your new **admin panel**.
 
-> 🪄 *You’ll now be able to create posts, connect your Minecraft server, install addons, change themes, and much more!*
+> 🪄 *You'll now be able to create posts, connect your Minecraft server, install addons, change themes, and much more!*
 
+
+## 🎮 Connecting Your Minecraft Server (Optional)
+
+To enable game integrations and connect your Minecraft server to Pano, you'll need to install the **Pano MC Plugin**.
+
+### What is Pano MC Plugin?
+
+The Pano MC Plugin acts as a bridge between your Minecraft server and Pano, enabling:
+- 🔒 Secure WebSocket communication (RSA + AES-256 encryption)
+- 🔄 Real-time player data synchronization
+- 🧩 Automatic plugin detection and integration (AuthMe, permissions, etc.)
+- 📡 Event system for in-game to web communication
+
+### Installation Steps
+
+1. **Download the Plugin**
+   - Visit [Pano MC Plugin Releases](https://github.com/PanoMC/pano-mc-plugin/releases)
+   - Download the appropriate JAR file for your server platform:
+     - `pano-spigot-<version>.jar` — For Spigot/Paper/Folia
+     - `pano-bungeecord-<version>.jar` — For Bungeecord
+     - `pano-velocity-<version>.jar` — For Velocity
+
+2. **Install the Plugin**
+   - Place the downloaded JAR file in your server's `plugins/` folder
+   - Restart your Minecraft server
+
+3. **Connect to Pano**
+   - After restart, open your **Pano Admin Panel**
+   - Navigate to **Servers** (in the sidebar)
+   - Click the **+** button to add a new server
+   - A connection modal will appear with step-by-step instructions
+   - Follow the steps shown in the modal to link your Minecraft server
+   - The plugin will automatically establish a secure encrypted connection
+
+4. **Verify Connection**
+   - Once connected, your server will appear in the **Servers** list
+   - You should see server status (online/offline), player count, and other information
+   - The connection is now active and ready for integrations
+
+> 💡 **Note:** You can connect multiple Minecraft servers to a single Pano instance.
+
+### Supported Platforms
+
+- ✅ Spigot
+- ✅ Paper
+- ✅ Folia
+- ✅ Purpur
+- ✅ Bungeecord
+- ✅ Velocity
+
+### What's Next?
+
+Once your server is connected, you can:
+- Enable [game integrations](../integrations/) (like AuthMeReloaded)
+- View real-time player statistics
+- Manage players from the web panel
+- Sync in-game events with your website
 
 ## 🛠️ After Installation
 

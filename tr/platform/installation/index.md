@@ -96,6 +96,64 @@ Pano kurulumu sonlandıracak ve otomatik olarak yeni **yönetici panelinize** y�
 
 > 🪄 *Artık yazılar oluşturabilir, Minecraft sunucunuzu bağlayabilir, eklentiler kurabilir, temalar değiştirebilir ve çok daha fazlasını yapabilirsiniz!*
 
+
+## 🎮 Minecraft Sunucunuzu Bağlama (Opsiyonel)
+
+Oyun entegrasyonlarını etkinleştirmek ve Minecraft sunucunuzu Pano'ya bağlamak için **Pano MC Eklentisi**ni kurmanız gerekir.
+
+### Pano MC Eklentisi Nedir?
+
+Pano MC Eklentisi, Minecraft sunucunuz ile Pano arasında bir köprü görevi görür ve şunları sağlar:
+- 🔒 Güvenli WebSocket iletişimi (RSA + AES-256 şifreleme)
+- 🔄 Gerçek zamanlı oyuncu verisi senkronizasyonu
+- 🧩 Otomatik eklenti tespit ve entegrasyon (AuthMe, izinler, vb.)
+- 📡 Oyun içinden web'e iletişim için etkinlik sistemi
+
+### Kurulum Adımları
+
+1. **Eklentiyi İndirin**
+   - [Pano MC Eklentisi Releases](https://github.com/PanoMC/pano-mc-plugin/releases) sayfasını ziyaret edin
+   - Sunucu platformunuza uygun JAR dosyasını indirin:
+     - `pano-spigot-<sürüm>.jar` — Spigot/Paper/Folia için
+     - `pano-bungeecord-<sürüm>.jar` — Bungeecord için
+     - `pano-velocity-<sürüm>.jar` — Velocity için
+
+2. **Eklentiyi Kurun**
+   - İndirdiğiniz JAR dosyasını sunucunuzun `plugins/` klasörüne yerleştirin
+   - Minecraft sunucunuzu yeniden başlatın
+
+3. **Pano'ya Bağlanın**
+   - Yeniden başlatma sonrası **Pano Yönetici Panelinizi** açın
+   - **Sunucular** (kenar çubuğunda) bölümüne gidin
+   - **+** butonuna tıklayarak yeni sunucu ekleyin
+   - Açılan bağlantı modalında adım adım talimatları göreceksiniz
+   - Modal'da gösterilen adımları takip ederek Minecraft sunucunuzu bağlayın
+   - Eklenti otomatik olarak güvenli şifreli bağlantı kuracaktır
+
+4. **Bağlantıyı Doğrulayın**
+   - Bağlandıktan sonra sunucunuz **Sunucular** listesinde görünecektir
+   - Sunucu durumunu (çevrimiçi/çevrimdışı), oyuncu sayısını ve diğer bilgileri görebilirsiniz
+   - Bağlantı artık aktif ve entegrasyonlar için hazır
+
+> 💡 **Not:** Tek bir Pano örneğine birden fazla Minecraft sunucusu bağlayabilirsiniz.
+
+### Desteklenen Platformlar
+
+- ✅ Spigot
+- ✅ Paper
+- ✅ Folia
+- ✅ Purpur
+- ✅ Bungeecord
+- ✅ Velocity
+
+### Sırada Ne Var?
+
+Sunucunuz bağlandıktan sonra şunları yapabilirsiniz:
+- [Oyun entegrasyonlarını](../integrations/) etkinleştirin (AuthMeReloaded gibi)
+- Gerçek zamanlı oyuncu istatistiklerini görüntüleyin
+- Oyuncuları web panelinden yönetin
+- Oyun içi etkinlikleri web sitenizle senkronize edin
+
 ## 🛠️ Kurulum Sonrası
 
 Kurulum tamamlandıktan sonra isterseniz yapılandırma dosyasını düzenleyebilirsiniz.  

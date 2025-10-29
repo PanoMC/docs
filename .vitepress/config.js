@@ -45,10 +45,27 @@ export default defineConfig({
               },
               { text: "Installation", link: "/platform/installation/" },
               { text: "Configuration", link: "/platform/configuration/" },
+              { 
+                text: "Integrations", 
+                link: "/platform/integrations/",
+                collapsed: true,
+                items: [
+                  { text: "AuthMeReloaded", link: "/platform/integrations/authme/" },
+                ]
+              },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
               { text: "Advanced", link: "/platform/advanced/" },
               { text: "FAQ", link: "/platform/FAQ/" },
+            ],
+          },
+          {
+            text: "Integration Development",
+            items: [
+              {
+                text: "Getting Started",
+                link: "/integration/getting-started/",
+              },
             ],
           },
           {
@@ -101,10 +118,27 @@ export default defineConfig({
               },
               { text: "Kurulum", link: "/tr/platform/installation/" },
               { text: "Ayarlar", link: "/tr/platform/configuration/" },
+              { 
+                text: "Entegrasyonlar", 
+                link: "/tr/platform/integrations/",
+                collapsed: true,
+                items: [
+                  { text: "AuthMeReloaded", link: "/tr/platform/integrations/authme/" },
+                ]
+              },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
               { text: "Gelişmiş", link: "/tr/platform/advanced/" },
               { text: "SSS", link: "/tr/platform/FAQ/" },
+            ],
+          },
+          {
+            text: "Entegrasyon Geliştirme",
+            items: [
+              {
+                text: "Başlangıç",
+                link: "/tr/integration/getting-started/",
+              },
             ],
           },
           {
