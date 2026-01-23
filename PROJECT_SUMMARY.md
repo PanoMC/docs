@@ -2,8 +2,16 @@
 
 ## 🎯 Proje Tanımı
 
-**Pano**, Minecraft için geliştirilmiş ileri seviye bir web platformudur. Geleneksel web scriptlerden farklı olarak,
+**Pano**, Minecraft için geliştirilmiş ileri seviye bir web platformudur. Geleneksel web scriptlerinden farklı olarak,
 tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip kapsamlı bir platformdur.
+
+### 🚀 Temel Amaçlar
+
+- **Oyun İçi Entegrasyon:** LuckPerms, AuthMe Reloaded ve Ban yönetim sistemleri ile sorunsuz ve derinlemesine entegrasyon sağlar.
+- **Kesintisiz Etkileşim:** Oyuncular oyundan çıksa dahi, web platformu üzerinden oyun içi dinamiklerle etkileşimde kalmalarını sürdürmeyi amaçlar.
+- **Kapsamlı Sunucu Yönetimi:** Sunucu başlatma, durdurma, restart işlemlerinin yanı sıra komut yönetimi, dosya yönetimi ve eklenti (plugin) yönetimi gibi yönetimsel araçlar sunar.
+- **Kullanım Kolaylığı:** Tıpkı Spigot/Paper gibi tek bir JAR dosyası üzerinden, ek bir web sunucusu kurulumuna ihtiyaç duymadan (alışılmış düzen) çalıştırılabilir.
+
 
 ---
 
@@ -25,9 +33,9 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 
 - **Framework:** SvelteKit
 
-- **UI Framework:** Bootstrap 5
+- **UI Framework:** Bootstrap 5, Animate.css
 
-- **Runtime & Package Manager:** Bun
+- **Runtime & Package Manager:** Bun (Host için), Rollup (Pluginler için)
 
 - **Style:** SASS desteği
 
@@ -264,9 +272,14 @@ kullanır.
 
 ### Addon Sistemi
 
-- **Backend:** Plugin olarak geçer
+- **Backend:** Plugin olarak geçer (Kotlin/Java)
 
-- **Frontend:** Addon olarak geçer
+- **Frontend:** Addon olarak geçer (Svelte)
+
+- **Genel Bilgiler:**
+  - **Lisans:** MIT
+  - **Repository:** `panomc/` altında
+  - **Manifest:** `gradle.properties` (id, name, description, dependencies, main class)
 
 - **Yetenekler:**
 
@@ -277,6 +290,16 @@ kullanır.
 &nbsp;- Mevcut özellikleri değiştirme
 
 &nbsp;- Özellikleri kaldırma
+
+### Eklenti Dosya Yapısı
+
+- `src/panel/`: Panel'e özel mantık ve sayfalar
+- `src/theme/`: Temaya özel mantık ve sayfalar
+- `src/panel/components/`: Panel arayüz bileşenleri
+- `src/theme/components/`: Tema arayüz bileşenleri
+- `src/panel/modals/`, `src/theme/modals/`: Modal bileşenleri
+- `src/panel/pages/`, `src/theme/pages/`: Sayfa bileşenleri
+- `main.js`: Panel ve Tema tanımlarının kaydedildiği ana dosya
 
 ### Tema Sistemi
 
@@ -318,6 +341,16 @@ Pano ekosistemi için geliştirilen resmi SDK:
   - `master`: Stabil (production-ready) versiyon.
   - `dev`: En güncel, geliştirme aşamasındaki versiyon.
 - **Amacı:** Host (Pano) ile pluginler arasında bir köprü görevi görür. Eklentilere API erişimi ve hazır component'ler (Component Provider) sağlar.
+- **Yetenekler:**
+  - **SvelteKit Wrappers:** `page`, `base`, `navigating`, `browser`, `goto`, `invalidate`, `invalidateAll` erişimi sağlar.
+  - **API Araçları:** `ApiUtil` (network request) ve `buildQueryParams`.
+  - **Localization:** `_` (underscore) fonksiyonu ile namespace bazlı çeviri desteği.
+  - **Component Provider:** `viewComponent` ile dinamik import ve Svelte hydration desteği.
+  - **UI Kayıt:** `pano.ui.page.register` ile yeni rotalar ekleme.
+  - **Navigasyon:** `pano.ui.nav.site.editNavLinks` ile dinamik menü düzenleme.
+  - **Ortam Bilgisi:** `pano.isPanel` ile admin paneli kontrolü.
+  - **UI Bildirimleri:** `pano.utils.toast` ve `pano.utils.tooltip`.
+  - **Yaşam Döngüsü:** `onLoad(pano)` ve `onUnload()` hook'ları.
 - **Entegrasyon Yapısı:**
   - **Development (UI):** `panel-ui`, `vanilla-theme` ve `setup-ui` gibi projelerde SDK, `src/pano-sdk` dizini altında bir **Git Submodule** olarak eklenmiştir ve projeyle birlikte derlenir. Bu projeler SDK'yı bir **Host** olarak kullanır.
   - **Production (Plugin):** Eklentiler SDK'yı bir **Client** gibi kullanır; npm paketi (`@panomc/sdk`) üzerinden projeye dahil edilir.
@@ -340,33 +373,30 @@ Pano ekosistemi için geliştirilen resmi SDK:
 
 ## 🛠️ Geliştirme Standartları
 
-### Frontend
+### Frontend Bilgileri
+- **Kod Sıralaması:** Svelte dosyalarında sıralama: `<head>`, `<styles>`, `<html>`, `<script module>`, `<script>`.
+- **Dinamik Yükleme:** Pano API'sine kayıtlı bileşenler, yükü azaltmak için dinamik (lazy) yüklenmelidir.
+- **Format:** Kodlar her zaman **Prettier** ile formatlanmalıdır.
+- **Tasarım:** Tasarımlar `panel-ui` ve `vanilla-theme` ile tutarlı olmalı. Tablo yapıları (arama, pagination) mevcut sayfaları taklit etmelidir.
+- **Eklenti Ayarları:** Genel ayarlar, karmaşık bir yapı gerekmiyorsa ayrı bir sayfa yerine **Addon Detail** sayfasındaki Hook'lar kullanılarak entegre edilmelidir.
 
-- ✅ JavaScript (tercih edilen)
+### Backend Bilgileri
+- **Plugin Lifecycle:** `PanoPlugin` sınıfı extend edilir. `onStart` ve `onUninstall` kullanılır.
+- **Context Yönetimi:** `applicationContext` (Host), `pluginBeanContext` (Plugin içi), `pluginGlobalBeanContext` (Eklentiler arası).
+- **Setup Entegrasyonu:** Veritabanı işlemleri için Pano kurulumunun bitmesi (`SetupEventListener`) beklenmelidir.
+- **Database:** `@DBEntity`, `@Migration`, `@Dao` anotasyonları kullanılır. Enum kullanımı statik stringlere tercih edilmelidir.
+- **API Yapısı:** `PanelApi` (admin) ve `LoggedInApi` (kullanıcı) tipleri kullanılır.
+- **Activity Logs:** Tüm `PanelApi` endpointleri için activity log tanımlanması **zorunludur**.
+- **Permissions:** `PanelPermission` extend edilerek ve `@PermissionDefinition` anotasyonuyla tanımlanır.
+- **Config:** `PluginConfigManager` kullanılır. Ayarlarda statik string yerine **Enum** kullanımı zorunludur.
 
-- ❌ TypeScript (kullanılmıyor)
+---
 
-- ✅ SASS/SCSS desteği
+## 🌐 Çeviri ve Dil Desteği
 
-- ✅ SvelteKit
-
-- ✅ Bootstrap 5
-
-### Backend
-
-- ✅ Kotlin
-
-- ✅ Vert.x
-
-- ✅ Spring DI
-
-- ✅ JVM 11+
-
-### Database
-
-- ✅ MySQL 5.5+
-
-- ✅ MariaDB
+- **Desteklenen Diller:** Türkçe (tr), İngilizce (en), Rusça (ru).
+- **Namespace:** Eklentiler kendi namespace'lerini (`plugins.plugin-id.*`) kullanır.
+- **Activity Logs Çevirisi:** Activity log mesajları da çeviri dosyalarında tanımlanmalıdır.
 
 ---
 
