@@ -76,7 +76,7 @@ Pano MC Eklentisi, AuthMeReloaded'ın sunucunuzda kurulu olup olmadığını oto
 
 ### 2. AuthMe Yapılandırmasını Değiştirir (Sıfır Dokunma)
 
-Pano, **sıfır dokunma yapılandırma yaklaşımı** kullanır — herhangi bir manuel müdahale gerektirmeden uyumluluğu sağlamak için belirli AuthMe yapılandırma değerlerini otomatik olarak düzenler. **Herhangi bir değişiklik yapmadan önce, Pano** `config.yml` dosyanızın bir **yedeğini oluşturur** ve bunu **Pano eklenti klasörüne** (`plugins/Pano/authme-backup/`) kaydeder.
+Pano, **sıfır dokunma yapılandırma yaklaşımı** kullanır — herhangi bir manuel müdahale gerektirmeden uyumluluğu sağlamak için belirli AuthMe yapılandırma değerlerini otomatik olarak düzenler. **Herhangi bir değişiklik yapmadan önce, Pano** `config.yml` dosyanızın bir **yedeğini oluşturur** ve bunu **Pano eklenti klasörüne** (`plugins/Pano/`) **`authme-backup.yml`** adıyla kaydeder.
 
 Aşağıdaki ayarlar değiştirilir:
 
@@ -84,6 +84,9 @@ Aşağıdaki ayarlar değiştirilir:
 |------|-----------|-------|
 | `settings.security.passwordHash` | `CUSTOM` | Pano'nun şifre doğrulama entegrasyonu için gerekli |
 | `settings.registration.type` | `PASSWORD` | Pano yalnızca şifre tabanlı kimlik doğrulamayı destekler (e-posta tabanlı özellikler Pano'nun web sitesi üzerinden gerçekleştirilmelidir) |
+| `settings.security.minPasswordLength` | `6` | Hesap güvenliği için minimum standart sağlar |
+| `settings.security.passwordMaxLength` | `128` | Platform genelinde şifre uyumluluğu için standartlaştırılmış maksimum uzunluk |
+| `settings.restrictions.allowedNicknameCharacters` | `[a-zA-Z0-9_]*` | Takma adları platform uyumluluğu için alfanümerik karakterler ve alt çizgi ile sınırlar |
 
 > ⚠️ **Bu ayarları manuel olarak değiştirmeyin.** Tam entegrasyon ve uyumluluk için gereklidirler. Değiştirmek entegrasyonu bozabilir veya diğer eklentilerle çakışmalara neden olabilir.
 
@@ -104,9 +107,11 @@ Pano aşağıdaki AuthMe komutlarını ve özelliklerini destekler:
 - ✅ `/register <şifre> <şifreTekrar>` — Yeni hesap kaydı
 - ✅ `/login <şifre>` — Hesaba giriş
 - ✅ `/logout` — Hesaptan çıkış
+- ✅ `/changepassword <eskiŞifre> <yeniŞifre>` — Hesap şifresini değiştirme
 - ✅ `/authme forceLogin <oyuncu>` — Oyuncuyu zorla giriş yaptır (yönetici)
 - ✅ `/authme register <oyuncu> <şifre>` — Oyuncu kaydı (yönetici)
 - ✅ `/authme reload` — AuthMe yapılandırmasını yeniden yükle
+- ✅ `/authme changepassword <oyuncu> <yeniŞifre>` — Bir oyuncunun şifresini değiştirme (yönetici)
 
 Pano bu komutları dinler ve eylemleri web sitesi veritabanınızla senkronize eder.
 
@@ -118,8 +123,6 @@ Entegrasyon sınırlamaları nedeniyle, aşağıdaki AuthMe komutları ve özell
 - ❌ `/authme unregister <oyuncu>` — Yukarıdakiyle aynı
 - ❌ `/email` — E-posta yönetimi Pano tarafından yapılır
 - ❌ `/totp` — İki faktörlü kimlik doğrulama desteklenmez
-- ❌ `/changepassword` — Şifre değiştirmek için Pano'nun web sitesini kullanın
-- ❌ Komut takma adları (örn. `/changepassword` için `/cp`) — Yalnızca standart komutlar desteklenir
 
 Bir oyuncu desteklenmeyen bir komutu kullanmaya çalışırsa, bunun yerine web sitesini kullanması bildirilir.
 

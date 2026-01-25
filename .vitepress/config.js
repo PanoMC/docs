@@ -45,18 +45,30 @@ export default defineConfig({
               },
               { text: "Installation", link: "/platform/installation/" },
               { text: "Configuration", link: "/platform/configuration/" },
-              { 
-                text: "Integrations", 
+              {
+                text: "Integrations",
                 link: "/platform/integrations/",
                 collapsed: true,
                 items: [
                   { text: "AuthMeReloaded", link: "/platform/integrations/authme/" },
+                  { text: "LuckPerms", link: "/platform/integrations/luckperms/" },
+                  { text: "Ban Management", link: "/platform/integrations/ban-management/" },
                 ]
               },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
               { text: "Advanced", link: "/platform/advanced/" },
               { text: "FAQ", link: "/platform/FAQ/" },
+            ],
+          },
+          {
+            text: "Official Plugins",
+            collapsed: true,
+            items: [
+              { text: "Announcement", link: "/plugins/announcement/" },
+              { text: "Slider", link: "/plugins/slider/" },
+              { text: "Pages", link: "/plugins/pages/" },
+              { text: "Comments", link: "/plugins/comments/" },
             ],
           },
           {
@@ -118,18 +130,30 @@ export default defineConfig({
               },
               { text: "Kurulum", link: "/tr/platform/installation/" },
               { text: "Ayarlar", link: "/tr/platform/configuration/" },
-              { 
-                text: "Entegrasyonlar", 
+              {
+                text: "Entegrasyonlar",
                 link: "/tr/platform/integrations/",
                 collapsed: true,
                 items: [
                   { text: "AuthMeReloaded", link: "/tr/platform/integrations/authme/" },
+                  { text: "LuckPerms", link: "/tr/platform/integrations/luckperms/" },
+                  { text: "Ban Management", link: "/tr/platform/integrations/ban-management/" },
                 ]
               },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
               { text: "Gelişmiş", link: "/tr/platform/advanced/" },
               { text: "SSS", link: "/tr/platform/FAQ/" },
+            ],
+          },
+          {
+            text: "Resmi Eklentiler",
+            collapsed: true,
+            items: [
+              { text: "Announcement", link: "/tr/plugins/announcement/" },
+              { text: "Slider", link: "/tr/plugins/slider/" },
+              { text: "Pages", link: "/tr/plugins/pages/" },
+              { text: "Comments", link: "/tr/plugins/comments/" },
             ],
           },
           {
@@ -172,6 +196,91 @@ export default defineConfig({
         editLink: {
           pattern: "https://github.com/PanoMC/pano/edit/main/:path",
           text: "Bu sayfayı GitHub'da düzenle",
+        },
+      },
+    },
+    ru: {
+      title: "Документация Pano",
+      label: "Русский",
+      lang: "ru",
+      link: "/ru/",
+      themeConfig: {
+        sidebar: [
+          {
+            text: "Платформа",
+            items: [
+              {
+                text: "Начало работы",
+                link: "/ru/platform/introduction/",
+              },
+              { text: "Установка", link: "/ru/platform/installation/" },
+              { text: "Конфигурация", link: "/ru/platform/configuration/" },
+              {
+                text: "Интеграции",
+                link: "/ru/platform/integrations/",
+                collapsed: true,
+                items: [
+                  { text: "AuthMeReloaded", link: "/ru/platform/integrations/authme/" },
+                  { text: "LuckPerms", link: "/ru/platform/integrations/luckperms/" },
+                  { text: "Ban Management", link: "/ru/platform/integrations/ban-management/" },
+                ]
+              },
+              { text: "Аддоны", link: "/ru/platform/addons/" },
+              { text: "Темы", link: "/ru/platform/themes/" },
+              { text: "Дополнительно", link: "/ru/platform/advanced/" },
+              { text: "FAQ", link: "/ru/platform/FAQ/" },
+            ],
+          },
+          {
+            text: "Официальные плагины",
+            collapsed: true,
+            items: [
+              { text: "Announcement", link: "/ru/plugins/announcement/" },
+              { text: "Slider", link: "/ru/plugins/slider/" },
+              { text: "Pages", link: "/ru/plugins/pages/" },
+              { text: "Comments", link: "/ru/plugins/comments/" },
+            ],
+          },
+          {
+            text: "Разработка интеграций",
+            items: [
+              {
+                text: "Начало работы",
+                link: "/ru/integration/getting-started/",
+              },
+            ],
+          },
+          {
+            text: "Разработка аддонов",
+            items: [
+              {
+                text: "Начало работы",
+                link: "/ru/addon/getting-started/",
+              },
+            ],
+          },
+          {
+            text: "Разработка тем",
+            items: [
+              {
+                text: "Начало работы",
+                link: "/ru/theme/getting-started/",
+              },
+            ],
+          },
+          {
+            text: "Помощь проекту",
+            items: [
+              {
+                text: "Начало работы",
+                link: "/ru/contribution/getting-started/",
+              },
+            ],
+          },
+        ],
+        editLink: {
+          pattern: "https://github.com/PanoMC/pano/edit/main/:path",
+          text: "Редактировать эту страницу на GitHub",
         },
       },
     },

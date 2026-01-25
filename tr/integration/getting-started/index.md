@@ -443,19 +443,242 @@ public class MyIntegrationPlugin extends JavaPlugin {
 
 :::
 
+### Adım 4: Hedef Eklenti Etkinliklerine Bağlanma
+
+::: code-group
+
+```kotlin [Kotlin]
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+
+class PlayerJoinListener(
+    private val plugin: MyIntegrationPlugin
+) : Listener {
+
+    @EventHandler
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        val player = event.player
+
+        // Pano'ya oyuncu katılım etkinliği gönder
+        val request = object : PlatformRequest() {
+            override fun getRequestType() = "player_join"
+            override fun getData() = mapOf(
+                "player" to player.name,
+                "uuid" to player.uniqueId.toString(),
+                "ip" to player.address?.address?.hostAddress
+            )
+        }
+
+        plugin.sendRequestToPano(request)
+    }
+}
+```
+
+```java [Java]
+import com.panomc.plugin.api.PlatformRequest;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PlayerJoinListener implements Listener {
+    
+    private final MyIntegrationPlugin plugin;
+    
+    public PlayerJoinListener(MyIntegrationPlugin plugin) {
+        this.plugin = plugin;
+    }
+    
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        
+        // Pano'ya oyuncu katılım etkinliği gönder
+        PlatformRequest request = new PlatformRequest() {
+            @Override
+            public String getRequestType() {
+                return "player_join";
+            }
+            
+            @Override
+            public Map<String, Object> getData() {
+                Map<String, Object> data = new HashMap<>();
+                data.put("player", player.getName());
+                data.put("uuid", player.getUniqueId().toString());
+                data.put("ip", player.getAddress().getAddress().getHostAddress());
+                return data;
+            }
+        };
+        
+        plugin.sendRequestToPano(request);
+    }
+}
+```
+
+:::
+
+### Adım 5: Yanıt Bekleyen İstekler Gönderme
+
+::: code-group
+
+```kotlin [Kotlin]
+class PlayerStatsRequest(
+    private val playerUUID: String,
+    private val callback: (Map<String, Any>) -> Unit
+) : PlatformRequest(), PlatformMessageResponse {
+
+    override fun getRequestType() = "player_stats"
+
+    override fun getData() = mapOf("uuid" to playerUUID)
+
+    override fun onResponse(response: Map<String, Any>) {
+        callback(response)
+    }
+
+    override fun onError(error: String) {
+        println("Oyuncu istatistikleri alınamadı: $error")
+    }
+}
+
+// Komut içinde kullanım
+fun onCommand(player: Player) {
+    val request = PlayerStatsRequest(player.uniqueId.toString()) { stats ->
+        player.sendMessage("İstatistiklerin:")
+        player.sendMessage("Öldürme: ${stats["kills"]}")
+        player.sendMessage("Ölme: ${stats["deaths"]}")
+    }
+    
+    platformManager.sendRequest(request)
+}
+```
+
+```java [Java]
+import com.panomc.plugin.api.PlatformRequest;
+import com.panomc.plugin.api.PlatformMessageResponse;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
+public class PlayerStatsRequest extends PlatformRequest implements PlatformMessageResponse {
+    
+    private final String playerUUID;
+    private final Consumer<Map<String, Object>> callback;
+    
+    public PlayerStatsRequest(String playerUUID, Consumer<Map<String, Object>> callback) {
+        this.playerUUID = playerUUID;
+        this.callback = callback;
+    }
+    
+    @Override
+    public String getRequestType() {
+        return "player_stats";
+    }
+    
+    @Override
+    public Map<String, Object> getData() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("uuid", playerUUID);
+        return data;
+    }
+    
+    @Override
+    public void onResponse(Map<String, Object> response) {
+        callback.accept(response);
+    }
+    
+    @Override
+    public void onError(String error) {
+        System.out.println("Oyuncu istatistikleri alınamadı: " + error);
+    }
+}
+
+// Komut içinde kullanım
+public void onCommand(Player player) {
+    PlayerStatsRequest request = new PlayerStatsRequest(
+        player.getUniqueId().toString(),
+        stats -> {
+            player.sendMessage("İstatistiklerin:");
+            player.sendMessage("Öldürme: " + stats.get("kills"));
+            player.sendMessage("Ölme: " + stats.get("deaths"));
+        }
+    );
+    
+    platformManager.sendRequest(request);
+}
+```
+
+:::
+
 ## 🔗 Pano'nun Backend'ini Genişletme (Önerilen)
 
 Tam bir entegrasyon için, özel isteklerinizi ve mesajlarınızı işleyen bir **Pano eklentisi** (backend tarafında) oluşturmanız **şiddetle önerilir**.
 
-Backend tarafında Pano eklentisi oluşturarak entegrasyon mantığınızı yönetebilirsiniz.
+### Pano Eklenti Yapısı
+
+Özel entegrasyon mantığınızı işlemek için Pano'nun backend'inde bir eklenti oluşturun:
+
+```kotlin
+// Pano eklentinizde (backend)
+class MyIntegrationPanoPlugin : PanoPlugin() {
+
+    override fun onEnable() {
+        // İstek handler'larını kaydet
+        registerRequestHandler("player_join") { data, connection ->
+            handlePlayerJoin(data, connection)
+        }
+
+        registerRequestHandler("player_stats") { data, connection ->
+            handlePlayerStatsRequest(data, connection)
+        }
+    }
+
+    private fun handlePlayerJoin(data: Map<String, Any>, connection: Connection) {
+        val playerName = data["player"] as String
+        val uuid = data["uuid"] as String
+        
+        // Veritabanına kaydet, event tetikle vb.
+        database.updatePlayerLastJoin(uuid)
+        
+        // İsteğe bağlı yanıt gönder
+        connection.sendResponse("success", mapOf("message" to "Giriş kaydedildi"))
+    }
+
+    private fun handlePlayerStatsRequest(data: Map<String, Any>, connection: Connection) {
+        val uuid = data["uuid"] as String
+        val stats = database.getPlayerStats(uuid)
+        
+        // İstatistikleri MC eklentisine geri gönder
+        connection.sendResponse("player_stats_response", stats)
+    }
+}
+```
+
+### Pano'dan Minecraft'a Mesaj Gönderme
+
+Pano eklentinizden bağlı Minecraft sunucularına mesaj gönderebilirsiniz:
+
+```kotlin
+// Oyuncuya ödül gönder
+platformManager.sendMessage("player_reward", mapOf(
+    "playerName" to "Steve",
+    "reward" to "coins",
+    "amount" to 100
+))
+```
+
+Bu mesaj, Minecraft sunucusundaki `PlayerRewardHandler` tarafından alınacaktır.
 
 ## 🔒 Güvenlik En İyi Uygulamaları
 
 1. **Tüm Verileri Doğrulayın** — Gelen verilere doğrulama olmadan asla güvenmeyin
-2. **Pano'nun Şifrelemesini Kullanın** — Tüm iletişim otomatik olarak şifrelenir
-3. **İzinleri Kontrol Edin** — Komutları çalıştırmadan önce kullanıcı izinlerini doğrulayın
+2. **Pano'nun Şifrelemesini Kullanın** — Tüm iletişim WebSocket üzerinden otomatik olarak şifrelenir
+3. **İzinleri Kontrol Edin** — İşlemleri yürütmeden önce kullanıcı izinlerini doğrulayın
 4. **Girişleri Temizleyin** — Enjeksiyon saldırılarını önleyin
 5. **Hız Sınırlama** — Sık işlemler için hız sınırları uygulayın
+6. **Hata Yönetimi** — Hataları her zaman düzgün bir şekilde ele alın
 
 ## 📦 Örnek Proje
 
@@ -468,6 +691,77 @@ Bu repository şunları gösterir:
 - Özel istek ve handler'lar oluşturma
 - Üçüncü taraf eklentilere bağlanma
 - En iyi uygulamalar ve desenler
+
+## 🧪 Entegrasyonunuzu Test Etme
+
+### Yerel Test
+
+1. Eklentinizi build edin:
+```bash
+./gradlew build
+```
+
+2. JAR dosyasını test sunucunuzun `plugins/` klasörüne kopyalayın
+3. Pano MC Eklentisinin kurulu ve bağlı olduğundan emin olun
+4. Hedef eklentinizi kurun
+5. Sunucuyu başlatın ve işlevselliği test edin
+
+### Hata Ayıklama (Debugging)
+
+Eklentinizde hata ayıklama günlüğünü etkinleştirin:
+
+```kotlin
+if (config.getBoolean("debug", false)) {
+    logger.info("[Debug] İstek gönderildi: ${request.getRequestType()}")
+}
+```
+
+## 📚 API Referansı
+
+### PlatformManager Metotları
+
+```kotlin
+interface PlatformManager {
+    // Pano'ya istek gönder
+    fun sendRequest(request: PlatformRequest)
+    
+    // Mesaj handler'ı kaydet
+    fun registerMessageHandler(handler: PlatformMessageHandler<*>)
+    
+    // Pano'ya bağlı mı kontrol et
+    fun isConnected(): Boolean
+    
+    // Bağlantı durumunu al
+    fun getConnectionStatus(): ConnectionStatus
+}
+```
+
+### PlatformRequest
+
+```kotlin
+abstract class PlatformRequest {
+    abstract fun getRequestType(): String
+    abstract fun getData(): Map<String, Any>
+}
+```
+
+### PlatformMessageResponse
+
+```kotlin
+interface PlatformMessageResponse {
+    fun onResponse(response: Map<String, Any>)
+    fun onError(error: String)
+}
+```
+
+### PlatformMessageHandler
+
+```kotlin
+abstract class PlatformMessageHandler<R : PlatformMessage> {
+    abstract fun handle(message: R)
+    abstract fun getMessageType(): String
+}
+```
 
 ## 💬 Yardıma mı İhtiyacınız Var?
 

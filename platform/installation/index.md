@@ -21,6 +21,7 @@ Before installing Pano, make sure your environment meets the following requireme
 
 4. **Port 80 (HTTP) Open**
    - Make sure TCP port **80** is accessible if you’re installing on a remote server.
+   - **Optional:** If you configure SSL after installation, port **443 (HTTPS)** must also be open.
 
 ## 📦 Downloading Pano
 
@@ -31,6 +32,9 @@ You can get the latest version of Pano from the official website:
 
 Pano is distributed as a **`.jar`** file — just like **Spigot** or **Paper**.  
 After downloading, save the file somewhere convenient (for example, in a dedicated folder like `/pano`).
+
+> [!NOTE]
+> When you first run Pano, it will extract necessary files, create directories (like `plugins/` and `themes/`), and download required dependencies or runtimes. It is highly recommended to run it in its own dedicated folder.
 
 ## 🚀 Running Pano
 
@@ -71,14 +75,16 @@ http://<your-server-ip>/
 You’ll see the **Setup Wizard**, guiding you through five simple steps:
 
 1. **Language Selection**  
-   Choose your preferred language.
+   Choose your preferred language.  
+   <small>*(By proceeding, you agree to Pano's Terms & Conditions and Privacy Policy.)*</small>
 
 2. **Website Configuration**  
    Set up your website details (site name, URL, etc.).
 
 3. **Database Setup**  
    Enter your **MySQL** or **MariaDB** credentials.  
-   Default table prefix: `pano_` (you can change it if needed).
+   Default table prefix: `pano_` (you can change it if needed).  
+   > 💡 **Portable DB Option:** On **Windows (x64 or ARM64)** systems, you'll see an option to use a **Portable Database**. Selecting this will cause Pano to automatically download, configure, and manage a portable MariaDB instance for you.
 
 4. **SMTP Settings (Optional)**  
    Configure email sending if you wish.  

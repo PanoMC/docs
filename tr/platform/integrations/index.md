@@ -24,6 +24,8 @@ Tüm oyun entegrasyonları, **Pano MC Eklentisi**nin kurulu ve Pano örneğinize
 ### Kimlik Doğrulama ve Oyuncu Yönetimi
 
 - [**AuthMeReloaded**](./authme/) — Sorunsuz kimlik doğrulama sistemi entegrasyonu
+- [**LuckPerms**](./luckperms/) — Minecraft'ın en gelişmiş izin sistemiyle tam entegrasyon
+- [**Ban Yönetimi**](./ban-management/) — Oyun ve web arasında gerçek zamanlı, senkronize ban yönetimi
 
 ## 🎯 Entegrasyonlar Nasıl Çalışır?
 
@@ -48,8 +50,8 @@ Bir entegrasyon aktif olduğunda, Pano şunları yapabilir:
 
 Sürekli olarak daha fazla entegrasyon eklemek için çalışıyoruz. Düşündüğümüz bazı eklentiler:
 
-- **İzin Eklentileri** (LuckPerms, vb.)
-- **Ban Yönetim Eklentileri**
+- **Ekonomi Eklentileri**
+- **Market Eklentileri**
 
 Entegre edilmesini istediğiniz bir eklenti mi var? [Discord](https://discord.gg/6vVy72wgXT) üzerinden bize bildirin veya [GitHub](https://github.com/PanoMC/pano-mc-plugin/issues)'da bir özellik isteği açın! 
 

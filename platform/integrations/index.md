@@ -24,6 +24,8 @@ All game integrations require the **Pano MC Plugin** to be installed and connect
 ### Authentication & Player Management
 
 - [**AuthMeReloaded**](./authme/) — Seamless authentication system integration
+- [**LuckPerms**](./luckperms/) — Full integration with Minecraft's most advanced permissions system
+- [**Ban Management**](./ban-management/) — Real-time, synchronized ban management between game and web
 
 ## 🎯 How Integrations Work
 
@@ -48,8 +50,8 @@ When an integration is active, Pano can:
 
 We're constantly working to add more integrations. Some plugins we're considering:
 
-- **Permission Plugins** (LuckPerms, etc.)
-- **Ban Management Plugins**
+- **Economy Plugins**
+- **Shop Plugins**
 
 Have a plugin you'd like to see integrated? Let us know on [Discord](https://discord.gg/6vVy72wgXT) or open a feature request on [GitHub](https://github.com/PanoMC/pano-mc-plugin/issues)! 
 

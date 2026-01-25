@@ -73,6 +73,20 @@ Bu isim, **her şeyi tek bir yerden yönetme fikrini** yansıtır — sunucunuzu
 
 Gerçek bir pano size nasıl tam kontrol sağlıyorsa, **Pano** da Minecraft sunucunuzun tüm yönlerini tek bir sade, genişletilebilir ve güçlü platformda bir araya getirir.
 
+## ⚖️ Lisans
+
+Pano core platformu **GNU General Public License v3.0 (GPLv3)** ile lisanslanmıştır.
+
+### GPLv3 Nedir?
+GPLv3, Pano'nun çekirdeğinin sonsuza kadar özgür ve açık kaynaklı kalmasını sağlayan bir "copyleft" lisansıdır. Size yazılımı çalıştırma, inceleme, paylaşma ve değiştirme özgürlüğü verir. Ancak, Pano çekirdeğinin değiştirilmiş sürümlerini dağıtırsanız, bu değişikliklerin de GPLv3 altında lisanslanması ve kaynak kodlarının erişilebilir olması gerekir.
+
+### Eklentiler (Addons), Temalar ve 3. Taraf Yazılımlar
+GPLv3 lisansının **Pano çekirdek platformu** için geçerli olduğunu unutmamak önemlidir.
+- Pano için geliştirilen **Eklentiler ve Temalar** bağımsız olarak lisanslanabilir. Bu kaynakların geliştiricileri, **kapalı kaynak**, **özel** veya **ticari** lisanslar dahil olmak üzere farklı lisanslar kullanmakta özgürdür.
+- Pano ile entegre edilen **3. Taraf Yazılımlar** (resmi veya topluluk yapımı eklentiler gibi) kendi lisans şartlarını takip edebilir.
+
+Bu yaklaşım, Pano'nun temelinin herkes için açık kalmasını sağlarken, geliştiricilerin çalışmalarını koruma ve ekosisteme katkılarından potansiyel olarak kazanç sağlama özgürlüğüne sahip olmalarını sağlar.
+
 ## 🧑‍💻 Ekibimiz
 
 Harika ekibimizle tanışın.

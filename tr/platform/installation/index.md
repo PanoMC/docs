@@ -21,6 +21,7 @@ Pano’yu kurmadan önce aşağıdaki gereksinimlerin karşılandığından emin
 
 4. **80 Numaralı Port (HTTP) Açık Olmalı**
     - Uzak bir sunucuya kurulum yapıyorsanız, TCP port **80**’in açık ve erişilebilir olduğundan emin olun.
+    - **Opsiyonel:** Kurulumdan sonra SSL yapılandırırsanız, **443 (HTTPS)** portunun da açık olması gerekir.
 
 ## 📦 Pano’yu İndirme
 
@@ -31,6 +32,9 @@ Pano’nun en son sürümünü resmi web sitesinden indirebilirsiniz:
 
 Pano, **`.jar`** dosyası olarak dağıtılır — tıpkı **Spigot** veya **Paper** gibi.  
 İndirdikten sonra dosyayı uygun bir klasöre (örneğin `/pano`) kaydedin.
+
+> [!NOTE]
+> Pano'yu ilk kez çalıştırdığınızda, gerekli dosyaları çıkaracak, dizinleri (örneğin `plugins/` ve `themes/`) oluşturacak ve gerekli bağımlılıkları veya çalışma zamanlarını indirecektir. Kendi özel klasöründe çalıştırılması şiddetle tavsiye edilir.
 
 ## 🚀 Pano’yu Çalıştırma
 
@@ -71,14 +75,16 @@ http://<sunucu-ip-adresiniz>/
 Ekranda sizi beş basit adımdan geçiren **Kurulum Sihirbazı** görünecektir:
 
 1. **Dil Seçimi**  
-   Tercih ettiğiniz dili seçin.
+   Tercih ettiğiniz dili seçin.  
+   <small>*(Devam ederek, Pano'nun Kullanım Koşullarını ve Gizlilik Politikasını kabul etmiş sayılırsınız.)*</small>
 
 2. **Web Sitesi Ayarları**  
    Site adı, URL gibi web sitesi bilgilerini girin.
 
 3. **Veritabanı Ayarları**  
    **MySQL** veya **MariaDB** bilgilerinizi girin.  
-   Varsayılan tablo ön eki: `pano_` (isterseniz değiştirebilirsiniz).
+   Varsayılan tablo ön eki: `pano_` (isterseniz değiştirebilirsiniz).  
+   > 💡 **Portable DB Seçeneği:** **Windows (x64 veya ARM64)** sistemlerde, **Portable Database** kullanma seçeneğini göreceksiniz. Bunu seçmek, Pano'nun sizin için otomatik olarak taşınabilir bir MariaDB örneği indirmesine, yapılandırmasına ve yönetmesine neden olacaktır.
 
 4. **SMTP Ayarları (Opsiyonel)**  
    E-posta gönderimi için SMTP ayarlarını yapabilirsiniz.  

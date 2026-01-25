@@ -58,11 +58,13 @@ For detailed instructions, see the [Installation Guide](../../installation/).
 
 1. Log in to your **Pano Admin Panel**
 2. Navigate to **Panel → Server Settings → Game Integration**
-3. Find the **Auth Integration** checkbox
-4. **Verify it's enabled** (it's enabled by default)
-5. If it's disabled, enable it and save your settings
+3. Find the **Auth Integration** section. Here you can configure:
+   - **Auth Integration (Enabled by default):** The main toggle for the integration.
+   - **Require Verified (Enabled by default):** If enabled, players must have a verified email address to log in to the server.
+   - **Kick After Register (Enabled by default):** If enabled, players are automatically kicked from the server immediately after successful in-game registration. This is primarily used to ensure players verify their email addresses before being allowed to log in and play.
+4. **Verify your preferred settings** and click save.
 
-> 💡 **Note:** The Auth Integration is **enabled by default**. When enabled and AuthMeReloaded is detected on your server, Pano will automatically hook into it. You only need to verify it's active.
+> 💡 **Note:** The Auth Integration and its sub-settings are **enabled by default**. When enabled and AuthMeReloaded is detected on your server, Pano will automatically hook into it and apply these rules.
 
 That's it! The Pano MC Plugin will automatically **detect AuthMeReloaded** and start managing authentication flows.
 
@@ -76,7 +78,7 @@ The Pano MC Plugin automatically detects if AuthMeReloaded is installed on your 
 
 ### 2. Modify AuthMe Configuration (Zero-Touch)
 
-Pano uses a **zero-touch configuration approach** — it automatically adjusts specific AuthMe configuration values to ensure compatibility without requiring any manual intervention. **Before making any changes, Pano creates a backup** of your `config.yml` file in the **Pano plugin folder** (`plugins/Pano/authme-backup/`).
+Pano uses a **zero-touch configuration approach** — it automatically adjusts specific AuthMe configuration values to ensure compatibility without requiring any manual intervention. **Before making any changes, Pano creates a backup** of your `config.yml` file as **`authme-backup.yml`** in the **Pano plugin folder** (`plugins/Pano/`).
 
 The following settings are modified:
 
@@ -84,6 +86,9 @@ The following settings are modified:
 |---------|-----------|--------|
 | `settings.security.passwordHash` | `CUSTOM` | Required for Pano's password validation integration |
 | `settings.registration.type` | `PASSWORD` | Pano only supports password-based authentication (email-based features should be handled through Pano's website) |
+| `settings.security.minPasswordLength` | `6` | Ensures a minimum standard for account security |
+| `settings.security.passwordMaxLength` | `128` | Standardized maximum length for password compatibility across the platform |
+| `settings.restrictions.allowedNicknameCharacters` | `[a-zA-Z0-9_]*` | Restricts nicknames to alphanumeric characters and underscores for platform compatibility |
 
 > ⚠️ **Do not manually change these settings.** They are essential for full integration and compatibility. Changing them may break the integration or cause conflicts with other plugins.
 
@@ -104,9 +109,11 @@ Pano supports the following AuthMe commands and features:
 - ✅ `/register <password> <confirmPassword>` — Register a new account
 - ✅ `/login <password>` — Login to your account
 - ✅ `/logout` — Logout from your account
+- ✅ `/changepassword <oldPassword> <newPassword>` — Change account password
 - ✅ `/authme forceLogin <player>` — Force login a player (admin)
 - ✅ `/authme register <player> <password>` — Register a player (admin)
 - ✅ `/authme reload` — Reload AuthMe configuration
+- ✅ `/authme changepassword <player> <newPassword>` — Change a player's password (admin)
 
 Pano listens to these commands and synchronizes the actions with your website database.
 
@@ -118,8 +125,7 @@ Due to integration limitations, the following AuthMe commands and features are *
 - ❌ `/authme unregister <player>` — Same as above
 - ❌ `/email` — Email management is handled by Pano
 - ❌ `/totp` — Two-factor authentication is not supported
-- ❌ `/changepassword` — Use Pano's website to change passwords
-- ❌ Command aliases (e.g., `/cp` for `/changepassword`) — Only standard commands are supported
+- ❌ `/totp` — Two-factor authentication is not supported
 
 If a player tries to use an unsupported command, they will be notified to use the website instead.
 
@@ -182,7 +188,7 @@ Pano uses AuthMe's **CUSTOM hash** type, which allows Pano to validate passwords
 Before modifying any AuthMe configuration, Pano **automatically creates a backup** of your `config.yml` file. You can find backups in:
 
 ```
-plugins/Pano/authme-backup/
+plugins/Pano/authme-backup.yml
 ```
 
 If something goes wrong, you can always restore your previous configuration.

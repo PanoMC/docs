@@ -79,6 +79,20 @@ community.
 Just like a real dashboard gives you full control, **Pano** brings all aspects of your Minecraft server together in one
 clean, extendable, and powerful platform.
 
+## ⚖️ License
+
+Pano is licensed under the **GNU General Public License v3.0 (GPLv3)**.
+
+### What is GPLv3?
+The GPLv3 is a "copyleft" license that ensures the core of Pano remains free and open-source forever. It grants you the freedom to run, study, share, and modify the software. However, if you distribute modified versions of the Pano core, those modifications must also be licensed under GPLv3 and their source code must be made available.
+
+### Addons, Themes & 3rd Party Software
+It is important to note that the GPLv3 license applies to the **Pano core platform**. 
+- **Addons and Themes** developed for Pano can be licensed independently. Developers of these resources are free to use different licenses, including **closed-source**, **private**, or **commercial** licenses.
+- **3rd Party Software** integrated with Pano (such as official or community-made plugins) may also follow their own licensing terms.
+
+This approach ensures that while the foundation of Pano remains open to everyone, developers have the freedom to protect their work and potentially monetize their contributions to the ecosystem.
+
 ## 🧑‍💻 Our Team
 Say hello to our awesome team.
 

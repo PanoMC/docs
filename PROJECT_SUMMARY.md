@@ -29,6 +29,10 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 
 - **Database:** MySQL 5.5+ / MariaDB
 
+- **Ağ (Portlar):**
+  - **Port 80 (HTTP):** Kurulum ve arayüz erişimi için açık olmalıdır.
+  - **Port 443 (HTTPS):** (Opsiyonel) Kurulum tamamlandıktan sonra SSL yapılandırılmışsa açık olmalıdır.
+
 ### Frontend
 
 - **Framework:** SvelteKit
@@ -441,6 +445,10 @@ Website üzerinde "resource" paylaşımı bu iki türü kapsar.
 - **Docs:** /docs endpoint üzerinden erişilebilir
 
 - **Releases:** GitHub Releases sayfaları
+
+### ⚖️ Lisans
+
+Pano core platformu **GNU General Public License v3.0 (GPLv3)** ile lisanslanmıştır. Ancak, Pano için geliştirilen **Addonlar ve Temalar** bağımsız olarak lisanslanabilir (Kapalı kaynak veya ticari olabilir).
 
 ---
 
