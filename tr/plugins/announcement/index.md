@@ -33,6 +33,10 @@ Modal'lar, kullanıcının dikkatini anında çeken açılır pencerelerdir.
 Duyuruları yönetmek için kullanıcıların aşağıdaki izne sahip olması gerekir:
 `pano.plugin.pano-plugin-announcement.manage.announcements`
 
+## 📖 Açık Kaynak
+Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak koduna GitHub üzerinden erişebilirsiniz:
+- [Kaynak Kodu](https://github.com/PanoMC/pano-plugin-announcement)
+
 ## 🔧 Kurulum
 1. Pano Yönetim Panelinden eklentiyi etkinleştirin.
 2. **Panel → Duyurular** yolunu izleyin.

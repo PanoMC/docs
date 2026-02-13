@@ -1,4 +1,4 @@
-# Addons & Plugins
+# Addons/Plugins
 
 > ⚠️ Managing addons in Pano requires **Addon Management permission**.  
 > If you are not logged in as an **Admin**, you must have **Addon Management access** to open the addons page and perform

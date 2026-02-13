@@ -28,6 +28,10 @@ When creating or editing a page, you have access to several configuration option
 To create and manage pages, users must have the following permission:
 `pano.plugin.pano-plugin-pages.manage.pages`
 
+## 📖 Open Source
+This plugin is open source and licensed under **GPLv3**. You can access the source code on GitHub:
+- [Source Code](https://github.com/PanoMC/pano-plugin-pages)
+
 ## 🔧 Setup
 1. Enable the plugin in the **Pano Admin Panel**.
 2. Navigate to **Panel → Pages**.

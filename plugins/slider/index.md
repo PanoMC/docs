@@ -36,6 +36,10 @@ Each slide in the carousel can be individually managed with the following fields
 To manage the slider, users must have the following permission:
 `pano.plugin.pano-plugin-slider.manage.slider`
 
+## 📖 Open Source
+This plugin is open source and licensed under **GPLv3**. You can access the source code on GitHub:
+- [Source Code](https://github.com/PanoMC/pano-plugin-slider)
+
 ## 🔧 Setup
 1. Enable the plugin in the **Pano Admin Panel**.
 2. Navigate to **Panel → View → Slider**.

@@ -33,6 +33,10 @@ Modals are pop-up windows that grab the user's attention immediately.
 To manage announcements, users must have the following permission:
 `pano.plugin.pano-plugin-announcement.manage.announcements`
 
+## 📖 Open Source
+This plugin is open source and licensed under **GPLv3**. You can access the source code on GitHub:
+- [Source Code](https://github.com/PanoMC/pano-plugin-announcement)
+
 ## 🔧 Setup
 1. Enable the plugin in the **Pano Admin Panel**.
 2. Navigate to **Panel → Announcements**.

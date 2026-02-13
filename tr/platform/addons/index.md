@@ -1,4 +1,4 @@
-# Eklentiler (Addons & Plugins)
+# Eklentiler (Addons/Plugins)
 
 > ⚠️ Pano’da eklenti yönetimi için **Eklenti Yönetimi (Addon Management) izni** gerekir.  
 > **Yönetici (Admin)** olarak oturum açmadıysanız, eklentiler sayfasını açmak ve eklentiler ile ilgili işlemleri gerçekleştirmek

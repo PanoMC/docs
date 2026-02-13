@@ -69,6 +69,8 @@ export default defineConfig({
               { text: "Slider", link: "/plugins/slider/" },
               { text: "Pages", link: "/plugins/pages/" },
               { text: "Comments", link: "/plugins/comments/" },
+              { text: "FAQ", link: "/plugins/faq/" },
+              { text: "Bans", link: "/plugins/bans/" },
             ],
           },
           {
@@ -101,10 +103,12 @@ export default defineConfig({
           {
             text: "Contribution",
             items: [
-              {
-                text: "Getting Started",
-                link: "/contribution/getting-started/",
-              },
+              { text: "Getting Started", link: "/contribution/getting-started/" },
+              { text: "Backend Development", link: "/contribution/backend" },
+              { text: "Frontend Development", link: "/contribution/frontend" },
+              { text: "MC Plugin Development", link: "/contribution/mc-plugin" },
+              { text: "Translations", link: "/contribution/translations" },
+              { text: "Community", link: "/contribution/community" },
             ],
           },
         ],
@@ -154,6 +158,8 @@ export default defineConfig({
               { text: "Slider", link: "/tr/plugins/slider/" },
               { text: "Pages", link: "/tr/plugins/pages/" },
               { text: "Comments", link: "/tr/plugins/comments/" },
+              { text: "FAQ", link: "/tr/plugins/faq/" },
+              { text: "Bans", link: "/tr/plugins/bans/" },
             ],
           },
           {
@@ -186,10 +192,12 @@ export default defineConfig({
           {
             text: "Katkıda Bulun",
             items: [
-              {
-                text: "Getting Started",
-                link: "/tr/contribution/getting-started/",
-              },
+              { text: "Başlangıç", link: "/contribution/getting-started/" },
+              { text: "Backend Geliştirme", link: "/contribution/backend" },
+              { text: "Frontend Geliştirme", link: "/contribution/frontend" },
+              { text: "MC Plugin Geliştirme", link: "/contribution/mc-plugin" },
+              { text: "Çeviriler", link: "/contribution/translations" },
+              { text: "Topluluk", link: "/contribution/community" },
             ],
           },
         ],
@@ -239,6 +247,8 @@ export default defineConfig({
               { text: "Slider", link: "/ru/plugins/slider/" },
               { text: "Pages", link: "/ru/plugins/pages/" },
               { text: "Comments", link: "/ru/plugins/comments/" },
+              { text: "FAQ", link: "/ru/plugins/faq/" },
+              { text: "Bans", link: "/ru/plugins/bans/" },
             ],
           },
           {
@@ -271,10 +281,12 @@ export default defineConfig({
           {
             text: "Помощь проекту",
             items: [
-              {
-                text: "Начало работы",
-                link: "/ru/contribution/getting-started/",
-              },
+              { text: "Начало работы", link: "/contribution/getting-started/" },
+              { text: "Разработка бэкенда", link: "/contribution/backend" },
+              { text: "Разработка фронтенда", link: "/contribution/frontend" },
+              { text: "Разработка плагина MC", link: "/contribution/mc-plugin" },
+              { text: "Переводы", link: "/contribution/translations" },
+              { text: "Сообщество", link: "/contribution/community" },
             ],
           },
         ],

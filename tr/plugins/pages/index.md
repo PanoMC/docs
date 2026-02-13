@@ -28,6 +28,10 @@ Bir sayfa oluştururken veya düzenlerken aşağıdaki yapılandırma seçenekle
 Sayfa oluşturmak ve yönetmek için kullanıcıların aşağıdaki izne sahip olması gerekir:
 `pano.plugin.pano-plugin-pages.manage.pages`
 
+## 📖 Açık Kaynak
+Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak koduna GitHub üzerinden erişebilirsiniz:
+- [Kaynak Kodu](https://github.com/PanoMC/pano-plugin-pages)
+
 ## 🔧 Kurulum
 1. Pano Yönetim Panelinden eklentiyi etkinleştirin.
 2. **Panel → Sayfalar** yolunu izleyin.

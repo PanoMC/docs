@@ -36,6 +36,10 @@ Karuzeldeki her bir slayt aşağıdaki alanlarla bireysel olarak yönetilebilir:
 Slider ayarlarını ve öğelerini yönetmek için kullanıcıların aşağıdaki izne sahip olması gerekir:
 `pano.plugin.pano-plugin-slider.manage.slider`
 
+## 📖 Açık Kaynak
+Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak koduna GitHub üzerinden erişebilirsiniz:
+- [Kaynak Kodu](https://github.com/PanoMC/pano-plugin-slider)
+
 ## 🔧 Kurulum
 1. Pano Yönetim Panelinden eklentiyi etkinleştirin.
 2. **Panel → Görünüm → Slider** yolunu izleyin.
