@@ -1,79 +1,39 @@
-# Getting Started with Addon Development
+# Getting Started
 
-Pano is a modular platform that allows developers to extend its functionality through **Addons** (Frontend) and **Plugins** (Backend). This guide will help you understand the core concepts and architecture of the Pano ecosystem.
+This area contains the basics you need to know to develop plugins for the Pano platform. A Pano plugin consists of a Kotlin backend and a Svelte frontend.
 
-## 🏗️ Core Architecture
+## Prerequisites
+Before you begin development, ensure you have the following:
 
-Pano is not a traditional web script. It's a self-contained platform running as a single JAR file that serves multiple SvelteKit interfaces through an internal reverse proxy.
+- **Technical Knowledge**:
+    -   Basic understanding of **Kotlin** or **Java** for backend development.
+    -   Basic understanding of **HTML, CSS, JavaScript** or **Svelte** for frontend development.
+- **Pano Installation**: You must have a Pano instance already installed and running locally.
+- **Development Mode**: Go to **Panel > Platform** settings and enable **Development Mode**. This is strictly required to see UI changes during development.
 
-- **Backend**: Kotlin (Vert.x, Spring DI)
-- **Frontend**: SvelteKit, Bootstrap 5, Vanilla JavaScript (No TypeScript)
-- **Runtime**: Bun (Fast JS runtime)
+## Setup
 
-### What is a Pano Plugin/Addon?
-A complete extension typically consists of two parts:
-1. **Plugin Backend**: A Kotlin/Java JAR that runs inside Pano Core.
-2. **Plugin UI (Addon)**: A Svelte-based frontend bundled with the backend or served dynamically.
+We have prepared a **[Pano Boilerplate Plugin](https://github.com/PanoMC/pano-boilerplate-plugin)** to help you get started quickly. This repository contains a pre-configured structure for both backend and frontend.
 
----
+### 1. Clone the Boilerplate
+To enable live reloading of UI changes, you **must** clone your project into the `plugins` directory of your installed Pano instance.
 
-## 🛠️ The Pano SDK (`@panomc/sdk`)
+1.  Navigate to your Pano installation directory (e.g., `Pano/plugins`).
+2.  Clone the repository:
+    ```bash
+    git clone https://github.com/PanoMC/pano-boilerplate-plugin.git your-plugin-name
+    ```
 
-The SDK is the heart of addon development. It acts as the bridge between the Host (Pano) and your Plugin.
+2.  **Rename & Configure**: Open the project and rename all occurrences of `pano-boilerplate-plugin` to your own plugin ID.
+    *   Update `gradle.properties` (manifest).
+    *   Rename package directories.
+    *   Update basic definitions in the main class.
 
-- **Component Provider**: Access pre-built components like `Button`, `Modal`, `Editor`, and `Card`.
-- **UI Registration**: Add new routes to the Panel or Theme using `pano.ui.page.register`.
-- **Navigation Control**: Modify sidebar links dynamically via `pano.ui.nav.site.editNavLinks`.
-- **API Utilities**: Use `ApiUtil` for secure network requests.
-- **Localization**: Use the localized `_` function for multi-language support (EN, TR, RU).
+##  What's Next?
 
----
+Pano plugin development involves separate workflows for frontend and backend. Check out the detailed guides below to learn more:
 
-## 🎨 Frontend Standards
-
-We follow strict design and coding standards to ensure all addons feel like a native part of Pano.
-
-### Language & Styling
-- **Vanilla JavaScript**: We believe in a better world with plain JS. TypeScript is not accepted in frontend projects.
-- **Svelte & Bootstrap 5**: The core UI framework. Use SASS for styling.
-- **Design Consistency**: Match the aesthetics of `panel-ui` and `vanilla-theme`. Use consistent table structures, search inputs, and pagination (default 10 items).
-
-### Performance
-- **SSR & CSR**: Pano uses hybrid Server-Side and Client-Side rendering. Ensure your components are SSR-compatible (avoid `window`/`document` outside `onMount`).
-- **Dynamic Loading**: Components registered to the Pano API **must** be loaded dynamically to keep initial page weight low.
-
----
-
-## ⚙️ Backend Standards (Kotlin)
-
-### Lifecycle Management
-Plugins must extend the `PanoPlugin` class and handle `onStart` and `onUninstall` hooks. For database operations, always wait for the Pano setup to finish using `SetupEventListener`.
-
-### Database & Permissions
-- **Type Safety**: Use **Enums** over static strings for configuration and database entities.
-- **DAO Pattern**: Use `@DBEntity`, `@Migration`, and `@Dao` annotations.
-- **Security**: Define permissions by extending `PanelPermission` with custom FontAwesome icons.
-- **Activity Logs**: All administrative API endpoints **must** define Activity Logs for transparency.
-
----
-
-## 📥 Development Workflow
-
-### Rapid UI Testing
-To test UI changes without rebuilding:
-1. Enable **Dev Mode** in `Panel -> Settings`.
-2. Place your addon files in the `plugins/` directory of your Pano installation.
-3. Use `bun dev` to see changes instantly with Hot Module Replacement (HMR).
-
-### Branching & Commits
-- **Alpha First**: Always target the `alpha` branch for Pano Core or the `dev` branch for UI projects.
-- **Conventional Commits**: We strictly follow [Conventional Commits](https://www.conventionalcommits.org/). This is mandatory as changelogs are automatically generated via **Semantic Release**.
-
----
-
-## 🔗 Resources & Licensing
-- **License**: Official plugins and the boilerplate are licensed under **MIT**.
-- **Community**: Join us on [Discord](https://panomc.com/discord) for support.
-- **Boilerplate**: Start your project with the [Pano Boilerplate Plugin](https://github.com/PanoMC/pano-boilerplate-plugin).
-
-Ready to build? Move on to the next section to set up your environment!
+*   [General Architecture](../architecture) - Learn about general structure, standards, and PF4J integration.
+*   [UI Development (Frontend)](../frontend) - Learn how to build interfaces using Svelte and the Pano SDK.
+*   [Backend Development](../backend) - Deep dive into Kotlin backend, database models, and APIs.
+*   [Translations (i18n)](../localization) - How to make your plugin multilingual.

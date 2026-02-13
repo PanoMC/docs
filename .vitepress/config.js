@@ -75,6 +75,7 @@ export default defineConfig({
           },
           {
             text: "Integration Development",
+            collapsed: true,
             items: [
               {
                 text: "Getting Started",
@@ -84,15 +85,41 @@ export default defineConfig({
           },
           {
             text: "Addon Development",
+            collapsed: true,
             items: [
               {
                 text: "Getting Started",
                 link: "/addon/getting-started/",
               },
+              {
+                text: "Architecture",
+                link: "/addon/architecture/",
+              },
+              {
+                text: "Manifest Configuration",
+                link: "/addon/manifest/",
+              },
+              {
+                text: "Frontend Development",
+                link: "/addon/frontend/",
+              },
+              {
+                text: "Backend Development",
+                link: "/addon/backend/",
+              },
+              {
+                text: "Localization",
+                link: "/addon/localization/",
+              },
+              {
+                text: "Building & Publishing",
+                link: "/addon/publishing/",
+              },
             ],
           },
           {
             text: "Theme Development",
+            collapsed: true,
             items: [
               {
                 text: "Getting Started",
@@ -102,6 +129,7 @@ export default defineConfig({
           },
           {
             text: "Contribution",
+            collapsed: true,
             items: [
               { text: "Getting Started", link: "/contribution/getting-started/" },
               { text: "Backend Development", link: "/contribution/backend/" },
@@ -164,6 +192,7 @@ export default defineConfig({
           },
           {
             text: "Entegrasyon Geliştirme",
+            collapsed: true,
             items: [
               {
                 text: "Başlangıç",
@@ -173,15 +202,41 @@ export default defineConfig({
           },
           {
             text: "Eklenti Geliştirme",
+            collapsed: true,
             items: [
               {
                 text: "Başlangıç",
                 link: "/tr/addon/getting-started/",
               },
+              {
+                text: "Mimari",
+                link: "/tr/addon/architecture/",
+              },
+              {
+                text: "Manifesto Yapılandırması",
+                link: "/tr/addon/manifest/",
+              },
+              {
+                text: "Arayüz Geliştirme",
+                link: "/tr/addon/frontend/",
+              },
+              {
+                text: "Backend Geliştirme",
+                link: "/tr/addon/backend/",
+              },
+              {
+                text: "Yerelleştirme",
+                link: "/tr/addon/localization/",
+              },
+              {
+                text: "Derleme ve Yayınlama",
+                link: "/tr/addon/publishing/",
+              },
             ],
           },
           {
             text: "Tema Geliştirme",
+            collapsed: true,
             items: [
               {
                 text: "Başlangıç",
@@ -191,6 +246,7 @@ export default defineConfig({
           },
           {
             text: "Katkıda Bulun",
+            collapsed: true,
             items: [
               { text: "Başlangıç", link: "/tr/contribution/getting-started/" },
               { text: "Backend Geliştirme", link: "/tr/contribution/backend/" },
@@ -253,6 +309,7 @@ export default defineConfig({
           },
           {
             text: "Разработка интеграций",
+            collapsed: true,
             items: [
               {
                 text: "Начало работы",
@@ -262,15 +319,41 @@ export default defineConfig({
           },
           {
             text: "Разработка аддонов",
+            collapsed: true,
             items: [
               {
                 text: "Начало работы",
                 link: "/ru/addon/getting-started/",
               },
+              {
+                text: "Архитектура",
+                link: "/ru/addon/architecture/",
+              },
+              {
+                text: "Конфигурация манифеста",
+                link: "/ru/addon/manifest/",
+              },
+              {
+                text: "Frontend",
+                link: "/ru/addon/frontend",
+              },
+              {
+                text: "Backend",
+                link: "/ru/addon/backend/",
+              },
+              {
+                text: "Локализация",
+                link: "/ru/addon/localization/",
+              },
+              {
+                text: "Сборка и публикация",
+                link: "/ru/addon/publishing/",
+              },
             ],
           },
           {
             text: "Разработка тем",
+            collapsed: true,
             items: [
               {
                 text: "Начало работы",
@@ -280,6 +363,7 @@ export default defineConfig({
           },
           {
             text: "Помощь проекту",
+            collapsed: true,
             items: [
               { text: "Начало работы", link: "/ru/contribution/getting-started/" },
               { text: "Разработка бэкенда", link: "/ru/contribution/backend/" },
