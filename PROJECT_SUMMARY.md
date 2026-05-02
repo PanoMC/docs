@@ -452,4 +452,16 @@ Pano core platformu **GNU General Public License v3.0 (GPLv3)** ile lisanslanmı
 
 ---
 
+### 🔒 Premium Plugin DRM
+
+Pano, plugin yazarlarının panomc.com store üzerinden ücretli plugin satabilmesi için merkezi bir DRM/lisanslama sistemi içerir:
+
+- Premium plugin'ler `onStart()`'ta `panomc.com`'dan kısa ömürlü (1h) RS256 JWT ister.
+- Token `(panoPlatformId, resourceId, version, jarSha256)`'a bağlı; başka bir Pano'da veya patch'lenmiş bir JAR'da geçersizdir.
+- Plugin token'ı kendi gömülü pubkey'i ile bağımsız doğrular (host'a güvenmez).
+- Lisansı geçersiz olan premium plugin başlamaz; Pano normal çalışmaya devam eder, hata panel UI'da (per-addon badge, addon detay license card, dashboard banner) gösterilir.
+- Detaylı tasarım: [`/documentation/DRM_LICENSE_SYSTEM.md`](DRM_LICENSE_SYSTEM.md).
+
+---
+
 _Son Güncelleme: 2025_
