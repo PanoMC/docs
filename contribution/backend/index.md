@@ -4,20 +4,20 @@ The Pano backend is the heart of the platform. It handles API requests, manages 
 
 Throughout our documentation and code, the project may be referred to as **Pano Platform**, **Pano Core Platform**, or **Pano Web Platform**.
 
-## 📱 Repository Applications
+## Repository Applications
 
 The main [**Pano Core**](https://github.com/PanoMC/Pano) repository actually contains two distinct applications:
 
 1. **Pano Core**: The main platform that handles all web and server management logic.
 2. **Updater**: A secondary application responsible for updating the core platform. It is compiled alongside Pano and embedded into the final `.jar` file. It only runs during the update process.
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Language**: Kotlin
 - **Framework**: Vert.x (Event-driven, non-blocking)
 - **Dependency Injection**: Spring DI
 - **Database**: MySQL 5.5+ / MariaDB
 
-## 🏗️ Architecture
+## Architecture
 The backend is designed to be modular and resilient. It supports a plugin system where features can be added or removed dynamically.
 
 ### UI & Interface Management
@@ -37,7 +37,7 @@ java -jar Pano.jar -nogui
 ### Dependency Injection (Spring DI)
 We use **Spring DI** for component management. All beans are defined in `SpringConfig` based on their usage requirements. We utilize **Lazy Loading** (`@Lazy`) where appropriate to keep startup times fast.
 
-### 🔌 Interface Initialization (`init-ui`)
+### Interface Initialization (`init-ui`)
 Unless the `init-ui` configuration is explicitly set to `false`, Pano will automatically attempt to launch the default interfaces included in the repository.
 - **Proxying**: Pano's reverse proxy will only direct traffic to these internally managed instances, even if other interface instances are running externally.
 - **Dev Environment Note**: If `init-ui` is enabled and Pano is not shut down cleanly (e.g., a crash or forced kill), the underlying **Bun** processes for the interfaces may remain running in the background.
@@ -55,7 +55,7 @@ Every backend plugin extends the `PanoPlugin` class (which implements the PF4J `
 - `pluginBeanContext`: Context specific to a single plugin.
 - `pluginGlobalBeanContext`: Shared context across all plugins.
 
-## 🚦 Development Flow
+## Development Flow
 
 ::: warning FIRST-RUN CONFIGURATION
 After running Pano for the first time, we strongly recommend closing the application **before** completing the setup. Open the generated `config.conf` file and change the port to `8088` to avoid conflicts and ensure a smooth development experience.

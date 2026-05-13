@@ -16,7 +16,7 @@ Pano ekosisteminde:
 
 İsim farklı olsa da, her ikisi de Pano’yu güçlü, esnek ve topluluk odaklı kılan **modüler sistemi** temsil eder.
 
-## 🧩 Kendi Eklentinizi Oluşturma
+## Kendi Eklentinizi Oluşturma
 
 Bir geliştiriciyseniz ve **kendi eklentinizi oluşturmak** istiyorsanız, Pano **PF4J** tabanlı güçlü ve geliştirici dostu
 bir API ve yaşam döngüsü sistemi sunar.
@@ -31,10 +31,10 @@ Her eklenti, meta verilerini ve bağımlılıklarını tanımlayan bir tanımlay
 paketlenir.  
 Eklentilerinizi **Pano Mağazası** üzerinden herkese açık olarak veya kendi sunucularınızda özel olarak dağıtabilirsiniz.
 
-📘 Eklenti oluşturmayı, derlemeyi ve yayınlamayı öğrenin:  
-👉 [Eklenti Geliştirme Rehberi →](../../addon/getting-started)
+ Eklenti oluşturmayı, derlemeyi ve yayınlamayı öğrenin:
+ [Eklenti Geliştirme Rehberi →](../../addon/getting-started)
 
-## 💡 Neden Eklentiler Önemlidir
+## Neden Eklentiler Önemlidir
 
 Pano, sadece bir uygulama değil, bir **platform** olarak tasarlanmıştır.  
 Bu, giriş entegrasyonlarından analiz panolarına kadar her özelliğin bir **eklenti** olarak geliştirilebileceği anlamına
@@ -50,7 +50,7 @@ Eklentiler önemlidir çünkü:
 Eklentiler sayesinde, Pano kurulumunuz sunucunuzun ihtiyaçlarına göre evrilir —  
 basit web uzantılarından derin oyun içi entegrasyonlara kadar.
 
-## ⚙️ Eklentiler Nasıl Çalışır (Kapsamlı Bakış)
+## Eklentiler Nasıl Çalışır (Kapsamlı Bakış)
 
 Pano’nun eklenti sistemi, **[PF4J](https://pf4j.org)** — bilinen bir Java eklenti çerçevesi — tarafından desteklenir.  
 Her eklenti, kendi meta verilerini, bağımlılıklarını ve yaşam döngüsü yöneticilerini içeren **bağımsız bir JAR
@@ -77,7 +77,7 @@ Bu dizini değiştirmek için:
 java -Dpf4j.pluginsDir=/path/to/custom/plugins -jar Pano-<version>.jar
 ```
 
-## 📦 Eklenti Yükleme
+## Eklenti Yükleme
 
 Eklentileri yüklemenin **iki yolu** vardır:
 
@@ -98,11 +98,11 @@ Eklentileri yüklemenin **iki yolu** vardır:
 Yeni eklentileri keşfedebilir, premium olanları satın alabilir veya mevcutları güncelleyebilirsiniz — hepsi doğrudan
 **Pano Mağazası** üzerinden.
 
-> 🧩 Marketplace özelliği için bağlı bir [Pano Hesabı](./advanced/connect-pano-account.md) gereklidir.
+> Marketplace özelliği için bağlı bir [Pano Hesabı](./advanced/connect-pano-account.md) gereklidir.
 >
 > ⚠️ Pano tarafından doğrulanmamış herhangi bir eklenti riskli olabilir, **kendi sorumluluğunuzda kullanın!**
 
-## 🧰 Eklentileri Etkinleştirme veya Devre Dışı Bırakma
+## Eklentileri Etkinleştirme veya Devre Dışı Bırakma
 
 Eklentileri etkinleştirmenin veya devre dışı bırakmanın iki yolu vardır:
 
@@ -124,7 +124,7 @@ Yeniden etkinleştirildiğinde:
 
 - Uyumluluk durumuna göre bağımlı eklentiler de yeniden etkinleşir.
 
-> 💡 Bir eklentiyi etkinleştirirken hata oluşursa, Pano konsolunda hata kayıtlarını kontrol edin ve gerekirse
+> Bir eklentiyi etkinleştirirken hata oluşursa, Pano konsolunda hata kayıtlarını kontrol edin ve gerekirse
 > geliştiriciye bildirin.
 
 ## ⚠️ Eklenti Sürüm Düşürme (Downgrade)
@@ -142,11 +142,11 @@ Eğer yapmak zorundaysanız, emin olun ki:
 1. Veritabanı ve yapılandırmanın **tam yedeğini** aldınız.
 2. Eski sürümün belgeleriyle uyumluluğu kontrol ettiniz.
 
-> 💀 Yalnızca tamamen emin olduğunuzda devam edin — aksi halde Pano’yu yeniden kurmanız gerekebilir.
+> Yalnızca tamamen emin olduğunuzda devam edin — aksi halde Pano’yu yeniden kurmanız gerekebilir.
 >
-> 💡 Geliştiricilerimizin bu karara uymasını rica ediyoruz, ancak her zaman çalışacağının garantisi yoktur!
+> Geliştiricilerimizin bu karara uymasını rica ediyoruz, ancak her zaman çalışacağının garantisi yoktur!
 
-## 🧩 Eklenti Silme
+## Eklenti Silme
 
 Bir eklentiyi sildiğinizde:
 
@@ -159,9 +159,9 @@ Silmek için:
 2. İlgili eklentiye tıklayın ve detay sayfasındaki **Sil** düğmesine tıklayın.
 3. İşlemi onaylayın — kaldırılacak bağımlı eklentiler listelenecektir.
 
-> 💡 Bir eklentinin silinmeden önce kendi verilerini temizlemesi beklenir. Ancak her zaman küçük artıklar kalabilir!
+> Bir eklentinin silinmeden önce kendi verilerini temizlemesi beklenir. Ancak her zaman küçük artıklar kalabilir!
 
-## 🔍 Eklenti Dizini Görünümü
+## Eklenti Dizini Görünümü
 
 Pano ve eklentiler için örnek dosya yapısı:
 
@@ -182,7 +182,7 @@ Pano ve eklentiler için örnek dosya yapısı:
 └── file-uploads/
 ```
 
-## 🧠 Özet
+## Özet
 
 | İşlem                         | Konum                                         | Önerilen Yöntem                      |
 |-------------------------------|-----------------------------------------------|--------------------------------------|
@@ -192,12 +192,12 @@ Pano ve eklentiler için örnek dosya yapısı:
 | **Eklenti Sil**               | `Panel → Eklentiler`                          | Onay ile silme işlemi                |
 | **Eklenti Dizinini Değiştir** | JVM parametresi                               | `-Dpf4j.pluginsDir=/path/to/plugins` |
 
-## 🧩 Gelişmiş Notlar
+## Gelişmiş Notlar
 
 - Eklentiler, platformun API’leri aracılığıyla hem **arka uç mantığını** hem de **ön uç bileşenlerini** ortaya
   çıkarabilir.
 - Bazı eklentiler **özel rotalar, API uç noktaları veya UI bileşenleri** kaydedebilir.
 - Çakışmalar veya eksik bağımlılıklar yaşarsanız, **logs** klasöründeki PF4J hata mesajlarını kontrol edin.
 
-> 🪄 Eklentiler, Pano’yu *canlı* hale getirir — kurulumunuzu topluluğunuzla birlikte büyüyen, özelleştirilebilir bir
+> Eklentiler, Pano’yu *canlı* hale getirir — kurulumunuzu topluluğunuzla birlikte büyüyen, özelleştirilebilir bir
 > platforma dönüştürür.

@@ -20,74 +20,39 @@ const members = [
     ]
   }
 ];
-
-const learningPaths = [
-  {
-    title: "Try the Tutorial",
-    text: "For individuals who would rather learn by doing."
-  },
-  {
-    title: "Check out the Examples",
-    text: "Discover common examples of core features and official plugins available for Parsek."
-  }
-]
 </script>
 
 # Pano Nedir?
 
-**Pano**, tam kontrol ve sadelik isteyen **Minecraft sunucu sahipleri** için geliştirilmiş, **açık kaynaklı** ve **topluluk odaklı** bir **platformdur**.  
-**Kotlin** ile geliştirilmiş ve **JVM** üzerinde çalışan Pano, **web sitenizi**, **sunucunuzu** ve **topluluğunuzu** tek bir yerde birleştirir.
+Pano, **web siteni**, **sunucunu** ve **topluluğunu** tek bir yerde birleştiren, Minecraft sunucu sahipleri için geliştirilmiş **açık kaynaklı bir platformdur** — Kotlin ile yazıldı, JVM üzerinde çalışır ve tek bir `.jar` dosyası olarak gelir.
 
-Bir **platform**, sıradan bir yazılımdan fazlasıdır — bir temeldir.  
-Pano, **eklentilerle** (addon) genişletilebilen, **temalarla** özelleştirilebilen ve oyun sunucunuza bağlanabilen bir altyapı sunar.  
-Bu sayede kendi **sunucu-topluluk ekosisteminizi** oluşturmanız için ihtiyacınız olan her şeyi sağlar.
+> Basit. Güçlü. Sana ait. — İşte Pano.
 
-Tipik bir **web site scriptlerinden** farklı olarak, Pano öylece bir PHP web sunucuya atıp çalıştırabileceğiniz bir şey değildir.  
-Pano, **Spigot** gibi tam teşekküllü bir **uygulamadır** ve bir `.jar` dosyası olarak dağıtılır.  
-**JVM** üzerinde çalışır ve kurulumu tamamlamak için **aktif bir internet bağlantısı** gerektirir.  
-Bu mimari, Pano’ya geleneksel web scriptlerine kıyasla çok daha yüksek **performans**, **esneklik** ve **güvenlik** kazandırır — onu bir **platform**, sadece birkaç dosyadan ibaret bir sistem olmaktan çıkarır.
+## Neden Pano?
 
-Pano, oyun ile web arasında **derin bir entegrasyon** sağlamak için geliştirilmiştir — otomatik giriş, oyuncu istatistikleri ve oyun içi yönetim gibi özellikleri doğrudan web siteniz üzerinden mümkün kılar.
+- **Kendi sunucunda çalışır, açık kaynaktır.** İstediğin yerde barındır, tam kontrol sende kalır.
+- **Genişletilebilir.** Eklentiler ve temalar ile Pano'yu sunucuna göre şekillendir.
+- **Oyuna hazır.** Otomatik giriş, oyuncu istatistikleri ve oyun içi yönetim — kutudan çıkar çıkmaz.
 
-> Basit. Güçlü. Size ait. — İşte Pano.
+## Hızlı Başla
 
-[Kuruluma Başla →](../installation)
+- **[Pano'yu Kur →](../installation/)** — Beş dakikada çalışan bir Pano.
+- **[Discord'a Katıl →](https://discord.gg/6vVy72wgXT)** — Soru sor, geri bildirim paylaş.
 
-## ⚡ Temel Özellikler
+::: details Pano ismi nereden geliyor?
+**Pano** kelimesi, Türkçe'de *gösterge paneli* veya *kontrol paneli* anlamına gelir — sunucunu, web siteni, oyuncularını ve topluluğunu yönettiğin tek bir merkez.
+:::
 
-Pano, Minecraft sunucu sahiplerine çevrimiçi varlıklarını kolayca oluşturup yönetebilmeleri için gereken her şeyi sunar:
+::: details Lisans (GPLv3)
+Pano çekirdek platformu **GNU General Public License v3.0 (GPLv3)** ile lisanslıdır — yazılımın temelini sonsuza kadar özgür ve açık tutan bir "copyleft" lisans.
 
-- 🚀 **Hızlı ve Hafif** — Minimum kaynak kullanımıyla maksimum performans.
-- 🧩 **Modüler ve Genişletilebilir** — Eklentiler ve temalar sayesinde Pano’yu kendi tarzınıza uyarlayın.
-- 🛠️ **Kendinize Ait Özgürlük** — İstediğiniz yerde barındırın, tam kontrol sizde olsun.
-- 🕹️ **Oyun Entegrasyonu** — Oyun sunucunuzu web sitenize bağlayın.
-- 💡 **Modern Teknoloji Altyapısı** — Hız, kararlılık ve ölçeklenebilirlik için Kotlin ve Svelte gücüyle.
+- Pano'yu çalıştırabilir, inceleyebilir, paylaşabilir ve değiştirebilirsin.
+- **Çekirdek** üzerine yaptığın değişiklikler de açık kaynak ve GPLv3 olmak zorunda.
+- **Eklentiler ve temalar** istedikleri lisansı kullanabilir — özel veya ticari dahil.
+- **Üçüncü taraf eklentiler** kendi lisans kurallarını takip eder.
+:::
 
-Topluluğa katılın ve Pano’nun Minecraft sunucu yönetimini nasıl yeniden tanımladığını keşfedin.  
-[→ Discord Sunucumuza Katılın](https://discord.gg/6vVy72wgXT)
-
-## 🪧 *Pano* İsmi Nereden Geliyor?
-
-**Pano** ismi, Türkçe’de **“Pano”** kelimesinden gelir; *kontrol paneli* veya *gösterge paneli* anlamındadır.  
-Bu isim, **her şeyi tek bir yerden yönetme fikrini** yansıtır — sunucunuzu, web sitenizi, oyuncularınızı ve topluluğunuzu.
-
-Gerçek bir pano size nasıl tam kontrol sağlıyorsa, **Pano** da Minecraft sunucunuzun tüm yönlerini tek bir sade, genişletilebilir ve güçlü platformda bir araya getirir.
-
-## ⚖️ Lisans
-
-Pano core platformu **GNU General Public License v3.0 (GPLv3)** ile lisanslanmıştır.
-
-### GPLv3 Nedir?
-GPLv3, Pano'nun çekirdeğinin sonsuza kadar özgür ve açık kaynaklı kalmasını sağlayan bir "copyleft" lisansıdır. Size yazılımı çalıştırma, inceleme, paylaşma ve değiştirme özgürlüğü verir. Ancak, Pano çekirdeğinin değiştirilmiş sürümlerini dağıtırsanız, bu değişikliklerin de GPLv3 altında lisanslanması ve kaynak kodlarının erişilebilir olması gerekir.
-
-### Eklentiler (Addons), Temalar ve 3. Taraf Yazılımlar
-GPLv3 lisansının **Pano çekirdek platformu** için geçerli olduğunu unutmamak önemlidir.
-- Pano için geliştirilen **Eklentiler ve Temalar** bağımsız olarak lisanslanabilir. Bu kaynakların geliştiricileri, **kapalı kaynak**, **özel** veya **ticari** lisanslar dahil olmak üzere farklı lisanslar kullanmakta özgürdür.
-- Pano ile entegre edilen **3. Taraf Yazılımlar** (resmi veya topluluk yapımı eklentiler gibi) kendi lisans şartlarını takip edebilir.
-
-Bu yaklaşım, Pano'nun temelinin herkes için açık kalmasını sağlarken, geliştiricilerin çalışmalarını koruma ve ekosisteme katkılarından potansiyel olarak kazanç sağlama özgürlüğüne sahip olmalarını sağlar.
-
-## 🧑‍💻 Ekibimiz
+## Ekibimiz
 
 Harika ekibimizle tanışın.
 

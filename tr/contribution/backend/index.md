@@ -4,20 +4,20 @@ Pano backend'i platformun kalbidir. API isteklerini yönetir, veritabanını ida
 
 Dokümantasyon genelinde proje; **Pano Platform**, **Pano Core Platform** veya **Pano Web Platform** olarak anılabilir.
 
-## 📱 Depo Uygulamaları
+## Depo Uygulamaları
 
 Ana [**Pano Core**](https://github.com/PanoMC/Pano) deposu aslında iki ayrı uygulama barındırır:
 
 1. **Pano Core**: Tüm web ve sunucu yönetimi mantığını yürüten ana platform.
 2. **Updater**: Ana platformu güncellemekten sorumlu ikincil uygulama. Pano ile birlikte derlenir ve nihai `.jar` dosyası içine eklenir. Sadece güncelleme işlemi sırasında çalışır.
 
-## 🛠️ Teknoloji Yığını
+## Teknoloji Yığını
 - **Dil**: Kotlin
 - **Framework**: Vert.x (Olay tabanlı, engellemesiz)
 - **Bağımlılık Enjeksiyonu**: Spring DI
 - **Veritabanı**: MySQL 5.5+ / MariaDB
 
-## 🏗️ Mimari
+## Mimari
 Backend, modüler ve esnek bir yapıda tasarlanmıştır. Özelliklerin dinamik olarak eklenebileceği veya kaldırılabileceği bir eklenti (plugin) sistemini destekler.
 
 ### UI ve Arayüz Yönetimi
@@ -37,7 +37,7 @@ java -jar Pano.jar -nogui
 ### Bağımlılık Enjeksiyonu (Spring DI)
 Bileşen yönetimi için **Spring DI** kullanıyoruz. Tüm bean'ler, kullanım gereksinimlerine göre `SpringConfig` içinde tanımlanır. Başlangıç süresini optimize etmek için uygun yerlerde **Lazy Loading** (`@Lazy`) kullanılır.
 
-### 🔌 Arayüz İlklendirme (`init-ui`)
+### Arayüz İlklendirme (`init-ui`)
 `init-ui` yapılandırması açıkça `false` yapılmadığı sürece, Pano depoda bulunan varsayılan arayüzleri otomatik olarak ayağa kaldırır.
 - **Proxy İşlemi**: Pano'nun ters proxy'si, dışarıda açık başka arayüzler olsa dahi sadece bu yönetilen örneklere trafik yönlendirir.
 - **Geliştirme Ortamı Notu**: Eğer `init-ui` aktifse ve Pano düzgün kapatılmazsa (çökme veya zorla kapatma gibi), arayüzlerin arkasındaki **Bun** servisleri arkaplanda açık kalmaya devam edebilir.
@@ -55,7 +55,7 @@ Her backend eklentisi `PanoPlugin` sınıfını genişletir (bu sınıf PF4J `Pl
 - `pluginBeanContext`: Tek bir eklentiye özgü bağlam.
 - `pluginGlobalBeanContext`: Tüm eklentiler arasında paylaşılan bağlam.
 
-## 🚦 Geliştirme Akışı
+## Geliştirme Akışı
 
 ::: warning İLK ÇALIŞTIRMA YAPILANDIRMASI
 Pano'yu ilk kez çalıştırdıktan sonra, kurulumu tamamlamadan **önce** uygulamayı kapatmanızı şiddetle öneririz. Oluşturulan `config.conf` dosyasını açın ve çakışmaları önlemek ve sorunsuz bir geliştirme deneyimi sağlamak için portu `8088` olarak değiştirin.

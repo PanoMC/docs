@@ -4,72 +4,47 @@ layout: home
 
 hero:
   name: "Pano Docs"
+  text: "Build, manage, deploy."
   tagline: "Open-source advanced server management and web platform made for Minecraft."
   actions:
     - theme: brand
-      text: → Getting Started
+      text: Get Started
       link: /platform/introduction
     - theme: alt
-      text: Website ↗
+      text: Visit Website
       link: https://panomc.com
 
 features:
-  - icon: 🚀
-    title: Installation
+  - title: Installation
     details: Get started in just 5 minutes.
     link: /platform/installation/
-  - icon: ⚙️
-    title: Configuration
+    linkText: Install now
+  - title: Configuration
     details: Quickly adjust anything you want.
     link: /platform/configuration/
-  - icon: 🛠️
-    title: Addons
+    linkText: Configure
+  - title: Addons
     details: Enhance Pano’s power even further.
     link: /platform/addons/
-  - icon: 🎨
-    title: Themes
+    linkText: Browse addons
+  - title: Themes
     details: Make Pano match your style.
     link: /platform/themes/
-  - icon: 💡
-    title: Frequently Asked Questions (FAQ)
+    linkText: Explore themes
+  - title: Frequently Asked Questions
     details: Got a question in mind?
     link: /platform/FAQ/
-  - icon: 🧩
-    title: Addon Development
+    linkText: Read FAQ
+  - title: Addon Development
     details: Build your own features.
     link: /addon/getting-started/
-  - icon: ✨
-    title: Theme Development
+    linkText: Start building
+  - title: Theme Development
     details: Create your own design.
     link: /theme/getting-started/
-  - icon: 🪧
-    title: Contribute
+    linkText: Start designing
+  - title: Contribute
     details: Everything about improving Pano.
     link: /contribution/getting-started/
-
+    linkText: Get involved
 ---
-
-<style>
-    :root {
-      --vp-home-hero-name-color: transparent;
-      --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
-    
-      --vp-home-hero-image-background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%);
-      --vp-home-hero-image-filter: blur(44px);
-      .VPImage {
-        width:50px;
-      }
-    }
-    
-    @media (min-width: 640px) {
-      :root {
-        --vp-home-hero-image-filter: blur(56px);
-      }
-    }
-    
-    @media (min-width: 960px) {
-      :root {
-        --vp-home-hero-image-filter: blur(68px);
-      }
-    }
-</style>

@@ -15,7 +15,7 @@ In Pano’s ecosystem:
 
 Regardless of the name, they represent the same modular system that makes Pano powerful, flexible, and community-driven.
 
-## 🧩 Creating Your Own Addon
+## Creating Your Own Addon
 
 If you’re a developer and want to **build your own addon**, Pano provides a powerful developer-friendly API and lifecycle system based on **PF4J**.
 
@@ -27,11 +27,11 @@ Addons can:
 Each addon is packaged as a **JAR file** with a descriptor that defines its metadata and dependencies.  
 You can distribute your addons publicly via the **Pano Store** or privately on your own servers.
 
-📘 Learn how to create, build, and publish addons here:  
-👉 [Addon Development Guide →](../../addon/getting-started)
+ Learn how to create, build, and publish addons here:
+ [Addon Development Guide →](../../addon/getting-started)
 
 
-## 💡 Why Addons Matter
+## Why Addons Matter
 
 Pano is designed to be a **platform**, not just an application.  
 That means every feature — from login integrations to analytics dashboards — can be built as an **addon**.
@@ -46,7 +46,7 @@ Addons are important because they:
 With addons, your Pano installation evolves alongside your server’s needs — from simple website extensions to deep
 in-game integrations.
 
-## ⚙️ How Addons Work (Under-The-Hood)
+## How Addons Work (Under-The-Hood)
 
 Pano’s addon system is powered by **[PF4J](https://pf4j.org)** — a well-known Java plugin framework.  
 Each addon is a **self-contained JAR file** that includes its own metadata, dependencies, and lifecycle handlers.
@@ -72,7 +72,7 @@ You can override this directory with:
 java -Dpf4j.pluginsDir=/path/to/custom/plugins -jar Pano-<version>.jar
 ```
 
-## 📦 Installing Addons
+## Installing Addons
 
 There are **two ways** to install addons:
 
@@ -92,11 +92,11 @@ There are **two ways** to install addons:
 
 You can explore new addons, purchase premium ones, or update existing ones — all directly from the **Pano Store**.
 
-> 🧩 Marketplace requires a connected [Pano Account](./advanced/connect-pano-account.md).
+> Marketplace requires a connected [Pano Account](./advanced/connect-pano-account.md).
 >
 > ⚠️ Any not verified by Pano addon might be unsafe, use at your own risk!
 
-## 🧰 Enabling or Disabling Addons
+## Enabling or Disabling Addons
 
 There are two methods to enable or disable addons:
 
@@ -118,7 +118,7 @@ When re-enabled:
 
 - All compatible dependents will reactivate if possible.
 
-> 💡 If an error occurred during enabling an addon, it will provide you some error logs. Check out error logs in Pano
+> If an error occurred during enabling an addon, it will provide you some error logs. Check out error logs in Pano
 > console for more details and report it to necessary developer.
 
 ## ⚠️ Downgrading Addons
@@ -137,11 +137,11 @@ If you must downgrade, ensure you have:
 1. A **full backup** of your database and configuration.
 2. Checked compatibility with the older version’s documentation.
 
-> 💀 Proceed only if you are absolutely sure — otherwise, reinstalling Pano might be required.
+> Proceed only if you are absolutely sure — otherwise, reinstalling Pano might be required.
 >
-> 💡 We kindly ask our addon developers to respect this decision, but bear in mind it may not work always!
+> We kindly ask our addon developers to respect this decision, but bear in mind it may not work always!
 
-## 🧩 Deleting Addons
+## Deleting Addons
 
 When deleting an addon:
 
@@ -154,9 +154,9 @@ To delete:
 2. Click on the addon to go to addon detail page and click on **Delete** button.
 3. Confirm the action — dependent addons will be listed before removal.
 
-> 💡 Although, it's expected an addon to clean itself before deletion. Keep in mind, always there may be leakage! 
+> Although, it's expected an addon to clean itself before deletion. Keep in mind, always there may be leakage!
 
-## 🔍 Addon Directory Overview
+## Addon Directory Overview
 
 Example file structure for Pano and addons:
 
@@ -177,7 +177,7 @@ Example file structure for Pano and addons:
 └── file-uploads/
 ```
 
-## 🧠 Summary
+## Summary
 
 | Action                      | Location                                        | Recommended Method                   |
 |-----------------------------|-------------------------------------------------|--------------------------------------|
@@ -187,11 +187,11 @@ Example file structure for Pano and addons:
 | **Delete Addon**            | `Panel → Addons`                                | Delete with confirmation             |
 | **Change Plugin Directory** | JVM option                                      | `-Dpf4j.pluginsDir=/path/to/plugins` |
 
-## 🧩 Advanced Notes
+## Advanced Notes
 
 - Addons can expose both **backend logic** and **frontend components** through the platform’s APIs.
 - Some addons register **custom routes, API endpoints, or UI widgets**.
 - If you encounter conflicts or missing dependencies, check your **logs folder** for PF4J error messages.
 
-> 🪄 Addons are what make Pano *alive* — they turn your installation into a customizable, ever-expanding platform that
+> Addons are what make Pano *alive* — they turn your installation into a customizable, ever-expanding platform that
 > grows with your community.

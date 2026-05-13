@@ -29,7 +29,7 @@ To enable live reloading of UI changes, you **must** clone your project into the
     *   Rename package directories.
     *   Update basic definitions in the main class.
 
-##  What's Next?
+## What's Next?
 
 Pano plugin development involves separate workflows for frontend and backend. Check out the detailed guides below to learn more:
 

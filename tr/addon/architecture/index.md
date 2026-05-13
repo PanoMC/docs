@@ -1,6 +1,6 @@
 # Genel Mimari
 
-## 🏗️ Genel Mimari
+## Genel Mimari
 
 Bir Pano eklentisi iki ana bölümden oluşur:
 1.  **Eklenti Arayüzü (UI)**: Hem Panel (yönetici arayüzü) hem de Tema (genel arayüz) üzerinde çalışan Svelte tabanlı bir frontend bölümü.

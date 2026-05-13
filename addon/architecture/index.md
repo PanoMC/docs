@@ -1,6 +1,6 @@
 # General Architecture
 
-## 🏗️ General Architecture
+## General Architecture
 
 A Pano plugin consists of two main parts:
 1.  **Plugin UI**: A Svelte-based frontend that runs in both the Panel (admin interface) and the Theme (public interface).

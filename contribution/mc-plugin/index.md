@@ -2,12 +2,12 @@
 
 The `pano-mc-plugin` is the bridge between your Minecraft server and the Pano web platform.
 
-## 📡 Communication (WebSocket)
+## Communication (WebSocket)
 Communication is handled over WebSocket for real-time performance. To ensure security, we use a hybrid encryption method:
 - **RSA**: Used for the initial key exchange.
 - **AES-256**: Used for encrypting all subsequent messages.
 
-## 🎮 Supported Platforms
+## Supported Platforms
 We support a wide range of Minecraft server platforms:
 - Spigot / Paper / Folia
 - Bungeecord / Velocity
@@ -16,11 +16,11 @@ We support a wide range of Minecraft server platforms:
 When developing features or fixing bugs, you **must** ensure the code works correctly across all supported platforms. Use platform-specific modules for any logic that cannot be shared.
 :::
 
-## 🌍 Translations
+## Translations
 If you want to add, change, or remove translations for the Minecraft plugin (or the core platform), please modify the files in the Pano repository under:
 `Pano/src/main/resources/locales`
 
-## 🛠️ Development
+## Development
 The plugin repository uses a modular structure where common logic is shared in a `core` module, while platform-specific implementations reside in their respective modules.
 
 ### Branching Policy

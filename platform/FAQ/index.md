@@ -4,7 +4,7 @@ Everything you need to know about Pano. If you can't find the answer you're look
 
 ---
 
-### 🌐 General
+### General
 
 #### What is Pano?
 Pano is an advanced, open-source web platform designed for Minecraft server owners. It unifies your website, community management, and game integration into one powerful system.
@@ -17,7 +17,7 @@ No. Pano is optimized for performance. A basic VPS with 1GB of RAM and Java 11+ 
 
 ---
 
-### 🚀 Installation & Setup
+### Installation & Setup
 
 #### Which ports do I need to open?
 By default, Pano uses port **80** for HTTP. If you configure SSL/HTTPS, you will also need to open port **443**.
@@ -33,7 +33,7 @@ On the first run, Pano needs to download dependencies and extract necessary file
 
 ---
 
-### 🕹️ Game Integration
+### Game Integration
 
 #### What does the `pano: true` context mean in permissions?
 When you add a permission node via the Pano panel, it automatically includes the `pano: true` context. This means the permission is only active on the **Pano platform (web)** and is **not** reflected in-game. This keeps your server's internal permissions clean.
@@ -46,7 +46,7 @@ Yes, Pano supports both Bungeecord and Velocity proxies, as well as standalone S
 
 ---
 
-### 🧩 Addons & Themes
+### Addons & Themes
 
 #### Where can I find more addons and themes?
 Official and community resources will be available on the [Pano Market](https://panomc.com/market) (coming soon).
@@ -56,7 +56,7 @@ Absolutely! Check out our [Addon Development Guide](../../addon/getting-started/
 
 ---
 
-### 💬 Support
+### Support
 
 #### I found a bug. What should I do?
 Please report it on our [GitHub repository](https://github.com/PanoMC/pano/issues) with as much detail as possible, or let us know on Discord.

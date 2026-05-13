@@ -11,7 +11,7 @@ kalırken benzersiz görünebilir.
 Temalar, arka uç eklentilerinden bağımsız çalışır; bu sayede temaları **Pano’yu yeniden başlatmadan** ve arka uç
 eklentilerini etkilemeden değiştirebilirsiniz.
 
-## 🎨 Kendi Temanızı Oluşturma
+## Kendi Temanızı Oluşturma
 
 **Kendi temanızı geliştirmek** istiyorsanız, Pano bunu hem basit hem de güçlü kılar.  
 Temalar, Pano’nun kendi arayüzlerini de güçlendiren modern web çatısı **[SvelteKit](https://kit.svelte.dev/)** ile
@@ -31,10 +31,10 @@ Bir tema şunları yapabilir:
 > Temalar, arka uç verilerine **yalnızca Pano’nun API katmanı** üzerinden erişebilir; ancak yine de gerçek bir UI
 > uygulaması olarak çalışırlar.
 
-📘 Temanızı nasıl geliştirip paketleyeceğinizi burada öğrenin:  
-👉 [Tema Geliştirme Rehberi →](../../theme/getting-started)
+ Temanızı nasıl geliştirip paketleyeceğinizi burada öğrenin:
+ [Tema Geliştirme Rehberi →](../../theme/getting-started)
 
-## 💡 Neden Temalar Önemli
+## Neden Temalar Önemli
 
 Temalar, sunucunuzun web sitesinin **kullanıcı deneyimini** şekillendirir.  
 Ziyaretçilerin içeriğinizle nasıl etkileşime girdiğini ve topluluğunuzun markanızı nasıl gördüğünü tanımlarlar.
@@ -52,7 +52,7 @@ Temalar sayesinde:
 > Ayrıca, bazı temalar gelişmiş özellikler sağlamak için Pano’nun varsayılan API davranışını genişletebilir veya
 > geçersiz kılabilir.
 
-## ⚙️ Temalar Nasıl Çalışır (Arka Plan)
+## Temalar Nasıl Çalışır (Arka Plan)
 
 Pano, temaları `themes/` dizininden bağımsız **UI uygulamaları** olarak yükler.  
 Her temanın, meta verilerini (id, sürüm, yazar, uyumluluk vb.) içeren **`manifest.json`** adlı bir bildirim dosyası
@@ -83,7 +83,7 @@ Pano henüz kurulmadıysa, kurulum tamamlanana kadar **Setup UI** otomatik olara
 **Yönetim Paneli**’ne erişmek için tarayıcınızda `/panel` adresine gidin —  
 oturum açtıysanız ve gerekli izinlere sahipseniz, panel arayüzüne yönlendirilirsiniz.
 
-## 📦 Tema Yükleme
+## Tema Yükleme
 
 Temaları **iki şekilde** yükleyebilirsiniz:
 
@@ -106,9 +106,9 @@ Temaları **iki şekilde** yükleyebilirsiniz:
 3. **Yükle**’ye tıklayın ve kalan her şeyi Pano’nun otomatik olarak yapmasına izin verin.
 4. Tema, kurulum tamamlandıktan sonra otomatik olarak görünecektir.
 
-> 🛍️ Marketplace için bağlı bir [Pano Hesabı](./advanced/connect-pano-account.md) gerekir.
+> Marketplace için bağlı bir [Pano Hesabı](./advanced/connect-pano-account.md) gerekir.
 
-## 🧩 Temaları Etkinleştirme ve Yönetme
+## Temaları Etkinleştirme ve Yönetme
 
 Aynı anda yalnızca **bir tema etkin** olabilir.  
 Gerektiğinde etkin tema **durdurulabilir** veya **yeniden başlatılabilir**.  
@@ -124,7 +124,7 @@ Temaları yönetmek için:
 > Etkin temayı durdurmak web sitesini geçici olarak devre dışı bırakır.  
 > Başka bir temayı durdurmadan önce her zaman geçerli bir temanın etkin olduğundan emin olun.
 
-## ⚙️ Temaları Özelleştirme
+## Temaları Özelleştirme
 
 Her temanın kendi yapılandırma seçenekleri vardır ve bunlar temadan temaya değişebilir.  
 Genel olarak şunları özelleştirebilirsiniz:
@@ -159,7 +159,7 @@ Kaldırırken:
 2. **Sil**’e tıklayın.
 3. İşlemi onaylayın.
 
-## 🧱 Dizin Yapısı
+## Dizin Yapısı
 
 Temalarla birlikte örnek Pano dizin yerleşimi:
 
@@ -182,7 +182,7 @@ Temalarla birlikte örnek Pano dizin yerleşimi:
   yüklenir**.
 - Yalnızca kullanıcı tarafından yüklenen `tema klasörlerini` manuel yönetin.
 
-## 🧠 Özet
+## Özet
 
 | İşlem                  | Konum                                                   | Açıklama                                 |
 |------------------------|---------------------------------------------------------|------------------------------------------|
@@ -192,7 +192,7 @@ Temalarla birlikte örnek Pano dizin yerleşimi:
 | **Özelleştir**         | `Panel → Görünüm → Tema Ayarları`                       | Renkler, düzen, yazı tipleri             |
 | **Sil**                | `Panel → Görünüm → Temalar → Tema Detayları → Sil`      | Özel temayı güvenle kaldır               |
 
-## 🧩 Gelişmiş Notlar
+## Gelişmiş Notlar
 
 - Yalnızca **geçerli temalar** listede görünür; bozuk veya eksik temalar yok sayılır.
 - Her tema, **SvelteKit derleme paketi (.zip)** olarak paketlenir.
@@ -203,4 +203,4 @@ Temalarla birlikte örnek Pano dizin yerleşimi:
 - Eksik veya bozuklarsa, Pano başlangıçta bunları otomatik olarak yeniden yükler.
 - Temalar **sandbox** değildir; ancak arka uca erişimleri **yalnızca HTTP API uç noktaları** ile sınırlıdır.
 
-> 🌈 Temalar, Pano’nuzun kişiliğini belirler — sizin dünyanız, sizin tasarımınız, sizin kimliğiniz.
+> Temalar, Pano’nuzun kişiliğini belirler — sizin dünyanız, sizin tasarımınız, sizin kimliğiniz.

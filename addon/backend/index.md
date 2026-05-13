@@ -1,6 +1,6 @@
 # Backend Development (Kotlin)
 
-## 🚀 Plugin Lifecycle & Context
+## Plugin Lifecycle & Context
 Plugins extend `PanoPlugin`. Key contexts include:
 -   `applicationContext`: Pano's main DI context.
 -   `pluginBeanContext`: Handles plugin-internal beans.
@@ -35,13 +35,13 @@ override suspend fun onUninstall() {
 }
 ```
 
-## 🗄️ Database & Models
+## Database & Models
 - **Package Structure**: `db/daos/`, `db/impl/`, `db/models/`, `db/migrations/`.
 - **Annotations**: `@DBEntity` (models), `@Migration` (versioned changes), `@Dao` (implementations).
 - **Naming Convention**: Keep **DAO** and **Model** names similar (e.g., `AnnouncementModel` and `AnnouncementDao`).
 - **Implementation**: Extend abstract Dao classes and provide the model class. Ensure `uninstall` logic is implemented.
 
-## 🛣️ API & Routing
+## API & Routing
 - **Location**: `routes/` package.
 - **Types**: `PanelApi` (admin), `LoggedInApi` (authenticated users).
 - **Validation**:
@@ -52,7 +52,7 @@ override suspend fun onUninstall() {
 - **Activity Logs**: All Panel APIs **must** define activity logs.
 - **Error Handling**: Prefer built-in errors (`com.panomc.platform.error`). Define custom errors in `error/` by extending `com.panomc.platform.model.Error`.
 
-## 🔐 Permissions & Configuration
+## Permissions & Configuration
 - **Permissions**: Define in `permission/` package, extending `PanelPermission` with `@PermissionDefinition`.
     -   **Icon**: Provide a FontAwesome icon name to the `PanelPermission` constructor (e.g., `PanelPermission("fa-question-circle")`).
     -   **Node**: The permission node ID is automatically generated from the class name (e.g., `ManageFAQPermission` -> `MANAGE_FAQ`).

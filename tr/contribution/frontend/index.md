@@ -8,19 +8,19 @@ Frontend geliştirmeye başlamadan önce, **mutlaka** çalışan bir Pano backen
 - **Full-Stack Geliştirme**: Eğer backend tarafında da değişiklik yapacaksanız, lütfen kaynak koddan çalıştırmak için [Backend Geliştirme](./backend) kılavuzunu izleyin.
 :::
 
-## 🛠️ Teknoloji Yığını
+## Teknoloji Yığını
 - **Framework**: SvelteKit
 - **Stil**: Bootstrap 5 + SASS
 - **Çalışma Zamanı**: Bun (Hızlı JavaScript çalışma zamanı)
 - **Dil**: **JavaScript** (Saf JS zorunludur. Saf JS ile daha iyi bir dünyanın mümkün olduğuna inanıyoruz!)
 
-## 📜 Dil Felsefesi (JavaScript vs. TypeScript)
+## Dil Felsefesi (JavaScript vs. TypeScript)
 Pano projesinde dil seçimimiz konusunda net bir duruşumuz var:
 - **Her zaman JavaScript kullanın**: Her şeyi basit ve hafif tutmaya kararlıyız.
 - **TypeScript'e Karşıyız**: Uyumluluğu ve sadeliği korumak için TypeScript kullanmaktan kaçınıyoruz.
 - **Neden?**: Temiz ve iyi yazılmış saf (Vanilla) JS ile daha iyi ve daha verimli bir dünyanın mümkün olduğuna inanıyoruz. Frontend projelerimizde TypeScript kabul edilmemektedir.
 
-## 🚀 Performans ve SEO
+## Performans ve SEO
 Pano, hibrit bir **SSR (Sunucu Taraflı Oluşturma)** ve **CSR (İstemci Taraflı Oluşturma)** deneyimi sunmak için **SvelteKit**'in gücünden yararlanır.
 - **SEO Odaklı**: SEO optimizasyonuna büyük önem veriyoruz. SSR kullanarak tüm içeriğin arama motorları tarafından kolayca indekslenebilir olmasını sağlıyoruz.
 - **Akıcı Deneyim**: Dinamik etkileşimler için CSR kullanılır, bu da tam sayfa yenilemeleri olmadan hızlı ve akıcı bir kullanıcı deneyimi sağlar.
@@ -31,7 +31,7 @@ Frontend bileşenleri geliştirirken, bunların **SSR uyumlu** olduğundan emin 
 
 - **vanilla-theme**: Tüm temalar için temel.
 
-## 📥 Klonlama ve Alt Modüller (Submodules)
+## Klonlama ve Alt Modüller (Submodules)
 Tüm arayüz projelerimiz, çekirdek mantığı ve bileşenleri paylaşmak için [**pano-sdk**](https://github.com/PanoMC/pano-sdk)'yı bir git alt modülü (submodule) olarak kullanır.
 
 ### Tavsiye Edilen Klonlama Yöntemi
@@ -47,7 +47,7 @@ git submodule init
 git submodule update
 ```
 
-## 🚦 Geliştirme Kılavuzu
+## Geliştirme Kılavuzu
 Depoyu ve alt modülleri klonladıktan sonra şu adımları izleyin:
 
 ### 1. Kurulum
@@ -77,12 +77,12 @@ Her arayüz belirli bir port üzerinde çalışır. **Bu portları değiştirmey
 - **Admin Girişi**: `/panel` rotası üzerinden `panel-ui`'a erişmek için, kurulum sırasında tanımladığınız kimlik bilgilerini kullanarak **Admin** olarak giriş yapmalısınız.
 :::
 
-## 🔄 Paketleme Süreci
+## Paketleme Süreci
 1. Her UI projesi derlenir ve bir `.zip` dosyası halinde sıkıştırılır.
 2. Pano derleme işlemi sırasında bu ZIP'ler indirilir ve nihai JAR'a gömülür.
 3. Çalışma zamanında Pano bunları `ui/` dizinine çıkarır ve Bun kullanarak bir mikro servis olarak sunar.
 
-## 🔌 UI Eklenti Sistemi
+## UI Eklenti Sistemi
 Panel'e veya Temalara özellik ekleyen eklentiler oluşturabilirsiniz.
 - **Backend tarafı**: Bir JAR eklentisi olarak tanımlanır.
 - **Frontend tarafı**: Svelte ile geliştirilir ve `plugins/` klasörüne yerleştirilir.

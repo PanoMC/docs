@@ -29,7 +29,7 @@ Arayüz değişikliklerinin canlı yeniden yüklenmesini (live reloading) etkinl
     *   Paket dizinlerinin adını değiştirin.
     *   Ana sınıftaki temel tanımları güncelleyin.
 
-## 📖 Sırada Ne Var?
+## Sırada Ne Var?
 
 Pano eklenti geliştirme, frontend ve backend için ayrı iş akışlarını içerir. Daha fazla bilgi edinmek için aşağıdaki ayrıntılı rehberlere göz atın:
 

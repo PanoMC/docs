@@ -1,6 +1,6 @@
 # Derleme ve Yayınlama
 
-## 📦 Eklentiyi Derleme
+## Eklentiyi Derleme
 
 Eklentinizi bir Pano sunucusuna kurulabilir bir JAR dosyasına dönüştürmek için:
 
@@ -16,7 +16,7 @@ Eklentinizi bir Pano sunucusuna kurulabilir bir JAR dosyasına dönüştürmek i
 Pano tarafından sağlanmayan harici bağımlılıklar kullanıyorsanız, bunları paketlemek için `shadowJar` görevini kullandığınızdan emin olun.
 :::
 
-## 🚀 Yayınlama
+## Yayınlama
 
 ### Sürümleme
 Derlemeden önce `gradle.properties` dosyanızda doğru sürüm numarasının olduğundan emin olun.
@@ -31,7 +31,7 @@ GitHub'da yayınlamak için:
 2.  Yeni bir Release oluşturun.
 3.  `build/libs` klasöründeki JAR dosyasını yükleyin.
 
-## 🤖 Otomasyon
+## Otomasyon
 
 Derleme ve dağıtım sürecinizi **GitHub Actions** kullanarak otomatikleştirebilirsiniz.
 

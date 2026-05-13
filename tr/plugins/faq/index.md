@@ -2,7 +2,7 @@
 
 **FAQ** eklentisi, web sitenizde sıkça sorulan soruları yönetmek ve görüntülemek için yapılandırılmış bir yol sunar. Bilgileri kategoriler halinde düzenlemenize olanak tanıyarak kullanıcıların yaygın sorularına kolayca yanıt bulmasını sağlar.
 
-## 📋 Özellikler
+## Özellikler
 
 ### 1. Kategoriler
 SSS'lerinizi mantıksal gruplar halinde düzenleyin.
@@ -20,15 +20,15 @@ Bireysel soru ve cevapları yönetin.
 - **Temiz Düzen:** SSS'ler genellikle daha iyi okunabilirlik için akordeon tarzı bir arayüzde görüntülenir.
 - **Mobil Uyumlu:** Tamamen duyarlı tasarım, SSS'lerin tüm cihazlarda harika görünmesini sağlar.
 
-## 🛡️ Gerekli İzin
+## Gerekli İzin
 SSS'leri ve kategorileri yönetmek için kullanıcıların aşağıdaki izne sahip olması gerekir:
 `pano.plugin.pano-plugin-faq.manage.faq`
 
-## 📖 Açık Kaynak
+## Açık Kaynak
 Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak koduna GitHub üzerinden erişebilirsiniz:
 - [Kaynak Kodu](https://github.com/PanoMC/pano-plugin-faq)
 
-## 🔧 Kurulum
+## Kurulum
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
 2. **Panel → Eklentiler → FAQ** yolunu izleyin.
 3. Önce bir kategori oluşturun, ardından ilk soru ve cevabınızı ekleyin!

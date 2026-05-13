@@ -11,7 +11,7 @@ staying compatible with the backend.
 Themes operate independently of backend addons, meaning you can switch themes **without restarting your Pano or
 affecting backend addons.**
 
-## 🎨 Creating Your Own Theme
+## Creating Your Own Theme
 
 If you want to **build your own theme**, Pano makes it simple and powerful.  
 Themes are developed using **[SvelteKit](https://kit.svelte.dev/)** — the same modern web framework that powers Pano’s
@@ -30,10 +30,10 @@ A theme can:
 
 > Themes can access backend data **only through Pano’s API layer**, but still run as real UI applications.
 
-📘 Learn how to build and package your theme here:  
-👉 [Theme Development Guide →](../../theme/getting-started)
+ Learn how to build and package your theme here:
+ [Theme Development Guide →](../../theme/getting-started)
 
-## 💡 Why Themes Matter
+## Why Themes Matter
 
 Themes are what shape the **user experience** of your server’s website.  
 They define how visitors interact with your content and how your community sees your brand.
@@ -49,7 +49,7 @@ Themes let you:
 > Some addons may require specific themes, and some themes may require certain addons to function properly.  
 > Additionally, some themes extend or override Pano’s default API behavior to provide advanced features.
 
-## ⚙️ How Themes Work (Behind the Scenes)
+## How Themes Work (Behind the Scenes)
 
 Pano loads themes as independent **UI applications** from its `themes/` directory.  
 Each theme has a manifest file called **`manifest.json`** that contains its metadata (id, version, author,
@@ -80,7 +80,7 @@ If Pano has not been set up yet, it automatically shows the **Setup UI** until i
 To access the **Admin Panel**, visit `/panel` in your browser —  
 if you are logged in and have the required permissions, you’ll be redirected to the panel interface.
 
-## 📦 Installing Themes
+## Installing Themes
 
 You can install themes in **two ways**:
 
@@ -103,9 +103,9 @@ You can install themes in **two ways**:
 3. Click **Install** and let Pano handle everything automatically.
 4. The theme will appear automatically after installation.
 
-> 🛍️ The Marketplace requires a connected [Pano Account](./advanced/connect-pano-account.md).
+> The Marketplace requires a connected [Pano Account](./advanced/connect-pano-account.md).
 
-## 🧩 Activating and Managing Themes
+## Activating and Managing Themes
 
 Only **one theme can be active** at a time.  
 An active theme can be **stopped** or **restarted** manually if needed.  
@@ -121,7 +121,7 @@ To manage your themes:
 > Stopping the active theme disables the website temporarily.  
 > Always ensure a valid theme is active before stopping another.
 
-## ⚙️ Customizing Themes
+## Customizing Themes
 
 Each theme has its own configuration options, and these may differ from one theme to another.  
 In general, you can customize:
@@ -156,7 +156,7 @@ To delete a custom theme:
 2. Click **Delete**.
 3. Confirm your action.
 
-## 🧱 Directory Structure
+## Directory Structure
 
 Example Pano directory layout with themes:
 
@@ -178,7 +178,7 @@ Example Pano directory layout with themes:
 - They are managed internally by Pano and will be **reinstalled automatically** at startup if missing or corrupted.
 - Only manage user-installed `theme folders` manually.
 
-## 🧠 Summary
+## Summary
 
 | Action              | Location                                               | Description                        |
 |---------------------|--------------------------------------------------------|------------------------------------|
@@ -188,7 +188,7 @@ Example Pano directory layout with themes:
 | **Customize**       | `Panel → View → Theme Settings`                        | Change colors, layout, fonts       |
 | **Delete**          | `Panel → View → Themes → Theme Details → Delete`       | Remove a custom theme safely       |
 
-## 🧩 Advanced Notes
+## Advanced Notes
 
 - Only **valid themes** appear in the list; broken or incomplete themes are ignored.
 - Each theme is packaged as a **SvelteKit build bundle (.zip)**.
@@ -199,4 +199,4 @@ Example Pano directory layout with themes:
 - If they are corrupted or missing, Pano will automatically reinstall them during startup.
 - Themes are **not sandboxed**, but their access to the backend is limited to **HTTP API endpoints**.
 
-> 🌈 Themes define your Pano’s personality — your world, your design, your identity.
+> Themes define your Pano’s personality — your world, your design, your identity.

@@ -2,24 +2,24 @@
 
 Pano, Pano deneyiminizi geliştirmek için çeşitli oyun eklentileriyle sorunsuz entegrasyon destekler. Bu entegrasyonlar **tak-çalıştır** mantığıyla çalışır — doğru yapılandırıldığında, otomatik olarak Minecraft sunucunuzla bağlantı kurar ve senkronize olur.
 
-## 🔌 Pano MC Eklentisi
+## Pano MC Eklentisi
 
 Tüm oyun entegrasyonları, **Pano MC Eklentisi**nin kurulu ve Pano örneğinize bağlı olmasını gerektirir. Pano MC Eklentisi, Minecraft sunucunuz ile Pano arasında bir köprü görevi görerek gerçek zamanlı iletişim ve veri senkronizasyonu sağlar.
 
 **Temel Özellikler:**
 
-- 🔒 **Uçtan Uca Şifreleme** — RSA + AES-256 hibrit şifreleme kullanarak güvenli WebSocket iletişimi
-- 🔄 **Gerçek Zamanlı Senkronizasyon** — Oyun ve web arasında anlık oyuncu verisi senkronizasyonu
-- 🎮 **Çoklu Platform Desteği** — Spigot, Paper, Folia, Bungeecord ve Velocity ile çalışır
-- 🧩 **Eklenti Hook'ları** — Desteklenen eklentileri (AuthMe, izinler, vb.) otomatik olarak tespit eder ve bağlanır
-- 📡 **Etkinlik Sistemi** — Oyun içi etkinlikleri dinler ve Pano'ya gönderir
-- ⚙️ **Otomatik Yapılandırma** — Uyumluluk için eklenti ayarlarını otomatik olarak düzenler
+- **Uçtan Uca Şifreleme** — RSA + AES-256 hibrit şifreleme kullanarak güvenli WebSocket iletişimi
+- **Gerçek Zamanlı Senkronizasyon** — Oyun ve web arasında anlık oyuncu verisi senkronizasyonu
+- **Çoklu Platform Desteği** — Spigot, Paper, Folia, Bungeecord ve Velocity ile çalışır
+- **Eklenti Hook'ları** — Desteklenen eklentileri (AuthMe, izinler, vb.) otomatik olarak tespit eder ve bağlanır
+- **Etkinlik Sistemi** — Oyun içi etkinlikleri dinler ve Pano'ya gönderir
+- **Otomatik Yapılandırma** — Uyumluluk için eklenti ayarlarını otomatik olarak düzenler
 
 > ⚠️ **Önemli:** Tüm entegrasyonlar ve en son özelliklerle uyumluluk için her zaman **Pano MC Eklentisi**nin **en son sürümünü** kullanın.
 
 [→ Pano MC Eklentisini İndir](https://github.com/PanoMC/pano-mc-plugin/releases) | [→ Kurulum Rehberi](../installation/)
 
-## 📋 Mevcut Entegrasyonlar
+## Mevcut Entegrasyonlar
 
 ### Kimlik Doğrulama ve Oyuncu Yönetimi
 
@@ -27,7 +27,7 @@ Tüm oyun entegrasyonları, **Pano MC Eklentisi**nin kurulu ve Pano örneğinize
 - [**LuckPerms**](./luckperms/) — Minecraft'ın en gelişmiş izin sistemiyle tam entegrasyon
 - [**Ban Yönetimi**](./ban-management/) — Oyun ve web arasında gerçek zamanlı, senkronize ban yönetimi
 
-## 🎯 Entegrasyonlar Nasıl Çalışır?
+## Entegrasyonlar Nasıl Çalışır?
 
 Pano'nun entegrasyonları desteklenen eklentilerle **sorunsuz** bir şekilde çalışacak şekilde tasarlanmıştır:
 
@@ -36,17 +36,17 @@ Pano'nun entegrasyonları desteklenen eklentilerle **sorunsuz** bir şekilde ça
 3. Entegrasyonun **Panel → Sunucu Ayarları → Oyun Entegrasyonu**'ndan etkin olduğunu doğrulayın (çoğu entegrasyon varsayılan olarak etkindir)
 4. Bu kadar! Pano otomatik olarak eklentiyi tespit edip bağlanacaktır
 
-## 🔌 Entegrasyon Özellikleri
+## Entegrasyon Özellikleri
 
 Bir entegrasyon aktif olduğunda, Pano şunları yapabilir:
 
-- ✅ Oyuncu verilerini oyun ve web arasında senkronize eder
-- ✅ Kimlik doğrulama akışlarını yönetir (giriş, kayıt, şifre yönetimi)
-- ✅ Panel'den eklenti komutlarını çalıştırır
-- ✅ Eklenti etkinliklerini dinler ve buna göre tepki verir
-- ✅ Optimal uyumluluk için eklenti ayarlarını otomatik olarak yapılandırır
+- Oyuncu verilerini oyun ve web arasında senkronize eder
+- Kimlik doğrulama akışlarını yönetir (giriş, kayıt, şifre yönetimi)
+- Panel'den eklenti komutlarını çalıştırır
+- Eklenti etkinliklerini dinler ve buna göre tepki verir
+- Optimal uyumluluk için eklenti ayarlarını otomatik olarak yapılandırır
 
-## 🚀 Yakında Gelenler
+## Yakında Gelenler
 
 Sürekli olarak daha fazla entegrasyon eklemek için çalışıyoruz. Düşündüğümüz bazı eklentiler:
 
@@ -57,7 +57,7 @@ Entegre edilmesini istediğiniz bir eklenti mi var? [Discord](https://discord.gg
 
 > Belirli bir entegrasyon için ne kadar çok istek alırsak, önceliklendirilip uygulanma olasılığı o kadar artar.
 
-## 🧑‍💻 Kendi Entegrasyonunuzu Geliştirme
+## ‍ Kendi Entegrasyonunuzu Geliştirme
 
 Pano ve Minecraft sunucu eklentileriniz arasında özel entegrasyonlar oluşturmak isteyen bir geliştirici misiniz?
 
@@ -68,7 +68,7 @@ Pano ve Minecraft sunucu eklentileriniz arasında özel entegrasyonlar oluşturm
 - Oyun ve web arasında veri nasıl senkronize edilir
 - Sorunsuz eklenti entegrasyonları nasıl oluşturulur
 
-## 💬 Yardıma mı İhtiyacınız Var?
+## Yardıma mı İhtiyacınız Var?
 
 Entegrasyonlarla ilgili herhangi bir sorunla karşılaşırsanız:
 
@@ -77,4 +77,4 @@ Entegrasyonlarla ilgili herhangi bir sorunla karşılaşırsanız:
 - [**Discord topluluğumuz**](https://discord.gg/6vVy72wgXT)dan yardım isteyin
 - Veya [GitHub](https://github.com/PanoMC/pano-mc-plugin/issues)'da bir sorun bildirin
 
-> Birlikte, Pano'yu daha iyi hale getiriyoruz. 🚀
+> Birlikte, Pano'yu daha iyi hale getiriyoruz.

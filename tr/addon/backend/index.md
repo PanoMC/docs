@@ -1,6 +1,6 @@
 # Backend Geliştirme (Kotlin)
 
-## 🚀 Eklenti Yaşam Döngüsü ve Bağlam
+## Eklenti Yaşam Döngüsü ve Bağlam
 Eklentiler `PanoPlugin` sınıfını genişletir. Temel bağlamlar şunlardır:
 -   `applicationContext`: Pano'nun ana DI bağlamı.
 -   `pluginBeanContext`: Eklenti içi bean'leri yönetir.
@@ -35,13 +35,13 @@ override suspend fun onUninstall() {
 }
 ```
 
-## 🗄️ Veritabanı ve Modeller
+## Veritabanı ve Modeller
 - **Paket Yapısı**: `db/daos/`, `db/impl/`, `db/models/`, `db/migrations/`.
 - **Anotasyonlar**: `@DBEntity` (modeller), `@Migration` (sürümlü değişiklikler), `@Dao` (uygulamalar).
 - **İsimlendirme Kuralı**: **DAO** ve **Model** isimlerini benzer tutun (örn: `AnnouncementModel` ve `AnnouncementDao`).
 - **Uygulama**: Soyut Dao sınıflarını genişletin ve model sınıfını sağlayın. `uninstall` mantığının uygulandığından emin olun.
 
-## 🛣️ API ve Yönlendirme
+## API ve Yönlendirme
 - **Konum**: `routes/` paketi.
 - **Türler**: `PanelApi` (yönetici), `LoggedInApi` (kimliği doğrulanmış kullanıcılar).
 - **Doğrulama**:
@@ -52,7 +52,7 @@ override suspend fun onUninstall() {
 - **Etkinlik Kayıtları**: Tüm Panel API'leri **mutlaka** etkinlik kayıtları tanımlamalıdır.
 - **Hata Yönetimi**: Yerleşik hataları (`com.panomc.platform.error`) tercih edin. Özel hataları `error/` içinde `com.panomc.platform.model.Error` sınıfını genişleterek tanımlayın.
 
-## 🔐 İzinler ve Yapılandırma
+## İzinler ve Yapılandırma
 - **İzinler**: `permission/` paketinde tanımlayın, `@PermissionDefinition` ile `PanelPermission` sınıfını genişletin.
     -   **İkon**: `PanelPermission` kurucusuna bir FontAwesome ikon adı sağlayın (örn: `PanelPermission("fa-question-circle")`).
     -   **Node**: İzin nodedu, sınıf adından otomatik olarak oluşturulur (örn: `ManageFAQPermission` -> `MANAGE_FAQ`).

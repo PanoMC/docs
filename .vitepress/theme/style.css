@@ -1,94 +1,133 @@
 /**
- * Customize default theme styling by overriding CSS variables:
- * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ * Pano Docs — Mintlify-inspired theme
+ * Overrides the VitePress default theme to look closer to Mintlify:
+ * cleaner typography, softer borders, refined cards and hero.
  */
 
-/**
- * Colors
- *
- * Each colors have exact same color scale system with 3 levels of solid
- * colors with different brightness, and 1 soft color.
- * 
- * - `XXX-1`: The most solid color used mainly for colored text. It must
- *   satisfy the contrast ratio against when used on top of `XXX-soft`.
- *
- * - `XXX-2`: The color used mainly for hover state of the button.
- *
- * - `XXX-3`: The color for solid background, such as bg color of the button.
- *   It must satisfy the contrast ratio with pure white (#ffffff) text on
- *   top of it.
- *
- * - `XXX-soft`: The color used for subtle background such as custom container
- *   or badges. It must satisfy the contrast ratio when putting `XXX-1` colors
- *   on top of it.
- *
- *   The soft color must be semi transparent alpha channel. This is crucial
- *   because it allows adding multiple "soft" colors on top of each other
- *   to create a accent, such as when having inline code block inside
- *   custom containers.
- *
- * - `default`: The color used purely for subtle indication without any
- *   special meanings attached to it such as bg color for menu hover state.
- *
- * - `brand`: Used for primary brand colors, such as link text, button with
- *   brand theme, etc.
- *
- * - `tip`: Used to indicate useful information. The default theme uses the
- *   brand color for this by default.
- *
- * - `warning`: Used to indicate warning to the users. Used in custom
- *   container, badges, etc.
- *
- * - `danger`: Used to show error, or dangerous message to the users. Used
- *   in custom container, badges, etc.
- * -------------------------------------------------------------------------- */
+@import url("https://rsms.me/inter/inter.css");
 
- :root {
+/* -------------------------------------------------------------------------
+ * Colors — keep Pano's purple/blue brand, but flatten the palette so
+ * surfaces feel more like Mintlify (whiter light mode, deeper dark mode).
+ * --------------------------------------------------------------------- */
+
+:root {
   --vp-c-default-1: var(--vp-c-gray-1);
   --vp-c-default-2: var(--vp-c-gray-2);
   --vp-c-default-3: var(--vp-c-gray-3);
   --vp-c-default-soft: var(--vp-c-gray-soft);
 
-  --vp-c-brand-1: var(--vp-c-indigo-1);
-  --vp-c-brand-2: var(--vp-c-indigo-2);
-  --vp-c-brand-3: var(--vp-c-indigo-3);
-  --vp-c-brand-soft: var(--vp-c-indigo-soft);
+  /* Pano brand: indigo -> sky gradient */
+  --pano-brand-from: #7c5cff;
+  --pano-brand-to: #38bdf8;
+  --pano-brand-solid: #6366f1;
+  --pano-brand-solid-hover: #4f46e5;
+
+  --vp-c-brand-1: #6366f1;
+  --vp-c-brand-2: #5b5ef0;
+  --vp-c-brand-3: #4f46e5;
+  --vp-c-brand-soft: rgba(99, 102, 241, 0.14);
 
   --vp-c-tip-1: var(--vp-c-brand-1);
   --vp-c-tip-2: var(--vp-c-brand-2);
   --vp-c-tip-3: var(--vp-c-brand-3);
   --vp-c-tip-soft: var(--vp-c-brand-soft);
 
-  --vp-c-warning-1: var(--vp-c-yellow-1);
-  --vp-c-warning-2: var(--vp-c-yellow-2);
-  --vp-c-warning-3: var(--vp-c-yellow-3);
-  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+  /* Slightly cooler grays for surfaces */
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-alt: #fafbfc;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #f7f8fa;
 
-  --vp-c-danger-1: var(--vp-c-red-1);
-  --vp-c-danger-2: var(--vp-c-red-2);
-  --vp-c-danger-3: var(--vp-c-red-3);
-  --vp-c-danger-soft: var(--vp-c-red-soft);
+  --vp-c-divider: rgba(15, 23, 42, 0.08);
+  --vp-c-gutter: rgba(15, 23, 42, 0.06);
+  --vp-c-border: rgba(15, 23, 42, 0.10);
+
+  /* Strong heading vs body contrast (Mintlify-like) */
+  --vp-c-text-1: #0b1220;  /* near-black for headings */
+  --vp-c-text-2: #4a5568;  /* body — muted slate */
+  --vp-c-text-3: #6b7785;  /* captions / muted hints */
+
+  /* Layout polish */
+  --vp-layout-max-width: 1440px;
+  --vp-sidebar-width: 280px;
+  --vp-nav-height: 64px;
+
+  /* Typography */
+  --vp-font-family-base: "Inter", "Inter var", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --vp-font-family-mono: "JetBrains Mono", "Fira Code", ui-monospace,
+    SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/**
- * Component: Button
- * -------------------------------------------------------------------------- */
+.dark {
+  --vp-c-bg: #0b0d12;
+  --vp-c-bg-alt: #0f1218;
+  --vp-c-bg-elv: #12151c;
+  --vp-c-bg-soft: #14171f;
+
+  --vp-c-divider: rgba(255, 255, 255, 0.08);
+  --vp-c-gutter: rgba(255, 255, 255, 0.06);
+  --vp-c-border: rgba(255, 255, 255, 0.10);
+
+  --vp-c-text-1: #f8fafc;  /* bright white for headings */
+  --vp-c-text-2: #aab4c0;  /* muted body */
+  --vp-c-text-3: #7e8a99;  /* hints */
+
+  --vp-c-brand-1: #a5b4fc;
+  --vp-c-brand-2: #818cf8;
+  --vp-c-brand-3: #6366f1;
+  --vp-c-brand-soft: rgba(129, 140, 248, 0.16);
+}
+
+/* -------------------------------------------------------------------------
+ * Buttons — pill-shape with subtle hover lift, Mintlify-style.
+ * --------------------------------------------------------------------- */
 
 :root {
   --vp-button-brand-border: transparent;
-  --vp-button-brand-text: var(--vp-c-white);
-  --vp-button-brand-bg: var(--vp-c-brand-3);
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-bg: var(--pano-brand-solid);
   --vp-button-brand-hover-border: transparent;
-  --vp-button-brand-hover-text: var(--vp-c-white);
-  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-hover-bg: var(--pano-brand-solid-hover);
   --vp-button-brand-active-border: transparent;
-  --vp-button-brand-active-text: var(--vp-c-white);
-  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+  --vp-button-brand-active-text: #ffffff;
+  --vp-button-brand-active-bg: #4338ca;
+
+  --vp-button-alt-border: var(--vp-c-border);
+  --vp-button-alt-text: var(--vp-c-text-1);
+  --vp-button-alt-bg: var(--vp-c-bg);
+  --vp-button-alt-hover-border: var(--vp-c-text-3);
+  --vp-button-alt-hover-text: var(--vp-c-text-1);
+  --vp-button-alt-hover-bg: var(--vp-c-bg-soft);
 }
 
-/**
- * Component: Custom Block
- * -------------------------------------------------------------------------- */
+.VPButton {
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+  transition: all 0.18s ease;
+}
+
+.VPButton.brand {
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25),
+    0 1px 2px rgba(99, 102, 241, 0.18);
+}
+
+.VPButton.brand:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.30),
+    0 2px 4px rgba(99, 102, 241, 0.20);
+}
+
+.VPButton.alt:hover {
+  transform: translateY(-1px);
+}
+
+/* -------------------------------------------------------------------------
+ * Custom blocks (tip/warning/danger/info) — softer, modern look.
+ * --------------------------------------------------------------------- */
 
 :root {
   --vp-custom-block-tip-border: transparent;
@@ -97,9 +136,830 @@
   --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
 }
 
-/**
- * Component: Algolia
- * -------------------------------------------------------------------------- */
+/* Callouts — Mintlify-style with a colored left accent bar. */
+.custom-block {
+  border-radius: 12px !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  border-left: 4px solid transparent !important;
+  padding: 16px 20px !important;
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 20px 0;
+}
+
+.custom-block .custom-block-title {
+  font-weight: 600 !important;
+  color: var(--vp-c-text-1) !important;
+  margin-bottom: 6px !important;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+.custom-block p {
+  margin: 6px 0 !important;
+  color: var(--vp-c-text-2);
+}
+
+.custom-block.tip {
+  background: var(--vp-c-brand-soft);
+  border-left-color: var(--vp-c-brand-1) !important;
+}
+
+.custom-block.info {
+  background: rgba(56, 189, 248, 0.10);
+  border-left-color: #38bdf8 !important;
+}
+
+.dark .custom-block.info {
+  background: rgba(56, 189, 248, 0.14);
+}
+
+.custom-block.warning {
+  background: rgba(245, 158, 11, 0.10);
+  border-left-color: #f59e0b !important;
+}
+
+.dark .custom-block.warning {
+  background: rgba(245, 158, 11, 0.14);
+}
+
+.custom-block.danger {
+  background: rgba(239, 68, 68, 0.10);
+  border-left-color: #ef4444 !important;
+}
+
+.dark .custom-block.danger {
+  background: rgba(239, 68, 68, 0.14);
+}
+
+/* -------------------------------------------------------------------------
+ * Global typography
+ *
+ * Weight scale (only four steps — keep it clean):
+ *   400 — body, paragraphs, list items
+ *   500 — sidebar items, secondary UI labels
+ *   600 — h3/h4, card titles, buttons, sidebar section headers, <strong>
+ *   700 — h1/h2, hero, nav title
+ * --------------------------------------------------------------------- */
+
+html {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+body {
+  font-family: var(--vp-font-family-base);
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--vp-c-text-1);
+  letter-spacing: -0.02em;
+}
+
+/* -------------------------------------------------------------------------
+ * Top navigation — translucent backdrop blur, slimmer feel.
+ * --------------------------------------------------------------------- */
+
+.VPNav {
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  background-color: rgba(255, 255, 255, 0.72) !important;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.dark .VPNav {
+  background-color: rgba(11, 13, 18, 0.72) !important;
+}
+
+.VPNavBar.has-sidebar .content-body,
+.VPNavBar .content-body {
+  background: transparent !important;
+}
+
+.VPNavBar {
+  border-bottom: none !important;
+}
+
+.VPNavBarTitle .title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Search bar pill */
+.VPNavBarSearch .DocSearch-Button {
+  border-radius: 10px !important;
+  background: var(--vp-c-bg-soft) !important;
+  border: 1px solid var(--vp-c-border);
+  transition: all 0.18s ease;
+}
+
+.VPNavBarSearch .DocSearch-Button:hover {
+  border-color: var(--vp-c-text-3);
+}
+
+/* -------------------------------------------------------------------------
+ * Sidebar — tighter, with Mintlify-like indent rails.
+ * --------------------------------------------------------------------- */
+
+.VPSidebar {
+  background-color: var(--vp-c-bg-alt) !important;
+  border-right: 1px solid var(--vp-c-divider);
+  padding-top: 24px !important;
+}
+
+.VPSidebarItem .text {
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  transition: color 0.15s ease;
+}
+
+.VPSidebarItem .link:hover .text {
+  color: var(--vp-c-text-1);
+}
+
+.VPSidebarItem.is-active > .item .link .text {
+  color: var(--vp-c-brand-1) !important;
+  font-weight: 600;
+}
+
+.VPSidebarItem.level-0 > .item > .text {
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vp-c-text-3) !important;
+}
+
+/* -------------------------------------------------------------------------
+ * Hero (home page)
+ * --------------------------------------------------------------------- */
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(
+    120deg,
+    var(--pano-brand-from) 0%,
+    var(--pano-brand-to) 100%
+  );
+  --vp-home-hero-image-background-image: radial-gradient(
+    circle at 30% 30%,
+    var(--pano-brand-from),
+    var(--pano-brand-to) 70%
+  );
+  --vp-home-hero-image-filter: blur(72px);
+}
+
+.VPHero {
+  padding: clamp(48px, 8vw, 96px) 24px !important;
+}
+
+.VPHero .name {
+  font-size: clamp(40px, 6vw, 60px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.035em !important;
+  font-weight: 700 !important;
+}
+
+.VPHero .text {
+  font-size: clamp(24px, 3.4vw, 34px) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em !important;
+  font-weight: 600 !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.VPHero .tagline {
+  font-size: clamp(16px, 1.6vw, 18px) !important;
+  line-height: 1.6 !important;
+  font-weight: 400 !important;
+  color: var(--vp-c-text-2) !important;
+  max-width: 640px;
+  margin-top: 18px !important;
+}
+
+.VPHero .actions {
+  margin-top: 32px !important;
+  gap: 12px !important;
+}
+
+/* Subtle dotted-grid background behind the hero, like Mintlify */
+.VPHome {
+  position: relative;
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgba(99, 102, 241, 0.10),
+      transparent 60%
+    ),
+    var(--vp-c-bg);
+}
+
+.VPHome::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(15, 23, 42, 0.06) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6), transparent 60%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dark .VPHome::before {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 0
+  );
+}
+
+.VPHome > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* -------------------------------------------------------------------------
+ * Feature cards — the Mintlify card look.
+ * --------------------------------------------------------------------- */
+
+.VPFeatures {
+  padding: 0 24px !important;
+  margin-top: 24px;
+}
+
+.VPFeatures .container {
+  max-width: 1200px !important;
+}
+
+.VPFeature {
+  background: var(--vp-c-bg) !important;
+  border: 1px solid var(--vp-c-border) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  transition: all 0.22s ease !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.dark .VPFeature {
+  background: var(--vp-c-bg-elv) !important;
+}
+
+.VPFeature:hover {
+  transform: translateY(-2px);
+  border-color: var(--vp-c-brand-1) !important;
+  box-shadow: 0 12px 28px rgba(99, 102, 241, 0.12),
+    0 4px 8px rgba(15, 23, 42, 0.04);
+}
+
+.VPFeature .box {
+  padding: 0 !important;
+  background: transparent !important;
+  height: 100% !important;
+}
+
+.VPFeature .icon {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 22px !important;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.14),
+    rgba(56, 189, 248, 0.14)
+  ) !important;
+  border: 1px solid rgba(99, 102, 241, 0.18) !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px !important;
+  transition: all 0.22s ease;
+}
+
+.dark .VPFeature .icon {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 140, 248, 0.18),
+    rgba(56, 189, 248, 0.18)
+  ) !important;
+  border-color: rgba(129, 140, 248, 0.28) !important;
+}
+
+.VPFeature:hover .icon {
+  transform: scale(1.05);
+}
+
+.VPFeature .title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+  margin-bottom: 8px !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.VPFeature .details {
+  font-size: 14.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: var(--vp-c-text-2) !important;
+}
+
+.VPFeature .link-text {
+  margin-top: 16px !important;
+}
+
+.VPFeature .link-text-value {
+  font-weight: 600;
+  color: var(--vp-c-brand-1) !important;
+}
+
+/* -------------------------------------------------------------------------
+ * Doc content — typographic rhythm for long pages.
+ *
+ * Heading hierarchy (sharp contrast against body via size + weight + color):
+ *   h1 ............ 36px / 700 — page title
+ *   h2 ............ 26px / 700 — major section, with prominent top border
+ *   h3 ............ 19px / 600 — subsection
+ *   h4 ............ 16px / 600 — minor heading
+ *   p, li ......... 16px / 400 / 1.75 line-height — body
+ * --------------------------------------------------------------------- */
+
+.vp-doc h1 {
+  font-size: 36px !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em !important;
+  margin: 0 0 12px !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.vp-doc h2 {
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.02em !important;
+  margin: 64px 0 20px !important;
+  padding-top: 36px !important;
+  border-top: 1px solid var(--vp-c-divider) !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.vp-doc h2:first-of-type {
+  margin-top: 48px !important;
+}
+
+.vp-doc h3 {
+  font-size: 19px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.015em !important;
+  margin: 36px 0 12px !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.vp-doc h4 {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  margin: 28px 0 10px !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+/* Body text — relaxed line-height, muted body color for clear hierarchy */
+.vp-doc p {
+  font-size: 16px;
+  line-height: 1.75;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  margin: 16px 0;
+}
+
+/* Tagline directly after H1 (lead paragraph) */
+.vp-doc h1 + p {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+  margin-top: 4px;
+  margin-bottom: 28px;
+}
+
+.vp-doc strong,
+.vp-doc b {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+/* Lists — looser rhythm + body-2 color */
+.vp-doc ul,
+.vp-doc ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.vp-doc li {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--vp-c-text-2);
+  margin: 6px 0;
+}
+
+.vp-doc li > p {
+  margin: 4px 0;
+}
+
+.vp-doc li::marker {
+  color: var(--vp-c-text-3);
+}
+
+/* Inline links */
+.vp-doc a {
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+  text-decoration: none !important;
+  border-bottom: 1px solid var(--vp-c-brand-soft);
+  transition: border-color 0.15s ease;
+}
+
+.vp-doc a:hover {
+  border-bottom-color: var(--vp-c-brand-1);
+}
+
+/* Inline code */
+.vp-doc :not(pre) > code {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.875em !important;
+  font-weight: 500;
+  background: var(--vp-c-bg-soft) !important;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 5px !important;
+  padding: 2px 6px !important;
+  color: var(--vp-c-brand-1);
+}
+
+/* Code blocks */
+.vp-doc div[class*="language-"] {
+  border-radius: 12px !important;
+  border: 1px solid var(--vp-c-divider);
+  margin: 20px 0;
+}
+
+/* Blockquote */
+.vp-doc blockquote {
+  margin: 20px 0;
+  padding: 0 16px;
+  border-left: 3px solid var(--vp-c-brand-1) !important;
+  background: transparent;
+}
+
+.vp-doc blockquote p {
+  color: var(--vp-c-text-2);
+  font-style: normal;
+}
+
+/* Horizontal rule (--- in markdown) for explicit content breaks */
+.vp-doc hr {
+  border: none;
+  border-top: 1px solid var(--vp-c-divider);
+  margin: 56px 0;
+}
+
+/* Tables — cleaner, modern */
+.vp-doc table {
+  display: table;
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc th {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+  font-size: 14px;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc td {
+  padding: 12px 16px;
+  color: var(--vp-c-text-2);
+  border-bottom: 1px solid var(--vp-c-divider);
+  font-size: 15px;
+}
+
+.vp-doc tr:last-child td {
+  border-bottom: none;
+}
+
+/* Cap prose width so long lines stay readable on wide screens */
+.VPDoc .container .content .content-container {
+  max-width: 760px;
+}
+
+.VPDoc.has-aside .container .content .content-container {
+  max-width: none;
+}
+
+/* Right-side TOC ("On this page") — make it look intentional */
+.VPDocAside .outline-marker {
+  background-color: var(--vp-c-brand-1) !important;
+}
+
+.VPDocAsideOutline .outline-link {
+  color: var(--vp-c-text-2);
+  font-weight: 400;
+  transition: color 0.15s ease;
+  line-height: 1.5;
+  padding: 4px 0;
+}
+
+.VPDocAsideOutline .outline-link:hover,
+.VPDocAsideOutline .outline-link.active {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.VPDocAsideOutline .outline-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vp-c-text-3);
+}
+
+/* VPTeamMembers — the .name is rendered as an <h1>, so global vp-doc h1
+ * styling makes it huge. Scope it back to reasonable sizes here. */
+.vp-doc .VPTeamMembersItem .profile .name,
+.vp-doc .VPTeamMembersItem.small .profile .name,
+.vp-doc .VPTeamMembersItem.medium .profile .name {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.005em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-top: none !important;
+}
+
+.vp-doc .VPTeamMembersItem .profile .affiliation,
+.vp-doc .VPTeamMembersItem .profile .title,
+.vp-doc .VPTeamMembersItem .profile .org {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--vp-c-text-2) !important;
+  line-height: 1.45 !important;
+  margin-top: 2px !important;
+}
+
+.vp-doc .VPTeamMembersItem .avatar {
+  width: 56px;
+  height: 56px;
+}
+
+/* Prev / Next page nav at bottom of doc */
+.VPDocFooter .pager-link {
+  border-radius: 12px;
+  border-color: var(--vp-c-border);
+  transition: all 0.18s ease;
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.10);
+}
+
+.VPDocFooter .pager-link .title {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
+.VPDocFooter .pager-link .desc {
+  color: var(--vp-c-text-3);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* -------------------------------------------------------------------------
+ * Sidebar icons — Lucide-style, injected per href via CSS custom property.
+ * Each `.link` element gets `::before` masked to `--sidebar-icon`.
+ * Items without a mapped icon hide the pseudo-element (display: none).
+ * --------------------------------------------------------------------- */
+
+.VPSidebarItem .item .link {
+  display: flex !important;
+  align-items: center;
+  gap: 0;
+}
+
+.VPSidebarItem .item .link::before {
+  content: "";
+  display: var(--sidebar-icon-display, none);
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  background-color: currentColor;
+  -webkit-mask: var(--sidebar-icon) center / contain no-repeat;
+  mask: var(--sidebar-icon) center / contain no-repeat;
+  opacity: 0.6;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.VPSidebarItem .item .link:hover::before {
+  opacity: 0.95;
+}
+
+.VPSidebarItem.is-active > .item .link::before {
+  opacity: 1;
+}
+
+/* Platform */
+.VPSidebarItem .item .link[href$="/platform/introduction/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/installation/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' x2='12' y1='15' y2='3'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/configuration/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='21' x2='14' y1='4' y2='4'/><line x1='10' x2='3' y1='4' y2='4'/><line x1='21' x2='12' y1='12' y2='12'/><line x1='8' x2='3' y1='12' y2='12'/><line x1='21' x2='16' y1='20' y2='20'/><line x1='12' x2='3' y1='20' y2='20'/><line x1='14' x2='14' y1='2' y2='6'/><line x1='8' x2='8' y1='10' y2='14'/><line x1='16' x2='16' y1='18' y2='22'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/integrations/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22v-5'/><path d='M9 8V2'/><path d='M15 8V2'/><path d='M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integrations/authme/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/><path d='m9 12 2 2 4-4'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integrations/luckperms/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 18a4 4 0 0 1 4-4h12a4 4 0 0 1 0 8H6a4 4 0 0 1-4-4Z'/><circle cx='18' cy='18' r='2'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integrations/ban-management/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m14 13-7.5 7.5c-.83.83-2.17.83-3 0a2.12 2.12 0 0 1 0-3L11 10'/><path d='m16 16 6-6'/><path d='m8 8 6-6'/><path d='m9 7 8 8'/><path d='m21 11-8-8'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/addons/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='7' height='7' x='14' y='3' rx='1'/><path d='M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/themes/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='13.5' cy='6.5' r='.5' fill='black'/><circle cx='17.5' cy='10.5' r='.5' fill='black'/><circle cx='8.5' cy='7.5' r='.5' fill='black'/><circle cx='6.5' cy='12.5' r='.5' fill='black'/><path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.999 6.012 17.5 2 12 2z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/advanced/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z'/><path d='M5 3v4'/><path d='M3 5h4'/><path d='M19 17v4'/><path d='M17 19h4'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/FAQ/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/><path d='M12 17h.01'/></svg>");
+}
+
+/* Configuration sub-pages */
+.VPSidebarItem .item .link[href$="/platform/configuration/services/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22v-5'/><path d='M9 8V2'/><path d='M15 8V2'/><path d='M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/configuration/server/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='8' x='2' y='2' rx='2' ry='2'/><rect width='20' height='8' x='2' y='14' rx='2' ry='2'/><line x1='6' x2='6.01' y1='6' y2='6'/><line x1='6' x2='6.01' y1='18' y2='18'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/platform/configuration/production/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 11 3 3L22 4'/><path d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/></svg>");
+}
+
+/* AuthMe sub-pages */
+.VPSidebarItem .item .link[href$="/integrations/authme/features/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 12h3v8h6v-6h2v6h6v-8h3z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integrations/authme/troubleshooting/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='12' x2='12' y1='8' y2='12'/><line x1='12' x2='12.01' y1='16' y2='16'/></svg>");
+}
+
+/* Official Plugins */
+.VPSidebarItem .item .link[href$="/plugins/announcement/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m3 11 18-5v12L3 14v-3z'/><path d='M11.6 16.8a3 3 0 1 1-5.8-1.6'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/plugins/slider/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='18' height='18' x='3' y='3' rx='2' ry='2'/><circle cx='9' cy='9' r='2'/><path d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/plugins/pages/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/><path d='M14 2v4a2 2 0 0 0 2 2h4'/><path d='M10 9H8'/><path d='M16 13H8'/><path d='M16 17H8'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/plugins/comments/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/plugins/faq/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/><path d='M12 17h.01'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/plugins/bans/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m4.9 4.9 14.2 14.2'/></svg>");
+}
+
+/* Getting-Started entries (each section's intro) */
+.VPSidebarItem .item .link[href$="/integration/getting-started/"],
+.VPSidebarItem .item .link[href$="/addon/getting-started/"],
+.VPSidebarItem .item .link[href$="/theme/getting-started/"],
+.VPSidebarItem .item .link[href$="/contribution/getting-started/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z'/><path d='m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z'/><path d='M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0'/><path d='M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5'/></svg>");
+}
+
+/* Integration Development sub-pages */
+.VPSidebarItem .item .link[href$="/integration/core-concepts/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.8 1.3 1.5 1.5 2.5'/><path d='M9 18h6'/><path d='M10 22h4'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integration/creating-plugin/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integration/extending-backend/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='8' x='2' y='2' rx='2' ry='2'/><rect width='20' height='8' x='2' y='14' rx='2' ry='2'/><line x1='6' x2='6.01' y1='6' y2='6'/><line x1='6' x2='6.01' y1='18' y2='18'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integration/testing/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2'/><path d='M8.5 2h7'/><path d='M7 16h10'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/integration/api-reference/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 2v8l3-3 3 3V2'/><path d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'/></svg>");
+}
+
+/* Addon Development */
+.VPSidebarItem .item .link[href$="/addon/architecture/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z'/><path d='m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65'/><path d='m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/addon/manifest/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/><path d='M14 2v4a2 2 0 0 0 2 2h4'/><path d='m10 13-2 2 2 2'/><path d='m14 13 2 2-2 2'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/addon/frontend/"],
+.VPSidebarItem .item .link[href$="/contribution/frontend/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='18' height='18' x='3' y='3' rx='2' ry='2'/><line x1='3' x2='21' y1='9' y2='9'/><line x1='9' x2='9' y1='21' y2='9'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/addon/backend/"],
+.VPSidebarItem .item .link[href$="/contribution/backend/"],
+.VPSidebarItem .item .link[href$="/contribution/mc-plugin/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='8' x='2' y='2' rx='2' ry='2'/><rect width='20' height='8' x='2' y='14' rx='2' ry='2'/><line x1='6' x2='6.01' y1='6' y2='6'/><line x1='6' x2='6.01' y1='18' y2='18'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/addon/localization/"],
+.VPSidebarItem .item .link[href$="/contribution/translations/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m5 8 6 6'/><path d='m4 14 6-6 2-3'/><path d='M2 5h12'/><path d='M7 2h1'/><path d='m22 22-5-10-5 10'/><path d='M14 18h6'/></svg>");
+}
+.VPSidebarItem .item .link[href$="/addon/publishing/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242'/><path d='M12 12v9'/><path d='m16 16-4-4-4 4'/></svg>");
+}
+
+/* Contribution */
+.VPSidebarItem .item .link[href$="/contribution/community/"] {
+  --sidebar-icon-display: inline-block;
+  --sidebar-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M22 21v-2a4 4 0 0 0-3-3.87'/><path d='M16 3.13a4 4 0 0 1 0 7.75'/></svg>");
+}
+
+/* -------------------------------------------------------------------------
+ * Algolia search
+ * --------------------------------------------------------------------- */
 
 .DocSearch {
   --docsearch-primary-color: var(--vp-c-brand-1) !important;

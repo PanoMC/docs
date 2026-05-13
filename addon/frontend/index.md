@@ -2,7 +2,7 @@
 
 Frontend development in Pano is built on **Svelte** and styled with **Bootstrap 5** and **Animate.css**. The core of your plugin's frontend interaction happens through the **@panomc/sdk**.
 
-## 📂 Directory Structure
+## Directory Structure
 
 Before diving into code, it's important to understand where your files should live.
 
@@ -25,7 +25,7 @@ src/
 
 ---
 
-## 🛠️ Developing with @panomc/sdk
+## Developing with @panomc/sdk
 
 The `@panomc/sdk` package is your toolkit for interacting with Pano. It provides everything you need to build a native-feeling application, from UI components to network requests.
 
@@ -118,7 +118,7 @@ pano.utils.toast.success(_('announcement.created_success'));
 pano.utils.toast.error(_('announcement.created_error'));
 ```
 
-## 📝 Coding Style & Best Practices
+## Coding Style & Best Practices
 
 *   **Svelte Sequence**: Order your blocks as: `<styles>`, `<html>`, `<script>`.
 *   **Dynamic Importing**: Always use dynamic imports (e.g., `() => import(...)`) when registering pages to keep the initial bundle size small.

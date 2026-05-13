@@ -2,7 +2,7 @@
 
 Pano'da frontend geliştirme **Svelte** üzerine kuruludur ve stillendirme için **Bootstrap 5** ile **Animate.css** kullanılır. Eklentinizin frontend etkileşiminin temelinde **@panomc/sdk** yatar.
 
-## 📂 Dizin Yapısı
+## Dizin Yapısı
 
 Kodlamaya başlamadan önce dosyalarınızın nerede bulunması gerektiğini anlamak önemlidir.
 
@@ -25,7 +25,7 @@ src/
 
 ---
 
-## 🛠️ @panomc/sdk ile Geliştirme
+## @panomc/sdk ile Geliştirme
 
 `@panomc/sdk` paketi, Pano ile etkileşim kurmanız için gereken araç setinizdir. UI bileşenlerinden ağ isteklerine kadar, yerel hissettiren bir uygulama oluşturmak için ihtiyacınız olan her şeyi sağlar.
 
@@ -118,7 +118,7 @@ pano.utils.toast.success(_('announcement.created_success'));
 pano.utils.toast.error(_('announcement.created_error'));
 ```
 
-## 📝 Kodlama Stili ve En İyi Uygulamalar
+## Kodlama Stili ve En İyi Uygulamalar
 
 *   **Svelte Sıralaması**: Bloklarınızı şu sırayla düzenleyin: `<styles>`, `<html>`, `<script>`.
 *   **Dinamik Yükleme**: Sayfaları kaydederken her zaman dinamik içe aktarma (örn. `() => import(...)`) kullanın; bu, başlangıç paket boyutunu küçük tutar.

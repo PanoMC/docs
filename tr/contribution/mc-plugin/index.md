@@ -2,12 +2,12 @@
 
 `pano-mc-plugin`, Minecraft sunucunuz ile Pano web platformu arasındaki köprüdür.
 
-## 📡 İletişim (WebSocket)
+## İletişim (WebSocket)
 İletişim, gerçek zamanlı performans için WebSocket üzerinden yürütülür. Güvenliği sağlamak için hibrit bir şifreleme yöntemi kullanıyoruz:
 - **RSA**: İlk anahtar değişimi için kullanılır.
 - **AES-256**: Sonraki tüm mesajların şifrelenmesi için kullanılır.
 
-## 🎮 Desteklenen Platformlar
+## Desteklenen Platformlar
 Çok çeşitli Minecraft sunucu platformlarını destekliyoruz:
 - Spigot / Paper / Folia
 - Bungeecord / Velocity
@@ -16,11 +16,11 @@
 Yeni özellikler eklerken veya hataları düzeltirken, yazdığınız kodun desteklenen **tüm platformlarda** (Spigot/Paper, Velocity/Bungee vb.) sorunsuz çalıştığından emin olmalısınız. Ortak kullanılamayan mantıklar için platforma özel modülleri kullanın.
 :::
 
-## 🌍 Çeviriler
+## Çeviriler
 Minecraft eklentisi (veya çekirdek platform) için çeviri eklemek, değiştirmek veya kaldırmak istiyorsanız, lütfen Pano deposundaki şu dizin altındaki dosyaları düzenleyin:
 `Pano/src/main/resources/locales`
 
-## 🛠️ Geliştirme
+## Geliştirme
 Eklenti deposu, ortak mantığın bir `core` modülünde paylaşıldığı, platforma özgü uygulamaların ise kendi modüllerinde bulunduğu modüler bir yapı kullanır.
 
 ### Branching Politikası

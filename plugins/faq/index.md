@@ -2,7 +2,7 @@
 
 The **FAQ** plugin provides a structured way to manage and display frequently asked questions on your website. It allows you to organize information into categories, making it easy for users to find answers to common queries.
 
-## 📋 Features
+## Features
 
 ### 1. Categories
 Organize your FAQs into logical groups.
@@ -20,15 +20,15 @@ Manage individual questions and answers.
 - **Clean Layout:** FAQs are typically displayed in an accordion-style interface for better readability.
 - **Mobile Friendly:** Fully responsive design ensures FAQs look great on all devices.
 
-## 🛡️ Required Permission
+## Required Permission
 To manage FAQs and categories, users must have the following permission:
 `pano.plugin.pano-plugin-faq.manage.faq`
 
-## 📖 Open Source
+## Open Source
 This plugin is open source and licensed under **GPLv3**. You can access the source code on GitHub:
 - [Source Code](https://github.com/PanoMC/pano-plugin-faq)
 
-## 🔧 Setup
+## Setup
 1. Enable the plugin in the **Pano Admin Panel**.
 2. Navigate to **Panel → Plugins → FAQ**.
 3. Start by creating a category, then add your first question and answer!

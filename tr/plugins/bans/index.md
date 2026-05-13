@@ -2,7 +2,7 @@
 
 **Bans** eklentisi, Pano web sitenize profesyonel ve şeffaf bir yasaklı oyuncular listesi ekler. Topluluğunuzun aktif yasaklamaları, nedenlerini ve sürelerini temiz ve aranabilir bir arayüzde görmesini sağlar.
 
-## 📋 Özellikler
+## Özellikler
 
 ### 1. Herkese Açık Yasaklı Listesi
 - **Aranabilir:** Kullanıcılar, yasaklanma durumlarını görmek için belirli oyuncuları arayabilir.
@@ -18,15 +18,15 @@
 - **Minecraft Arka Ucu:** Doğru bilgi sağlamak için sunucunuzun yasaklama yönetim sistemiyle doğrudan senkronize olur.
 - **Gerçek Zamanlı Güncellemeler:** En son yasaklama verilerini otomatik olarak yansıtır.
 
-## 🛡️ Gerekli İzin
+## Gerekli İzin
 Yasaklı listesi ayarlarını yapılandırmak için kullanıcıların aşağıdaki izne sahip olması gerekir:
 `pano.plugin.pano-plugin-bans.manage.bans`
 
-## 📖 Açık Kaynak
+## Açık Kaynak
 Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak koduna GitHub üzerinden erişebilirsiniz:
 - [Kaynak Kodu](https://github.com/PanoMC/pano-plugin-bans)
 
-## 🔧 Kurulum
+## Kurulum
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
 2. Görüntüleme ayarlarını yapılandırmak için **Panel → Eklentiler → Bans → Ayarlar** yolunu izleyin.
 3. Yasaklı listesi, temanıza bağlı olarak web sitenizdeki `/bans` rotasında mevcut olacaktır.

@@ -8,19 +8,19 @@ Before you start frontend development, you **must** have a running Pano backend.
 - **Full-Stack Development**: If you plan to modify the backend as well, please follow the [Backend Development](./backend) guide to run it from source.
 :::
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework**: SvelteKit
 - **Styling**: Bootstrap 5 + SASS
 - **Runtime**: Bun (Fast JavaScript runtime)
 - **Language**: **JavaScript** (Vanilla JS is mandatory. We believe a better world is possible with plain JS!)
 
-## 📜 Language Philosophy (JavaScript vs. TypeScript)
+## Language Philosophy (JavaScript vs. TypeScript)
 In the Pano project, we have a firm stance on our choice of language:
 - **Always use JavaScript**: We are committed to keeping things simple and lightweight.
 - **No TypeScript**: We avoid TypeScript to maintain high compatibility and simplicity.
 - **Why?**: We believe that with clean, well-written Vanilla JS, a better and more efficient world is possible. TypeScript is not accepted in our frontend projects.
 
-## 🚀 Performance & SEO
+## Performance & SEO
 Pano leverages the power of **SvelteKit** to provide a hybrid **SSR (Server-Side Rendering)** and **CSR (Client-Side Rendering)** experience.
 - **SEO Focused**: We pay close attention to SEO optimization. By using SSR, we ensure that all content is easily indexable by search engines.
 - **Smooth UX**: CSR is utilized for dynamic interactions, providing a fast and fluid user experience without full page reloads.
@@ -31,7 +31,7 @@ When developing frontend components, you **must** ensure they are SSR-compatible
 
 - **vanilla-theme**: The base for all themes.
 
-## 📥 Cloning & Submodules
+## Cloning & Submodules
 All our interface projects use the [**pano-sdk**](https://github.com/PanoMC/pano-sdk) as a git submodule to share core logic and components.
 
 ### Recommended Cloning Method
@@ -47,7 +47,7 @@ git submodule init
 git submodule update
 ```
 
-## 🚦 Development Guide
+## Development Guide
 After cloning the repository and submodules, follow these steps:
 
 ### 1. Installation
@@ -77,12 +77,12 @@ Each interface runs on a specific port. **Do not change these ports**, and ensur
 - **Admin Login**: To access `panel-ui` via the `/panel` route, you must log in as an **Admin** using the credentials you defined during the setup process.
 :::
 
-## 🔄 Packaging Process
+## Packaging Process
 1. Each UI project is built and compressed into a `.zip` file.
 2. During the Pano build process, these ZIPs are downloaded and embedded into the final JAR.
 3. At runtime, Pano extracts these to the `ui/` directory and serves them using Bun as a micro-service.
 
-## 🔌 UI Addon System
+## UI Addon System
 You can create addons that inject features into the Panel or Themes.
 - **Backend-side**: Defined as a JAR plugin.
 - **Frontend-side**: Developed in Svelte and placed in the `plugins/` folder.

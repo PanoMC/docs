@@ -2,7 +2,7 @@
 
 Welcome! Pano is an open-source project and we love community contributions. Whether you're fixing bugs, adding new features, or improving documentation, your help is appreciated.
 
-## 📦 Our Repositories
+## Our Repositories
 
 Pano is composed of several repositories, each serving a specific purpose:
 
@@ -13,7 +13,7 @@ Pano is composed of several repositories, each serving a specific purpose:
 - [**pano-mc-plugin**](https://github.com/PanoMC/pano-mc-plugin): Minecraft server-side integration plugin.
 - [**docs**](https://github.com/PanoMC/docs): This documentation repository.
 
-## 🚀 Release Types
+## Release Types
 
 We maintain three stages of releases across our branches:
 
@@ -23,7 +23,7 @@ We maintain three stages of releases across our branches:
 | **Beta** | `beta` | Medium | Pre-release stage. Generally stable but may have minor bugs. |
 | **Release**| `main` | High | Production-ready. The most stable version. |
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 Pano is built using modern technologies to ensure performance and flexibility:
 
@@ -32,7 +32,7 @@ Pano is built using modern technologies to ensure performance and flexibility:
 - **Runtime**: [Bun](https://bun.sh) is used for running our frontend services.
 - **Packaging**: Projects are packaged into ZIP files and embedded into a single executable JAR file.
 
-## 📜 Contribution Guidelines
+## Contribution Guidelines
 
 To maintain a high-quality codebase, please follow these guidelines:
 
@@ -48,7 +48,7 @@ To maintain a high-quality codebase, please follow these guidelines:
 - **AI-Generated Code**: Using AI to generate code is allowed; however, we cannot accept any code that is private, proprietary, or subject to licenses that conflict with our open-source goals.
 - **Quality**: PRs should be clean, well-commented where necessary, and tested before submission.
 
-## 🧩 How Pano Works
+## How Pano Works
 
 Pano is not a traditional web script. It's a self-contained platform that runs as a single JAR file (similar to a Minecraft server). When you run the JAR:
 1. It extracts the necessary UI files.

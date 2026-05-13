@@ -1,6 +1,6 @@
 # Building & Publishing
 
-## 📦 Building Your Addon
+## Building Your Addon
 
 To compile your addon into a JAR file that can be installed on a Pano server:
 
@@ -16,7 +16,7 @@ To compile your addon into a JAR file that can be installed on a Pano server:
 If you are using external dependencies that are not provided by Pano, make sure to use the `shadowJar` task to bundle them.
 :::
 
-## 🚀 Publishing
+## Publishing
 
 ### Versioning
 Ensure your `gradle.properties` file has the correct version number before building.
@@ -31,7 +31,7 @@ To release on GitHub:
 2.  Create a new Release.
 3.  Upload the JAR file from `build/libs`.
 
-## 🤖 Automation
+## Automation
 
 You can automate your build and release process using **GitHub Actions**.
 

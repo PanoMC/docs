@@ -44,13 +44,30 @@ export default defineConfig({
                 link: "/platform/introduction/",
               },
               { text: "Installation", link: "/platform/installation/" },
-              { text: "Configuration", link: "/platform/configuration/" },
+              {
+                text: "Configuration",
+                link: "/platform/configuration/",
+                collapsed: true,
+                items: [
+                  { text: "Services", link: "/platform/configuration/services/" },
+                  { text: "Server", link: "/platform/configuration/server/" },
+                  { text: "Production", link: "/platform/configuration/production/" },
+                ],
+              },
               {
                 text: "Integrations",
                 link: "/platform/integrations/",
                 collapsed: true,
                 items: [
-                  { text: "AuthMeReloaded", link: "/platform/integrations/authme/" },
+                  {
+                    text: "AuthMeReloaded",
+                    link: "/platform/integrations/authme/",
+                    collapsed: true,
+                    items: [
+                      { text: "Features", link: "/platform/integrations/authme/features/" },
+                      { text: "Troubleshooting", link: "/platform/integrations/authme/troubleshooting/" },
+                    ],
+                  },
                   { text: "LuckPerms", link: "/platform/integrations/luckperms/" },
                   { text: "Ban Management", link: "/platform/integrations/ban-management/" },
                 ]
@@ -77,10 +94,12 @@ export default defineConfig({
             text: "Integration Development",
             collapsed: true,
             items: [
-              {
-                text: "Getting Started",
-                link: "/integration/getting-started/",
-              },
+              { text: "Getting Started", link: "/integration/getting-started/" },
+              { text: "Core API Concepts", link: "/integration/core-concepts/" },
+              { text: "Creating a Plugin", link: "/integration/creating-plugin/" },
+              { text: "Extending Backend", link: "/integration/extending-backend/" },
+              { text: "Testing & Examples", link: "/integration/testing/" },
+              { text: "API Reference", link: "/integration/api-reference/" },
             ],
           },
           {
@@ -161,13 +180,30 @@ export default defineConfig({
                 link: "/tr/platform/introduction/",
               },
               { text: "Kurulum", link: "/tr/platform/installation/" },
-              { text: "Ayarlar", link: "/tr/platform/configuration/" },
+              {
+                text: "Ayarlar",
+                link: "/tr/platform/configuration/",
+                collapsed: true,
+                items: [
+                  { text: "Servisler", link: "/tr/platform/configuration/services/" },
+                  { text: "Sunucu", link: "/tr/platform/configuration/server/" },
+                  { text: "Üretim", link: "/tr/platform/configuration/production/" },
+                ],
+              },
               {
                 text: "Entegrasyonlar",
                 link: "/tr/platform/integrations/",
                 collapsed: true,
                 items: [
-                  { text: "AuthMeReloaded", link: "/tr/platform/integrations/authme/" },
+                  {
+                    text: "AuthMeReloaded",
+                    link: "/tr/platform/integrations/authme/",
+                    collapsed: true,
+                    items: [
+                      { text: "Özellikler", link: "/tr/platform/integrations/authme/features/" },
+                      { text: "Sorun Giderme", link: "/tr/platform/integrations/authme/troubleshooting/" },
+                    ],
+                  },
                   { text: "LuckPerms", link: "/tr/platform/integrations/luckperms/" },
                   { text: "Ban Management", link: "/tr/platform/integrations/ban-management/" },
                 ]
@@ -194,10 +230,12 @@ export default defineConfig({
             text: "Entegrasyon Geliştirme",
             collapsed: true,
             items: [
-              {
-                text: "Başlangıç",
-                link: "/tr/integration/getting-started/",
-              },
+              { text: "Başlangıç", link: "/tr/integration/getting-started/" },
+              { text: "Temel API Kavramları", link: "/tr/integration/core-concepts/" },
+              { text: "Eklenti Oluşturma", link: "/tr/integration/creating-plugin/" },
+              { text: "Backend'i Genişletme", link: "/tr/integration/extending-backend/" },
+              { text: "Test ve Örnekler", link: "/tr/integration/testing/" },
+              { text: "API Referansı", link: "/tr/integration/api-reference/" },
             ],
           },
           {
@@ -278,13 +316,30 @@ export default defineConfig({
                 link: "/ru/platform/introduction/",
               },
               { text: "Установка", link: "/ru/platform/installation/" },
-              { text: "Конфигурация", link: "/ru/platform/configuration/" },
+              {
+                text: "Конфигурация",
+                link: "/ru/platform/configuration/",
+                collapsed: true,
+                items: [
+                  { text: "Сервисы", link: "/ru/platform/configuration/services/" },
+                  { text: "Сервер", link: "/ru/platform/configuration/server/" },
+                  { text: "Production", link: "/ru/platform/configuration/production/" },
+                ],
+              },
               {
                 text: "Интеграции",
                 link: "/ru/platform/integrations/",
                 collapsed: true,
                 items: [
-                  { text: "AuthMeReloaded", link: "/ru/platform/integrations/authme/" },
+                  {
+                    text: "AuthMeReloaded",
+                    link: "/ru/platform/integrations/authme/",
+                    collapsed: true,
+                    items: [
+                      { text: "Возможности", link: "/ru/platform/integrations/authme/features/" },
+                      { text: "Устранение неполадок", link: "/ru/platform/integrations/authme/troubleshooting/" },
+                    ],
+                  },
                   { text: "LuckPerms", link: "/ru/platform/integrations/luckperms/" },
                   { text: "Ban Management", link: "/ru/platform/integrations/ban-management/" },
                 ]
@@ -311,10 +366,12 @@ export default defineConfig({
             text: "Разработка интеграций",
             collapsed: true,
             items: [
-              {
-                text: "Начало работы",
-                link: "/ru/integration/getting-started/",
-              },
+              { text: "Начало работы", link: "/ru/integration/getting-started/" },
+              { text: "Основные концепции API", link: "/ru/integration/core-concepts/" },
+              { text: "Создание плагина", link: "/ru/integration/creating-plugin/" },
+              { text: "Расширение бэкенда", link: "/ru/integration/extending-backend/" },
+              { text: "Тестирование и примеры", link: "/ru/integration/testing/" },
+              { text: "Справочник API", link: "/ru/integration/api-reference/" },
             ],
           },
           {
