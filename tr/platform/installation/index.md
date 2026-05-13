@@ -97,6 +97,9 @@ http://<sunucu-ip-adresiniz>/
 
 > Port **80**’in açık olduğundan ve başka bir uygulama tarafından kullanılmadığından emin olun.
 
+> [!IMPORTANT]
+> **Cloudflare mi kullanıyorsunuz?** Pano varsayılan olarak 80 numaralı portta düz HTTP servis eder; bu nedenle Cloudflare'de **SSL/TLS modu: Flexible** olarak ayarlanmalıdır — aksi takdirde alan adınızı açtığınızda yönlendirme döngüleri veya `521`/`525` hataları alırsınız. Devam etmeden önce ayrıntılı [Cloudflare rehberini →](../advanced/cloudflare/) okuyun.
+
 Ekranda sizi beş basit adımdan geçiren **Kurulum Sihirbazı** görünecektir:
 
 1. **Dil Seçimi**  

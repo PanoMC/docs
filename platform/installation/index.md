@@ -97,6 +97,9 @@ http://<your-server-ip>/
 
 > Make sure port **80** is open and not used by another application.
 
+> [!IMPORTANT]
+> **Using Cloudflare?** Pano serves plain HTTP on port 80 by default, so Cloudflare must be set to **SSL/TLS mode: Flexible** — otherwise you'll hit redirect loops or `521`/`525` errors when opening your domain. See the dedicated [Cloudflare guide →](../advanced/cloudflare/) before continuing.
+
 You’ll see the **Setup Wizard**, guiding you through five simple steps:
 
 1. **Language Selection**  

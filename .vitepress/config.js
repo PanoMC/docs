@@ -74,7 +74,14 @@ export default defineConfig({
               },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
-              { text: "Advanced", link: "/platform/advanced/" },
+              {
+                text: "Advanced",
+                link: "/platform/advanced/",
+                collapsed: true,
+                items: [
+                  { text: "Cloudflare", link: "/platform/advanced/cloudflare/" },
+                ],
+              },
               { text: "FAQ", link: "/platform/FAQ/" },
             ],
           },
@@ -210,7 +217,14 @@ export default defineConfig({
               },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
-              { text: "Gelişmiş", link: "/tr/platform/advanced/" },
+              {
+                text: "Gelişmiş",
+                link: "/tr/platform/advanced/",
+                collapsed: true,
+                items: [
+                  { text: "Cloudflare", link: "/tr/platform/advanced/cloudflare/" },
+                ],
+              },
               { text: "SSS", link: "/tr/platform/FAQ/" },
             ],
           },
@@ -346,7 +360,14 @@ export default defineConfig({
               },
               { text: "Аддоны", link: "/ru/platform/addons/" },
               { text: "Темы", link: "/ru/platform/themes/" },
-              { text: "Дополнительно", link: "/ru/platform/advanced/" },
+              {
+                text: "Дополнительно",
+                link: "/ru/platform/advanced/",
+                collapsed: true,
+                items: [
+                  { text: "Cloudflare", link: "/ru/platform/advanced/cloudflare/" },
+                ],
+              },
               { text: "FAQ", link: "/ru/platform/FAQ/" },
             ],
           },
