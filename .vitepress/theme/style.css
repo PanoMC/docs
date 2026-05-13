@@ -5,6 +5,7 @@
  */
 
 @import url("https://rsms.me/inter/inter.css");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
 
 /* -------------------------------------------------------------------------
  * Colors — keep Pano's purple/blue brand, but flatten the palette so
@@ -54,10 +55,13 @@
   --vp-nav-height: 64px;
 
   /* Typography */
-  --vp-font-family-base: "Inter", "Inter var", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --vp-font-family-base: "Quicksand", "Inter", "Inter var", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Helvetica Neue", sans-serif;
   --vp-font-family-mono: "JetBrains Mono", "Fira Code", ui-monospace,
     SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --pano-font-family-heading: "Quicksand", "Inter", "Inter var", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .dark {
@@ -222,6 +226,7 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: var(--pano-font-family-heading);
   color: var(--vp-c-text-1);
   letter-spacing: -0.02em;
 }
@@ -251,6 +256,7 @@ h6 {
 }
 
 .VPNavBarTitle .title {
+  font-family: var(--pano-font-family-heading);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -324,6 +330,7 @@ h6 {
 }
 
 .VPHero .name {
+  font-family: var(--pano-font-family-heading);
   font-size: clamp(40px, 6vw, 60px) !important;
   line-height: 1.05 !important;
   letter-spacing: -0.035em !important;
@@ -331,6 +338,7 @@ h6 {
 }
 
 .VPHero .text {
+  font-family: var(--pano-font-family-heading);
   font-size: clamp(24px, 3.4vw, 34px) !important;
   line-height: 1.15 !important;
   letter-spacing: -0.025em !important;
@@ -466,6 +474,7 @@ h6 {
 }
 
 .VPFeature .title {
+  font-family: var(--pano-font-family-heading);
   font-size: 18px !important;
   font-weight: 700 !important;
   letter-spacing: -0.015em !important;
@@ -501,6 +510,7 @@ h6 {
  * --------------------------------------------------------------------- */
 
 .vp-doc h1 {
+  font-family: var(--pano-font-family-heading);
   font-size: 36px !important;
   font-weight: 700 !important;
   line-height: 1.15 !important;
@@ -510,6 +520,7 @@ h6 {
 }
 
 .vp-doc h2 {
+  font-family: var(--pano-font-family-heading);
   font-size: 26px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
@@ -525,6 +536,7 @@ h6 {
 }
 
 .vp-doc h3 {
+  font-family: var(--pano-font-family-heading);
   font-size: 19px !important;
   font-weight: 600 !important;
   line-height: 1.3 !important;
@@ -534,6 +546,7 @@ h6 {
 }
 
 .vp-doc h4 {
+  font-family: var(--pano-font-family-heading);
   font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 1.35 !important;

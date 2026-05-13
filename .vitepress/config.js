@@ -7,6 +7,11 @@ export default defineConfig({
 
   lastUpdated: true,
   ignoreDeadLinks: true,
+  vite: {
+    server: {
+      allowedHosts: ["f285-130-162-246-99.ngrok-free.app"]
+    }
+  },
 
   head: [
     [
@@ -16,6 +21,9 @@ export default defineConfig({
   ],
 
   themeConfig: {
+    logo: "/docs/img/logo-nav.svg",
+    siteTitle: "Docs",
+
     socialLinks: [
       { icon: "github", link: "https://github.com/panomc/pano" },
       { icon: "discord", link: "https://discord.gg/GZvaK3wpHF" },

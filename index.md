@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Pano Docs"
-  text: "Build, manage, deploy."
+  text: "Build your Minecraft website."
   tagline: "Open-source advanced server management and web platform made for Minecraft."
   actions:
     - theme: brand

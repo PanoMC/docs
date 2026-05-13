@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Pano Docs"
-  text: "Создавайте, управляйте, развёртывайте."
+  text: "Создайте свой сайт для Minecraft."
   tagline: "Продвинутая веб-платформа и система управления сервером с открытым исходным кодом, созданная для Minecraft."
   actions:
     - theme: brand

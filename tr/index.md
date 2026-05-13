@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Pano Dokümanı"
-  text: "Kur, yönet, yayınla."
+  text: "Minecraft web siteni inşa et."
   tagline: "Açık kaynak Minecraft için gelişmiş sunucu yönetimi ve web platformu."
   actions:
     - theme: brand
