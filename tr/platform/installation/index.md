@@ -74,10 +74,10 @@ java -jar Pano-<version>.jar -bg
 
 | Bayraklar | GUI | Terminalden ayrık |
 | --- | --- | --- |
-| _(hiçbiri)_ | | |
-| `-nogui` | | |
-| `-bg` | | |
-| `-bg -nogui` | | |
+| _(hiçbiri)_ | Evet | Hayır |
+| `-nogui` | Hayır | Hayır |
+| `-bg` | Evet | Evet |
+| `-bg -nogui` | Hayır | Evet |
 
 > [!TIP]
 > Panelden bir platform güncellemesi veya yeniden başlatma tetiklediğinizde, platform şu anda **terminale bağlı** çalışıyorsa onay penceresinde "Arka plan modunda yeniden başlat" anahtarı görünür. Bu seçeneği işaretlerseniz yeni süreç terminalden ayrılır — örneğin SSH oturumunu hemen kapatmak istiyorsanız kullanışlıdır.

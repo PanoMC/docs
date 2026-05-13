@@ -74,10 +74,10 @@ When you pass `-bg`, the launcher process re-spawns itself as a detached child a
 
 | Flags | GUI | Detached from terminal |
 | --- | --- | --- |
-| _(none)_ | | |
-| `-nogui` | | |
-| `-bg` | | |
-| `-bg -nogui` | | |
+| _(none)_ | Yes | No |
+| `-nogui` | No | No |
+| `-bg` | Yes | Yes |
+| `-bg -nogui` | No | Yes |
 
 > [!TIP]
 > When you launch a platform update or restart from the panel and the platform is currently **terminal-attached**, the confirmation modal offers a "Restart in background mode" toggle. Enabling it ensures the new process is detached from your terminal — useful if you want to close the SSH session right after.

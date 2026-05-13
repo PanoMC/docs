@@ -28,17 +28,6 @@ Pano, **web siteni**, **sunucunu** ve **topluluğunu** tek bir yerde birleştire
 
 > Basit. Güçlü. Sana ait. — İşte Pano.
 
-## Neden Pano?
-
-- **Kendi sunucunda çalışır, açık kaynaktır.** İstediğin yerde barındır, tam kontrol sende kalır.
-- **Genişletilebilir.** Eklentiler ve temalar ile Pano'yu sunucuna göre şekillendir.
-- **Oyuna hazır.** Otomatik giriş, oyuncu istatistikleri ve oyun içi yönetim — kutudan çıkar çıkmaz.
-
-## Hızlı Başla
-
-- **[Pano'yu Kur →](../installation/)** — Beş dakikada çalışan bir Pano.
-- **[Discord'a Katıl →](https://discord.gg/6vVy72wgXT)** — Soru sor, geri bildirim paylaş.
-
 ::: details Pano ismi nereden geliyor?
 **Pano** kelimesi, Türkçe'de *gösterge paneli* veya *kontrol paneli* anlamına gelir — sunucunu, web siteni, oyuncularını ve topluluğunu yönettiğin tek bir merkez.
 :::
@@ -51,6 +40,17 @@ Pano çekirdek platformu **GNU General Public License v3.0 (GPLv3)** ile lisansl
 - **Eklentiler ve temalar** istedikleri lisansı kullanabilir — özel veya ticari dahil.
 - **Üçüncü taraf eklentiler** kendi lisans kurallarını takip eder.
 :::
+
+## Neden Pano?
+
+- **Kendi sunucunda çalışır, açık kaynaktır.** İstediğin yerde barındır, tam kontrol sende kalır.
+- **Genişletilebilir.** Eklentiler ve temalar ile Pano'yu sunucuna göre şekillendir.
+- **Oyuna hazır.** Otomatik giriş, oyuncu istatistikleri ve oyun içi yönetim — kutudan çıkar çıkmaz.
+
+## Hızlı Başla
+
+- **[Pano'yu Kur →](../installation/)** — Beş dakikada çalışan bir Pano.
+- **[Discord'a Katıl →](https://discord.gg/6vVy72wgXT)** — Soru sor, geri bildirim paylaş.
 
 ## Ekibimiz
 
