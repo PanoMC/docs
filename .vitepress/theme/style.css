@@ -235,14 +235,19 @@ h6 {
  * Top navigation — translucent backdrop blur, slimmer feel.
  * --------------------------------------------------------------------- */
 
-.VPNav {
+/* NOTE: backdrop-filter MUST live on .VPNavBar, NOT .VPNav. Applying
+ * backdrop-filter to .VPNav makes it a containing block for fixed-positioned
+ * descendants — which collapses .VPNavScreen (the mobile menu) into a 0px-tall
+ * sliver and silently breaks the hamburger menu. Keep the blur on the bar
+ * itself so the visual effect is identical but the screen escapes containment. */
+.VPNavBar {
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
   background-color: rgba(255, 255, 255, 0.72) !important;
-  border-bottom: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--vp-c-divider) !important;
 }
 
-.dark .VPNav {
+.dark .VPNavBar {
   background-color: rgba(11, 13, 18, 0.72) !important;
 }
 
@@ -251,8 +256,9 @@ h6 {
   background: transparent !important;
 }
 
-.VPNavBar {
-  border-bottom: none !important;
+/* Mobile menu screen — ensure solid background sits cleanly over the hero. */
+.VPNavScreen {
+  background-color: var(--vp-c-bg) !important;
 }
 
 .VPNavBarTitle .title {
@@ -325,13 +331,20 @@ h6 {
   --vp-home-hero-image-filter: blur(72px);
 }
 
+/* Keep VitePress's negative margin-top trick (so the hero canvas extends
+ * under the translucent nav) but ensure the *content* still clears the
+ * navbar. Without including `--vp-nav-height` in padding-top, the hero
+ * name/text renders behind the navbar on phones where `8vw < 64px`. */
 .VPHero {
-  padding: clamp(48px, 8vw, 96px) 24px !important;
+  padding:
+    calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + clamp(24px, 6vw, 64px))
+    clamp(20px, 4vw, 48px)
+    clamp(48px, 6vw, 80px) !important;
 }
 
 .VPHero .name {
   font-family: var(--pano-font-family-heading);
-  font-size: clamp(40px, 6vw, 60px) !important;
+  font-size: clamp(36px, 7vw, 60px) !important;
   line-height: 1.05 !important;
   letter-spacing: -0.035em !important;
   font-weight: 700 !important;
@@ -339,8 +352,8 @@ h6 {
 
 .VPHero .text {
   font-family: var(--pano-font-family-heading);
-  font-size: clamp(24px, 3.4vw, 34px) !important;
-  line-height: 1.15 !important;
+  font-size: clamp(20px, 4vw, 34px) !important;
+  line-height: 1.2 !important;
   letter-spacing: -0.025em !important;
   font-weight: 600 !important;
   color: var(--vp-c-text-1) !important;
@@ -396,7 +409,12 @@ h6 {
   );
 }
 
-.VPHome > * {
+/* Lift content above the dotted-grid pseudo-background. Scoped to the
+ * known home blocks so we don't accidentally trap the mobile nav screen
+ * (or other layered UI) inside the home stacking context. */
+.VPHome > .VPHero,
+.VPHome > .VPFeatures,
+.VPHome > .vp-doc {
   position: relative;
   z-index: 1;
 }
@@ -406,7 +424,7 @@ h6 {
  * --------------------------------------------------------------------- */
 
 .VPFeatures {
-  padding: 0 24px !important;
+  padding: 0 clamp(16px, 4vw, 24px) !important;
   margin-top: 24px;
 }
 
@@ -418,7 +436,7 @@ h6 {
   background: var(--vp-c-bg) !important;
   border: 1px solid var(--vp-c-border) !important;
   border-radius: 16px !important;
-  padding: 24px !important;
+  padding: clamp(18px, 3vw, 24px) !important;
   transition: all 0.22s ease !important;
   position: relative;
   overflow: hidden;
