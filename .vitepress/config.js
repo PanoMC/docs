@@ -60,6 +60,7 @@ export default defineConfig({
                   { text: "Services", link: "/platform/configuration/services/" },
                   { text: "Server", link: "/platform/configuration/server/" },
                   { text: "Production", link: "/platform/configuration/production/" },
+                  { text: "Memory & Limits", link: "/platform/configuration/memory/" },
                 ],
               },
               {
@@ -203,6 +204,7 @@ export default defineConfig({
                   { text: "Servisler", link: "/tr/platform/configuration/services/" },
                   { text: "Sunucu", link: "/tr/platform/configuration/server/" },
                   { text: "Üretim", link: "/tr/platform/configuration/production/" },
+                  { text: "Bellek ve Limitler", link: "/tr/platform/configuration/memory/" },
                 ],
               },
               {
@@ -346,6 +348,7 @@ export default defineConfig({
                   { text: "Сервисы", link: "/ru/platform/configuration/services/" },
                   { text: "Сервер", link: "/ru/platform/configuration/server/" },
                   { text: "Production", link: "/ru/platform/configuration/production/" },
+                  { text: "Память и лимиты", link: "/ru/platform/configuration/memory/" },
                 ],
               },
               {

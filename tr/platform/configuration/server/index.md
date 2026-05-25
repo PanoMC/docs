@@ -11,6 +11,7 @@ server {
   redirect-https = false
   ssl-cert = null # Ham sertifika içeriği (MANUAL ise)
   ssl-key = null  # Ham özel anahtar içeriği (MANUAL ise)
+  ui-max-memory-mb = 200 # Spawn edilen her UI runtime'ı için maksimum MB; 0 kapatır
 }
 ```
 
@@ -22,6 +23,7 @@ server {
     - `LETS_ENCRYPT`: Otomatik olarak bir SSL sertifikası almaya ve yapılandırmaya çalışır. **Not:** Bunun çalışması için geçerli bir `website-url` yapılandırılmalı, **http-port** `80` ve **https-port** `443` olarak ayarlanmalıdır.
     - `MANUAL`: Kendi sertifikanızı ve anahtar dize bilgilerinizi doğrudan `ssl-cert` ve `ssl-key` üzerinden sağlamanıza olanak tanır.
 - `redirect-https`: `true` olarak ayarlanırsa, tüm HTTP trafiği otomatik olarak HTTPS'ye yönlendirilir.
+- `ui-max-memory-mb`: Spawn edilen **her** UI runtime'ı (setup-ui, panel-ui, aktif tema) için bellek tavanı (MB); Pano aşan UI'ı yeniden başlatır. Varsayılan **200**, `0` kapatır. Bkz. [Bellek ve Limitler](../memory/).
 - **Gelişmiş:** Karmaşık kurulumlar için hala bir **reverse proxy** (Nginx, Apache) veya Cloudflare kullanabilirsiniz.
 ## Başlatma, Arayüz ve Güncellemeler
 
