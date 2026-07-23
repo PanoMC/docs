@@ -1,170 +1,106 @@
 # Başlangıç
 
-Bu bölüm, bir Pano teması oluşturmak için bilmeniz gereken her şeyi kapsar. Bir tema, genel sitenin **görünümünü ve hissini** (layout, renkler, tipografi ve markup) kontrol eder; backend, kimlik doğrulama, eklenti çalışma zamanı ve veri yükleme işlemleri ise sizin için halledilir.
+Bir Pano **teması**, web sitenizin nasıl göründüğünü kontrol eder — renklerini, fontlarını ve düzenini. Zor kısımlar (giriş, eklentiler, veri yükleme, derleme) `@panomc/theme-core` adlı bir motor tarafından sizin için önceden halledilmiştir. Temanız yalnızca bunun üzerine oturur ve görünümü değiştirir.
 
-## Bir tema artık nedir?
+Bu sayfa sizi sıfırdan çalışan bir temaya götürür ve yaklaşık iki dakikada ilk değişikliğinizi yaptırır.
 
-Modern bir Pano teması, npm üzerinde yayınlanan **`@panomc/theme-core`** motorunun üzerine kurulmuş **ince bir paket**tir (güncel sürüm hattı `1.0.0-dev.x`). Motor; kimlik doğrulama akışlarını, eklenti çalışma zamanını, veri yüklemeyi ve derleme hattını bir bağımlılık olarak sunar — siz bunu kullanır ve tıpkı diğer paketler gibi `bun update` ile güncellersiniz.
+::: tip Uzman olmanıza gerek yok
+Buradaki her adımı komutları kopyalayıp yapıştırarak izleyebilirsiniz. Biraz **HTML**, **CSS**, **JavaScript** ve **Svelte** bilmek **yardımcı olur**, ancak başlamak için hiçbiri gerekli değildir.
 
-Tema deponuz genellikle yalnızca birkaç yüz satırdır: tasarım token'ları, isteğe bağlı görünüm (view) geçersiz kılmaları ve meta veriler. Zor olan her şey zaten motorun içinde yaşar.
+Bunlar sizin için yeni mi? Bu ücretsiz kaynaklar harika:
 
-> **`vanilla-theme`, dahili SİSTEM temasıdır, bir şablon değildir.** Onu **fork'lamayın veya kopyalamayın**. Korumalıdır ve Pano tarafından dahili olarak yönetilir. Bunun yerine yeni bir temaya aşağıdaki iskele oluşturucu (scaffolder) ile başlayın.
+- **Svelte** — [svelte.dev/tutorial](https://svelte.dev/tutorial)
+- **HTML / CSS / JavaScript** — [MDN Web Docs](https://developer.mozilla.org/)
+:::
 
-## Gereksinimler
+## Neye ihtiyacınız var
 
-Başlamadan önce aşağıdakilere sahip olduğunuzdan emin olun:
+Başlamadan önce şu üç şeye sahip olduğunuzdan emin olun:
 
-- Kurulu **Bun** (Pano frontend'leri npm/pnpm değil, Bun kullanır).
-- **Yerelde çalışan bir Pano örneği** — temanızın geliştirme sunucusu API çağrılarını buraya yönlendirir (proxy).
-- Temel düzeyde **Svelte 5** ve **SCSS** bilgisi (yalnızca token'ların ötesine geçtiğinizde gereklidir).
+| İhtiyacınız olan | Nedir |
+|---|---|
+| **Bun** | Pano frontend'lerini kuran ve çalıştıran araç. [bun.sh](https://bun.sh) adresinden kurun. |
+| **Çalışan bir Pano** | Kendi Pano sunucunuz veya bilgisayarınızda çalışan bir tane. Çalışırken temanız onunla konuşur. |
+| **Bir kod editörü** | [VS Code](https://code.visualstudio.com/) gibi herhangi bir kod metin editörü. |
 
-## Tema oluşturma
+## Temanızı oluşturun
 
-`theme-core` CLI ile yeni bir tema oluşturun:
+Yeni bir temayı **tek komutla** oluşturursunuz. Bir terminal açın ve şunu çalıştırın:
 
 ```sh
 bunx theme-core new my-theme
 ```
 
-Bu komut, **17 dosyalık bir iskele** üretir — manifest, config, stil token'ları, hooks shim'leri ve SvelteKit iskeleti. Ardından kurun ve başlatın:
+Bu, içinde bir temanın ihtiyaç duyduğu her şeyle birlikte `my-theme` adında yeni bir klasör oluşturur.
+
+Şimdi o klasöre girin ve parçalarını kurun:
 
 ```sh
 cd my-theme
 bun install
-bun run sync          # motordan rota/lib köprülerini üretir
-bun run dev           # çalışan bir Pano backend'ine karşı geliştirme sunucusu
 ```
 
-> **`bun install` "Resolving…" adımında takılırsa**, iptal edip şununla yeniden deneyin:
-> ```sh
-> bun install --backend=copyfile
-> ```
+::: tip `bun install` takılmış gibi görünürse
+"Resolving…" adımında takılırsa, durdurun (`Ctrl + C`'ye basın) ve bunun yerine şunu çalıştırın:
 
-Geliştirme sunucusu API çağrılarını yerel Pano backend'inize yönlendirir. Hedefi `.env` içinde ayarlayın:
+```sh
+bun install --backend=copyfile
+```
+:::
+
+Ardından, motorun sizin için sağladığı dosyaları üretin:
+
+```sh
+bun run sync
+```
+
+Şimdi temanıza çalışan Pano'nuzun nerede olduğunu söyleyin. `.env` adlı dosyayı açın ve adresi ayarlayın:
 
 ```sh
 # .env
 VITE_API_URL=http://localhost:8088/api
 ```
 
-## Sizin sahip olduklarınız ve üretilenler
+::: tip
+`8088`, varsayılan Pano portudur. Pano'nuz başka bir yerde çalışıyorsa, onun adresini kullanın.
+:::
 
-Hangi dosyaların sizin, hangilerinin yeniden üretildiğini bilmek, sorunsuz güncellemelerin anahtarıdır.
-
-**Sizin — özgürce düzenleyin, deponuza kaydedin:**
-
-| Yol | Amaç |
-|---|---|
-| `manifest.json` | id, başlık, sürüm, yazar, `panoVersion`, ekran görüntüleri |
-| `theme.config.js` | görünüm geçersiz kılmaları + ayar şeması genişletmeleri |
-| `src/styles/tokens.scss` | tasarım token'larınız (renkler, köşe yarıçapları, fontlar, gölgeler) |
-| `src/styles/style.scss` | önce token'lar, sonra motor SCSS'i, sonra kendi CSS'iniz |
-| `src/views/` | görünüm geçersiz kılmalarınız (yalnızca eject ettikleriniz) |
-| `lang-overrides/` | yalnızca değiştirdiğiniz i18n anahtarları (derin birleştirilir, eklemeli) |
-| `static/` | varlıklarınız (asset) |
-
-**Üretilen — asla elle düzenlemeyin (`bun run sync` bunları yeniden oluşturur):**
-
-| Yol | Amaç |
-|---|---|
-| `src/routes/` | motordan üretilen rota shim'leri |
-| `src/lib/` | üretilen köprüler + SDK host-provides stub'ları |
-| `lang/` | temel dil dosyaları (`lang-overrides/` ile geçersiz kılın) |
-
-> Üretilen dosyaları elle düzenlemek, değişikliklerinizin bir sonraki `sync` veya motor güncellemesinde kaybolması demektir. Her değişikliği, sahip olduğunuz dosyalara koyun.
-
-## Katman 1 — Token'lar (bakım gerektirmeyen yeniden stilleme)
-
-En basit tema, token'lardan başka hiçbir şeyi değiştirmez. `src/styles/tokens.scss`, **her motor değişkeninin yorum satırına alınmış bir menüsü** olarak gelir. İstediklerinizin yorumunu kaldırın ve değerlerini değiştirin:
-
-```scss
-// src/styles/tokens.scss
-$color-primary:    #ff5722;
-$color-background: #0f1115;
-$radius-base:      12px;
-$font-family-base: "Inter", sans-serif;
-```
-
-Her motor değişkeni `!default` olarak tanımlanmıştır, bu yüzden sizin değeriniz her zaman kazanır. Yalnızca token içeren bir tema **sonsuza dek bakım gerektirmez** — motor minor ve hatta major sürümleri boyunca hiçbir düzenleme olmadan çalışmaya devam eder. Tek başına bu bile gözle görülür biçimde farklı bir tema üretir.
-
-## Katman 2 — Görünümler (özel markup)
-
-Token'lar yeterli olmadığında ve farklı bir markup gerektiğinde, bir **görünümü (view)** geçersiz kılın. Geçersiz kılınabilen tüm görünümleri ve prop'larını listeleyin:
+Son olarak, başlatın:
 
 ```sh
-bunx theme-core list-views
+bun run dev
 ```
 
-Geçersiz kılınabilen **26 görünüm** vardır. Birini özelleştirmek için eject edin:
+Tarayıcınızda **`http://localhost:3000`** adresini açın. Sitenizi yeni temanızla çalışırken görmelisiniz.
 
-```sh
-bunx theme-core eject-view LoginView
-```
+## 2 dakikada ilk değişikliğiniz
 
-Bu komut, motorun varsayılan görünümünü `src/views/LoginView.svelte` içine kopyalar ve `theme.config.js` içinde kaydeder. Dosyanın başlığı (header) **her prop'u** belgeler — store'lar store nesnesi olarak gelir (`$store` kullanın), eylemler (action) ise fonksiyon olarak gelir.
+Temanızın ana rengini değiştirelim.
 
-Sayfa çerçevesi (`Navbar`, `Header`, `Footer`) ve eklentiye bakan bileşenler (`LoginFormBody`, `RegisterForm`, `Pagination`, …) aynı şekilde tek tek geçersiz kılınabilir — bir navbar'ı yeniden stillemek için tüm bir layout'u eject etmeniz gerekmez.
+1. Editörünüzde `src/styles/tokens.scss` dosyasını açın.
+2. Ana renk (primary) için olan satırı bulun. Başlangıçta yorum satırına alınmış olarak gelir, şöyle:
+   ```scss
+   // $primary: #ff5722;
+   ```
+3. Etkinleştirmek için baştaki `//` işaretini kaldırın ve rengi değiştirin:
+   ```scss
+   $primary: #10b981;
+   ```
+4. Dosyayı kaydedin, sonra tarayıcınızı yenileyin.
 
-> **Her eklenti bağlama noktasını (mount point) koruyun.** Geçersiz kılınan bir görünüm, varsayılan görünümün bağladığı `<ViewComponent>` slot'larını ve `<Hook>` işaretçilerini **korumak zorundadır**. Birini kaldırırsanız, kurulu eklentiler sessizce kaybolur — ve `bun run check` gönderemeden önce hata verir.
+Siteniz artık yeni rengi kullanıyor. Bütün döngü budur: düzenle, kaydet, yenile.
 
-## Ek tema ayarları
+::: tip Az önce ne oldu
+`tokens.scss`, temanızın tasarım değerlerinin bir listesidir — renkler, fontlar, boyutlar. Motordaki her değer buradan değiştirilebilir. Bir token'ı değiştirin, kullanıldığı her yerde değişir.
+:::
 
-Tema ayarları sayfası, bir sekme → ayar anahtarı eşlemesiyle sürülür. Geçersiz kıldığınız bir görünüm ek girdiler (yeni anahtarlar veya tüm bir yeni sekme) oluşturuyorsa, panelin bunları **kaydetmesi ve sıfırlaması** için `theme.config.js` içinde bildirin (aksi halde görünürler ama asla kalıcı olmazlar):
+## Sırada ne var
 
-```js
-// theme.config.js
-export default {
-  views: {
-    ThemeSettingsView: () => import("./src/views/ThemeSettingsView.svelte"),
-  },
-  settingsSchema: {
-    // Yalnızca eklemeli: anahtarlar bir sekmeye EKLENİR (yoksa yeni bir sekme
-    // oluşturulur). Bir temel anahtarı kaldıramaz veya taşıyamazsınız.
-    tabs: {
-      header: ["heroSubtitle", "heroSubtitleVisibility"],
-      "support-page": ["supportPageDiscordLink"],
-    },
-    // İsteğe bağlı: sayfanın açılacağı sekme. Yalnızca görünümünüz temel
-    // varsayılan sekmeyi ("general") oluşturmuyorsa gereklidir.
-    defaultTab: "logo",
-  },
-};
-```
+Artık çalışan bir temanız var ve onu nasıl değiştireceğinizi biliyorsunuz. Ne yapmak istediğinize göre nereye gideceğiniz aşağıda:
 
-Kurallar: bir anahtar tam olarak **bir** sekmede bulunabilir (kaydetme/sıfırlama sekme başınadır) ve `defaultTab` gerçek bir sekme olmalıdır. Yalnızca markup içinde *okuduğunuz* (ayar görünümünde girdisi olmayan) bir anahtar için şema girişi gerekmez.
-
-## Bir temayı gönderme
-
-Derleme ve paketleme, tasarımı gereği yeniden üretilebilir (reproducible):
-
-```sh
-bun run build        # yeniden üretilebilir derleme (kit sürümü sabitlenmiş, deterministik)
-bun run check        # sözleşmeyi doğrular — herhangi bir ihlalde hata verir
-bun run package      # deterministik zip
-```
-
-Ardından üretilen `.zip` dosyasını **Panel → Görünüm → Temalar → Tema Yükle** üzerinden kurun.
-
-**Premium temalar:** zip'in **sha256 değeri lisans kimliğidir**. Lisans kapısı, özgürce geliştirebilmeniz için **`vite dev` altında atlanır** ve **production derlemelerinde uygulanır**.
-
-`bun run check`, gönderimden önce sözleşmeyi uygular:
-
-- `svelte`, core'un sürümüne tam olarak sabitlenmiş olmalı (uyumsuzluk eklentileri sessizce düşürür)
-- kayıtlı her görünüm mevcut ve bilinen bir sözleşme adı olmalı
-- geçersiz kılınan görünümler, varsayılanın bağladığı her slot/hook'u korumalı
-- `lang-overrides/*.json` ayrıştırılabilir ve eklemeli olarak birleşmeli
-- `settingsSchema` şekilce geçerli, yalnızca eklemeli olmalı ve `defaultTab` değeri gerçek olmalı
-- `manifest.json` gerekli anahtarları taşımalı ve `id` değeri `vanilla-theme` olmamalı
-
-## Motoru güncelleme
-
-Yükseltme üç komutluk bir döngüdür:
-
-```sh
-bun update @panomc/theme-core && bunx theme-core sync && bun run build
-```
-
-- **Yalnızca token içeren temalar** başka bir şeye ihtiyaç duymaz — **major sürümlerde bile** tüm göç bundan ibarettir.
-- **Görünüm geçersiz kılmaları** minor sürümlerden etkilenmez (prop'lar yalnızca eklenir, asla değiştirilmez veya kaldırılmaz). Bir **major** sürümde, yalnızca geçersiz kıldığınız görünümler dikkat gerektirebilir — `bun run check` her sözleşme ihlalini listeler ve motorun değişiklik günlüğü görünüm başına prop değişikliklerini belgeler.
-
-Bütün model bundan ibarettir: bakım gerektirmeyen bir tema için token'larda kalın, yalnızca özel markup gerektiren yerlerde görünümlere inin ve gerisini motorun taşımasına izin verin.
+- **[Tema Yapısı](/tr/theme/structure/)** — tüm dosyaların ne olduğu ve hangilerinin size ait olduğu.
+- **[Özelleştirme](/tr/theme/customization/)** — token'lar ve stillerle daha derine inin.
+- **[Görünümler](/tr/theme/views/)** — yalnızca renkleri değil, gerçek düzeni ve markup'ı değiştirin.
+- **[Yerelleştirme](/tr/theme/localization/)** — temanızı başka dillere çevirin.
+- **[Paketleme](/tr/theme/packaging/)** — temanızı kurabileceğiniz bir dosyaya derleyin.
+- **[Yayınlama](/tr/theme/publishing/)** — temanızı başkalarıyla paylaşın.

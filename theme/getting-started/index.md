@@ -1,170 +1,106 @@
 # Getting Started
 
-This area covers everything you need to build a Pano theme. A theme controls the **look and feel** of the public website — layouts, colors, typography, and markup — while the backend, authentication, plugin runtime, and data loading are handled for you.
+A Pano **theme** controls how your website looks — its colors, fonts, and layout. The hard parts (login, plugins, loading data, building) are already done for you by an engine called `@panomc/theme-core`. Your theme just sits on top and changes the look.
 
-## What a theme is now
+This page gets you from nothing to a running theme, and makes your first change in about two minutes.
 
-A modern Pano theme is a **thin package** built on top of the **`@panomc/theme-core`** engine, published on npm (current line `1.0.0-dev.x`). The engine ships the auth flows, plugin runtime, data loading, and build pipeline as a dependency — you consume it and update it with `bun update`, the same way you update any package.
+::: tip You do not need to be an expert
+You can follow every step here by copying and pasting commands. It **helps** to know a little **HTML**, **CSS**, **JavaScript**, and **Svelte**, but none of it is required to start.
 
-Your theme repo is typically only a few hundred lines: design tokens, optional view overrides, and metadata. Everything hard already lives in the engine.
+New to these? These free guides are great:
 
-> **`vanilla-theme` is the built-in SYSTEM theme, not a template.** Do **not** fork or copy it. It is protected and managed internally by Pano. Start a new theme with the scaffolder below instead.
+- **Svelte** — [svelte.dev/tutorial](https://svelte.dev/tutorial)
+- **HTML / CSS / JavaScript** — [MDN Web Docs](https://developer.mozilla.org/)
+:::
 
-## Prerequisites
+## What you need
 
-Before you begin, make sure you have:
+Before you start, make sure you have these three things:
 
-- **Bun** installed (Pano front-ends use Bun, not npm/pnpm).
-- A **Pano instance running locally** — your theme's dev server proxies API calls to it.
-- Basic familiarity with **Svelte 5** and **SCSS** (only needed once you go beyond tokens).
+| You need | What it is |
+|---|---|
+| **Bun** | The tool that installs and runs Pano front-ends. Install it from [bun.sh](https://bun.sh). |
+| **A running Pano** | Your own Pano server, or one running on your computer. Your theme talks to it while you work. |
+| **A code editor** | Any text editor for code, such as [VS Code](https://code.visualstudio.com/). |
 
-## Create a theme
+## Create your theme
 
-Scaffold a new theme with the `theme-core` CLI:
+You create a new theme with **one command**. Open a terminal and run:
 
 ```sh
 bunx theme-core new my-theme
 ```
 
-This generates a **17-file scaffold** — manifest, config, style tokens, hooks shims, and the SvelteKit skeleton. Then install and boot it:
+This makes a new folder called `my-theme` with everything a theme needs inside it.
+
+Now go into that folder and install its parts:
 
 ```sh
 cd my-theme
 bun install
-bun run sync          # generates route/lib bridges from the engine
-bun run dev           # dev server against a running Pano backend
 ```
 
-> **If `bun install` hangs at "Resolving…"**, cancel and retry with:
-> ```sh
-> bun install --backend=copyfile
-> ```
+::: tip If `bun install` seems stuck
+If it hangs on "Resolving…", stop it (press `Ctrl + C`) and run this instead:
 
-The dev server proxies API calls to your local Pano backend. Set the target in `.env`:
+```sh
+bun install --backend=copyfile
+```
+:::
+
+Next, generate the files the engine provides for you:
+
+```sh
+bun run sync
+```
+
+Now tell your theme where your running Pano is. Open the file called `.env` and set the address:
 
 ```sh
 # .env
 VITE_API_URL=http://localhost:8088/api
 ```
 
-## What you own vs. what is generated
+::: tip
+`8088` is the default Pano port. If your Pano runs somewhere else, use that address instead.
+:::
 
-Knowing which files are yours and which are regenerated is the key to painless upgrades.
-
-**Yours — edit freely, committed to your repo:**
-
-| Path | Purpose |
-|---|---|
-| `manifest.json` | id, title, version, author, `panoVersion`, screenshots |
-| `theme.config.js` | view overrides + settings-schema extensions |
-| `src/styles/tokens.scss` | your design tokens (colors, radii, fonts, shadows) |
-| `src/styles/style.scss` | tokens first, then engine SCSS, then your CSS |
-| `src/views/` | your view overrides (only the ones you eject) |
-| `lang-overrides/` | only the i18n keys you change (deep-merged, additive) |
-| `static/` | your assets |
-
-**Generated — never hand-edit (`bun run sync` recreates them):**
-
-| Path | Purpose |
-|---|---|
-| `src/routes/` | route shims generated from the engine |
-| `src/lib/` | generated bridges + SDK host-provides stubs |
-| `lang/` | base language files (override via `lang-overrides/`) |
-
-> Hand-editing generated files means your changes vanish on the next `sync` or engine update. Put every change in the files you own.
-
-## Tier 1 — Tokens (zero-maintenance restyle)
-
-The simplest theme changes nothing but tokens. `src/styles/tokens.scss` ships as a **commented menu of every engine variable**. Uncomment the ones you want and change their values:
-
-```scss
-// src/styles/tokens.scss
-$color-primary:    #ff5722;
-$color-background: #0f1115;
-$radius-base:      12px;
-$font-family-base: "Inter", sans-serif;
-```
-
-Every engine variable is declared `!default`, so your value always wins. A tokens-only theme is **zero-maintenance forever** — it keeps working across engine minors and even majors with no edits. This alone produces a visibly distinct theme.
-
-## Tier 2 — Views (custom markup)
-
-When tokens aren't enough and you need different markup, override a **view**. List every overridable view and its props:
+Finally, start it:
 
 ```sh
-bunx theme-core list-views
+bun run dev
 ```
 
-There are **26 overridable views**. To customize one, eject it:
+Open **`http://localhost:3000`** in your browser. You should see your site, running with your new theme.
 
-```sh
-bunx theme-core eject-view LoginView
-```
+## Your first change in 2 minutes
 
-This copies the engine's default view into `src/views/LoginView.svelte` and registers it in `theme.config.js`. The file's header documents **every prop** — stores arrive as store objects (use `$store`), actions arrive as functions.
+Let's change the main color of your theme.
 
-The page chrome (`Navbar`, `Header`, `Footer`) and plugin-facing components (`LoginFormBody`, `RegisterForm`, `Pagination`, …) are individually overridable the same way — you don't have to eject a whole layout to restyle a navbar.
+1. In your editor, open `src/styles/tokens.scss`.
+2. Find the line for the primary color. It starts commented out, like this:
+   ```scss
+   // $primary: #ff5722;
+   ```
+3. Remove the `//` at the start to turn it on, and change the color:
+   ```scss
+   $primary: #10b981;
+   ```
+4. Save the file, then refresh your browser.
 
-> **Keep every plugin mount point.** An overridden view **must** retain the `<ViewComponent>` slots and `<Hook>` markers the default view mounted. If you drop one, installed plugins silently disappear — and `bun run check` fails before you can ship.
+Your site now uses the new color. That is the whole loop: edit, save, refresh.
 
-## Extra theme settings
+::: tip What just happened
+`tokens.scss` is a list of your theme's design values — colors, fonts, sizes. Every value in the engine can be replaced from here. Change a token, and it changes everywhere it is used.
+:::
 
-The theme-settings page is driven by a tab → settings-key map. If an overridden view renders extra inputs — new keys, or a whole new tab — declare them in `theme.config.js` so the panel **saves and resets** them (otherwise they render but never persist):
+## Where to next
 
-```js
-// theme.config.js
-export default {
-  views: {
-    ThemeSettingsView: () => import("./src/views/ThemeSettingsView.svelte"),
-  },
-  settingsSchema: {
-    // Additive only: keys are APPENDED to a tab (a new tab is created if
-    // absent). You cannot remove or move a base key.
-    tabs: {
-      header: ["heroSubtitle", "heroSubtitleVisibility"],
-      "support-page": ["supportPageDiscordLink"],
-    },
-    // Optional: the tab the page opens on. Only required when your view does
-    // not render the base default tab ("general").
-    defaultTab: "logo",
-  },
-};
-```
+You now have a running theme and know how to change it. Here is where to go depending on what you want to do:
 
-Rules: a key may live in exactly **one** tab (save/reset are per-tab), and `defaultTab` must be a real tab. A key you only *read* in markup (with no input in the settings view) needs no schema entry.
-
-## Ship a theme
-
-Building and packaging is reproducible by design:
-
-```sh
-bun run build        # reproducible build (kit version pinned, deterministic)
-bun run check        # verifies the contract — fails on any violation
-bun run package      # deterministic zip
-```
-
-Then install the produced `.zip` from **Panel → View → Themes → Install Theme**.
-
-**Premium themes:** the zip's **sha256 is the license identity**. The license gate is **skipped under `vite dev`** so you can develop freely, and **enforced in production builds**.
-
-`bun run check` enforces the contract before you ship:
-
-- `svelte` pinned exactly to core's version (skew silently drops plugins)
-- every registered view exists and is a known contract name
-- overridden views keep every plugin slot/hook the default mounts
-- `lang-overrides/*.json` parse and merge additively
-- `settingsSchema` is shape-valid, appends only, and its `defaultTab` is real
-- `manifest.json` carries the required keys and its `id` is not `vanilla-theme`
-
-## Update the engine
-
-Upgrading is a three-command loop:
-
-```sh
-bun update @panomc/theme-core && bunx theme-core sync && bun run build
-```
-
-- **Tokens-only themes** need nothing more — this is the entire migration, **even across majors**.
-- **View overrides** are unaffected by minors (props are only added, never changed or removed). On a **major**, only the views you overrode may need attention — `bun run check` lists every contract violation, and the engine's changelog documents the prop changes per view.
-
-That's the whole model: stay on tokens for a maintenance-free theme, drop down to views only where you need custom markup, and let the engine carry the rest.
+- **[Theme Structure](/theme/structure/)** — what all the files are, and which ones are yours to edit.
+- **[Customization](/theme/customization/)** — go deeper with tokens and styles.
+- **[Views](/theme/views/)** — change the actual layout and markup, not just colors.
+- **[Localization](/theme/localization/)** — translate your theme into other languages.
+- **[Packaging](/theme/packaging/)** — build your theme into a file you can install.
+- **[Publishing](/theme/publishing/)** — share your theme with others.

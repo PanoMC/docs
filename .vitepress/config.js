@@ -160,6 +160,30 @@ export default defineConfig({
                 text: "Getting Started",
                 link: "/theme/getting-started/",
               },
+              {
+                text: "Theme Structure",
+                link: "/theme/structure/",
+              },
+              {
+                text: "Colors & Styling",
+                link: "/theme/customization/",
+              },
+              {
+                text: "Changing Page Designs",
+                link: "/theme/views/",
+              },
+              {
+                text: "Localization",
+                link: "/theme/localization/",
+              },
+              {
+                text: "Building & Packaging",
+                link: "/theme/packaging/",
+              },
+              {
+                text: "Publishing & Premium",
+                link: "/theme/publishing/",
+              },
             ],
           },
           {
@@ -304,6 +328,30 @@ export default defineConfig({
                 text: "Başlangıç",
                 link: "/tr/theme/getting-started/",
               },
+              {
+                text: "Tema Yapısı",
+                link: "/tr/theme/structure/",
+              },
+              {
+                text: "Renkler ve Stiller",
+                link: "/tr/theme/customization/",
+              },
+              {
+                text: "Sayfa Tasarımlarını Değiştirme",
+                link: "/tr/theme/views/",
+              },
+              {
+                text: "Yerelleştirme",
+                link: "/tr/theme/localization/",
+              },
+              {
+                text: "Derleme ve Paketleme",
+                link: "/tr/theme/packaging/",
+              },
+              {
+                text: "Yayınlama ve Premium",
+                link: "/tr/theme/publishing/",
+              },
             ],
           },
           {
@@ -447,6 +495,30 @@ export default defineConfig({
               {
                 text: "Начало работы",
                 link: "/ru/theme/getting-started/",
+              },
+              {
+                text: "Структура темы",
+                link: "/ru/theme/structure/",
+              },
+              {
+                text: "Цвета и стили",
+                link: "/ru/theme/customization/",
+              },
+              {
+                text: "Изменение дизайна страниц",
+                link: "/ru/theme/views/",
+              },
+              {
+                text: "Локализация",
+                link: "/ru/theme/localization/",
+              },
+              {
+                text: "Сборка и упаковка",
+                link: "/ru/theme/packaging/",
+              },
+              {
+                text: "Публикация и Premium",
+                link: "/ru/theme/publishing/",
               },
             ],
           },
