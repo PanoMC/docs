@@ -10,7 +10,7 @@ Bu el kitabı için Pano'yu **geliştirme modunda** başlattığınızı varsaya
 
 ```sh
 # Pano klasörünüzde
-./pano --dev
+java -jar Pano-v1.0.0.jar --dev
 ```
 
 `--dev` modunda Pano **8088** portunu dinler. (`--dev` olmadan varsayılan **80** portudur.) Bunu kendi terminalinde çalışır durumda bırakın.

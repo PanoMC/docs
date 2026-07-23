@@ -10,7 +10,7 @@ For this handbook we'll assume you started Pano in **development mode**:
 
 ```sh
 # in your Pano folder
-./pano --dev
+java -jar Pano-v1.0.0.jar --dev
 ```
 
 In `--dev` mode Pano listens on port **8088**. (Without `--dev`, the default is port **80**.) Keep this running in its own terminal.
