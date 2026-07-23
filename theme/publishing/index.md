@@ -60,6 +60,44 @@ Replace `my-theme` with your theme's `id` from `manifest.json`.
 `GITHUB_TOKEN` is provided automatically by GitHub Actions — you do not need to create it. Just pass it through as shown.
 :::
 
+## Publishing on the official Pano Marketplace
+
+The Marketplace on [panomc.com](https://panomc.com) is where server owners discover and install themes straight from their panel. Publishing there takes three steps: create an account, create a resource, then upload versions (by hand or automatically).
+
+### 1. Create an account and a resource
+
+1. Sign up (or log in) at **panomc.com**.
+2. Open **Create Resource**.
+3. Choose the type **Theme**, pick a category, fill in the title and description, and upload at least one **screenshot** — screenshots are required for themes, since they are how people judge a theme at a glance.
+4. Choose the pricing: **free**, or **paid** if you plan to sell it (see the premium section below).
+
+When the resource is created, it gets a **resource ID** (a long unique code, a UUID). You will find your resources and their IDs later under **Profile → Resources**. This ID is how release tools refer to your theme on the Marketplace — keep it handy.
+
+::: tip Two different IDs
+Your `manifest.json` `id` (like `my-theme`) identifies the theme *package* itself. The Marketplace **resource ID** (the UUID) identifies your theme's *store page* on panomc.com. They are separate things, and the release automation needs the UUID.
+:::
+
+### 2. Upload versions — manually or automatically
+
+The simple way: open your resource page and upload the `.zip` from `bun run package` as a new version whenever you release.
+
+The better way is to automate it with **`semantic-release-pano`**, so every push publishes to GitHub *and* the Marketplace in one go:
+
+1. On panomc.com, create an **API token** under **Profile → Security → API tokens**, and add it to your GitHub repository as a secret named `PANO_TOKEN` (**Settings → Secrets → Actions**).
+2. Add `semantic-release-pano` to your release configuration (`.releaserc.json`), pointing at your resource ID:
+
+```json
+["semantic-release-pano", {
+  "resourceId": "YOUR-RESOURCE-UUID",
+  "file": "my-theme-${version}.zip",
+  "panoVersion": "1.0.0",
+  "useGitHubLink": true,
+  "repositoryUrl": "https://github.com/YourName/my-theme.git"
+}]
+```
+
+With `useGitHubLink`, free themes are not uploaded twice: the Marketplace links to the `.zip` already attached to your GitHub release (so the GitHub release step must run *before* this plugin). Without it, the plugin uploads the file to the Marketplace directly — which is what you want for premium themes.
+
 ## Making your theme premium
 
 A premium theme is one people pay for on panomc.com, protected so it only runs on servers that actually purchased it.
@@ -88,6 +126,10 @@ For a free theme (`"premium": false`), these variables are ignored — they do n
 - To use your premium theme, a server must have a **panomc.com account connected** in its panel, and that account must have purchased your theme. Pano checks this both when the theme is **installed** and while it **runs**.
 - If the package is tampered with or repacked, its fingerprint no longer matches the licensed one, and Pano rejects it.
 - During `bun run dev` the license gate is **turned off**, so you can develop freely without any license at all. Protection only applies to production builds.
+
+::: warning No protection is absolute
+Be honest with yourself about what this system can and cannot do: **no license system can protect code 100%**. The goal here is to make unauthorized use as hard as possible for the vast majority of users — not to make it impossible. Like every piece of software, any code that ends up in the end user's hands is inherently exposed: someone sufficiently determined and skilled can always take it apart. This is true of every DRM ever made, not just Pano's. Price and support your theme with that reality in mind.
+:::
 
 ::: warning Keep versions moving via releases
 A premium license is issued per **version + package**. If you edit a `.zip` that was already released, its fingerprint changes and it will no longer be licensed. Always ship changes as a **new release** through the normal flow above — never hand-edit a released `.zip`.

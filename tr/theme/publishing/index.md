@@ -60,6 +60,44 @@ Dosyanın tamamı bu kadar. Push yaptığınızda paylaşılan workflow:
 `GITHUB_TOKEN`, GitHub Actions tarafından otomatik olarak sağlanır — oluşturmanıza gerek yoktur. Yalnızca gösterildiği gibi iletin.
 :::
 
+## Resmi Pano Marketplace'te yayınlama
+
+[panomc.com](https://panomc.com) üzerindeki Marketplace, sunucu sahiplerinin temaları doğrudan panellerinden keşfedip kurduğu yerdir. Orada yayınlamak üç adımdan oluşur: bir hesap oluşturun, bir kaynak (resource) oluşturun, sonra sürümleri yükleyin (elle ya da otomatik olarak).
+
+### 1. Bir hesap ve bir kaynak oluşturun
+
+1. **panomc.com** adresinde kaydolun (veya giriş yapın).
+2. **Create Resource**'u açın.
+3. Tür olarak **Theme** seçin, bir kategori seçin, başlık ile açıklamayı doldurun ve en az bir **ekran görüntüsü** yükleyin — ekran görüntüleri temalar için gereklidir, çünkü insanların bir temayı bir bakışta değerlendirme biçimi budur.
+4. Fiyatlandırmayı seçin: **ücretsiz** ya da satmayı planlıyorsanız **ücretli** (aşağıdaki premium bölümüne bakın).
+
+Kaynak oluşturulduğunda bir **resource ID** (uzun, benzersiz bir kod, bir UUID) alır. Kaynaklarınızı ve kimliklerini sonradan **Profile → Resources** altında bulursunuz. Bu kimlik, yayın araçlarının temanıza Marketplace üzerinde nasıl atıfta bulunduğudur — elinizin altında tutun.
+
+::: tip İki farklı kimlik
+`manifest.json` `id`'niz (`my-theme` gibi) tema *paketinin* kendisini tanımlar. Marketplace **resource ID**'si (UUID) ise temanızın panomc.com'daki *mağaza sayfasını* tanımlar. Bunlar ayrı şeylerdir ve yayın otomasyonu UUID'ye ihtiyaç duyar.
+:::
+
+### 2. Sürümleri yükleyin — elle ya da otomatik olarak
+
+Basit yol: kaynak sayfanızı açın ve her yayınladığınızda `bun run package`'tan çıkan `.zip`'i yeni bir sürüm olarak yükleyin.
+
+Daha iyi yol, bunu **`semantic-release-pano`** ile otomatikleştirmektir; böylece her push tek seferde hem GitHub'a *hem de* Marketplace'e yayınlanır:
+
+1. panomc.com'da **Profile → Security → API tokens** altında bir **API token** oluşturun ve GitHub deponuza `PANO_TOKEN` adlı bir gizli anahtar (secret) olarak ekleyin (**Settings → Secrets → Actions**).
+2. `semantic-release-pano`'yu yayın yapılandırmanıza (`.releaserc.json`) ekleyin ve kaynak kimliğinize yönlendirin:
+
+```json
+["semantic-release-pano", {
+  "resourceId": "YOUR-RESOURCE-UUID",
+  "file": "my-theme-${version}.zip",
+  "panoVersion": "1.0.0",
+  "useGitHubLink": true,
+  "repositoryUrl": "https://github.com/YourName/my-theme.git"
+}]
+```
+
+`useGitHubLink` ile ücretsiz temalar iki kez yüklenmez: Marketplace, GitHub sürümünüze zaten eklenmiş `.zip`'e bağlantı verir (bu yüzden GitHub sürüm adımı bu eklentiden *önce* çalışmalıdır). O olmadan, eklenti dosyayı doğrudan Marketplace'e yükler — premium temalar için istediğiniz budur.
+
 ## Temanızı premium yapma
 
 Premium bir tema, insanların panomc.com üzerinden satın aldığı ve yalnızca gerçekten satın alan sunucularda çalışacak şekilde korunan bir temadır.
@@ -88,6 +126,10 @@ Bir premium derleme, lisansı paketinize bağlayabilmek için bir açık anahtar
 - Premium temanızı kullanmak için bir sunucunun panelinde **bağlı bir panomc.com hesabı** olmalı ve o hesabın temanızı satın almış olması gerekir. Pano bunu hem tema **kurulduğunda** hem de **çalışırken** denetler.
 - Paket kurcalanır veya yeniden paketlenirse, parmak izi lisanslı olanla artık eşleşmez ve Pano onu reddeder.
 - `bun run dev` sırasında lisans kapısı **kapalıdır**, bu yüzden herhangi bir lisans olmadan özgürce geliştirebilirsiniz. Koruma yalnızca production derlemelerinde geçerlidir.
+
+::: warning Hiçbir koruma mutlak değildir
+Bu sistemin ne yapabileceği ve ne yapamayacağı konusunda kendinize karşı dürüst olun: **hiçbir lisans sistemi kodu %100 koruyamaz**. Buradaki amaç, yetkisiz kullanımı kullanıcıların büyük çoğunluğu için mümkün olduğunca zorlaştırmaktır — imkansız kılmak değil. Her yazılım parçası gibi, son kullanıcının eline geçen her kod doğası gereği açıktır: yeterince kararlı ve yetenekli biri onu her zaman parçalarına ayırabilir. Bu, yalnızca Pano'nunki için değil, yapılmış her DRM için geçerlidir. Temanızı bu gerçeği aklınızda tutarak fiyatlandırın ve destekleyin.
+:::
 
 ::: warning Sürümleri yayınlarla ilerletin
 Bir premium lisans, **sürüm + paket** başına verilir. Zaten yayınlanmış bir `.zip`'i düzenlerseniz parmak izi değişir ve artık lisanslı olmaz. Değişiklikleri her zaman yukarıdaki normal akış üzerinden **yeni bir yayın** olarak gönderin — yayınlanmış bir `.zip`'i asla elle düzenlemeyin.

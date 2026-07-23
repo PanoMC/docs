@@ -10,6 +10,52 @@ Yayınlamaya hazır olduğunuzda bir **production derlemesi** oluşturursunuz. B
 
 Elle bir şey değiştirmenize gerek yoktur — aşağıdaki komutlar doğru olanı yapar.
 
+## Temanızın kimliği — `manifest.json`
+
+Tema klasörünüzün kökünde `manifest.json` bulunur — Pano'ya (ve herkese) bu temanın *ne olduğunu* söyleyen kart. İskelet onu sizin için oluşturdu, ama yayınlamadan önce doldurmalısınız:
+
+```json
+{
+  "id": "my-theme",
+  "title": "My Theme",
+  "description": "A clean, dark theme for survival servers",
+  "version": "1.0.0",
+  "author": "YourName",
+  "panoVersion": "1.0.0",
+  "screenshots": ["screenshots/1.png"],
+  "premium": false
+}
+```
+
+| Alan | Nedir |
+|---|---|
+| `id` | Temanızın **benzersiz tanımlayıcısı** — `my-theme` gibi küçük harfli, tireyle ayrılmış bir ad. Pano temaları birbirinden ayırmak için bunu kullanır ve paketlenen dosya ona göre adlandırılır (`my-theme-1.0.0.zip`). Bir kez seçin ve yayınladıktan sonra **asla değiştirmeyin**: yeni bir `id`, tamamen farklı bir tema sayılır. Ayrıca `vanilla-theme` olmamalıdır — `check` bunu reddeder. |
+| `title` | Panelde kullanıcılara gösterilen, okunabilir ad. |
+| `description` | Temanın nasıl göründüğü hakkında bir iki cümle. |
+| `version` | Yayın sürümü. Yayın otomasyonunu kullanırsanız bu sizin için damgalanır — elle yükseltmeyin. |
+| `author` | Adınız veya ekibinizin adı. |
+| `panoVersion` | Temanızın hedeflediği Pano sürümü. |
+| `screenshots` | Görsel yollarının bir listesi (aşağıya bakın). |
+| `premium` | Ücretsiz bir tema için `false`; `true` ücretli lisans korumasını etkinleştirir. Bkz. [Yayınlama ve Premium](/tr/theme/publishing/). |
+
+### Ekran görüntüleri ekleme
+
+Görsellerinizi temanızın kökündeki bir `screenshots/` klasörüne koyun ve manifest'te listeleyin:
+
+```
+my-theme/
+├─ manifest.json
+└─ screenshots/
+   ├─ 1.png
+   └─ 2.png
+```
+
+```json
+"screenshots": ["screenshots/1.png", "screenshots/2.png"]
+```
+
+Derleme, `screenshots/` klasörünü otomatik olarak paketinize kopyalar, bu yüzden görseller `.zip`'in içinde yayınlanır. İyi bir ekran görüntüsü, temanızın ana sayfasının tam sayfa yakalanmış halidir — temalara göz atarken insanların gördüğü ilk şey odur.
+
 ## Adım 1 — Derleme
 
 Temanızın klasöründe bir terminal açın ve şunu çalıştırın:

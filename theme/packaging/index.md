@@ -10,6 +10,52 @@ When you are ready to ship, you make a **production build**. This is the polishe
 
 You do not need to switch anything by hand — the commands below do the right thing.
 
+## Your theme's identity — `manifest.json`
+
+At the root of your theme folder sits `manifest.json` — the card that tells Pano (and everyone else) what this theme *is*. The scaffold created it for you, but before shipping you should fill it in:
+
+```json
+{
+  "id": "my-theme",
+  "title": "My Theme",
+  "description": "A clean, dark theme for survival servers",
+  "version": "1.0.0",
+  "author": "YourName",
+  "panoVersion": "1.0.0",
+  "screenshots": ["screenshots/1.png"],
+  "premium": false
+}
+```
+
+| Field | What it is |
+|---|---|
+| `id` | Your theme's **unique identifier** — a lowercase, dash-separated name like `my-theme`. Pano uses it to tell themes apart, and the packaged file is named after it (`my-theme-1.0.0.zip`). Pick it once and **never change it** after publishing: a new `id` counts as a completely different theme. It also must not be `vanilla-theme` — `check` rejects that. |
+| `title` | The human-readable name shown to users in the panel. |
+| `description` | One or two sentences about what the theme looks like. |
+| `version` | The release version. If you use the release automation, this is stamped for you — don't bump it by hand. |
+| `author` | Your name or team name. |
+| `panoVersion` | The Pano version your theme targets. |
+| `screenshots` | A list of image paths (see below). |
+| `premium` | `false` for a free theme; `true` enables paid-license protection. See [Publishing & Premium](/theme/publishing/). |
+
+### Adding screenshots
+
+Put your images in a `screenshots/` folder at the root of your theme and list them in the manifest:
+
+```
+my-theme/
+├─ manifest.json
+└─ screenshots/
+   ├─ 1.png
+   └─ 2.png
+```
+
+```json
+"screenshots": ["screenshots/1.png", "screenshots/2.png"]
+```
+
+The build copies the `screenshots/` folder into your package automatically, so the images ship inside the `.zip`. A good screenshot is a full-page capture of your theme's home page — it is the first thing people see when browsing themes.
+
 ## Step 1 — Build
 
 Open a terminal in your theme folder and run:

@@ -198,6 +198,23 @@ export default defineConfig({
               { text: "Community", link: "/contribution/community/" },
             ],
           },
+          {
+            text: "Handbook",
+            items: [
+              {
+                text: "Build Your First Theme",
+                link: "/handbook/theme/",
+                collapsed: true,
+                items: [
+                  { text: "Setup", link: "/handbook/theme/setup/" },
+                  { text: "Design & Styling", link: "/handbook/theme/design/" },
+                  { text: "Reshaping Pages", link: "/handbook/theme/pages/" },
+                  { text: "Translations", link: "/handbook/theme/translate/" },
+                  { text: "Ship It", link: "/handbook/theme/ship/" },
+                ],
+              },
+            ],
+          },
         ],
         editLink: {
           pattern: "https://github.com/PanoMC/docs/edit/main/:path",
@@ -366,6 +383,23 @@ export default defineConfig({
               { text: "Topluluk", link: "/tr/contribution/community/" },
             ],
           },
+          {
+            text: "El Kitabı",
+            items: [
+              {
+                text: "İlk Temanı Yap",
+                link: "/tr/handbook/theme/",
+                collapsed: true,
+                items: [
+                  { text: "Kurulum", link: "/tr/handbook/theme/setup/" },
+                  { text: "Tasarım ve Stiller", link: "/tr/handbook/theme/design/" },
+                  { text: "Sayfaları Yeniden Şekillendir", link: "/tr/handbook/theme/pages/" },
+                  { text: "Çeviriler", link: "/tr/handbook/theme/translate/" },
+                  { text: "Yayına Çıkar", link: "/tr/handbook/theme/ship/" },
+                ],
+              },
+            ],
+          },
         ],
         editLink: {
           pattern: "https://github.com/PanoMC/pano/edit/main/:path",
@@ -532,6 +566,23 @@ export default defineConfig({
               { text: "Разработка плагина MC", link: "/ru/contribution/mc-plugin/" },
               { text: "Переводы", link: "/ru/contribution/translations/" },
               { text: "Сообщество", link: "/ru/contribution/community/" },
+            ],
+          },
+          {
+            text: "Руководство",
+            items: [
+              {
+                text: "Создайте свою первую тему",
+                link: "/ru/handbook/theme/",
+                collapsed: true,
+                items: [
+                  { text: "Подготовка", link: "/ru/handbook/theme/setup/" },
+                  { text: "Дизайн и стили", link: "/ru/handbook/theme/design/" },
+                  { text: "Изменение страниц", link: "/ru/handbook/theme/pages/" },
+                  { text: "Переводы", link: "/ru/handbook/theme/translate/" },
+                  { text: "Выпуск", link: "/ru/handbook/theme/ship/" },
+                ],
+              },
             ],
           },
         ],
