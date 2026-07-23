@@ -18,7 +18,7 @@
 Выведите список каждого представления, которое можно переопределить, вместе с данными, которые получает каждое:
 
 ```sh
-bunx theme-core list-views
+bunx @panomc/theme-core list-views
 ```
 
 ## Шаг 2 — возьмите представление под свой контроль
@@ -26,7 +26,7 @@ bunx theme-core list-views
 Чтобы взять представление под контроль, **извлеките (eject)** его. Извлечение копирует версию по умолчанию из движка в вашу собственную папку `src/views/` и регистрирует её в `theme.config.js`:
 
 ```sh
-bunx theme-core eject-view LoginView
+bunx @panomc/theme-core eject-view LoginView
 ```
 
 После этого у вас будет рабочий файл `src/views/LoginView.svelte`, который вы можете свободно редактировать.

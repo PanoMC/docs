@@ -10,7 +10,7 @@ Think of a Pano theme as two parts working together:
 - **Your theme** — this is only the *look*: colors, fonts, layout, and text. That is the part you own and edit.
 
 ::: tip vanilla-theme is not a template
-`vanilla-theme` is the **built-in default look** that Pano ships with. It is **not** a starting point to copy or fork. Always start a new theme with `bunx theme-core new`, and let the engine do the heavy lifting.
+`vanilla-theme` is the **built-in default look** that Pano ships with. It is **not** a starting point to copy or fork. Always start a new theme with `bunx @panomc/theme-core new`, and let the engine do the heavy lifting.
 :::
 
 ## The files
@@ -90,7 +90,7 @@ Because the engine is a package, updating it is just two commands:
 
 ```sh
 bun update @panomc/theme-core
-bunx theme-core sync
+bunx @panomc/theme-core sync
 ```
 
 The first line pulls the newest engine. The second regenerates the "auto" files above to match it.

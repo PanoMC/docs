@@ -18,7 +18,7 @@ Devralabileceğiniz **26 view** vardır; her sayfa türü için bir tane (ana sa
 Geçersiz kılabileceğiniz her view'ı, her birinin aldığı verilerle birlikte listeleyin:
 
 ```sh
-bunx theme-core list-views
+bunx @panomc/theme-core list-views
 ```
 
 ## Adım 2 — bir view'ın sahipliğini alın
@@ -26,7 +26,7 @@ bunx theme-core list-views
 Bir view'ı devralmak için onu **eject** edin. Eject etmek, motorun varsayılan sürümünü kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
 
 ```sh
-bunx theme-core eject-view LoginView
+bunx @panomc/theme-core eject-view LoginView
 ```
 
 Bundan sonra, serbestçe düzenleyebileceğiniz çalışan bir `src/views/LoginView.svelte` dosyanız olur.

@@ -10,7 +10,7 @@ Bir Pano temasını birlikte çalışan iki parça olarak düşünün:
 - **Temanız** — bu yalnızca *görünüm*tür: renkler, fontlar, düzen ve metin. Sahip olduğunuz ve düzenlediğiniz kısım budur.
 
 ::: tip vanilla-theme bir şablon değildir
-`vanilla-theme`, Pano'nun birlikte geldiği **dahili varsayılan görünüm**dür. Kopyalanacak veya fork'lanacak bir başlangıç noktası **değildir**. Yeni bir temaya her zaman `bunx theme-core new` ile başlayın ve ağır işi motorun yapmasına izin verin.
+`vanilla-theme`, Pano'nun birlikte geldiği **dahili varsayılan görünüm**dür. Kopyalanacak veya fork'lanacak bir başlangıç noktası **değildir**. Yeni bir temaya her zaman `bunx @panomc/theme-core new` ile başlayın ve ağır işi motorun yapmasına izin verin.
 :::
 
 ## Dosyalar
@@ -90,7 +90,7 @@ Motor bir paket olduğu için, onu güncellemek yalnızca iki komuttur:
 
 ```sh
 bun update @panomc/theme-core
-bunx theme-core sync
+bunx @panomc/theme-core sync
 ```
 
 İlk satır en yeni motoru çeker. İkincisi, ona uyacak şekilde yukarıdaki "oto" dosyalarını yeniden üretir.

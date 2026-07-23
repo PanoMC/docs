@@ -28,7 +28,7 @@ Before you start, make sure you have these three things:
 You create a new theme with **one command**. Open a terminal and run:
 
 ```sh
-bunx theme-core new my-theme
+bunx @panomc/theme-core new my-theme
 ```
 
 This makes a new folder called `my-theme` with everything a theme needs inside it.
@@ -65,7 +65,7 @@ VITE_API_URL=http://localhost:8088/api
 Pano's default port is `80`. When you start Pano with `--dev`, it runs on `8088` — that's the usual setup while developing a theme. If your Pano runs somewhere else, use that address instead.
 :::
 
-One more step on the Pano side: open Pano's config file, disable the `init-ui` setting, and restart Pano. This tells Pano to use **your** development theme instead of launching its own built-in one. The [Server configuration](/platform/configuration/server/) page shows where this setting lives.
+One more step on the Pano side: open Pano's config file, disable the `init-ui` setting, and restart Pano. This tells Pano to use **your** development theme instead of launching its own built-in one. The [Server configuration](/platform/configuration/server/#initialization-ui-and-updates) page shows where this setting lives.
 
 Finally, start the theme:
 

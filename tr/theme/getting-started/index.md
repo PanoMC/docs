@@ -28,7 +28,7 @@ Başlamadan önce şu üç şeye sahip olduğunuzdan emin olun:
 Yeni bir temayı **tek komutla** oluşturursunuz. Bir terminal açın ve şunu çalıştırın:
 
 ```sh
-bunx theme-core new my-theme
+bunx @panomc/theme-core new my-theme
 ```
 
 Bu, içinde bir temanın ihtiyaç duyduğu her şeyle birlikte `my-theme` adında yeni bir klasör oluşturur.
@@ -65,7 +65,7 @@ VITE_API_URL=http://localhost:8088/api
 Pano'nun varsayılan portu `80`'dir. Pano'yu `--dev` ile başlatırsanız `8088` portunda çalışır — tema geliştirirken alışıldık düzen budur. Pano'nuz başka bir yerde çalışıyorsa, onun adresini kullanın.
 :::
 
-Pano tarafında bir adım daha: Pano'nun yapılandırma dosyasını açıp `init-ui` ayarını kapatın ve Pano'yu yeniden başlatın. Bu, Pano'ya kendi gömülü teması yerine **sizin** geliştirme temanızı kullanmasını söyler. Bu ayarın yeri için [Sunucu yapılandırması](/tr/platform/configuration/server/) sayfasına bakın.
+Pano tarafında bir adım daha: Pano'nun yapılandırma dosyasını açıp `init-ui` ayarını kapatın ve Pano'yu yeniden başlatın. Bu, Pano'ya kendi gömülü teması yerine **sizin** geliştirme temanızı kullanmasını söyler. Bu ayarın yeri için [Sunucu yapılandırması](/tr/platform/configuration/server/#başlatma-arayüz-ve-güncellemeler) sayfasına bakın.
 
 Son olarak, temayı başlatın:
 

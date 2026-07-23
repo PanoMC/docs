@@ -131,7 +131,7 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 
 - @panomc/theme-core motoru üzerinde ince bir paket; şablon DEĞİLDİR
 
-- **Önemli:** Yeni temalar `bunx theme-core new <isim>` ile oluşturulur; vanilla fork'lanmaz
+- **Önemli:** Yeni temalar `bunx @panomc/theme-core new <isim>` ile oluşturulur; vanilla fork'lanmaz
 
 - Build: tekrarlanabilir ZIP (zip sha256 = premium lisans kimliği)
 

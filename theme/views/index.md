@@ -18,7 +18,7 @@ There are **26 views** you can take over, one for each kind of page (home, login
 List every view you can override, along with the data each one receives:
 
 ```sh
-bunx theme-core list-views
+bunx @panomc/theme-core list-views
 ```
 
 ## Step 2 — take ownership of a view
@@ -26,7 +26,7 @@ bunx theme-core list-views
 To take over a view, **eject** it. Ejecting copies the engine's default version into your own `src/views/` folder and registers it in `theme.config.js`:
 
 ```sh
-bunx theme-core eject-view LoginView
+bunx @panomc/theme-core eject-view LoginView
 ```
 
 After this you have a working `src/views/LoginView.svelte` that you can edit freely.

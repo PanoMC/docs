@@ -29,7 +29,7 @@ Pano leverages the power of **SvelteKit** to provide a hybrid **SSR (Server-Side
 When developing frontend components, you **must** ensure they are SSR-compatible. Avoid direct `window` or `document` access outside of Svelte's `onMount` lifecycle. Always use semantic HTML to preserve our SEO standards.
 :::
 
-- **vanilla-theme**: The built-in reference (system) theme that ships with Pano. It is **not** a starter template — new themes are scaffolded with `bunx theme-core new`.
+- **vanilla-theme**: The built-in reference (system) theme that ships with Pano. It is **not** a starter template — new themes are scaffolded with `bunx @panomc/theme-core new`.
 
 ## Cloning & Submodules
 Our themes and **panel-ui** carry the [**theme-core engine**](https://github.com/PanoMC/sdk) as a `theme-core` git submodule (it publishes both `@panomc/theme-core` and `@panomc/sdk`). **setup-ui** and the **website** need no submodule — they consume `@panomc/sdk` straight from npm.
