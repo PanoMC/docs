@@ -55,11 +55,48 @@ Every ejected view begins with a comment header that documents **every prop** �
 
 Stores arrive as store objects (read them with a `$` prefix, like `$_`), and actions arrive as functions you call. Whatever the header lists is what you have; you don't need to know where any of it comes from.
 
-## Keep the plugin mount points
+## The plugin API inside your views
+
+Installed plugins show up on the page through markers that live **inside the views**. There are two kinds:
+
+- **`<Hook>` markers** — named areas where plugins can inject their own components. A hook looks like `<Hook name="page:home:top" />` in the markup. The engine's views carry these hook names today:
+
+  | Hook name | Where plugins appear |
+  |---|---|
+  | `theme:top` | The very top of every page |
+  | `page:top` | The top of each page's content |
+  | `page:home:top` | The top of the home page |
+  | `theme:post-detail:bottom` | Under a post's content |
+  | `theme:support:content` | Inside the support page |
+
+- **`<ViewComponent>` slots** — places where a view renders a **list of plugin-registered components**, like extra login methods on the login page or extra rows on the profile card. These arrive through the props the view's header documents (stores such as `contentItems` or `altMethods`) and are rendered with `<ViewComponent component={item.component} … />`.
+
+### What you must never remove
 
 ::: warning
-Two kinds of markers in a view are where **plugins** appear on the page: `<ViewComponent>` slots and `<Hook>` markers. When you redesign a view, **keep every one of them** — move them, restyle around them, but do not delete them. If you drop one, any plugin that relied on it silently disappears from your users' sites. `bun run check` fails if a mount point is missing, so the tool protects you before you can ship a broken theme.
+When you redesign a view, **keep every `<Hook>` and every `<ViewComponent>` slot the original had** — move them, restyle around them, wrap them in your own markup, but do not delete them. If you drop one, any plugin that relied on it silently disappears from your users' sites. Also, a hook name must appear in **only one** view at a time — mounting the same hook in two places renders every plugin there twice.
+
+You don't have to track this by hand: `bun run check` fails if an overridden view lost a mount point or a hook name is mounted twice, so the tool protects you before you can ship a broken theme.
 :::
+
+### Adding your own mount points
+
+You are not limited to the built-in hooks — your theme can **extend the plugin API** by adding new hook areas of its own. Anywhere in a view you own, drop a new marker with a fresh name:
+
+```svelte
+<script>
+  import Hook from "$pano/lib/components/Hook.svelte";
+</script>
+
+<Hook name="my-theme:hero:bottom" />
+```
+
+Any plugin that registers a component for `my-theme:hero:bottom` will now render there. Two rules keep this safe:
+
+- **Namespace your names.** Start them with your theme's `id` (`my-theme:…`) so they can never collide with engine hooks or another theme's.
+- **Don't repurpose existing names.** The built-in names in the table above have a fixed meaning that plugins depend on — add new names instead of reusing old ones somewhere else.
+
+Once shipped, treat your custom hooks like a promise: plugins may start relying on them, so keep them across your theme's future versions just like the built-in ones.
 
 ## Custom theme settings
 

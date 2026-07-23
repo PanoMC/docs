@@ -55,11 +55,48 @@ Eject edilen her view, **her prop'u** belgeleyen bir yorum başlığıyla başla
 
 Store'lar birer store nesnesi olarak gelir (bunları `$_` gibi bir `$` önekiyle okuyun) ve action'lar çağıracağınız fonksiyonlar olarak gelir. Başlığın listelediği her şey elinizdedir; bunların nereden geldiğini bilmeniz gerekmez.
 
-## Eklenti bağlantı noktalarını koruyun
+## View'larınızın içindeki eklenti API'si
+
+Kurulu eklentiler, **view'ların içinde** yaşayan işaretçiler aracılığıyla sayfada görünür. İki tür vardır:
+
+- **`<Hook>` işaretçileri** — eklentilerin kendi bileşenlerini enjekte edebileceği adlandırılmış alanlar. Bir hook, markup'ta `<Hook name="page:home:top" />` şeklinde görünür. Motorun view'ları bugün şu hook adlarını taşır:
+
+  | Hook adı | Eklentilerin göründüğü yer |
+  |---|---|
+  | `theme:top` | Her sayfanın en üstü |
+  | `page:top` | Her sayfanın içeriğinin üstü |
+  | `page:home:top` | Ana sayfanın üstü |
+  | `theme:post-detail:bottom` | Bir gönderinin içeriğinin altı |
+  | `theme:support:content` | Destek sayfasının içi |
+
+- **`<ViewComponent>` slot'ları** — bir view'ın, giriş sayfasındaki ek giriş yöntemleri veya profil kartındaki ek satırlar gibi, **eklenti tarafından kaydedilmiş bir bileşen listesini** render ettiği yerler. Bunlar, view'ın başlığında belgelenen prop'lar aracılığıyla gelir (`contentItems` veya `altMethods` gibi store'lar) ve `<ViewComponent component={item.component} … />` ile render edilir.
+
+### Asla kaldırmamanız gerekenler
 
 ::: warning
-Bir view'daki iki tür işaretçi, **eklentilerin** sayfada göründüğü yerdir: `<ViewComponent>` slot'ları ve `<Hook>` işaretçileri. Bir view'ı yeniden tasarladığınızda, **her birini koruyun** — taşıyın, etraflarını yeniden stillendirin, ancak silmeyin. Birini kaldırırsanız, ona güvenen herhangi bir eklenti kullanıcılarınızın sitelerinden sessizce kaybolur. Bir bağlantı noktası eksikse `bun run check` başarısız olur, böylece araç, bozuk bir tema gönderemeden önce sizi korur.
+Bir view'ı yeniden tasarladığınızda, **orijinalin sahip olduğu her `<Hook>` ve her `<ViewComponent>` slot'unu koruyun** — taşıyın, etraflarını yeniden stillendirin, kendi markup'ınıza sarın, ancak silmeyin. Birini kaldırırsanız, ona güvenen herhangi bir eklenti kullanıcılarınızın sitelerinden sessizce kaybolur. Ayrıca, bir hook adı aynı anda yalnızca **tek bir** view'da görünmelidir — aynı hook'u iki yerde bağlamak, oradaki her eklentiyi iki kez render eder.
+
+Bunu elle takip etmeniz gerekmez: geçersiz kılınan bir view bir bağlama noktasını kaybederse ya da bir hook adı iki kez bağlanırsa `bun run check` başarısız olur; böylece araç, siz bozuk bir tema gönderemeden önce sizi korur.
 :::
+
+### Kendi bağlama noktalarınızı ekleme
+
+Yerleşik hook'larla sınırlı değilsiniz — temanız, kendi yeni hook alanlarını ekleyerek **eklenti API'sini genişletebilir**. Sahip olduğunuz bir view'ın herhangi bir yerinde, taze bir adla yeni bir işaretçi bırakın:
+
+```svelte
+<script>
+  import Hook from "$pano/lib/components/Hook.svelte";
+</script>
+
+<Hook name="my-theme:hero:bottom" />
+```
+
+`my-theme:hero:bottom` için bir bileşen kaydeden herhangi bir eklenti artık orada render edilir. İki kural bunu güvende tutar:
+
+- **Adlarınızı ad alanına alın (namespace).** Motor hook'larıyla veya başka bir temanınkiyle asla çakışamamaları için onları temanızın `id`'siyle başlatın (`my-theme:…`).
+- **Mevcut adları yeniden kullanmayın.** Yukarıdaki tablodaki yerleşik adların, eklentilerin dayandığı sabit bir anlamı vardır — eski adları başka bir yerde yeniden kullanmak yerine yeni adlar ekleyin.
+
+Bir kez gönderdikten sonra, özel hook'larınıza bir söz gibi davranın: eklentiler onlara dayanmaya başlayabilir, bu yüzden onları tıpkı yerleşik olanlar gibi temanızın gelecekteki sürümlerinde koruyun.
 
 ## Özel tema ayarları
 
