@@ -20,7 +20,7 @@ Before you start, make sure you have these three things:
 | You need | What it is |
 |---|---|
 | **Bun** | The tool that installs and runs Pano front-ends. Install it from [bun.sh](https://bun.sh). |
-| **A running Pano** | Your own Pano server, or one running on your computer. Your theme talks to it while you work. |
+| **A running Pano** | Your own Pano server, or one running on your computer — Pano must be installed and running first; see [Installation](/platform/installation/) if you haven't set it up yet. Your theme talks to it while you work. |
 | **A code editor** | Any text editor for code, such as [VS Code](https://code.visualstudio.com/). |
 
 ## Create your theme

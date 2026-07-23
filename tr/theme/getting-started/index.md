@@ -20,7 +20,7 @@ Başlamadan önce şu üç şeye sahip olduğunuzdan emin olun:
 | İhtiyacınız olan | Nedir |
 |---|---|
 | **Bun** | Pano frontend'lerini kuran ve çalıştıran araç. [bun.sh](https://bun.sh) adresinden kurun. |
-| **Çalışan bir Pano** | Kendi Pano sunucunuz veya bilgisayarınızda çalışan bir tane. Çalışırken temanız onunla konuşur. |
+| **Çalışan bir Pano** | Kendi Pano sunucunuz veya bilgisayarınızda çalışan bir tane — öncelikle Pano kurulu ve çalışıyor olmalı; henüz kurmadıysanız [Kurulum](/tr/platform/installation/) sayfasına bakın. Çalışırken temanız onunla konuşur. |
 | **Bir kod editörü** | [VS Code](https://code.visualstudio.com/) gibi herhangi bir kod metin editörü. |
 
 ## Temanızı oluşturun
