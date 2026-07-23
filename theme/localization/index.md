@@ -76,6 +76,23 @@ If you added your own markup — say a hero slogan in a view you overrode — yo
 
 Now the slogan shows in the visitor's language automatically. Run `bun run sync` after adding keys so the merge picks them up.
 
+## Adding a whole new language
+
+You are not limited to the three built-in languages. To add one — say German — create a new file in `lang-overrides/`:
+
+```
+lang-overrides/
+└─ de.json
+```
+
+**The file name is the locale code.** `de.json` means the locale code `de`, `en-US.json` means `en-US` — the part before `.json` is the code, in the same style as codes like `en-US`, `tr`, `de` (a lowercase language code, optionally followed by a dash and an uppercase region code). Put your translations inside using the same key structure as the other files.
+
+After `bun run sync`, your new language is built on top of the engine's **English** translations — so any key you have not translated yet falls back to English instead of showing a raw key.
+
+::: warning The panel decides which languages exist
+Adding the file alone does **not** make the language appear on your site. The list of available languages comes from Pano itself: an admin must first define a locale with the **same locale code** (for example `de`) in the panel. Once that locale exists panel-side, visitors can pick it and your `de.json` translations are used. If no matching locale is defined in the panel, the file is simply ignored.
+:::
+
 ::: tip Missing a translation?
 If a key has no translation, the raw key name (like `my-theme.hero-slogan`) shows up on screen instead of real text — an easy way to spot the problem. `bun run check` also warns you about keys your views use that are not translated, so you catch them before shipping. See [Packaging](/theme/packaging/).
 :::

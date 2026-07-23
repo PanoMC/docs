@@ -76,6 +76,23 @@ Kendi markup'ınızı eklediyseniz — diyelim ki override ettiğiniz bir görü
 
 Artık slogan, ziyaretçinin dilinde otomatik olarak gösterilir. Birleştirmenin bunları alması için anahtarları ekledikten sonra `bun run sync` çalıştırın.
 
+## Yepyeni bir dil eklemek
+
+Yerleşik üç dille sınırlı değilsiniz. Yeni bir dil eklemek için — örneğin Almanca — `lang-overrides/` içine yeni bir dosya oluşturun:
+
+```
+lang-overrides/
+└─ de.json
+```
+
+**Dosya adı, locale kodudur.** `de.json` demek locale kodu `de` demektir, `en-US.json` ise `en-US` — `.json`'dan önceki kısım koddur ve `en-US`, `tr`, `de` gibi kodlarla aynı biçimdedir (küçük harfli bir dil kodu, isteğe bağlı olarak tire ve büyük harfli bölge kodu). Çevirilerinizi diğer dosyalarla aynı anahtar yapısını kullanarak içine yazın.
+
+`bun run sync` sonrasında yeni diliniz motorun **İngilizce** çevirileri üzerine inşa edilir — yani henüz çevirmediğiniz her anahtar, ham anahtar göstermek yerine İngilizceye geri düşer.
+
+::: warning Hangi dillerin var olduğuna panel karar verir
+Dosyayı eklemek tek başına dili sitenizde **göstermez**. Kullanılabilir dillerin listesi Pano'nun kendisinden gelir: önce bir yöneticinin panelde **aynı locale koduna** sahip bir locale (örneğin `de`) tanımlamış olması gerekir. O locale panel tarafında var olduğunda ziyaretçiler onu seçebilir ve `de.json` çevirileriniz kullanılır. Panelde eşleşen bir locale tanımlı değilse dosya yok sayılır.
+:::
+
 ::: tip Çeviri mi eksik?
 Bir anahtarın çevirisi yoksa, gerçek metin yerine ekranda ham anahtar adı (örneğin `my-theme.hero-slogan`) görünür — sorunu fark etmenin kolay bir yolu. `bun run check` ayrıca görünümlerinizin kullandığı ama çevrilmemiş anahtarlar hakkında sizi uyarır, böylece bunları göndermeden önce yakalarsınız. Bkz. [Paketleme](/tr/theme/packaging/).
 :::
