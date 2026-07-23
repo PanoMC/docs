@@ -19,7 +19,7 @@ Bu sayfa sizi sıfırdan, **Panel → Eklentiler** içinde görünen kendi eklen
 
 | Gereksinim | Notlar |
 |---|---|
-| **Gradle'ı çalıştırmak için JDK 17+, *ayrıca* bir JDK 11** | Gradle'ın kendisi çalışmak için JDK 17+ ister. Eklenti bir **Java 11 araç zinciriyle (toolchain)** derlenir ve şablonun `settings.gradle.kts` dosyası boş gelir (foojay toolchain çözücüsü yoktur), bu yüzden Gradle JDK 11'i otomatik indiremez — yerelde kurulu bir JDK 11'iniz olmalı, aksi halde `./gradlew build` "no matching toolchain" hatasıyla başarısız olur. |
+| **JDK 11 veya daha yenisi** | Eklenti bir **Java 11 araç zinciriyle (toolchain)** derlenir; böylece Pano'nun desteklediği her sunucuda çalışır (Pano'nun kendisi de yalnızca Java 11+ ister). Gradle'ı JDK 11 veya daha yenisi çalıştırabilir; JDK'nız 11'den yeniyse şablon, Java 11 araç zincirini sizin için otomatik indirir. |
 | **Bun** | Arayüz (UI) paket yöneticisi ve derleyicisi. [bun.sh](https://bun.sh) adresinden kurun. Gradle, yayın (release) derlemeleri için Bun 1.2.0'ı otomatik indirir, ancak `bun run dev`'i çalıştırabilmeniz için yerelde kurulu olmasını istersiniz. |
 | **Çalışan bir Pano örneği** | Kurulum sihirbazı zaten tamamlanmış, kendi sunucunuzda barındırılan bir örnek. Eklentiniz, siz çalışırken bu örneğin içinde yaşar. Henüz kurmadıysanız [Kurulum](/tr/platform/installation/) sayfasına bakın. |
 | **Geliştirme Modu** | **Panel → Platform Ayarları** içinde bir anahtar (yapılandırma anahtarı `development-mode`). Temanın eklenti-arayüzü önbelleklemesini devre dışı bırakır (böylece paketiniz her istekte yeniden getirilir) ve yerelleştirme (locale) dosyalarının diskten canlı yüklenmesini sağlar. |

@@ -19,7 +19,7 @@ This page gets you from nothing to your own addon showing in **Panel → Addons*
 
 | Requirement | Notes |
 |---|---|
-| **JDK 17+ to run Gradle, *plus* a JDK 11** | Gradle itself needs JDK 17+ to run. The addon compiles against a **Java 11 toolchain**, and the template's `settings.gradle.kts` ships empty (no foojay toolchain resolver), so Gradle cannot auto-download JDK 11 — you must have a JDK 11 installed locally, or `./gradlew build` fails with a "no matching toolchain" error. |
+| **JDK 11 or newer** | The addon compiles against a **Java 11 toolchain**, so it runs on every server Pano supports (Pano itself only needs Java 11+). Any JDK 11 or newer can run Gradle; if yours is newer than 11, the template auto-downloads the Java 11 toolchain for you. |
 | **Bun** | The UI package manager and builder. Install it from [bun.sh](https://bun.sh). Gradle auto-downloads Bun 1.2.0 for release builds, but you want it installed locally so you can run `bun run dev`. |
 | **A running Pano instance** | Self-hosted, with the setup wizard already completed. Your addon lives inside this instance while you work. See [Installation](/platform/installation/) if you have not set one up. |
 | **Development Mode** | A toggle in **Panel → Platform Settings** (config key `development-mode`). It disables the theme's addon-UI caching (so your bundle is re-fetched each request) and makes locale files load live from disk. |
