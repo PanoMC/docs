@@ -45,13 +45,13 @@ ember/
 
 Хороший первый скриншот — полностраничный снимок главной страницы Ember, вместе с баннером. Сборка автоматически копирует `screenshots/` в пакет, поэтому изображения отправляются внутри `.zip`.
 
-## Шаг 2 — сборка, проверка, упаковка
+## Шаг 2 — проверка, сборка, упаковка
 
 Три команды ведут Ember от исходников к устанавливаемому файлу:
 
 ```sh
-bun run build      # produces the optimized build/ folder
 bun run check      # the safety net — Svelte version, plugin slots, settings, translations, manifest
+bun run build      # produces the optimized build/ folder
 bun run package    # wraps build/ into ember-1.0.0.zip
 ```
 

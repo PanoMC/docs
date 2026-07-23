@@ -328,7 +328,7 @@ export default defineConfig({
                 link: "/tr/addon/backend/",
               },
               {
-                text: "Yerelleştirme",
+                text: "Çeviriler",
                 link: "/tr/addon/localization/",
               },
               {
@@ -358,7 +358,7 @@ export default defineConfig({
                 link: "/tr/theme/views/",
               },
               {
-                text: "Yerelleştirme",
+                text: "Çeviriler",
                 link: "/tr/theme/localization/",
               },
               {

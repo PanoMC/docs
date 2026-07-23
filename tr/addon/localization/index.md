@@ -1,4 +1,4 @@
-# Yerelleştirme (i18n)
+# Çeviriler (i18n)
 
 Pano, güçlü bir yerelleştirme sistemini destekler. Eklentinizin `src/main/resources/locales` dizini, desteklenen diller için çeviri dosyalarını içermelidir.
 

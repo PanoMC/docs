@@ -95,7 +95,7 @@ await ApiUtil.post('/api/announcement/create', {
 });
 ```
 
-### 5. Yerelleştirme (Çoklu Dil)
+### 5. Çeviriler (Çoklu Dil)
 Pano varsayılan olarak çok dillidir. Metin dizelerini çevirmek için `_` (alt çizgi) fonksiyonunu kullanın.
 
 ```svelte

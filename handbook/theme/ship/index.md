@@ -45,13 +45,13 @@ ember/
 
 A good first screenshot is a full-page capture of Ember's home page — banner and all. The build copies `screenshots/` into the package automatically, so the images ship inside the `.zip`.
 
-## Step 2 — build, check, package
+## Step 2 — check, build, package
 
 Three commands take Ember from source to an installable file:
 
 ```sh
-bun run build      # produces the optimized build/ folder
 bun run check      # the safety net — Svelte version, plugin slots, settings, translations, manifest
+bun run build      # produces the optimized build/ folder
 bun run package    # wraps build/ into ember-1.0.0.zip
 ```
 

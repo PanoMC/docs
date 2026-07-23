@@ -2,7 +2,7 @@
 
 Ember'ın karşılama banner'ı şu anda yalnızca İngilizce konuşuyor. Her yerden oyuncuların olduğu bir survival sunucusunda bu, kaçırılmış bir fırsat. Ember'ın her ziyaretçiyi kendi dilinde karşılamasını sağlayalım.
 
-İyi haber: tema çekirdeği, desteklediği diller için **eksiksiz çevirilerle** gelir. Yalnızca *sizin* eklediğiniz veya değiştirdiğiniz parçaları yazarsınız. Tam referans: [Yerelleştirme](/tr/theme/localization/).
+İyi haber: tema çekirdeği, desteklediği diller için **eksiksiz çevirilerle** gelir. Yalnızca *sizin* eklediğiniz veya değiştirdiğiniz parçaları yazarsınız. Tam referans: [Çeviriler](/tr/theme/localization/).
 
 ## Tek bir resimde nasıl çalıştığı
 

@@ -138,4 +138,4 @@ Bir premium lisans, **sürüm + paket** başına verilir. Zaten yayınlanmış b
 ## Sırada ne var
 
 - **[Derleme ve Paketleme](/tr/theme/packaging/)** — derleme, denetleme ve paketleme adımları ayrıntılı olarak.
-- **[Yerelleştirme](/tr/theme/localization/)** — temanızı başka dillere çevirin.
+- **[Çeviriler](/tr/theme/localization/)** — temanızı başka dillere çevirin.

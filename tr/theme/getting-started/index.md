@@ -111,6 +111,6 @@ Artık çalışan bir temanız var ve onu nasıl değiştireceğinizi biliyorsun
 - **[Tema Yapısı](/tr/theme/structure/)** — tüm dosyaların ne olduğu ve hangilerinin size ait olduğu.
 - **[Özelleştirme](/tr/theme/customization/)** — token'lar ve stillerle daha derine inin.
 - **[Görünümler](/tr/theme/views/)** — yalnızca renkleri değil, gerçek düzeni ve markup'ı değiştirin.
-- **[Yerelleştirme](/tr/theme/localization/)** — temanızı başka dillere çevirin.
+- **[Çeviriler](/tr/theme/localization/)** — temanızı başka dillere çevirin.
 - **[Paketleme](/tr/theme/packaging/)** — temanızı kurabileceğiniz bir dosyaya derleyin.
 - **[Yayınlama](/tr/theme/publishing/)** — temanızı başkalarıyla paylaşın.

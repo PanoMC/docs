@@ -1,6 +1,6 @@
-# Yerelleştirme (i18n)
+# Çeviriler (i18n)
 
-Yerelleştirme (kısaca **i18n**), temanızın metnini farklı dillerde göstermek demektir. İyi haber: Pano tema çekirdeği zaten tam çevirilerle gelir, bu yüzden yalnızca gerçekten değiştirdiğiniz parçaları yazarsınız.
+Çeviriler (**i18n** olarak da bilinir), temanızın metnini farklı dillerde göstermek demektir. İyi haber: Pano tema çekirdeği zaten tam çevirilerle gelir, bu yüzden yalnızca gerçekten değiştirdiğiniz parçaları yazarsınız.
 
 ## Nasıl çalışır
 

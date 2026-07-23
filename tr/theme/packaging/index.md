@@ -56,23 +56,9 @@ my-theme/
 
 Derleme, `screenshots/` klasörünü otomatik olarak paketinize kopyalar, bu yüzden görseller `.zip`'in içinde yayınlanır. İyi bir ekran görüntüsü, temanızın ana sayfasının tam sayfa yakalanmış halidir — temalara göz atarken insanların gördüğü ilk şey odur.
 
-## Adım 1 — Derleme
+## Adım 1 — Denetleme
 
-Temanızın klasöründe bir terminal açın ve şunu çalıştırın:
-
-```sh
-bun run build
-```
-
-Bu komut, temanızın bitmiş, optimize edilmiş sürümünü bir `build/` klasörünün içinde üretir. `build/` klasörünü, tamamen monte edilmiş ve hazır — ama henüz paketlenmemiş — temanız olarak düşünün.
-
-::: tip Derlemeler yeniden üretilebilir
-Aynı kodu iki kez derlemek size **bayt bayt aynı** sonucu verir. Premium temalar için bu çok önemlidir: paketin SHA-256 değeri (dosyanın benzersiz parmak izi) **sizin lisans kimliğinizdir**. Aynı kod girer, aynı parmak izi çıkar. Bkz. [Yayınlama ve Premium](/tr/theme/publishing/).
-:::
-
-## Adım 2 — Denetleme
-
-Paketlemeden önce güvenlik ağını çalıştırın:
+Derlemeden önce güvenlik ağını çalıştırın:
 
 ```sh
 bun run check
@@ -85,10 +71,24 @@ Bu komut temanızı inceler ve bozuk bir şey yayınlamanızı engeller. Şunlar
 | **Svelte sürümü** | `svelte` sürümünüz tema çekirdeğininkiyle tam olarak eşleşmelidir. Bir uyumsuzluk, kurulu eklentileri sessizce bozar. |
 | **Eklenti slot'larının korunması** | Değiştirdiğiniz her görünüm, orijinalinde bulunan tüm eklenti bağlama noktalarını hâlâ içermelidir. Birini kaldırırsanız kurulu eklentiler sessizce kaybolur. |
 | **Ayar şemasının geçerliliği** | Eklediğiniz ek ayarlar doğru bildirilmelidir; böylece panel bunları kaydedip sıfırlayabilir. |
-| **Çevirilerin ayrıştırılabilirliği** | `lang-overrides/` içindeki her dosya geçerli olmalı ve sorunsuz birleşmelidir. Bkz. [Yerelleştirme](/tr/theme/localization/). |
+| **Çevirilerin ayrıştırılabilirliği** | `lang-overrides/` içindeki her dosya geçerli olmalı ve sorunsuz birleşmelidir. Bkz. [Çeviriler](/tr/theme/localization/). |
 | **Manifest bütünlüğü** | `manifest.json` gerekli tüm alanları taşımalı ve `id` değeri `vanilla-theme` olmamalıdır. |
 
-`check` bir sorun bildirirse düzeltin ve tekrar çalıştırın. Yeşil bir `check`, temanızın paketlenmeye hazır olduğu anlamına gelir.
+`check` bir sorun bildirirse düzeltin ve tekrar çalıştırın. Yeşil bir `check`, temanızın derlenmeye ve paketlenmeye hazır olduğu anlamına gelir.
+
+## Adım 2 — Derleme
+
+Temanızın klasöründe bir terminal açın ve şunu çalıştırın:
+
+```sh
+bun run build
+```
+
+Bu komut, temanızın bitmiş, optimize edilmiş sürümünü bir `build/` klasörünün içinde üretir. `build/` klasörünü, tamamen monte edilmiş ve hazır — ama henüz paketlenmemiş — temanız olarak düşünün.
+
+::: tip Derlemeler yeniden üretilebilir
+Aynı kodu iki kez derlemek size **bayt bayt aynı** sonucu verir. Premium temalar için bu çok önemlidir: paketin SHA-256 değeri (dosyanın benzersiz parmak izi) **sizin lisans kimliğinizdir**. Aynı kod girer, aynı parmak izi çıkar. Bkz. [Yayınlama ve Premium](/tr/theme/publishing/).
+:::
 
 ## Adım 3 — Paketleme
 
@@ -116,4 +116,4 @@ Bu, kullanıcılarınızın izleyeceği kurulum akışının tam olarak aynısı
 ## Sırada ne var
 
 - **[Yayınlama ve Premium](/tr/theme/publishing/)** — temanızı başkalarıyla paylaşın ve isteğe bağlı olarak premium yapın.
-- **[Yerelleştirme](/tr/theme/localization/)** — temanızı başka dillere çevirin.
+- **[Çeviriler](/tr/theme/localization/)** — temanızı başka dillere çevirin.

@@ -56,23 +56,9 @@ my-theme/
 
 The build copies the `screenshots/` folder into your package automatically, so the images ship inside the `.zip`. A good screenshot is a full-page capture of your theme's home page — it is the first thing people see when browsing themes.
 
-## Step 1 — Build
+## Step 1 — Check
 
-Open a terminal in your theme folder and run:
-
-```sh
-bun run build
-```
-
-This produces the finished, optimized version of your theme inside a `build/` folder. Think of `build/` as your theme fully assembled and ready — but not yet wrapped up.
-
-::: tip Builds are reproducible
-Building the same code twice gives you the **byte-identical** result. For premium themes this matters a lot: the package's SHA-256 (a unique fingerprint of the file) **is** your license identity. Same code in, same fingerprint out. See [Publishing & Premium](/theme/publishing/).
-:::
-
-## Step 2 — Check
-
-Before packaging, run the safety net:
+Before you build, run the safety net:
 
 ```sh
 bun run check
@@ -88,7 +74,21 @@ This inspects your theme and stops you from shipping something broken. It checks
 | **Translations parse** | Every file in `lang-overrides/` must be valid and merge cleanly. See [Localization](/theme/localization/). |
 | **Manifest complete** | `manifest.json` must carry all required fields, and its `id` must not be `vanilla-theme`. |
 
-If `check` reports a problem, fix it and run it again. A green `check` means your theme is safe to package.
+If `check` reports a problem, fix it and run it again. A green `check` means your theme is safe to build and package.
+
+## Step 2 — Build
+
+Open a terminal in your theme folder and run:
+
+```sh
+bun run build
+```
+
+This produces the finished, optimized version of your theme inside a `build/` folder. Think of `build/` as your theme fully assembled and ready — but not yet wrapped up.
+
+::: tip Builds are reproducible
+Building the same code twice gives you the **byte-identical** result. For premium themes this matters a lot: the package's SHA-256 (a unique fingerprint of the file) **is** your license identity. Same code in, same fingerprint out. See [Publishing & Premium](/theme/publishing/).
+:::
 
 ## Step 3 — Package
 

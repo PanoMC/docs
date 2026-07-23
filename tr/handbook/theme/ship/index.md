@@ -45,13 +45,13 @@ ember/
 
 İyi bir ilk ekran görüntüsü, Ember'ın ana sayfasının tam sayfa yakalanmış hali — banner'ıyla birlikte. Derleme, `screenshots/` klasörünü otomatik olarak pakete kopyalar, bu yüzden görseller `.zip`'in içinde yayınlanır.
 
-## Adım 2 — derleyin, denetleyin, paketleyin
+## Adım 2 — denetleyin, derleyin, paketleyin
 
 Üç komut Ember'ı kaynaktan kurulabilir bir dosyaya taşır:
 
 ```sh
-bun run build      # produces the optimized build/ folder
 bun run check      # the safety net — Svelte version, plugin slots, settings, translations, manifest
+bun run build      # produces the optimized build/ folder
 bun run package    # wraps build/ into ember-1.0.0.zip
 ```
 
@@ -159,7 +159,7 @@ Buradan nereye gidebilirsiniz:
 
 - **[Renkler ve Stiller](/tr/theme/customization/)** — token'lar ve SCSS'te daha derine inin.
 - **[Sayfa Tasarımlarını Değiştirme](/tr/theme/views/)** — 26 görünümün daha fazlasını yeniden şekillendirin.
-- **[Yerelleştirme](/tr/theme/localization/)** — çeviriler ve yeni diller hakkında daha fazlası.
+- **[Çeviriler](/tr/theme/localization/)** — çeviriler ve yeni diller hakkında daha fazlası.
 - **[Yayınlama ve Premium](/tr/theme/publishing/)** — tam yayın ve premium referansı.
 
 İyi temalamalar. 🔥
