@@ -26,10 +26,10 @@ bunx @panomc/theme-core list-views
 Bir view'ı devralmak için onu **eject** edin. Eject etmek, motorun varsayılan sürümünü kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
 
 ```sh
-bunx @panomc/theme-core eject-view LoginView
+bunx @panomc/theme-core eject-view HomeView
 ```
 
-Bundan sonra, serbestçe düzenleyebileceğiniz çalışan bir `src/views/LoginView.svelte` dosyanız olur.
+Bundan sonra, serbestçe düzenleyebileceğiniz çalışan bir `src/views/HomeView.svelte` dosyanız olur.
 
 ::: tip
 Eject edilen dosyalar, gerçek varsayılanın **çalışan kopyaları** olarak başlar — boş bir sayfa değil. Sıfırdan bir tasarım *yazmaz*, mevcut bir tasarımı *düzenlersiniz*. Küçük şeyleri değiştirerek ve yenileyerek başlayın.
@@ -54,6 +54,99 @@ Eject edilen her view, **her prop'u** belgeleyen bir yorum başlığıyla başla
 ```
 
 Store'lar birer store nesnesi olarak gelir (bunları `$_` gibi bir `$` önekiyle okuyun) ve action'lar çağıracağınız fonksiyonlar olarak gelir. Başlığın listelediği her şey elinizdedir; bunların nereden geldiğini bilmeniz gerekmez.
+
+## Uygulamalı bir örnek — ana sayfayı yeniden tasarlamak
+
+Hadi gerçekten yapalım. `eject-view HomeView` sonrasında `src/views/HomeView.svelte` dosyanız şöyle görünür (okumayı kolaylaştırmak için biraz kısaltıldı):
+
+```svelte
+<div class="vstack gap-3">
+  <Hook name="page:home:top" />
+
+  <!-- Posts -->
+  <Posts posts={data.posts} />
+
+  <!-- Pagination -->
+  {#if data.postCount > 0}
+    <Pagination
+      page={data.page}
+      totalPage={data.totalPage}
+      on:pageLinkClick={(event) => onPageClick(data, event.detail.page)} />
+  {/if}
+</div>
+
+<script>
+  import { _ } from "svelte-i18n";
+  import Hook from "$pano/lib/components/Hook.svelte";
+  import Pagination from "$pano/lib/components/Pagination.svelte";
+  import Posts from "$pano/lib/components/Posts.svelte";
+
+  export let data;
+  export let themeSettings;
+  export let onPageClick;
+</script>
+```
+
+Yukarıdan aşağıya okuyun: bir eklenti alanı (`<Hook>`), gönderi listesi ve sayfalama. Ana sayfanın tamamı bu. Şimdi onu, her seferinde küçük bir düzenleme yaparak değiştirelim.
+
+### Düzenleme 1 — kendi markup'ınızı ekleyin
+
+Markup'ta yazdığınız her şey sayfada olduğu gibi görünür. Gönderilerin üstüne bir karşılama afişi ekleyin:
+
+```svelte
+<div class="vstack gap-3">
+  <Hook name="page:home:top" />
+
+  <div class="welcome-banner">
+    <h1>Welcome, adventurer!</h1>
+    <p>Grab your pickaxe — the server awaits.</p>
+  </div>
+
+  <!-- Posts -->
+  <Posts posts={data.posts} />
+  ...
+```
+
+Kaydedin, yenileyin → afiş ana sayfanızda. `.welcome-banner`'ı temanızın SCSS'inde diğer herhangi bir CSS sınıfı gibi stillendirin. Tema çalışmasının büyük bölümü özünde budur: **view'ın içine yazılan, sade HTML ve CSS.**
+
+### Düzenleme 2 — size verilen veriyi kullanın
+
+Başlık bize `data.posts`'un bir gönderi dizisi olduğunu söyledi. Hazır `<Posts>` bileşenini kullanmak zorunda değilsiniz — gönderileri bir `{#each}` döngüsüyle **kendi tarzınızda** düzenleyebilirsiniz:
+
+```svelte
+  <!-- Posts — replaced with our own card grid -->
+  <div class="post-grid">
+    {#each data.posts as post}
+      <a class="post-card" href="/post/{post.url}">
+        <h3>{post.title}</h3>
+      </a>
+    {/each}
+  </div>
+```
+
+Kaydedin, yenileyin → aynı gönderiler, tamamen farklı bir düzen ve her pikseline siz sahipsiniz. Motor veriyi yine yükler, yine sayfalar, yine eklentileri çalıştırır — siz yalnızca bir gönderinin nasıl göründüğüne karar verdiniz.
+
+::: tip `post`'un içinde ne olduğunu nasıl bilirim?
+İki kolay yol: varsayılan markup'ın onu nasıl kullandığına bakın ya da bir anlığına döngünün içine `<pre>{JSON.stringify(post, null, 2)}</pre>` bırakın — nesnenin tamamını sayfaya yazdırır. İşiniz bitince silin.
+:::
+
+### Düzenleme 3 — bir ayara tepki verin
+
+`themeSettings`, site sahibinin panelde yapılandırdığı şeyleri tutar. Tasarımınızın bazı bölümlerini isteğe bağlı yapmak için bunu kullanın:
+
+```svelte
+  {#if themeSettings.welcomeBannerVisible !== false}
+    <div class="welcome-banner">
+      <h1>Welcome, adventurer!</h1>
+    </div>
+  {/if}
+```
+
+Artık afiş panelden kapatılabilir — anahtarı düzgün kaydedilecek şekilde nasıl tanımlayacağınız için aşağıdaki [Özel tema ayarları](#özel-tema-ayarları) bölümüne bakın.
+
+### Döngünün tamamı bu
+
+Her view tam olarak böyle çalışır, sayfa ne olursa olsun: eject → malzemelerinizi görmek için başlığı okuyun → markup'ı düzenleyin → yenileyin. Giriş sayfası, profil, gönderi detayı — aynı tarif, farklı prop'lar. Bir şey bozulduğunda son düzenlemenizi geri alın; kararsız kaldığınızda motorun varsayılan view'ıyla karşılaştırın (her zaman `node_modules/@panomc/theme-core/src/lib/views/` içinde görünür).
 
 ## View'larınızın içindeki eklenti API'si
 

@@ -26,10 +26,10 @@ bunx @panomc/theme-core list-views
 To take over a view, **eject** it. Ejecting copies the engine's default version into your own `src/views/` folder and registers it in `theme.config.js`:
 
 ```sh
-bunx @panomc/theme-core eject-view LoginView
+bunx @panomc/theme-core eject-view HomeView
 ```
 
-After this you have a working `src/views/LoginView.svelte` that you can edit freely.
+After this you have a working `src/views/HomeView.svelte` that you can edit freely.
 
 ::: tip
 Ejected files start as **working copies** of the real default — not a blank page. You *edit* an existing design, you don't write one from scratch. Start by changing small things and refreshing.
@@ -54,6 +54,99 @@ Every ejected view begins with a comment header that documents **every prop** �
 ```
 
 Stores arrive as store objects (read them with a `$` prefix, like `$_`), and actions arrive as functions you call. Whatever the header lists is what you have; you don't need to know where any of it comes from.
+
+## A worked example — redesigning the home page
+
+Let's actually do it. After `eject-view HomeView`, your `src/views/HomeView.svelte` looks like this (trimmed a little for reading):
+
+```svelte
+<div class="vstack gap-3">
+  <Hook name="page:home:top" />
+
+  <!-- Posts -->
+  <Posts posts={data.posts} />
+
+  <!-- Pagination -->
+  {#if data.postCount > 0}
+    <Pagination
+      page={data.page}
+      totalPage={data.totalPage}
+      on:pageLinkClick={(event) => onPageClick(data, event.detail.page)} />
+  {/if}
+</div>
+
+<script>
+  import { _ } from "svelte-i18n";
+  import Hook from "$pano/lib/components/Hook.svelte";
+  import Pagination from "$pano/lib/components/Pagination.svelte";
+  import Posts from "$pano/lib/components/Posts.svelte";
+
+  export let data;
+  export let themeSettings;
+  export let onPageClick;
+</script>
+```
+
+Read it top to bottom: a plugin area (`<Hook>`), the post list, and pagination. That's the whole home page. Now let's change it, one small edit at a time.
+
+### Edit 1 — add your own markup
+
+Anything you write in the markup just appears on the page. Add a welcome banner above the posts:
+
+```svelte
+<div class="vstack gap-3">
+  <Hook name="page:home:top" />
+
+  <div class="welcome-banner">
+    <h1>Welcome, adventurer!</h1>
+    <p>Grab your pickaxe — the server awaits.</p>
+  </div>
+
+  <!-- Posts -->
+  <Posts posts={data.posts} />
+  ...
+```
+
+Save, refresh → the banner is on your home page. Style `.welcome-banner` in your theme's SCSS like any other CSS class. This is most of theme work in a nutshell: **plain HTML and CSS, written inside the view.**
+
+### Edit 2 — use the data you're given
+
+The header told us `data.posts` is an array of posts. You don't have to use the ready-made `<Posts>` component — you can lay the posts out **your own way** with an `{#each}` loop:
+
+```svelte
+  <!-- Posts — replaced with our own card grid -->
+  <div class="post-grid">
+    {#each data.posts as post}
+      <a class="post-card" href="/post/{post.url}">
+        <h3>{post.title}</h3>
+      </a>
+    {/each}
+  </div>
+```
+
+Save, refresh → same posts, completely different layout, and you own every pixel of it. The engine still loads the data, still paginates, still runs plugins — you only decided what a post looks like.
+
+::: tip How do I know what's inside `post`?
+Two easy ways: look at how the default markup used it, or drop `<pre>{JSON.stringify(post, null, 2)}</pre>` inside the loop for a moment — it prints the whole object on the page. Delete it when you're done.
+:::
+
+### Edit 3 — react to a setting
+
+`themeSettings` holds what the site owner configured in the panel. Use it to make parts of your design optional:
+
+```svelte
+  {#if themeSettings.welcomeBannerVisible !== false}
+    <div class="welcome-banner">
+      <h1>Welcome, adventurer!</h1>
+    </div>
+  {/if}
+```
+
+Now the banner can be switched off from the panel — see [Custom theme settings](#custom-theme-settings) below for how to declare the key so it saves properly.
+
+### That's the whole loop
+
+Every view works exactly like this, whatever the page: eject → read the header to see your materials → edit markup → refresh. The login page, the profile, the post detail — same recipe, different props. When something breaks, undo your last edit; when in doubt, compare against the engine's default view (it's always visible in `node_modules/@panomc/theme-core/src/lib/views/`).
 
 ## The plugin API inside your views
 
