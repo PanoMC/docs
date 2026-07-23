@@ -315,7 +315,7 @@ class ShoutMigration1to2(
 `pluginDatabaseManager.uninstall(this)` runs **every DAO's `uninstall()`** — that is the panel **Delete** action, not **Disable**. Disabling keeps the data.
 :::
 
-For a complete, compiling query — a real `SELECT` and `INSERT` written inside a DAO — follow the tutorial's [A database table](/addon/backend/#_3-a-database-table) section.
+For a complete, compiling query — a real `SELECT` and `INSERT` written inside a DAO — follow the tutorial's [Database & Migrations](/addon/database/#the-implementation) page.
 
 ## 5. Configuration
 

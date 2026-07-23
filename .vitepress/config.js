@@ -137,6 +137,14 @@ export default defineConfig({
               {
                 text: "Backend Development",
                 link: "/addon/backend/",
+                collapsed: true,
+                items: [
+                  { text: "Endpoints", link: "/addon/endpoints/" },
+                  { text: "Database & Migrations", link: "/addon/database/" },
+                  { text: "Configuration", link: "/addon/configuration/" },
+                  { text: "Events", link: "/addon/events/" },
+                  { text: "Permissions", link: "/addon/permissions/" },
+                ],
               },
               {
                 text: "Backend API Reference",
@@ -145,6 +153,11 @@ export default defineConfig({
               {
                 text: "Frontend Development",
                 link: "/addon/frontend/",
+                collapsed: true,
+                items: [
+                  { text: "Theme UI", link: "/addon/theme-ui/" },
+                  { text: "Panel UI", link: "/addon/panel-ui/" },
+                ],
               },
               {
                 text: "Frontend API Reference",
@@ -346,14 +359,27 @@ export default defineConfig({
               {
                 text: "Backend Geliştirme",
                 link: "/tr/addon/backend/",
+                collapsed: true,
+                items: [
+                  { text: "Endpoint'ler", link: "/tr/addon/endpoints/" },
+                  { text: "Veritabanı ve Migrasyonlar", link: "/tr/addon/database/" },
+                  { text: "Yapılandırma", link: "/tr/addon/configuration/" },
+                  { text: "Olaylar (Events)", link: "/tr/addon/events/" },
+                  { text: "İzinler", link: "/tr/addon/permissions/" },
+                ],
               },
               {
                 text: "Backend API Referansı",
                 link: "/tr/addon/backend-reference/",
               },
               {
-                text: "Arayüz Geliştirme",
+                text: "Frontend Geliştirme",
                 link: "/tr/addon/frontend/",
+                collapsed: true,
+                items: [
+                  { text: "Tema Arayüzü", link: "/tr/addon/theme-ui/" },
+                  { text: "Panel Arayüzü", link: "/tr/addon/panel-ui/" },
+                ],
               },
               {
                 text: "Arayüz API Referansı",
@@ -555,6 +581,14 @@ export default defineConfig({
               {
                 text: "Разработка бэкенда",
                 link: "/ru/addon/backend/",
+                collapsed: true,
+                items: [
+                  { text: "Эндпоинты", link: "/ru/addon/endpoints/" },
+                  { text: "База данных и миграции", link: "/ru/addon/database/" },
+                  { text: "Конфигурация", link: "/ru/addon/configuration/" },
+                  { text: "События", link: "/ru/addon/events/" },
+                  { text: "Права доступа", link: "/ru/addon/permissions/" },
+                ],
               },
               {
                 text: "Справочник Backend API",
@@ -563,6 +597,11 @@ export default defineConfig({
               {
                 text: "Разработка фронтенда",
                 link: "/ru/addon/frontend/",
+                collapsed: true,
+                items: [
+                  { text: "UI темы", link: "/ru/addon/theme-ui/" },
+                  { text: "UI панели", link: "/ru/addon/panel-ui/" },
+                ],
               },
               {
                 text: "Справочник API фронтенда",

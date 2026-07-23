@@ -47,7 +47,7 @@ class ShoutboxPlugin : PanoPlugin() {
 }
 ```
 
-Birisi Shoutbox'ı kurulumu bitirmeden *önce* kurarsa, `startPlugin()` erkenden çıkar. Kurulum tamamlandığı an işleri kaldığı yerden almak için, `plugin.startPlugin()`'i yeniden çağıran küçük bir etkinlik dinleyicisi (`event/SetupEventHandler.kt`) ekleyin. Veritabanına dokunan her eklenti tam olarak bu kurulum-kapısı desenine ihtiyaç duyar — her iki sınıfı da [Backend Geliştirme § 1](/tr/addon/backend/#_1-giris-sınıfı)'den kopyalayın ve yalnızca adları değiştirin.
+Birisi Shoutbox'ı kurulumu bitirmeden *önce* kurarsa, `startPlugin()` erkenden çıkar. Kurulum tamamlandığı an işleri kaldığı yerden almak için, `plugin.startPlugin()`'i yeniden çağıran küçük bir etkinlik dinleyicisi (`event/SetupEventHandler.kt`) ekleyin. Veritabanına dokunan her eklenti tam olarak bu kurulum-kapısı desenine ihtiyaç duyar — her iki sınıfı da [Olaylar → kurulum kapısı](/tr/addon/events/#kurulum-kapısı)'ndan kopyalayın ve yalnızca adları değiştirin.
 
 ::: warning Spring'inkini değil, Pano'nun `@EventListener`'ını kullanın
 Etkinlik dinleyicisinin annotation'ı `com.panomc.platform.api.annotation.EventListener` olmalıdır — Spring'in `org.springframework.context.event.EventListener`'ı **değil**. Aynı adı paylaşırlar; yanlış olanı içe aktarırsanız dinleyiciniz sessizce hiç tetiklenmez.
@@ -64,7 +64,7 @@ class ShoutboxConfig(
 ) : PluginConfig()
 ```
 
-İlk çalıştırmada Pano bu varsayılanları `plugins/pano-plugin-shoutbox/config.conf`'a yazar. **Bir uç noktanın içinden** bir değer okumanın tek bir kuralı vardır — yapılandırma yöneticisini istek anında getirin, asla bir kurucuda değil — bu, [Backend Geliştirme § 2](/tr/addon/backend/#_2-yapılandırma)'de açıklanır.
+İlk çalıştırmada Pano bu varsayılanları `plugins/pano-plugin-shoutbox/config.conf`'a yazar. **Bir uç noktanın içinden** bir değer okumanın tek bir kuralı vardır — yapılandırma yöneticisini istek anında getirin, asla bir kurucuda değil — bu, [Yapılandırma](/tr/addon/configuration/#bir-uc-noktadan-yapılandırma-okuma-ve-neden-bir-kurucudan-degil)'da açıklanır.
 
 ## 3. Bir veritabanı tablosu
 
@@ -97,7 +97,7 @@ abstract class ShoutDao : Dao<Shout>(Shout::class.java) {
 }
 ```
 
-**impl**, `@Dao @Lazy @Scope(SCOPE_SINGLETON)` üçlüsünü taşır ve SQL'i (`CREATE TABLE IF NOT EXISTS`, `INSERT`, `SELECT`, `DELETE`) tutar. Sayfadaki en fazla boilerplate odur — onu [Backend Geliştirme § 3](/tr/addon/backend/#_3-bir-veritabanı-tablosu)'ten **olduğu gibi kopyalayın** ve yalnızca SQL dizelerini düzenleyin. Tablo adı, sınıfınızın snake_case hâli artı sitenin önekidir, dolayısıyla varsayılan bir kurulumda `Shout`, `pano_shout` tablosu olur.
+**impl**, `@Dao @Lazy @Scope(SCOPE_SINGLETON)` üçlüsünü taşır ve SQL'i (`CREATE TABLE IF NOT EXISTS`, `INSERT`, `SELECT`, `DELETE`) tutar. Sayfadaki en fazla boilerplate odur — onu [Veritabanı ve Migrasyonlar](/tr/addon/database/#uygulama-impl)'dan **olduğu gibi kopyalayın** ve yalnızca SQL dizelerini düzenleyin. Tablo adı, sınıfınızın snake_case hâli artı sitenin önekidir, dolayısıyla varsayılan bir kurulumda `Shout`, `pano_shout` tablosu olur.
 
 ::: danger Silme tablonuzu düşürür
 `onUninstall()`, her DAO'nun `uninstall()`'unu (bir `DROP TABLE`) çalıştırır. Bu, panelin **Disable** değil, **Delete** eyleminde tetiklenir. Devre dışı bırakma veriyi korur; silme onu çöpe atar.
@@ -115,7 +115,7 @@ Burada yakalanan bir yazım hatasını bulmak, beş dosya sonra aynı yazım hat
 
 ### Tabloyu sonradan değiştirme: migrasyonlar
 
-Gerçek kurulumlar eski şekle sahip olduktan sonra orijinal `CREATE TABLE`'ı değiştiremezsiniz. **Sürüm 2**'de bir sütun eklemek için `@Migration` ile işaretlenmiş bir `DatabaseMigration` sınıfı yazın. Onu hiçbir yere kaydetmezsiniz — `@Migration` annotation'ı kaydın *ta kendisidir* ve `pluginDatabaseManager.initialize(this)` (Bölüm 1'den) geride kalmış kurulumlarda bekleyen her migrasyonu bir kez çalıştırır. İlk gün buna ihtiyacınız olmayacak; tam desen [Backend Geliştirme § 4](/tr/addon/backend/#_4-semayı-bir-migrasyonla-gelistirme)'te.
+Gerçek kurulumlar eski şekle sahip olduktan sonra orijinal `CREATE TABLE`'ı değiştiremezsiniz. **Sürüm 2**'de bir sütun eklemek için `@Migration` ile işaretlenmiş bir `DatabaseMigration` sınıfı yazın. Onu hiçbir yere kaydetmezsiniz — `@Migration` annotation'ı kaydın *ta kendisidir* ve `pluginDatabaseManager.initialize(this)` (Bölüm 1'den) geride kalmış kurulumlarda bekleyen her migrasyonu bir kez çalıştırır. İlk gün buna ihtiyacınız olmayacak; tam desen [Veritabanı ve Migrasyonlar](/tr/addon/database/#semayı-bir-migrasyonla-gelistirme)'da.
 
 ## 4. Herkese açık bir JSON uç noktası
 
@@ -174,7 +174,7 @@ Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Roller**'i açın
 
 ## Bir shout yayınlama (panel uç noktası)
 
-Herkese açık `GET` yalnızca okur. Bir shout *yayınlamak* için, gövdeyi doğrulayan, `ManageShoutboxPermission`'ı kontrol eden, satırı yazan ve bir etkinlik günlüğü girdisi kaydeden bir panel `POST` uç noktası (`PanelApi`) eklersiniz. Bu, backend'deki en büyük kod bloğudur, o yüzden onu burada yeniden basmıyoruz — onu [Backend Geliştirme § 6](/tr/addon/backend/#_6-bir-panel-uc-noktası)'dan inşa edin.
+Herkese açık `GET` yalnızca okur. Bir shout *yayınlamak* için, gövdeyi doğrulayan, `ManageShoutboxPermission`'ı kontrol eden, satırı yazan ve bir etkinlik günlüğü girdisi kaydeden bir panel `POST` uç noktası (`PanelApi`) eklersiniz. Bu, backend'deki en büyük kod bloğudur, o yüzden onu burada yeniden basmıyoruz — onu [Endpoint'ler](/tr/addon/endpoints/#bir-panel-uc-noktası)'den inşa edin.
 
 ::: tip Panel yolları `/api/panel/` ile başlar
 Panel arayüzü `POST /panel/api/shoutbox`'ı çağırır, ama Pano onu yeniden yazar, dolayısıyla Kotlin'de yolu her zaman `Path("/api/panel/shoutbox", RouteType.POST)` olarak yazarsınız.

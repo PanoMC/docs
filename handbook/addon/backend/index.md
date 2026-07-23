@@ -47,7 +47,7 @@ class ShoutboxPlugin : PanoPlugin() {
 }
 ```
 
-If someone installs Shoutbox *before* finishing setup, `startPlugin()` bails out early. To pick it back up the moment setup completes, add a small event listener (`event/SetupEventHandler.kt`) that calls `plugin.startPlugin()` again. Every addon that touches the database needs this exact setup-gate pattern — copy both classes from [Backend Development § 1](/addon/backend/#_1-the-entry-class) and change only the names.
+If someone installs Shoutbox *before* finishing setup, `startPlugin()` bails out early. To pick it back up the moment setup completes, add a small event listener (`event/SetupEventHandler.kt`) that calls `plugin.startPlugin()` again. Every addon that touches the database needs this exact setup-gate pattern — copy both classes from [Events → the setup gate](/addon/events/#the-setup-gate) and change only the names.
 
 ::: warning Use Pano's `@EventListener`, not Spring's
 The event listener's annotation must be `com.panomc.platform.api.annotation.EventListener` — **not** Spring's `org.springframework.context.event.EventListener`. They share a name; import the wrong one and your listener silently never fires.
@@ -64,7 +64,7 @@ class ShoutboxConfig(
 ) : PluginConfig()
 ```
 
-On first run Pano writes these defaults to `plugins/pano-plugin-shoutbox/config.conf`. Reading a value **from inside an endpoint** has one rule — fetch the config manager at request time, never in a constructor — explained in [Backend Development § 2](/addon/backend/#_2-configuration).
+On first run Pano writes these defaults to `plugins/pano-plugin-shoutbox/config.conf`. Reading a value **from inside an endpoint** has one rule — fetch the config manager at request time, never in a constructor — explained in [Configuration](/addon/configuration/#reading-config-from-an-endpoint-and-why-not-from-a-constructor).
 
 ## 3. A database table
 
@@ -97,7 +97,7 @@ abstract class ShoutDao : Dao<Shout>(Shout::class.java) {
 }
 ```
 
-The **impl** carries the `@Dao @Lazy @Scope(SCOPE_SINGLETON)` trio and holds the SQL (`CREATE TABLE IF NOT EXISTS`, `INSERT`, `SELECT`, `DELETE`). It's the most boilerplate on the page — **copy it as-is** from [Backend Development § 3](/addon/backend/#_3-a-database-table) and edit only the SQL strings. The table name is your class in snake_case plus the site's prefix, so on a default install `Shout` becomes the table `pano_shout`.
+The **impl** carries the `@Dao @Lazy @Scope(SCOPE_SINGLETON)` trio and holds the SQL (`CREATE TABLE IF NOT EXISTS`, `INSERT`, `SELECT`, `DELETE`). It's the most boilerplate on the page — **copy it as-is** from [Database & Migrations](/addon/database/#the-implementation) and edit only the SQL strings. The table name is your class in snake_case plus the site's prefix, so on a default install `Shout` becomes the table `pano_shout`.
 
 ::: danger Delete drops your table
 `onUninstall()` runs every DAO's `uninstall()` (a `DROP TABLE`). That fires on the panel's **Delete** action, not **Disable**. Disabling keeps the data; deleting throws it away.
@@ -115,7 +115,7 @@ A typo caught here is far easier to find than the same typo after five more file
 
 ### Changing the table later: migrations
 
-You can't change the original `CREATE TABLE` once real installs have the old shape. To add a column in **version 2**, write a `DatabaseMigration` class annotated `@Migration`. You don't register it anywhere — the `@Migration` annotation *is* the registration, and `pluginDatabaseManager.initialize(this)` (from Section 1) runs any pending migration once, on installs that are behind. You won't need this on day one; the full pattern is in [Backend Development § 4](/addon/backend/#_4-evolving-the-schema-with-a-migration).
+You can't change the original `CREATE TABLE` once real installs have the old shape. To add a column in **version 2**, write a `DatabaseMigration` class annotated `@Migration`. You don't register it anywhere — the `@Migration` annotation *is* the registration, and `pluginDatabaseManager.initialize(this)` (from Section 1) runs any pending migration once, on installs that are behind. You won't need this on day one; the full pattern is in [Database & Migrations](/addon/database/#evolving-the-schema-with-a-migration).
 
 ## 4. A public JSON endpoint
 
@@ -174,7 +174,7 @@ After a rebuild and restart, open **Panel → Roles** and edit a role — a new 
 
 ## Posting a shout (the panel endpoint)
 
-The public `GET` only reads. To *post* a shout you add a panel `POST` endpoint (`PanelApi`) that validates the body, checks `ManageShoutboxPermission`, writes the row, and records an activity-log entry. It's the biggest code block in the backend, so we won't reprint it here — build it from [Backend Development § 6](/addon/backend/#_6-a-panel-endpoint).
+The public `GET` only reads. To *post* a shout you add a panel `POST` endpoint (`PanelApi`) that validates the body, checks `ManageShoutboxPermission`, writes the row, and records an activity-log entry. It's the biggest code block in the backend, so we won't reprint it here — build it from [Endpoints](/addon/endpoints/#a-panel-endpoint).
 
 ::: tip Panel paths start with `/api/panel/`
 The panel UI calls `POST /panel/api/shoutbox`, but Pano rewrites it, so in Kotlin you always write the path as `Path("/api/panel/shoutbox", RouteType.POST)`.

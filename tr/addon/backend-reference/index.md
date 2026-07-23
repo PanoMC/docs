@@ -315,7 +315,7 @@ class ShoutMigration1to2(
 `pluginDatabaseManager.uninstall(this)`, **her DAO'nun `uninstall()`'ını** çalıştırır — bu, panel **Sil** eylemidir, **Devre dışı bırak** değil. Devre dışı bırakmak veriyi korur.
 :::
 
-Eksiksiz, derlenen bir sorgu için — bir DAO içinde yazılmış gerçek bir `SELECT` ve `INSERT` — eğitimin [Bir veritabanı tablosu](/tr/addon/backend/#_3-bir-veritabanı-tablosu) bölümünü izleyin.
+Eksiksiz, derlenen bir sorgu için — bir DAO içinde yazılmış gerçek bir `SELECT` ve `INSERT` — eğitimin [Veritabanı ve Migrasyonlar](/tr/addon/database/#uygulama-impl) sayfasını izleyin.
 
 ## 5. Yapılandırma
 

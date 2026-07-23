@@ -129,14 +129,14 @@ A few things worth knowing:
 - **`text` is a translation key, not a label.** Until you add it (next page), the sidebar shows the raw key `plugins.pano-plugin-shoutbox.nav.shoutbox`. That's expected here.
 - **Guard against duplicates.** `editNavLinks` re-runs on every page load in the long-lived server, so check `links.some(...)` before adding — and always **return** the array.
 
-Inside `ShoutboxPage.svelte` you build the actual management UI: list the shouts, a form that calls `ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } })` to add one, and a delete button. To confirm an action, show a toast with `showToast` from `@panomc/sdk/toasts`. Full examples are in [Frontend Development](/addon/frontend/#showing-toasts).
+Inside `ShoutboxPage.svelte` you build the actual management UI: list the shouts, a form that calls `ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } })` to add one, and a delete button. To confirm an action, show a toast with `showToast` from `@panomc/sdk/toasts`. Full examples are in [Panel UI](/addon/panel-ui/#showing-toasts).
 
 ::: tip Check
 Reload the panel. A bullhorn icon appears in the sidebar just under **Posts**, labelled with the raw key (it turns into real text once you add the locale key next page). Click it to open your page at `/shoutbox`. If `permission` isn't met, the page 404s and the link is hidden.
 :::
 
 ::: tip A cheaper alternative: a settings section
-If you don't need a whole page, you can instead add a component to your addon's detail page (the `panel:plugin-detail:content:<pluginId>` hook) — the cheapest way to give an addon a settings screen. Most built-in addons do exactly this; see [Frontend Development](/addon/frontend/#panel-a-settings-section-on-your-addon-s-detail-page).
+If you don't need a whole page, you can instead add a component to your addon's detail page (the `panel:plugin-detail:content:<pluginId>` hook) — the cheapest way to give an addon a settings screen. Most built-in addons do exactly this; see [Panel UI](/addon/panel-ui/#a-settings-section-on-your-addon-s-detail-page).
 :::
 
 ## Beware fake APIs
