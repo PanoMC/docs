@@ -13,7 +13,7 @@ Entegrasyon geliştirme, üçüncü taraf Minecraft eklentileri ile Pano'nun web
 
 Entegrasyon geliştirmeye başlamadan önce şunlara sahip olduğunuzdan emin olun:
 
-1. **Java Development Kit (JDK 11+)** — Eklenti geliştirme için gerekli
+1. **Java Development Kit (JDK 17+)** — Eklenti geliştirme için gerekli
 2. **Java veya Kotlin Bilgisi** — Pano MC Eklentisi API'si ile her iki dili de kullanabilirsiniz
 3. **Minecraft Eklenti Geliştirme Deneyimi** — Spigot/Paper/Bukkit API anlayışı
 4. **Pano MC Eklentisi API** — [GitHub Repository](https://github.com/PanoMC/pano-mc-plugin)

@@ -10,6 +10,7 @@ Pano состоит из нескольких репозиториев, кажд
 - [**panel-ui**](https://github.com/PanoMC/panel-ui): Интерфейс панели управления (SvelteKit).
 - [**setup-ui**](https://github.com/PanoMC/setup-ui): Мастер первоначальной настройки (SvelteKit).
 - [**vanilla-theme**](https://github.com/PanoMC/vanilla-theme): Официальная тема по умолчанию (SvelteKit).
+- [**sdk (движок theme-core)**](https://github.com/PanoMC/sdk): Рабочее пространство движка, публикующее `@panomc/theme-core` и `@panomc/sdk`.
 - [**pano-mc-plugin**](https://github.com/PanoMC/pano-mc-plugin): Плагин интеграции для Minecraft сервера.
 - [**docs**](https://github.com/PanoMC/docs): Репозиторий этой документации.
 
@@ -27,7 +28,7 @@ Pano состоит из нескольких репозиториев, кажд
 
 Pano построен на современных технологиях для обеспечения производительности и гибкости:
 
-- **Backend**: Kotlin, Vert.x, Spring DI, ориентирован на JVM 11+.
+- **Backend**: Kotlin, Vert.x, Spring DI, ориентирован на JVM 17+ (тесты выполняются на JDK 21).
 - **Frontend**: SvelteKit, Bootstrap 5, SASS.
 - **Среда выполнения**: [Bun](https://bun.sh) используется для работы наших фронтенд-сервисов.
 - **Упаковка**: Проекты упаковываются в ZIP-архивы и встраиваются в один исполняемый JAR-файл.

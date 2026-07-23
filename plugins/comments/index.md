@@ -36,5 +36,5 @@ To moderate and manage comments, users must have the following permission:
 
 ## Setup & Configuration
 1. Enable the plugin in the **Pano Admin Panel**.
-2. **Configure Settings:** Navigate to **Panel → Addons → Comments** to adjust your settings (e.g., enabling likes, setting permissions, or cooldowns).
+2. **Configure Settings:** Navigate to **Panel → Plugins → Comments** to adjust your settings (e.g., enabling likes, setting permissions, or cooldowns).
 3. **Start Moderating:** Visit **Panel → Posts → Comments** to manage your community's discussions.

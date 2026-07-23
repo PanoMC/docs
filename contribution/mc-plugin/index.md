@@ -11,6 +11,7 @@ Communication is handled over WebSocket for real-time performance. To ensure sec
 We support a wide range of Minecraft server platforms:
 - Spigot / Paper / Folia
 - Bungeecord / Velocity
+- Fabric
 
 ::: warning COMPATIBILITY
 When developing features or fixing bugs, you **must** ensure the code works correctly across all supported platforms. Use platform-specific modules for any logic that cannot be shared.

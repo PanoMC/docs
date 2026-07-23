@@ -18,7 +18,7 @@ Bu projeler, web arayüzleri için çevirileri içerir:
 
 - **panel-ui**: [github.com/PanoMC/panel-ui/tree/dev/lang](https://github.com/PanoMC/panel-ui/tree/dev/lang)
 - **setup-ui**: [github.com/PanoMC/setup-ui/tree/dev/lang](https://github.com/PanoMC/setup-ui/tree/dev/lang)
-- **vanilla-theme**: [github.com/PanoMC/vanilla-theme/tree/dev/lang](https://github.com/PanoMC/vanilla-theme/tree/dev/lang)
+- **Tema temel çevirileri**: Temalar için paylaşılan UI temel çevirileri artık motor deposunda, [github.com/PanoMC/sdk/tree/dev/packages/theme-core/lang](https://github.com/PanoMC/sdk/tree/dev/packages/theme-core/lang) altında bulunur. Tek tek temalar yalnızca küçük bir `lang-overrides/` klasörü taşır; bu nedenle temel metinleri motor deposunda çevirin.
 
 ### Backend ve MC Plugin
 Platform mantığı ve Minecraft eklentisi için çeviriler burada bulunabilir:

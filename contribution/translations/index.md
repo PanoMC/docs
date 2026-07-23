@@ -18,7 +18,7 @@ These projects contain the translations for the web interfaces:
 
 - **panel-ui**: [github.com/PanoMC/panel-ui/tree/dev/lang](https://github.com/PanoMC/panel-ui/tree/dev/lang)
 - **setup-ui**: [github.com/PanoMC/setup-ui/tree/dev/lang](https://github.com/PanoMC/setup-ui/tree/dev/lang)
-- **vanilla-theme**: [github.com/PanoMC/vanilla-theme/tree/dev/lang](https://github.com/PanoMC/vanilla-theme/tree/dev/lang)
+- **Theme base translations**: the shared UI base translations for themes now live in the engine repo, under [github.com/PanoMC/sdk/tree/dev/packages/theme-core/lang](https://github.com/PanoMC/sdk/tree/dev/packages/theme-core/lang). Individual themes only carry a small `lang-overrides/` folder, so translate the base strings in the engine repo.
 
 ### Backend & MC Plugin
 Translations for the core platform logic and Minecraft plugin can be found here:

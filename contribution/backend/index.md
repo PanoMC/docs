@@ -15,7 +15,7 @@ The main [**Pano Core**](https://github.com/PanoMC/Pano) repository actually con
 - **Language**: Kotlin
 - **Framework**: Vert.x (Event-driven, non-blocking)
 - **Dependency Injection**: Spring DI
-- **Database**: MySQL 5.5+ / MariaDB
+- **Database**: A current MariaDB/MySQL (MariaDB 10.6+ / MySQL 8+)
 
 ## Architecture
 The backend is designed to be modular and resilient. It supports a plugin system where features can be added or removed dynamically.
@@ -62,7 +62,7 @@ After running Pano for the first time, we strongly recommend closing the applica
 :::
 
 1. **Clone the Core**: `https://github.com/PanoMC/Pano`
-2. **Setup Environment**: Ensure you have JDK 11+ and a MySQL/MariaDB instance.
+2. **Setup Environment**: Ensure you have JDK 17+ (tests run on JDK 21) and a current MariaDB/MySQL instance.
 3. **Build**: Use `./gradlew build` to compile the project.
 4. **Run**: Run the generated JAR or use `./gradlew run -Pnogui` for development (runs via Gradle without creating a JAR).
 

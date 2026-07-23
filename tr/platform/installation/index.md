@@ -6,8 +6,8 @@ Bu rehberi takip ederek **Pano**’yu kurabilir ve Minecraft sunucunuzda birkaç
 
 Pano’yu kurmadan önce aşağıdaki gereksinimlerin karşılandığından emin olun:
 
-1. **Java (JVM 11+)**
-    - Pano, Java 11 veya üzeri sürümlerde çalışır.
+1. **Java (JVM 17+)**
+    - Pano, Java 17 veya üzeri sürümlerde çalışır.
     - **JDK** veya **JRE**’nin kurulu olduğundan ve komut satırında erişilebilir olduğundan emin olun.
     - [→ Java’yı İndir](https://www.oracle.com/java/technologies/javase-downloads.html)
 
@@ -28,7 +28,7 @@ Pano’yu kurmadan önce aşağıdaki gereksinimlerin karşılandığından emin
 Pano’nun en son sürümünü resmi web sitesinden indirebilirsiniz:
 
 - [En Son Sürümü İndir →](https://panomc.com/download)
-- Daha eski sürümler için [GitHub Releases](https://github.com/your-repo/Pano/releases) sayfasını ziyaret edin.
+- Daha eski sürümler için [GitHub Releases](https://github.com/PanoMC/Pano/releases) sayfasını ziyaret edin.
 
 Pano, **`.jar`** dosyası olarak dağıtılır — tıpkı **Spigot** veya **Paper** gibi.  
 İndirdikten sonra dosyayı uygun bir klasöre (örneğin `/pano`) kaydedin.

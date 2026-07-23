@@ -16,6 +16,15 @@ End-to-end design for the Pano plugin DRM gate. Lives in 4 repos:
 - **Token format:** RS256 JWT, 1h TTL. Bound to `(panoPlatformId, resourceId, version, jarSha256)`.
 - **Anti-cracking:** JAR hash binding + version binding + multi-site checks + ProGuard + per-release hash invalidates older crack work.
 
+### Premium themes
+
+Themes reuse the same centralized JWT license model, but a theme is not a single JAR — it ships as a self-contained **zip**. So the license identity binds to the **whole-zip SHA-256** instead of `jarSha256`:
+
+- Theme builds are **byte-reproducible**: deterministic packaging (stable file ordering, normalized timestamps/permissions) makes a rebuild of the same source produce a hash-stable zip, so the `sha256` recorded on panomc.com matches what the operator installs.
+- The license binds to that whole-zip `sha256`. Both **install time** and **runtime** verify a `fileFingerprint` computed over the extracted theme folder — the folder must hash back to the licensed zip, catching a tampered or repacked theme just as JAR-hash binding catches a patched plugin.
+
+Everything else (issuance flow, 1h RS256 JWTs, multi-site binding, failure handling) is identical to the plugin model described below.
+
 ## Token claims
 
 ```json

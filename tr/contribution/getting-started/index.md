@@ -10,6 +10,7 @@ Pano, her biri belirli bir amaca hizmet eden birkaç depodan oluşur:
 - [**panel-ui**](https://github.com/PanoMC/panel-ui): Yönetim paneli arayüzü (SvelteKit).
 - [**setup-ui**](https://github.com/PanoMC/setup-ui): İlk kurulum sihirbazı (SvelteKit).
 - [**vanilla-theme**](https://github.com/PanoMC/vanilla-theme): Varsayılan resmi tema (SvelteKit).
+- [**sdk (theme-core motoru)**](https://github.com/PanoMC/sdk): `@panomc/theme-core` ve `@panomc/sdk` paketlerini yayınlayan motor deposu.
 - [**pano-mc-plugin**](https://github.com/PanoMC/pano-mc-plugin): Minecraft sunucu tarafı entegrasyon eklentisi.
 - [**docs**](https://github.com/PanoMC/docs): Bu dokümantasyon deposu.
 
@@ -27,7 +28,7 @@ Dallarımızda (branches) üç aşamalı bir yayın döngüsü izliyoruz:
 
 Pano, performans ve esneklik sağlamak için modern teknolojilerle oluşturulmuştur:
 
-- **Backend**: Kotlin, Vert.x, Spring DI, JVM 11+ hedefli.
+- **Backend**: Kotlin, Vert.x, Spring DI, JVM 17+ hedefli (testler JDK 21 üzerinde çalışır).
 - **Frontend**: SvelteKit, Bootstrap 5, SASS.
 - **Çalışma Zamanı**: Frontend servislerimizi çalıştırmak için [Bun](https://bun.sh) kullanılır.
 - **Paketleme**: Projeler ZIP dosyaları halinde paketlenir ve tek bir çalıştırılabilir JAR dosyasına gömülür.

@@ -6,8 +6,8 @@ Follow this guide to set up **Pano** and get it running on your Minecraft server
 
 Before installing Pano, make sure your environment meets the following requirements:
 
-1. **Java (JVM 11+)**
-   - Pano runs on Java 11 or higher.
+1. **Java (JVM 17+)**
+   - Pano runs on Java 17 or higher.
    - Make sure the **JDK** or **JRE** is installed and accessible via your command line.
    - [→ Download Java](https://www.oracle.com/java/technologies/javase-downloads.html)
 
@@ -28,7 +28,7 @@ Before installing Pano, make sure your environment meets the following requireme
 You can get the latest version of Pano from the official website:
 
 - [Download Latest Version →](https://panomc.com/download)
-- For older releases, visit [GitHub Releases](https://github.com/your-repo/Pano/releases)
+- For older releases, visit [GitHub Releases](https://github.com/PanoMC/Pano/releases)
 
 Pano is distributed as a **`.jar`** file — just like **Spigot** or **Paper**.  
 After downloading, save the file somewhere convenient (for example, in a dedicated folder like `/pano`).

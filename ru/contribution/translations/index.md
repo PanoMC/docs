@@ -18,7 +18,7 @@
 
 - **panel-ui**: [github.com/PanoMC/panel-ui/tree/dev/lang](https://github.com/PanoMC/panel-ui/tree/dev/lang)
 - **setup-ui**: [github.com/PanoMC/setup-ui/tree/dev/lang](https://github.com/PanoMC/setup-ui/tree/dev/lang)
-- **vanilla-theme**: [github.com/PanoMC/vanilla-theme/tree/dev/lang](https://github.com/PanoMC/vanilla-theme/tree/dev/lang)
+- **Базовые переводы тем**: общие базовые переводы UI для тем теперь находятся в репозитории движка, в [github.com/PanoMC/sdk/tree/dev/packages/theme-core/lang](https://github.com/PanoMC/sdk/tree/dev/packages/theme-core/lang). Отдельные темы содержат лишь небольшую папку `lang-overrides/`, поэтому базовые строки переводите в репозитории движка.
 
 ### Backend и MC Plugin
 Переводы для ядра платформы и плагина Minecraft можно найти здесь:

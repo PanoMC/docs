@@ -13,7 +13,7 @@ Pano is an advanced, open-source web platform designed for Minecraft server owne
 Yes! Pano is licensed under GPLv3 and is free to use for anyone. We also support an ecosystem where developers can create and sell their own addons and themes.
 
 #### Do I need a powerful server to run Pano?
-No. Pano is optimized for performance. A basic VPS with 1GB of RAM and Java 11+ is usually more than enough for most communities.
+No. Pano is optimized for performance. A basic VPS with 1GB of RAM and Java 17+ is usually more than enough for most communities.
 
 ---
 

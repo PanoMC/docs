@@ -15,7 +15,7 @@ Ana [**Pano Core**](https://github.com/PanoMC/Pano) deposu aslında iki ayrı uy
 - **Dil**: Kotlin
 - **Framework**: Vert.x (Olay tabanlı, engellemesiz)
 - **Bağımlılık Enjeksiyonu**: Spring DI
-- **Veritabanı**: MySQL 5.5+ / MariaDB
+- **Veritabanı**: Güncel bir MariaDB/MySQL (MariaDB 10.6+ / MySQL 8+)
 
 ## Mimari
 Backend, modüler ve esnek bir yapıda tasarlanmıştır. Özelliklerin dinamik olarak eklenebileceği veya kaldırılabileceği bir eklenti (plugin) sistemini destekler.
@@ -62,7 +62,7 @@ Pano'yu ilk kez çalıştırdıktan sonra, kurulumu tamamlamadan **önce** uygul
 :::
 
 1. **Core'u Klonlayın**: `https://github.com/PanoMC/Pano`
-2. **Ortamı Kurun**: JDK 11+ ve bir MySQL/MariaDB örneğine sahip olduğunuzdan emin olun.
+2. **Ortamı Kurun**: JDK 17+ (testler JDK 21 üzerinde çalışır) ve güncel bir MariaDB/MySQL örneğine sahip olduğunuzdan emin olun.
 3. **Derleme**: Projeyi derlemek için `./gradlew build` kullanın.
 4. **Çalıştırma**: Oluşturulan JAR'ı çalıştırın veya geliştirme için `./gradlew run -Pnogui` komutunu kullanın (Gradle ile JAR oluşturmadan çalıştırır).
 

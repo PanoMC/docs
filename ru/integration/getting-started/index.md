@@ -13,7 +13,7 @@
 
 Перед началом разработки интеграций убедитесь, что у вас есть:
 
-1. **Java Development Kit (JDK 11+)** — необходим для разработки плагинов.
+1. **Java Development Kit (JDK 17+)** — необходим для разработки плагинов.
 2. **Знание Java или Kotlin** — вы можете использовать любой из этих языков с API Pano MC Plugin.
 3. **Опыт разработки плагинов Minecraft** — понимание Spigot/Paper/Bukkit API.
 4. **Pano MC Plugin API** — [репозиторий GitHub](https://github.com/PanoMC/pano-mc-plugin).

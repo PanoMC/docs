@@ -11,6 +11,7 @@
 Çok çeşitli Minecraft sunucu platformlarını destekliyoruz:
 - Spigot / Paper / Folia
 - Bungeecord / Velocity
+- Fabric
 
 ::: warning UYUMLULUK
 Yeni özellikler eklerken veya hataları düzeltirken, yazdığınız kodun desteklenen **tüm platformlarda** (Spigot/Paper, Velocity/Bungee vb.) sorunsuz çalıştığından emin olmalısınız. Ortak kullanılamayan mantıklar için platforma özel modülleri kullanın.

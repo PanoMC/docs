@@ -13,7 +13,7 @@ Integration development allows you to create seamless connections between third-
 
 Before you start developing integrations, make sure you have:
 
-1. **Java Development Kit (JDK 11+)** — Required for plugin development
+1. **Java Development Kit (JDK 17+)** — Required for plugin development
 2. **Java or Kotlin Knowledge** — You can use either language with the Pano MC Plugin API
 3. **Minecraft Plugin Development Experience** — Understanding of Spigot/Paper/Bukkit API
 4. **Pano MC Plugin API** — [GitHub Repository](https://github.com/PanoMC/pano-mc-plugin)
