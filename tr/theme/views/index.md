@@ -98,6 +98,20 @@ Yerleşik hook'larla sınırlı değilsiniz — temanız, kendi yeni hook alanla
 
 Bir kez gönderdikten sonra, özel hook'larınıza bir söz gibi davranın: eklentiler onlara dayanmaya başlayabilir, bu yüzden onları tıpkı yerleşik olanlar gibi temanızın gelecekteki sürümlerinde koruyun.
 
+### SSR ve eklenti yüklemesi — eklenti verisi nereden gelir
+
+Eklenti içeriği sonradan tarayıcıda üzerine cıvatalanmaz — bu, **sunucu tarafı render'ın (SSR)** bir parçasıdır: bir sayfa sunucuda render edildiğinde, hook'lara bağlanan eklenti bileşenleri de onunla birlikte render edilir, böylece ziyaretçiler (ve arama motorları) ilk yanıtta tam sayfayı alır.
+
+Perde arkasında bunu iki eklenti API'si mümkün kılar ve her ikisi de **motorun controller'ları** tarafından çalıştırılır — temanız onları asla çağırmaz, ama var olduklarını bilmek faydalıdır:
+
+- **Hook `load()` fonksiyonları.** Bir hook'a bağlanan bir eklenti bileşeni kendi `load()`'unu dışa aktarabilir; motor bunu sayfanın yüklenmesi sırasında çalıştırır (SSR için sunucuda, gezinirken istemcide) ve sonuçları bileşene otomatik olarak **`hookProps`** olarak iletir — bazı view başlıklarının `data`'sında `hookProps`'un listelendiğini fark etmiş olabilirsiniz. Siz hiçbir şey yapmadan akıp gelir.
+- **Yaşam döngüsü olayları.** Eklentiler ayrıca, bir sayfanın verisi hazırlanırken motorun tetiklediği yükleme zamanı olaylarına da abone olabilir — `theme:app:load`, `theme:navbar:load`, `theme:profile:load`, `theme:post-detail:load`, `theme:support:load`, `theme:tickets:load`, `theme:settings:load` ve benzerleri. Örneğin eklentiler, öğeleri navbar'a sayfa yüklendikten sonra belirmek yerine sunucuda render edilen HTML'de görünecek kadar erken bu şekilde ekler.
+
+Bunun bir tema yazarı olarak sizin için anlamı:
+
+- **Bağlanacak hiçbir şey yok** — geçersiz kıldığınız view'lar bağlama noktalarını koruduğu sürece, SSR dahil yukarıdakilerin hepsi çalışmaya devam eder.
+- **Özel hook'lar hakkında dürüst bir uyarı:** sunucu tarafı `load()` hattı yalnızca **yerleşik** hook adları için çalışır. Eklediğiniz özel bir hook'a (örneğin `my-theme:hero:bottom`) bağlanan bir eklenti yine de render edilir — SSR dahil — ama `load()` verisi motor tarafından hazırlanmaz, bu yüzden böyle eklentiler verilerini genellikle istemcide çeker.
+
 ## Özel tema ayarları
 
 Yeniden tasarladığınız view, site sahibinin değiştirebilmesi gereken **yeni seçenekler** eklerse (örneğin ana sayfada bir hero başlığı), bu seçeneklerin panelin **kaydedip sıfırlayabilmesi** için tanımlanması gerekir. Bunu `theme.config.js` içinde `settingsSchema` altında yaparsınız.

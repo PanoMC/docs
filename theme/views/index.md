@@ -98,6 +98,20 @@ Any plugin that registers a component for `my-theme:hero:bottom` will now render
 
 Once shipped, treat your custom hooks like a promise: plugins may start relying on them, so keep them across your theme's future versions just like the built-in ones.
 
+### SSR and plugin loading — where plugin data comes from
+
+Plugin content is not bolted on in the browser afterwards — it is part of **server-side rendering (SSR)**: when a page is rendered on the server, the plugin components mounted in hooks render right along with it, so visitors (and search engines) get the full page in the first response.
+
+Behind the scenes, two plugin APIs make that work, and both are run by the **engine's controllers** — your theme never calls them, but it helps to know they exist:
+
+- **Hook `load()` functions.** A plugin component mounted in a hook can export its own `load()`; the engine executes it during the page's load (on the server for SSR, on the client when navigating) and hands the results to the component automatically as **`hookProps`** — you may have noticed `hookProps` listed in some view headers' `data`. It flows through without you doing anything.
+- **Lifecycle events.** Plugins can also subscribe to load-time events the engine fires while a page's data is prepared — `theme:app:load`, `theme:navbar:load`, `theme:profile:load`, `theme:post-detail:load`, `theme:support:load`, `theme:tickets:load`, `theme:settings:load` and friends. This is, for example, how plugins add items to the navbar early enough that they appear in the server-rendered HTML instead of popping in after the page loads.
+
+What this means for you as a theme author:
+
+- **Nothing to wire up** — as long as your overridden views keep the mount points, all of the above keeps working, SSR included.
+- **One honest caveat about custom hooks:** the server-side `load()` pipeline runs only for the **built-in** hook names. A plugin mounted in a custom hook you added (like `my-theme:hero:bottom`) still renders — SSR included — but its `load()` data is not prepared by the engine, so such plugins typically fetch their data on the client.
+
 ## Custom theme settings
 
 If your redesigned view adds **new options** the site owner should be able to change (say, a hero title on the home page), those options need to be declared so the panel can **save and reset** them. You do this in `theme.config.js` under `settingsSchema`.
