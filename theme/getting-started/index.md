@@ -70,8 +70,12 @@ One more step on the Pano side: open Pano's config file, disable the `init-ui` s
 Finally, start the theme:
 
 ```sh
-bun run dev
+bun run dev:ui
 ```
+
+::: tip Why `dev:ui`?
+`dev:ui` runs the dev server **plus a style watcher** that recompiles your styles whenever you save. Plain `bun run dev` starts only the server, so color and token changes would not show up.
+:::
 
 Now open your site **through Pano's address**: `http://localhost:8088` if you started Pano with `--dev`, or `http://localhost` (port `80` by default — or whatever port you configured). You should see your site, running with your new theme.
 

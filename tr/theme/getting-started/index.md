@@ -70,8 +70,12 @@ Pano tarafında bir adım daha: Pano'nun yapılandırma dosyasını açıp `init
 Son olarak, temayı başlatın:
 
 ```sh
-bun run dev
+bun run dev:ui
 ```
+
+::: tip Neden `dev:ui`?
+`dev:ui`, geliştirme sunucusunu **artı bir stil izleyicisi** çalıştırır; bu izleyici siz her kaydettiğinizde stillerinizi yeniden derler. Düz `bun run dev` yalnızca sunucuyu başlatır, bu yüzden renk ve token değişiklikleri görünmez.
+:::
 
 Şimdi sitenizi **Pano'nun adresi üzerinden** açın: Pano'yu `--dev` ile başlattıysanız `http://localhost:8088`, aksi halde `http://localhost` (varsayılan port `80` — ya da yapılandırmada ne ayarladıysanız). Sitenizi yeni temanızla çalışırken görmelisiniz.
 

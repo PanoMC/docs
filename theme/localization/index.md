@@ -23,7 +23,7 @@ So your job is small: write only the keys you want to change or add.
 
 Say you want the footer to say something different in Turkish. You do not need to touch the engine's files — you just override that one key.
 
-Open `lang-overrides/tr.json` and add the key you want to change:
+Create (or open, if you already made it) `lang-overrides/tr.json` and add the key you want to change:
 
 ```json
 {

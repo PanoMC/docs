@@ -23,7 +23,7 @@ Yani işiniz küçüktür: yalnızca değiştirmek veya eklemek istediğiniz ana
 
 Diyelim ki alt bilginin (footer) Türkçe'de farklı bir şey söylemesini istiyorsunuz. Motorun dosyalarına dokunmanıza gerek yok — yalnızca o tek anahtarı override edersiniz.
 
-`lang-overrides/tr.json` dosyasını açın ve değiştirmek istediğiniz anahtarı ekleyin:
+`lang-overrides/tr.json` dosyasını oluşturun (ya da daha önce oluşturduysanız açın) ve değiştirmek istediğiniz anahtarı ekleyin:
 
 ```json
 {

@@ -30,7 +30,7 @@ Back on the previous page we hard-coded Ember's banner. Let's swap those strings
 
 ## Step 2 — add the English text
 
-Open `lang-overrides/en-US.json` and add the keys:
+The `lang-overrides/` folder starts out empty — create a file named `en-US.json` inside it with the keys:
 
 ```json
 {

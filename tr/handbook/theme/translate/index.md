@@ -30,7 +30,7 @@ lang-overrides/
 
 ## Adım 2 — İngilizce metni ekleyin
 
-`lang-overrides/en-US.json` dosyasını açın ve anahtarları ekleyin:
+`lang-overrides/` klasörü başlangıçta boştur — içinde `en-US.json` adında bir dosya oluşturun ve anahtarları ekleyin:
 
 ```json
 {

@@ -66,8 +66,12 @@ Pano ships with its own built-in initialization UI. While developing Ember, we w
 Back in the `ember` folder, start the dev server:
 
 ```sh
-bun run dev
+bun run dev:ui
 ```
+
+::: tip Why `dev:ui` and not `dev`?
+`dev:ui` runs the dev server **plus a style watcher** that recompiles your SCSS whenever you save. Plain `bun run dev` starts only the server — your markup changes would show up, but style and token edits would not. While designing a theme, always use `dev:ui`.
+:::
 
 Now open your site **through Pano's address**:
 

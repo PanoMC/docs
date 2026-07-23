@@ -66,8 +66,12 @@ Pano, kendi gömülü başlatma arayüzüyle gelir. Ember'ı geliştirirken Pano
 `ember` klasörüne geri dönün ve geliştirme sunucusunu başlatın:
 
 ```sh
-bun run dev
+bun run dev:ui
 ```
+
+::: tip Neden `dev` değil de `dev:ui`?
+`dev:ui`, geliştirme sunucusunu **artı bir stil izleyicisi** çalıştırır; bu izleyici siz her kaydettiğinizde SCSS'inizi yeniden derler. Düz `bun run dev` yalnızca sunucuyu başlatır — markup değişiklikleriniz görünür, ama stil ve token düzenlemeleriniz görünmez. Bir tema tasarlarken her zaman `dev:ui` kullanın.
+:::
 
 Şimdi sitenizi **Pano'nun adresi üzerinden** açın:
 
