@@ -1,26 +1,50 @@
 # Arayüz Geliştirme
 
-Eklentiniz, [backend'iyle](/tr/addon/backend/) aynı jar'da bir **Svelte arayüzü (UI)** gönderir. O arayüz iki yerde çalışır: ziyaretçilerin gördüğü herkese açık **tema** ve yöneticilerin kullandığı **panel**. Tek bir dosya — `src/main.js` — ikisinin de giriş noktasıdır.
+**Bu sayfa size ne verir:** sona geldiğinizde, adım adım, her adımdan sonra işinizi kontrol ederek küçük bir örnek eklentinin tam arayüzünü oluşturmuş olacaksınız.
 
-Bu sayfa, çalışan örneğimiz **Shoutbox**'ın frontend'ini oluşturur: ana sayfanın üstünde en son "shout"lardan oluşan küçük bir widget, artı yöneticilerin bunları yönettiği bir panel. Sayfanın sonunda şunları yapabilirsiniz:
+Eklentinizin iki yarısı vardır: bir Kotlin [backend'i](/tr/addon/backend/) ve bir **Svelte** arayüzü (kullanıcıların gördüğü ve tıkladığı görsel kısım). Eklentinizi derlediğinizde, derlenmiş Kotlin backend'i ve derlenmiş Svelte dosyalarınız tek bir `.jar` dosyasına birlikte zip'lenir — o dosyanın tamamı *eklentinizin kendisidir*. Bunun için özel bir şey yapmazsınız; derleme halleder.
 
-- ana sayfaya bir bileşen yerleştirmek ve ona sunucuda render edilmiş veri vermek,
+Pano iki ayrı web sitesi çalıştırır: **tema** (ziyaretçilerin `yoursite.com`'da gördüğü) ve **panel** (`yoursite.com/panel`'deki yönetici panosu). Tek eklentiniz ikisine de arayüz ekler. Tek dosya — `src/main.js` — ikisi için de giriş noktasıdır.
+
+Bu sayfa örneğimiz **Shoutbox**'ın arayüzünü oluşturur: ana sayfanın üstünde en son "shout"lardan oluşan küçük bir widget, artı yöneticilerin bunları yönettiği bir panel. Sona geldiğinizde şunları yapabilirsiniz:
+
+- ana sayfaya bir bileşen yerleştirmek ve ona sunucu tarafında işlenmiş veri vermek,
 - eklentinizin panel detay sayfasına bir ayarlar bölümü eklemek,
-- kendi gezinme bağlantısıyla birlikte tam bir panel sayfası kaydetmek,
+- kendi gezinme bağlantısına sahip tam bir panel sayfası kaydetmek,
 - backend API'nizi çağırmak ve bir toast göstermek,
 - bileşenlerinizin içindeki metni çevirmek.
 
-Bu sayfadaki her imza gerçektir. (Bu sayfanın eski sürümü `pano.ui.page.register({ name, view, scopes })` ve `import { Button, Card } from '@panomc/sdk/components/panel'` gibi çağrılar kullanıyordu — **bunların hiçbiri mevcut değil.** Yalnızca burada ve [Arayüz API Referansı](/tr/addon/api-reference/)'nda gösterilenleri kullanın.)
+> Bir YZ asistanı veya eski bir eğitim size bu sayfada ya da [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir API verirse, o mevcut değildir. Yaygın sahte veya kaldırılmış çağrılar bu [sayfanın altında](#var-olmayan-eski-ve-yz-uydurması-api-ler) listelenmiştir.
 
-::: tip Svelte'te yeni misiniz?
-Eklenti arayüzleri, tıpkı Pano temaları gibi Svelte ile yazılır. Hiç kullanmadıysanız, etkileşimli [Svelte eğitimi](https://svelte.dev/tutorial) bir eklenti arayüzünün ihtiyaç duyduğu her şeyi kapsar.
+::: tip Svelte'de yeni misiniz?
+Eklenti arayüzleri Svelte ile yazılır, tıpkı Pano temaları gibi. Hiç kullanmadıysanız, etkileşimli [Svelte eğitimi](https://svelte.dev/tutorial) bir eklenti arayüzünün ihtiyaç duyduğu her şeyi kapsar.
 :::
+
+::: tip Başlamadan önce
+Eklentinizi **pano-boilerplate-plugin** şablonundan iskeleletmiş ve [Backend Geliştirme](/tr/addon/backend/)'yi tamamlamış olmalısınız. `src/main.js` dosyası boilerplate'te zaten var — onu oluşturmayacak, *düzenleyeceksiniz*. Geliştirme döngüsünü `bun run dev` ile başlatın ve tüm süre boyunca çalışır bırakın; aşağıdaki her değişiklik sıcak yeniden yüklenir, böylece onu anında görebilirsiniz. (Bitmiş eklentiyi bir yayına dönüştürmek [Derleme ve Yayınlama](/tr/addon/publishing/)'da ele alınmıştır.)
+:::
+
+## Eklentinizin dosyaları
+
+İşte bu sayfanın atıfta bulunduğu düzen. `theme/` ve `panel/` klasörleri, ziyaretçi bileşenlerini ve yönetici bileşenlerini ayrı tutmak için yalnızca düzenli bir gelenektir — Pano adları zorunlu kılmaz, dosyaları istediğiniz gibi düzenleyebilirsiniz.
+
+```text
+src/
+├─ main.js                    ← entry point; Pano loads this first
+├─ theme/                     ← components shown to visitors (the public site)
+│   └─ ShoutboxWidget.svelte
+└─ panel/                     ← components shown to admins (the dashboard)
+    ├─ ShoutboxSettings.svelte
+    └─ ShoutboxPage.svelte
+```
 
 ## Giriş noktası: `src/main.js`
 
-Her şey burada başlar. `main.js`, `PanoPlugin`'i genişleten bir varsayılan sınıf (default class) dışa aktarır. Pano tek bir örnek oluşturur, `this.pano`'yu enjekte eder ve `onLoad()`'unuzu çağırır — bir kez panel sürecinde ve bir kez tema sürecinde. İkisini `pano.isPanel` ile ayırt eder ve arayüzünüzü doğru dalda kaydedersiniz.
+Her şey `main.js`'te başlar. `PanoPlugin`'i genişleten bir varsayılan sınıf dışa aktarır. Pano sınıfınızın bir örneğini oluşturur, `this.pano`'yu sizin için ayarlar (onu asla kendiniz ayarlamazsınız), sonra `onLoad()` metodunuzu çağırır.
 
-Tüm eklentinin üzerine inşa edildiği iskelet aşağıda:
+`onLoad()`'ı **iki kez** çağırır — bir kez panelde ve bir kez temada. Tema ve panel iki ayrı çalışan programdır ve her biri eklentinizi bağımsız olarak yükler, dolayısıyla `onLoad()` gerçekten iki kez çalışır, her birinde bir kez. Bu normaldir, bir hata değil. `pano.isPanel` kontrolü, her tarafa farklı arayüz vermenizin yoludur: panelde `true`, temada `false`'tur.
+
+İşte tüm eklentinin üzerine inşa edildiği iskelet. İçindeki bir satır — `export const _ = ...` — korkutucu görünür; şimdilik olduğu gibi kopyalayın, o aşağıda [Metni çevirme](#bilesenlerinizdeki-metni-cevirme) bölümünde tam olarak açıklanan bir çeviri yardımcısıdır ve iskeleti kullanmak için onu anlamanıza gerek yoktur.
 
 ```js
 // src/main.js
@@ -49,22 +73,22 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
 }
 ```
 
-Önem taşıyan ve referans eklentilerin hepsinin izlediği birkaç kural:
+Önemli olan ve tüm yerleşik eklentilerin izlediği birkaç kural:
 
-- **Sınıf, `default` dışa aktarım olmalıdır.** Pano tam olarak bir tane arar.
-- **`this.pano` sizin tüm API'nizdir.** `onLoad()` çalışmadan önce enjekte edilir — `pano.isPanel`'i okuyun ve `pano.ui.*`'yı `onLoad()`'un içinden kullanın.
-- **Her bileşeni `viewComponent(() => import(...))` içine sarın.** Bu isteğe bağlı değildir. Bir `register` çağrısına verdiğiniz her bileşen — kancalar, sayfalar, görünüm yuvaları — bu şekilde sarılmalıdır. `viewComponent`, host'a bileşeninizi tembel (lazy) olarak nasıl yükleyeceğini ve paylaşılan Svelte çalışma zamanıyla nasıl render edeceğini öğretir.
-- **Paylaşılan durumu `main.js`'te tutun.** Modül kapsamındaki her şey (yukarıdaki `_` store'u gibi) burada yaşar. Host, **giriş** dosyanızı önbellek-kırıcı bir `?v=<uiHash>` sorgusuyla içe aktarırken, tembel parçalar (chunk) onu sorgusuz içe aktarır — aksi halde girişi iki kez değerlendirecek iki URL — bu yüzden derleme onu sanal bir cephe (facade) üzerinden yönlendirir ve `main.js`'i tam olarak bir kez çalışan tek bir paylaşılan parçaya zorlar. (Diğer dosyalar sıradan, sorgusuz parçalardır, her biri zaten bir kez yüklenmiştir; `main.js` yalnızca paylaşılan durumun garantili-tek yuvasıdır.)
+- **Sınıf, `default` dışa aktarma olmalı.** Pano tam olarak bir tane arar.
+- **`this.pano` tüm API'nizdir.** Pano onu `onLoad()` çalışmadan önce sizin için ayarlar — `onLoad()` içinde yalnızca `pano.isPanel`'i okur ve `pano.ui.*`'ı kullanırsınız.
+- **`pluginId`, [Backend Geliştirme](/tr/addon/backend/)'den / eklenti manifestonuzdan gelen eklenti ID'nizle tam olarak eşleşmeli.** Çeviriler ve panel detay-sayfası kancası ona göre anahtarlanır, dolayısıyla bir uyuşmazlık onları sessizce bozar.
+- **Her bileşeni `viewComponent(() => import('./File.svelte'))` ile sarın.** Bu isteğe bağlı değildir. Bir `register` çağrısına verdiğiniz her bileşen — kancalar, sayfalar, görünüm yuvaları — bu şekilde sarılmalıdır. Düz ifadeyle: bu, Pano'ya dosyanın kendisi yerine dosyanızı yüklemek için bir *tarif* verir, böylece Pano onu doğru anda, sayfanın kendi Svelte kopyasıyla yükleyebilir. Ayrıntılara ihtiyacınız yok — meraklıysanız [Mimari](/tr/addon/architecture/)'ye bakın.
+- **Paylaşılan durumu `main.js`'te tutun.** `main.js`'in en üst düzeyinde bildirdiğiniz değişkenler (yukarıdaki `_` deposu gibi) tam olarak bir kez var olur ve tüm bileşenleriniz tarafından paylaşılır. Derleme bunu yalnızca `main.js` için garanti eder, dolayısıyla paylaşılan durum için diğer dosyalara güvenmeyin. (Mekanizma [Mimari](/tr/addon/architecture/)'dedir.)
+- **`onUnload()`, eklentiniz devre dışı bırakıldığında çalışır.** Şimdilik boş bırakın; çoğu eklenti asla buna ihtiyaç duymaz.
 
-::: warning `svelte`'i `package.json`'da asla bildirmeyin
-Paketiniz Svelte'i, `svelte-i18n`'i veya `@panomc/sdk`'yi **göndermez** — bunları host sağlar, böylece tüm sayfa tek bir Svelte örneğini paylaşır. `svelte`'i kendiniz eklemek ikinci bir kopyayı sabitler ve hydration'ı bozar; derleme bunun üzerine başarısız olacak şekilde ayarlanmıştır. Nedeni için [Mimari](/tr/addon/architecture/) sayfasına bakın.
+::: warning `svelte`'yi asla `package.json`'da bildirmeyin
+Paketiniz Svelte, `svelte-i18n` veya `@panomc/sdk` **göndermez** — host onları sağlar, böylece tüm sayfa tek bir Svelte örneğini paylaşır. Siz (veya `bun add` ile kurduğunuz bir kütüphane) `package.json`'a `svelte` ekledikten hemen sonra derlemeniz başarısız olmaya başlarsa, neden budur: `svelte`'yi `package.json`'dan kaldırın. Düz ifadeyle, sayfa yalnızca tek bir Svelte kopyası çalıştırabilir ve host onu zaten sağlar; kendinizinkini eklemek ikinci bir kopyayı sabitler ve **hidrasyonu** (sunucu tarafında işlenmiş HTML'in tarayıcıda etkileşimli olmak üzere bağlandığı adım) bozar. Nedenini [Mimari](/tr/addon/architecture/)'de görün.
 :::
 
-Yukarıda `onUnload()`'u gördünüz ama `onContextUpdate()`'i görmediniz. Eski boilerplate `onContextUpdate` tanımlar — **hiçbir host onu asla çağırmaz**, bu yüzden oraya mantık koymayın.
+## Tema: ana sayfaya bir widget yerleştirin
 
-## Tema: ana sayfaya bir widget yerleştirme
-
-Tema, adlandırılmış **kancalar (hook)** açığa çıkarır — eklentilerin bir bileşen enjekte edebileceği noktalar. Shoutbox'ı ana sayfada göstermek için, `else` (tema) dalında, `page:home:top` kancası için bir bileşen kaydedin:
+Tema, adlandırılmış **kancalar** (hook) sunar — eklentilerin bir bileşen enjekte edebileceği noktalar (kanca adlarının tam listesi [Arayüz API Referansı](/tr/addon/api-reference/)'nda; bu eğitim `page:home:top`'u kullanır). Shoutbox'ı ana sayfada göstermek için, `else` (tema) dalında `page:home:top` kancası için bir bileşen kaydedin:
 
 ```js
 pano.ui.hook.register({
@@ -73,11 +97,15 @@ pano.ui.hook.register({
 });
 ```
 
-Widget'ı render etmek için bu kadarı yeterli. Ama iyi bir widget'ın veriye ihtiyacı vardır ve o verinin **ilk sunucu yanıtında** hazır olması gerekir — daha sonra tarayıcıda getirilmesi değil — böylece ziyaretçiler ve arama motorları shout'ları hemen görür.
+::: tip Kontrol
+Geliştirme sunucuları çalışırken, sitenin ana sayfasını açın. Sayfanın en tepesinde `<div class="shoutbox">` kapsayıcısını görmelisiniz (tarayıcı geliştirici araçlarıyla inceleyin). Henüz `load()` eklemediyseniz — sonraki adım — boş olacaktır; bu beklenen bir durum. Onu hiç görmüyorsanız, tarayıcı konsolunda hataları kontrol edin ve `pluginId`'nizi ve `else` dalında kaydettiğinizi doğrulayın.
+:::
 
-### Widget'a `load()` ile sunucuda render edilmiş veri verme
+### Widget'a `load()` ile sunucu tarafında işlenmiş veri verin
 
-Bir kanca bileşeni, **modül script'inden** bir `load(event)` fonksiyonu dışa aktarabilir. Tema, sayfa hazırlanırken (SSR sırasında sunucuda ve gezinirken istemcide) onu çalıştırır ve döndürdüğünüz her şeyi bileşene prop olarak verir. Shoutbox'ta `load()`, herkese açık uç noktamızı çağırır:
+İyi bir widget'ın veriye ihtiyacı vardır ve o verinin **ilk sunucu yanıtında** orada olması gerekir — sonradan tarayıcıda getirilmesi değil — böylece ziyaretçiler ve arama motorları shout'ları anında görür. Pano bunu **SSR** (sunucu tarafı işleme — sunucu, verisini sonradan getiren boş bir sayfa göndermek yerine, göndermeden önce bitmiş HTML'i oluşturur) ile yapar.
+
+Bir kanca bileşeni, **modül betiğinden** — `<script module>` bloğu — bir `load(event)` fonksiyonu dışa aktarabilir. O blok, dosya ilk yüklendiğinde, bileşenin herhangi bir örneği var olmadan önce bir kez çalışır ki `load()`'ın orada yaşamasının ve normal örnek-başına bileşen kodunuzun altındaki düz `<script>`'te yaşamasının nedeni budur. Tema, sayfa hazırlanırken `load()`'ı çalıştırır (SSR sırasında sunucuda ve sayfalar arasında gezinirken tekrar istemcide) ve döndürdüğünüz her şeyi bileşene props olarak verir. Shoutbox'ta, `load()` herkese açık uç noktamızı çağırır:
 
 ```svelte
 <!-- src/theme/ShoutboxWidget.svelte -->
@@ -101,20 +129,71 @@ Bir kanca bileşeni, **modül script'inden** bir `load(event)` fonksiyonu dışa
 </div>
 ```
 
-Döndürdüğünüz nesne, bileşenin prop'ları olur — burada `shouts`, render edilmeye hazır şekilde gelir. Host'un **`hookProps`** dediği prop akışı budur.
+`event`, gelen sayfa isteğidir — ziyaretçinin çerezlerini ve oturumunu taşır. Çoğunlukla onu API'nin kimin sorduğunu bilmesi için (yani `request: event` olarak) `ApiUtil`'e iletirsiniz.
+
+Döndürdüğünüz nesne bileşenin props'u olur — burada `shouts` işlenmeye hazır olarak gelir. (Host bu props akışına `hookProps` der; o adla API referansında ve hata mesajlarında tanışacaksınız.)
 
 ::: warning `load()` sunucuda *ve* istemcide çalışır
-Aynı `load()`, SSR sırasında ve tekrar istemci tarafı gezinmede çalışır. Onu **idempotent** tutun — yan etki yok, ve size verilen nesneleri asla değiştirmeyin. Sunucu tarafı çağrısının ziyaretçinin oturumunu taşıması için `ApiUtil`'e her zaman `request: event` geçin (sonraki bölüm).
+Aynı `load()`, SSR sırasında ve yeniden istemci tarafı gezinmede çalışır, dolayısıyla onu **iki kez çalışmaya güvenli** tutun: yalnızca veri getirmeli ve döndürmelidir. Global değişkenleri değiştirmeyin, hiçbir şey yazmayın ve size verilen nesneleri değiştirmeyin — çünkü aynı fonksiyon sunucuda bir kez ve tarayıcıda tekrar çalışır. ("Yan etkisi olmadan iki kez çalışmaya güvenli" için tek kelimelik ad *idempotent*'tir.) Sunucu tarafı çağrının ziyaretçinin oturumunu taşıması için `ApiUtil`'e her zaman `request: event` geçin (sonraki bölüm).
 :::
 
-Gerçek eklentilerin kullandığı iki ek püf noktası:
+::: tip Kontrol
+Ana sayfayı yenileyin. `<div class="shoutbox">` artık her shout için bir `<p class="shout">` içermeli (backend'inizde herhangi biri varsa). Verinin gerçekten *ilk* yanıtta olduğunu doğrulamak için, sert bir yenileme yapın (Ctrl/Cmd+Shift+R) ve "Kaynağı görüntüle"yi kullanın — shout'ları HTML'de zaten mevcut görmelisiniz, boş değil.
+:::
 
-- **Widget'ı koşullu olarak gizleyin.** `load()`, `{ hookOptions: { invisible: true } }` döndürürse, host o kanca için hiçbir şey render etmez. Announcement eklentisi, gösterilecek bir şey olmadığında kaybolmak için bunu kullanır.
-- **`load()`'u atlayın ve başka yerden getirin.** `skipLoad: true` ile kaydedin ve verinizi bunun yerine `pano.ui.app.onLoad(async (data, event) => { ... })`'dan getirin. Bu, alternatif veri yoludur — tek bir getirme birden fazla kaydı beslediğinde FAQ ve Pages eklentileri bunu kullanır.
+::: tip Gösterecek bir şeyi olmadığında widget'ı gizleyin
+`load()` `{ hookOptions: { invisible: true } }` döndürürse, host o kanca için hiçbir şey işlemez. Announcement eklentisi, gösterilecek bir şey olmadığında kaybolmak için bunu kullanır.
+:::
+
+## API'nizi çağırma
+
+Tüm ağ çağrıları `ApiUtil` üzerinden gider. Varsayılan dışa aktarmayı içe aktarın ve her biri tek bir seçenek nesnesi alan fiil metotlarını kullanın:
+
+```js
+import ApiUtil from '@panomc/sdk/utils/api';
+
+// In a load() — pass request so the server-side call has the session:
+const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+
+// In a browser event handler — body is your JSON payload:
+await ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } });
+await ApiUtil.delete({ path: `/api/panel/shoutbox/${id}` });
+await ApiUtil.put({ path: '/api/panel/shoutbox/config', body: config });
+```
+
+Kural: **bir `load()` içinde, her zaman `request: event` geçin** ki getirme (fetch), SSR sırasında ziyaretçinin oturumuyla çalışsın. Tarayıcıda çalışan bir tıklama işleyicisinde onu atlayabilirsiniz.
+
+::: warning `request: event`'i unutursanız
+Çağrı tarayıcıda yine çalışır, ama SSR sırasında **çıkış yapmış** olarak çalışır. Belirti kafa karıştırıcıdır: veri eksiktir veya yalnızca sert bir yenilemede izin hataları alırsınız, oysa etrafta tıklandığında her şey iyi görünür. Bunu görürseniz, önce `load()` çağrılarınızı kontrol edin.
+:::
+
+::: tip `ApiUtil` hataları nasıl bildirir
+`ApiUtil`, API hatalarında asla fırlatmaz — başarısız bir çağrı, `error` ayarlı bir nesneye çözümlenir (fırlatmaz ve bir HTTP durumunu kontrol etmezsiniz). Yanıtı kullanmadan önce her zaman `res.error`'ı kontrol edin; bunu aşağıdaki her örnekte göreceksiniz.
+:::
+
+## Bileşenlerinizdeki metni çevirme
+
+Tema geliştirmenin aksine, **eklenti bileşenlerinize otomatik olarak bir çeviri yardımcısı enjekte edilmez** — `_`'yi kendi `main.js`'inizden içe aktarmalısınız. O `_`, iskeletdeki korkutucu satırdır:
+
+```js
+export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
+```
+
+Yaptığı her şey şu: Pano'nun çeviri fonksiyonunu saran bir Svelte `derived` **deposudur** (kaynağı değiştiğinde yeniden hesaplanan bir değer) ve geçtiğiniz her anahtarı otomatik olarak `plugins.<pluginId>.` ile öne ekler. Yani bir bileşende `$_('widget.title')` yazarsınız ve o `plugins.pano-plugin-shoutbox.widget.title`'ı arar. Onu kullanmak için currying'i takip etmenize gerek yok — yalnızca içe aktarın ve `$` önekiyle okuyun:
+
+```svelte
+<script>
+  import { _ } from '../main.js';
+</script>
+
+<h2>{$_('widget.title')}</h2>
+```
+
+`{$_('widget.title')}`, yerelleştirme dosyalarınızdaki `plugins.pano-plugin-shoutbox.widget.title` anahtarına çözümlenir. O anahtarların nerede yaşadığını ve nasıl ad-alanlandırıldığını görmek için [Çeviriler](/tr/addon/localization/)'e bakın.
 
 ## Panel: eklentinizin detay sayfasında bir ayarlar bölümü
 
-Bir yönetici eklentinizi **Panel → Eklentiler**'de açtığında, detay sayfasının `panel:plugin-detail:content:<pluginId>` adlı bir kancası olur. Oraya bir bileşen kaydetmek, eklentinize bir ayarlar ekranı vermenin en ucuz yoludur — çoğu yerleşik eklenti tam olarak bunu yapar. Bunu `if (pano.isPanel)` dalına koyun:
+Bir yönetici eklentinizi **Panel → Eklentiler**'de açtığında, detay sayfasının `panel:plugin-detail:content:<pluginId>` adlı bir kancası olur. Orada bir bileşen kaydetmek, eklentinize bir ayarlar ekranı vermenin en ucuz yoludur — çoğu yerleşik eklenti tam olarak bunu yapar. Bunu `if (pano.isPanel)` dalına koyun:
 
 ```js
 pano.ui.hook.register({
@@ -129,7 +208,18 @@ pano.ui.addon.onLoad(async (data, event) => {
 });
 ```
 
-`pano.ui.addon.onLoad`, herhangi bir eklenti detay sayfası yüklendiğinde tetiklenir, bu yüzden ilk satır, getirmeden önce onun **sizinki** olduğunu kontrol eder. `data.addon.config`'e eklediğiniz yapılandırma, ardından `addon` prop'u aracılığıyla `ShoutboxSettings.svelte`'e erişilebilir olur:
+`pano.ui.addon.onLoad(callback)`, Pano'nun **herhangi** bir eklenti detay sayfası açıldığında çalıştırdığı bir fonksiyon kaydeder. Geri çağırmanız `(data, event)` alır:
+
+- `data.addon`, sayfası açılan eklentiyi tanımlar. Bilinen alanı `data.addon.id`'dir (eklenti ID'si). Ona kendi özelliklerinizi de ekleyebilirsiniz — buradaki `data.addon.config` gibi — ve bunlar bu sayfadaki bileşenlerin `addon` prop'unda gelir. (Tam şekil için [Arayüz API Referansı](/tr/addon/api-reference/)'ndaki `addon` girdisine bakın.)
+- `event`, sayfa isteğidir, tıpkı `load()`'taki `event` gibi.
+
+*Her* eklenti için tetiklendiğinden, ilk satır `data.addon.id !== pluginId`'yi kontrol eder ve getirmeden önce sayfa sizinki değilse çıkar.
+
+::: tip Burada `data`'yı genişletebilirsiniz
+Daha önce, `load()` size verilen nesneleri asla değiştirmemeniz konusunda uyarmıştı. `onLoad` geri çağırmaları kasıtlı istisnadır: `data` nesnesi genişletilmek **için** vardır ve yapılandırmanızı `data.addon.config`'e eklemek, onu bileşenlerinize geçirmenin desteklenen yoludur.
+:::
+
+Bu kancada kaydedilen bileşenler, sayfanın `addon` nesnesini bir prop olarak alır, dolayısıyla `ShoutboxSettings.svelte` eklediğiniz yapılandırmayı okuyabilir:
 
 ```svelte
 <!-- src/panel/ShoutboxSettings.svelte -->
@@ -139,9 +229,15 @@ pano.ui.addon.onLoad(async (data, event) => {
 </script>
 ```
 
-## Panel: kendi gezinme bağlantısıyla tam bir sayfa
+::: tip Kontrol
+**Panel → Eklentiler → Shoutbox**'ı açın. Ayarlar bileşeniniz detay sayfasında işlenmeli ve `config` API'den doldurulmuş olmalı (veya istek başarısız olursa `{ enabled: true, maxShouts: 5 }` yedeğiyle).
+:::
 
-Bir ayarlar bölümü, eklenti detay sayfasının içinde yaşar. Eklentiniz kendine ait bir sayfaya ihtiyaç duyduğunda — `/shoutbox`'ta bir yönetim ekranı — onu bir **sayfa** olarak kaydedin ve panel kenar çubuğuna bir bağlantı ekleyin:
+## Panel: kendi gezinme bağlantısı olan tam bir sayfa
+
+Bir ayarlar bölümü, eklenti detay sayfasının içinde yaşar. Eklentinizin kendine ait bir sayfaya ihtiyacı olduğunda — `/shoutbox`'ta bir yönetim ekranı — onu bir **sayfa** olarak kaydedin ve panel kenar çubuğuna bir bağlantı ekleyin.
+
+Aşağıdaki `permission` dizesi sabit bir deseni izler: `pano.plugin.<pluginId>.<nokta-durumunda izin sınıfı adı>`. Kotlin izin sınıfınızla **tam olarak** eşleşmelidir — burada `ManageShoutboxPermission`, `manage.shoutbox` olur ve `pano.plugin.pano-plugin-shoutbox.manage.shoutbox`'ı verir.
 
 ```js
 pano.ui.page.register({
@@ -166,36 +262,27 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 });
 ```
 
-Filodaki her eklentinin izlediği iki geleneğe dikkat edin:
+Açıklanmaya değer birkaç şey:
 
-- **Bir çıpaya göre ekleyin.** Mevcut bir bağlantı bulun (burada `/posts`) ve bağlantınızı onun yanına yerleştirin, çıpa yoksa `push`'a geri düşün — böylece bağlantınız her zaman sona değil, mantıklı bir yere düşer.
-- **Yinelenenlere karşı koruyun.** `editNavLinks` birden fazla kez çalışabilir, bu yüzden eklemeden önce `links.some((l) => l.href === '/shoutbox')`'u kontrol edin. Diziyi her zaman **döndürün**.
+- **`nav.site`, panelin ana kenar çubuğudur.** Başka gezinme alanları da vardır ve [Arayüz API Referansı](/tr/addon/api-reference/)'nda listelenmiştir; ad alanının fazladan `site` kelimesine sahip olmasının nedeni budur — yazım hatası değildir.
+- **`text`, düz bir etiket değil, bir çeviri anahtarıdır.** Bu anahtarı [Çeviriler](/tr/addon/localization/)'de ekleyene kadar, kenar çubuğu ham anahtar dizesini gösterir (`plugins.pano-plugin-shoutbox.nav.shoutbox`). Bu, bu aşamada beklenen bir durumdur.
+- **`icon`, bir Font Awesome sınıfıdır.** Panel Font Awesome'ı zaten paketler; mevcut adlara [fontawesome.com](https://fontawesome.com/icons)'dan göz atın.
+- **Bir çıpaya göre yerleştirin.** Mevcut bir bağlantı bulun (burada `/posts`) ve bağlantınızı onun yanına ekleyin (splice), çıpa eksikse `push`'a düşün — böylece bağlantınız her zaman en sona değil, mantıklı bir yere iner.
+- **Yinelenenlere karşı koruyun.** `editNavLinks`, uzun ömürlü sunucunun içinde her sayfa yüklemesinde yeniden çalışır, dolayısıyla birçok kez çalışabilir — eklemeden önce `links.some((l) => l.href === '/shoutbox')` kontrol edin, yoksa yinelenen bağlantılar yığarsınız. Diziyi her zaman **döndürün**.
 
-::: tip İzin dizesini senkron tutun
-Yukarıdaki `permission` dizesi, Kotlin `ManageShoutboxPermission` sınıfınızın türettiği düğümün elle yazılmış bir kopyasıdır (`pano.plugin.pano-plugin-shoutbox.manage.shoutbox`). Paylaşılan bir sabit yoktur — Kotlin sınıfını yeniden adlandırırsanız, türetilen düğüm değişir ve bu arayüz kapısı sessizce eşleşmeyi bırakır. İkisini birlikte değiştirin. İzin kuralını [Backend Geliştirme](/tr/addon/backend/)'de görün.
+::: tip İzin dizesini senkronda tutun
+Yukarıdaki `permission` dizesi, Kotlin `ManageShoutboxPermission` sınıfınızın türettiği düğümün elle yazılmış bir kopyasıdır (`pano.plugin.pano-plugin-shoutbox.manage.shoutbox`). Paylaşılan bir sabit yoktur — Kotlin sınıfını yeniden adlandırırsanız, türetilen düğüm değişir ve bu arayüz kapısı sessizce eşleşmeyi durdurur. İkisini birlikte değiştirin. İzin kuralı için [Backend Geliştirme](/tr/addon/backend/)'ye bakın.
 :::
 
-`permission` karşılanmazsa, sayfa 404 döndürür ve gezinme bağlantısı gizlenir. Sayfalar için iki seçenek daha vardır: `systemLayout`, yerleşik bir panel düzenini yeniden kullanır (Comments eklentisi, sayfasının Gönderiler bölümünün altında yer alması için `systemLayout: 'PostsLayout'` kullanır) ve `resetLayout`, çevredeki kabuğu (chrome) kaldırır. Düzen adlarının tam listesi [Arayüz API Referansı](/tr/addon/api-reference/)'ndadır.
+`permission` karşılanmazsa, sayfa 404 döndürür ve gezinme bağlantısı gizlenir. Sayfalar için iki seçenek daha var: `systemLayout`, yerleşik bir panel düzenini yeniden kullanır (Comments eklentisi, sayfasının Gönderiler bölümü altında oturması için `systemLayout: 'PostsLayout'` kullanır) ve `resetLayout`, çevredeki panel çerçevesini (kenar çubuğu, başlık) kaldırır, böylece sayfanız tam-genişlikte (full-bleed) işlenir. Düzen adlarının tam listesi [Arayüz API Referansı](/tr/addon/api-reference/)'ndadır.
 
-## API'nizi çağırma ve toast gösterme
+::: tip Kontrol
+Paneli yeniden yükleyin. Kenar çubuğunda, **Gönderiler**'in hemen altında, ham anahtar `plugins.pano-plugin-shoutbox.nav.shoutbox` ile etiketlenmiş bir megafon simgesi belirmeli (o yerelleştirme anahtarını ekledikten sonra etiket gerçek metne dönüşür). `/shoutbox`'taki sayfanızı açmak için ona tıklayın.
+:::
 
-Tüm ağ çağrıları `ApiUtil` üzerinden geçer. Varsayılan dışa aktarımı içe aktarın ve her biri tek bir seçenek nesnesi alan fiil metotlarını kullanın:
+## Toast'ları gösterme
 
-```js
-import ApiUtil from '@panomc/sdk/utils/api';
-
-// In a load() — pass request so the server-side call has the session:
-const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
-
-// In a browser event handler — body is your JSON payload:
-await ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } });
-await ApiUtil.delete({ path: `/api/panel/shoutbox/${id}` });
-await ApiUtil.put({ path: '/api/panel/shoutbox/config', body: config });
-```
-
-Kural: **bir `load()` içinde her zaman `request: event` geçin** ki getirme, SSR sırasında ziyaretçinin oturumuyla çalışsın. Tarayıcıda çalışan bir tıklama işleyicisinde onu atlayabilirsiniz.
-
-Bir eylemi onaylamak için bir toast gösterin:
+Bir eylemi yöneticiye doğrulamak için, bir toast gösterin (küçük bir açılır mesaj). `showToast`'ı `@panomc/sdk/toasts`'tan içe aktarın — ve yukarıdaki bölümdeki `$_` çeviri yardımcısını kullandığına dikkat edin:
 
 ```svelte
 <script>
@@ -209,31 +296,29 @@ Bir eylemi onaylamak için bir toast gösterin:
 </script>
 ```
 
-::: warning Bu eski imzalar mevcut değil
-Düz bir dizeyle `ApiUtil.get('/api/...')` **yanlıştır** — her çağrı bir seçenek nesnesi alır. Ayrıca **`pano.utils.toast` yoktur**; toast'lar yalnızca `@panomc/sdk/toasts`'tan gelir.
+::: tip Kontrol
+Bu `save`'i bir düğmeye bağlayın ve ona tıklayın. Bir toast'ın kayarak geldiğini görmelisiniz — istek çalıştığında başarı mesajı, başarısız olduğunda hata mesajı.
 :::
 
-## Bileşenlerinizdeki metni çevirme
+## İleri düzey — ilk okumada atlayın
 
-Bileşenlerinize otomatik olarak hiçbir şey enjekte edilmez. Çeviri yardımcısı, bu sayfanın başında `main.js`'ten dışa aktardığınız `_` store'udur — her anahtarı `plugins.<pluginId>.` ile önekleyen bir `derived` store. Onu içe aktarın ve `$` önekiyle okuyun:
+Aşağıdaki her şey, ilk eklentinizde karşılaşmayacağınız durumlar içindir. İhtiyaç duyduğunuzda geri gelin.
 
-```svelte
-<script>
-  import { _ } from '../main.js';
-</script>
+### `pano.ui.app.onLoad` ile paylaşılan veriyi bir kez getirme
 
-<h2>{$_('widget.title')}</h2>
-```
+`pano.ui.app.onLoad(callback)`, **temanın** her sayfa isteğinde, sayfa işlenmeden önce çalıştırdığı bir fonksiyon kaydeder. Geri çağırması `(data, event)` alır; burada `data`, paylaşılan bir sayfa verisi torbası ve `event`, istektir (`ApiUtil`'e geçtiğinizle aynı tür). Bir getirmenin aynı anda birkaç kaydı beslemesi gerektiğinde kullanın.
 
-`{$_('widget.title')}`, yerelleştirme dosyalarınızdaki `plugins.pano-plugin-shoutbox.widget.title` anahtarına çözümlenir. O anahtarların nerede yaşadığı ve nasıl ad alanına alındığı için [Çeviriler](/tr/addon/localization/) sayfasına bakın.
+Bileşen-başına bir `load()`'a alternatiftir: `skipLoad: true` ile bir kanca kaydedin ve verisini bunun yerine tek bir `pano.ui.app.onLoad(async (data, event) => { ... })`'tan getirin. FAQ ve Pages eklentileri, bir getirme birkaç kaydı beslediğinde bunu kullanır.
 
-## Dinamik sayfalar ve temizlik
+### Dinamik sayfalar ve temizlik
 
-Bazen kaydettiğiniz sayfalar derleme zamanında bilinmez — backend'inizden gelirler (özel URL'ler, yönlendirmeler ve benzerleri). Onları, listeyi getirdikten sonra `pano.ui.app.onLoad`'un içinden kaydedin. Pages eklentisi tam olarak bunu yapar.
+Bazen kaydettiğiniz sayfalar derleme zamanında bilinmez — backend'inizden gelirler (özel URL'ler, yönlendirmeler ve benzerleri). Onları listeyi getirdikten sonra `pano.ui.app.onLoad`'ın içinden kaydedin. Pages eklentisi tam olarak bunu yapar.
 
-Burada keskin bir kenar var. Temanın SSR süreci **uzun ömürlüdür**: `pano.ui.app.onLoad` her istekte çalışır, ancak kaydettiğiniz rotalar ve bağlantılar istekler arasında o süreçte kalıcı olur. Panelde bir sayfa silinirse, daha önce kaydettiğiniz girdi kalır — süreç yeniden başlayana kadar SSR hâlâ hayalet rotayı sunar, tarayıcı artık ondan haberdar olmasa bile.
+Önce zihinsel model, çünkü bu bölüm ona bağlıdır: tema, **her ziyaretçi tarafından paylaşılan, tek, uzun ömürlü bir sunucu programıdır**. Kaydettiğiniz her şey, o program yeniden başlayana kadar onun tarafından hatırlanır — ziyaretçi-başına ve sayfa-yüklemesi-başına değildir. Yani veriniz değişirse, siz kaldırmadıkça eski kayıtlar takılı kalır.
 
-Çözüm, kaydettiklerinizi izlemek ve `pano.ui.page.unregister(path)` kullanarak artık var olmayan girdileri kaldırmaktır:
+Buradaki keskin kenar budur. `pano.ui.app.onLoad` her istekte çalışır, ama kaydettiğiniz rotalar ve bağlantılar istekler arasında o süreçte kalır. Bir sayfa panelde silinirse, daha önce kaydettiğiniz girdi oyalanır — tarayıcı artık onu bilmese bile, süreç yeniden başlayana kadar SSR o hayalet rotayı sunmaya devam eder.
+
+Çözüm, kaydettiğinizi izlemek ve gitmiş girdileri `pano.ui.page.unregister(path)` kullanarak kaldırmaktır:
 
 ```js
 const registeredPaths = new Set();
@@ -258,15 +343,28 @@ pano.ui.app.onLoad(async (data, event) => {
 });
 ```
 
-::: warning SSR'deki hayalet rotalar
-Veriden kaydedilen dinamik sayfalar, Node sürecinde hayatta kalır. Kaldırılan öğeleri asla kayıttan silmezseniz, silinen sayfalar Pano yeniden başlayana kadar SSR sırasında sunulmaya devam eder. `pano-plugin-link-redirects` eklentisi, eklediğiniz bayat gezinme bağlantılarını kaldırmak da dahil olmak üzere bu temizlik deseninin eksiksiz referansıdır.
+Bir sayfayı `pano.ui.page.register` ile yeniden kaydetmek güvenlidir: aynı yol yalnızca önceki girdinin üzerine yazar, dolayısıyla burada yinelenen koruması gerekmez — gezinme bağlantılarının aksine, ki onlar *yinelenirdi*, `editNavLinks`'in `some(...)` kontrolüne ihtiyaç duymasının nedeni budur.
+
+::: warning SSR'de hayalet rotalar
+Veriden kaydedilen dinamik sayfalar Node sürecinde hayatta kalır (SSR — sunucu tarafı işleme — tek, uzun ömürlü bir programda çalışır). Kaldırılan öğelerin kaydını asla silmezseniz, silinen sayfalar Pano yeniden başlayana kadar SSR sırasında sunulmaya devam eder. `pano-plugin-link-redirects` eklentisi, eklediğiniz eskimiş gezinme bağlantılarını kaldırmak da dâhil, bu temizlik deseninin tam referansıdır.
 :::
+
+## Var olmayan eski ve YZ-uydurması API'ler
+
+Bir YZ aracı, eski bir eğitim veya iskele bunlardan herhangi birini önerirse, onu yok sayın — hiçbiri mevcut değil. Yalnızca bu sayfadaki ve [Arayüz API Referansı](/tr/addon/api-reference/)'ndaki olanları kullanın.
+
+- **`pano.ui.page.register({ name, view, scopes })`** — gerçek `page.register`, `{ path, component, permission, ... }` alır (yukarıya bakın). `name`/`view`/`scopes` biçimi yoktur.
+- **`import { Button, Card } from '@panomc/sdk/components/panel'`** — SDK'de böyle bir bileşen kütüphanesi yoktur.
+- **`onContextUpdate`** — eski boilerplate bu metodu tanımlar, ama **hiçbir host onu çağırmaz**. İskeletlenmiş `main.js`'iniz `onContextUpdate` içeriyorsa, onu silin.
+- **Düz bir dizeyle `ApiUtil.get('/api/...')`** — her `ApiUtil` çağrısı bir seçenek nesnesi alır, örn. `ApiUtil.get({ path: '/api/...' })`.
+- **`pano.utils.toast`** — böyle bir şey yoktur; toast'lar yalnızca `@panomc/sdk/toasts`'tan gelir.
 
 ## Sırada ne var
 
-Artık tüm Shoutbox arayüzüne sahipsiniz: SSR verili bir ana-sayfa widget'ı, bir panel ayarları bölümü, gezinme bağlantılı tam bir panel sayfası, API çağrıları ve çeviriler.
+Artık tüm Shoutbox arayüzüne sahipsiniz: SSR verili bir ana sayfa widget'ı, bir panel ayarlar bölümü, gezinme bağlantısı olan tam bir panel sayfası, API çağrıları ve çeviriler.
 
-- **[Arayüz API Referansı](/tr/addon/api-reference/)** — her kanca adı, görünüm yuvası, yaşam döngüsü olayı ve `@panomc/sdk` dışa aktarımı tek bir yerde.
-- **[Çeviriler](/tr/addon/localization/)** — `plugins.<pluginId>.<key>` dizelerinizin nerede yaşadığı ve panelin yöneticilerin bunları geçersiz kılmasına nasıl izin verdiği.
+- **[Arayüz API Referansı](/tr/addon/api-reference/)** — her kanca adı, görünüm yuvası, yaşam döngüsü etkinliği ve `@panomc/sdk` dışa aktarması tek bir yerde.
+- **[Çeviriler](/tr/addon/localization/)** — `plugins.<pluginId>.<key>` dizeleriniz nerede yaşar ve panel yöneticilerin bunları geçersiz kılmasına nasıl izin verir.
 - **[Backend Geliştirme](/tr/addon/backend/)** — bu sayfanın çağırdığı uç noktaların ve iznin Kotlin tarafı.
-- **[Derleme ve Yayınlama](/tr/addon/publishing/)** — bitmiş eklentiyi bir yayın jar'ına dönüştürün (unutmayın: bir yayın derlemesi arayüzü **içermek zorundadır**, bu yüzden onun için asla `-Pnoui` kullanmayın).
+- **[Derleme ve Yayınlama](/tr/addon/publishing/)** — bitmiş eklentiyi bir yayın jar'ına dönüştürün. Bir yayın derlemesi arayüzü **içermek zorundadır**, dolayısıyla onun için asla `-Pnoui` kullanmayın (`-Pnoui`, yalnızca-backend yinelemesi sırasında arayüz derlemesini atlayan Gradle bayrağıdır — bkz. Derleme ve Yayınlama).
+- **Referans eklentiler** — [PanoMC GitHub org](https://github.com/PanoMC)'undaki yerleşik eklentiler, buradaki her desen için çalışan referanstır: **Announcement** eklentisi (koşullu `invisible`), **FAQ** ve **Pages** eklentileri (`skipLoad` + `app.onLoad`), **Comments** eklentisi (`systemLayout`) ve **`pano-plugin-link-redirects`** (dinamik sayfalar + temizlik).

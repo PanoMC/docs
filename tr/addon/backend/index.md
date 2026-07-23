@@ -1,16 +1,20 @@
 # Backend Geliştirme
 
-Backend, eklentinizin Kotlin yarısıdır: Pano'nun kendi Java sürecinin içinde çalışan kısım. Veritabanı tablolarınız, JSON uç noktalarınız (endpoint), izinleriniz ve yönetici etkinlik günlükleriniz ona aittir. Bu sayfa, bu dokümanlar boyunca taşıdığımız küçük eklenti olan **Shoutbox'ın backend dilimini** oluşturur — ziyaretçilerin ana sayfada en son "shout"ları gördüğü, yöneticilerin bunları panelden gönderip kaldırdığı eklenti.
+Backend, eklentinizin Kotlin yarısıdır: Pano'nun kendi Java sürecinin içinde çalışan kısım. Veritabanı tablolarınıza, JSON uç noktalarınıza, izinlerinize ve yönetici etkinlik günlüklerinize sahiptir. Bu sayfa, bu dokümanlar boyunca taşıdığımız küçük eklenti olan **Shoutbox'ın backend dilimini** oluşturur; ziyaretçiler ana sayfada en son "shout"ları görür, yöneticiler bunları panelden yayınlar ve kaldırır.
 
-Sayfanın sonunda bir veritabanı tablosu eklemiş, herkese açık bir JSON API'si açığa çıkarmış, bir yönetici uç noktasını bir izinle korumuş ve bir etkinlik-günlüğü girdisi yazmış olacaksınız — hepsi de derlenen kodla.
+Sona geldiğinizde bir veritabanı tablosu eklemiş, herkese açık bir JSON API sunmuş, bir yönetici uç noktasını bir izinle korumuş ve bir etkinlik günlüğü girdisi yazmış olacaksınız — hepsi derlenen kodla. Derlenebilen her adımdan sonra bir **kontrol noktasında** duruyoruz, böylece her parçanın çalıştığını devam etmeden önce doğrularsınız — dokuz dosya yazıp da 2. dosyadaki bir yazım hatasını ancak 9. dosya başarısız olduğunda keşfetmek yerine.
 
 ::: tip Eklentiler kodda plugin'dir
-Düz metinde her yerde **eklenti** deriz, ancak kod düzeyindeki adların hepsi `plugin` kelimesini kullanır — `PanoPlugin`, `pluginId`, `PluginConfig` vb. Bu beklenen bir durumdur; koddaki hiçbir şeyi yeniden adlandırmayın.
+Düz metnin her yerinde **eklenti** deriz, ama kod düzeyindeki adların hepsi `plugin` kelimesini kullanır — `PanoPlugin`, `pluginId`, `PluginConfig` vb. Bu beklenen bir durum; koddaki hiçbir şeyi yeniden adlandırmayın.
 :::
 
 ## Başlamadan önce
 
-[Başlangıç](/tr/addon/getting-started/) sayfasından yeniden adlandırılmış, derlenen bir eklentiniz zaten olmalı ve klasör düzeni ile iki Spring bağlamının anlamlı gelmesi için [Mimari](/tr/addon/architecture/) sayfasını okumuş olmanız yardımcı olur. Backend, `src/main/kotlin/com/panomc/plugins/shoutbox/` altında yaşar ve paketlere bölünmüştür:
+[Başlangıç](/tr/addon/getting-started/) sayfasından, yeniden adlandırılmış ve derlenen bir eklentiniz olmalı — o sayfa ayrıca eklentinizin içinde yaşadığı çalışan Pano örneğini de kurar. **Henüz okumadıysanız lütfen önce [Mimari](/tr/addon/architecture/) sayfasını okuyun**; bu sayfanın tamamı ona yaslanır. Oradan getirmeniz gereken tek fikir, düz kelimelerle:
+
+> **Spring**, Pano'nun sınıflarınızı sizin için oluşturmak üzere kullandığı kütüphanedir, dolayısıyla asla `new` yazmazsınız. **Bağlam** (context), yalnızca Spring'in doldurduğu, hazır nesnelerden oluşan bir kutudur. Pano eklentinize kendi kutusunu verir ve her sınıfınızın birer kopyasını içine bırakır — siz sonra kutudan ihtiyaç duyduğunuz şeyi istersiniz. (Pano'nun kutuya neyin gireceğine nasıl karar verdiği hemen aşağıda açıklanıyor.)
+
+Backend, `src/main/kotlin/com/panomc/plugins/shoutbox/` altında yaşar; paketlere bölünmüştür:
 
 ```
 com/panomc/plugins/shoutbox/
@@ -29,22 +33,60 @@ com/panomc/plugins/shoutbox/
 └─ log/          CreatedShoutLog.kt
 ```
 
-Bu sınıfları asla elle birbirine bağlamazsınız. Pano eklentinizi yüklediğinde ona yalnızca sizin paket alt ağacınızı tarayan **kendi Spring bağlamını** verir ve `@Endpoint`, `@Dao`, `@Migration`, `@EventListener` ya da `@PermissionDefinition` ile anotasyonlanmış herhangi bir sınıf, yapıcı enjeksiyonuyla (constructor injection) sizin için oluşturulur.
+İşte bu dosyaların her birinin ne işe yaradığı, düz kelimelerle:
 
-::: warning Kotlin değişiklikleri asla sıcak değildir
-Bir `.kt` dosyasını düzenlemek, jar'ı yeniden derleyip örneğinizin `plugins/` klasörüne kopyalayana ve **Pano'yu yeniden başlatana** kadar hiçbir şeyi değiştirmez:
+| Dosya | Düz-kelime anlamı | Oluşturulduğu yer |
+|---|---|---|
+| `ShoutboxPlugin.kt` | eklentinizin ana sınıfı — Pano buradan başlar | Bölüm 1 |
+| `event/ SetupEventHandler.kt` | Pano'nun kurulum sihirbazı bittiğinde çalışan kod | Bölüm 1 |
+| `config/ ShoutboxConfig.kt` | site sahibinin değiştirmesine izin verilen ayarlar | Bölüm 2 |
+| `db/model/ Shout.kt` | tablonuzun bir satırı, bir Kotlin nesnesi olarak | Bölüm 3 |
+| `db/dao/ ShoutDao.kt` | sağlamaya söz verdiğiniz veritabanı sorgularının listesi | Bölüm 3 |
+| `db/impl/ ShoutDaoImpl.kt` | bu sözleri tutan gerçek SQL | Bölüm 3 |
+| `db/migration/ ShoutboxMigration1to2.kt` | tablonun şekline sonradan gelen bir değişiklik | Bölüm 4 |
+| `routes/api/ GetShoutsAPI.kt` | JSON döndüren herkese açık bir web adresi | Bölüm 5 |
+| `routes/panel/ PanelAddShoutAPI.kt` | yalnızca-yönetici bir web adresi | Bölüm 6 |
+| `permission/ ManageShoutboxPermission.kt` | roller için "shoutbox'ı yönetebilir" anahtarı | Bölüm 7 |
+| `log/ CreatedShoutLog.kt` | yönetici etkinlik akışında bir satır | Bölüm 8 |
+
+**Bu dosyaları aşağıdaki 1–8. bölümler boyunca tek tek oluşturacaksınız — hepsini şimdi oluşturmayın.** Her bölüm hangi dosya olduğunu söyler.
+
+### Pano sınıflarınızı sizin için nasıl oluşturur
+
+Bu sınıfları asla elle birbirine bağlamazsınız — `new` yok, "bunu kaydet" çağrıları yok. Bütün numara dört düz fikirdir:
+
+- Bir **işaretleme** (annotation), `@` ile başlayan ve bir sınıfın hemen üstünde duran bir etikettir, `@Endpoint` gibi. Bir yorum **değildir** — hem derleyici hem de Pano onu okur.
+- **Tarama:** eklentiniz yüklendiğinde Pano paketinizin içine bakar ve bu etiketlerden birini taşıyan her sınıfı bulur — `@Endpoint`, `@Dao`, `@Migration`, `@EventListener` veya `@PermissionDefinition`.
+- Bulduğu her biri için Pano **bir örnek** (bir nesne) oluşturur ve onu saklar. Pano tarafından oluşturulan, Pano tarafından saklanan böyle bir nesneye **bean** denir — bu sayfada "bean"in tek anlamı budur: Spring'in sizin için yaptığı bir nesne.
+- **Kurucu enjeksiyonu:** sınıflarınızdan biri kurucusunda bean'lerinizden bir başkasını isterse — `class GetShoutsAPI(private val shoutDao: ShoutDao)` — Pano hazır olanı size verir. Bunu bir teslimat servisi gibi düşünün: sipariş formuna (kurucu parametrelerine) malzemeleri listelersiniz ve kapınıza gelirler — alışverişe gitmezsiniz (kurucuyu asla kendiniz çağırmazsınız).
+
+En yaygın çökmeden sizi kurtaran bir şey daha: **iki kutu** vardır.
+
+- **Pano'nun kutusu** (*host bağlamı*) Pano'nun kendi servislerini tutar: `DatabaseManager`, `AuthProvider`, `SetupManager`, `PluginDatabaseManager`.
+- **Sizin kutunuz** (*eklenti bağlamı*) yazdığınız sınıfları tutar: uç noktalarınız, DAO'larınız, dinleyicileriniz.
+
+Kurucu enjeksiyonu yalnızca **sizin** kutunuza ulaşır. **Pano'nun** kutusundan bir şey almak için onu elle istersiniz: `applicationContext.getBean(SomeService::class.java)`. Bunu neredeyse her bölümde göreceksiniz.
+
+::: warning Kotlin değişiklikleri asla sıcak değildir — yeniden derleyin ve yeniden başlatın
+Bir `.kt` dosyasını düzenlemek tek başına hiçbir şeyi değiştirmez. Kotlin'e her dokunduğunuzda jar'ı yeniden derlemeli, örneğinizin `plugins/` klasörüne kopyalamalı ve **Pano'yu yeniden başlatmalısınız**:
 
 ```bash
 ./gradlew build -Pnoui
 cp build/libs/pano-plugin-shoutbox-local-build.jar <your-pano-instance>/plugins/
 ```
 
-Eklentiyi **Panel → Eklentiler**'den devre dışı bırakıp yeniden etkinleştirmek, yeniden derlenmiş bytecode'u *yüklemez* — PF4J zaten yüklü olan sınıf yükleyicisini (classloader) korur — bu yüzden yeni jar'ı alan şey tam bir Pano yeniden başlatmasıdır. Yalnızca Svelte arayüzü `bun run dev` altında canlıdır. Aşağıdaki örnekler üzerinde çalışırken bunu aklınızda tutun.
+`-Pnoui`, Kotlin üzerinde çalışırken ihtiyaç duymadığınız Svelte arayüzünü yeniden derlemeyi atlar — derlemeyi çok daha hızlı yapar.
+
+Eklentiyi **Panel → Eklentiler**'den devre dışı bırakıp yeniden etkinleştirmek **yeterli değildir**: Pano zaten çalışan Java kodunu değiştiremez, dolayısıyla yeni jar'ı yalnızca tam bir yeniden başlatma yükler. (Teknik neden, isterseniz: Pano'nun PF4J eklenti yükleyicisi zaten yüklenmiş *classloader*'ı tutar ve çalışan bir JVM onu yerinde değiştiremez.) Eklentinizin **Svelte arayüzü**, `bun run dev` altında sıcak yeniden yüklenir — ama **Kotlin asla yüklenmez**. Aşağıdaki her bölüm için bu yeniden-derle-ve-yeniden-başlat adımını aklınızda tutun.
+:::
+
+::: tip Kontrol noktası: yüklendi mi?
+Yeniden başlatmadan sonra, Pano'nun konsolunu izleyin — eklentinizin yüklendiğini günlüğe kaydetmeli — ve **Panel → Eklentiler**'i açın: **Shoutbox** listelenmiş olmalı. Yukarıdaki `cp` satırındaki jar adı gerçekte derlediğinizle eşleşmiyorsa, `build/libs/` içine bakın — ad, `pluginId`'nizden gelir (onu [Başlangıç](/tr/addon/getting-started/) sayfasında ayarlamıştınız).
 :::
 
 ## 1. Giriş sınıfı
 
-Her eklentinin `PanoPlugin`'i genişleten tek bir ana sınıfı vardır. Bizimki `ShoutboxPlugin`'dir ve başlangıçta tam olarak bir iş yapar: yapılandırmayı ve veritabanını başlatmak — ama **yalnızca Pano'nun kendi kurulum sihirbazı bittikten sonra**.
+Her eklentinin `PanoPlugin`'i genişleten bir ana sınıfı vardır. Bizimki `ShoutboxPlugin` (dosya `ShoutboxPlugin.kt`) ve başlangıçta tam olarak tek bir iş yapar: yapılandırmayı ve veritabanını başlatmak — ama **yalnızca Pano'nun kendi kurulum sihirbazı bittikten sonra**.
 
 ```kotlin
 package com.panomc.plugins.shoutbox
@@ -84,16 +126,24 @@ class ShoutboxPlugin : PanoPlugin() {
 }
 ```
 
-Yukarıdan aşağıya okuyun:
+Açıklamadan önce, bu sayfanın her yerinde göreceğiniz üç Kotlin söz dizimi parçası:
 
-- `applicationContext.getBean(...)`, **host bean'lerine** ulaşır — Pano'nun kendi servisleri. `PluginDatabaseManager` ve `SetupManager`, yapıcılarınıza enjekte edilemez; onları bu şekilde getirirsiniz. (Bu bölümün sonundaki uyarıya bakın.)
-- `onStart()`, eklenti yüklendiğinde çalışır. `startPlugin()`'i çağırır; o da kurulum henüz tamamlanmadıysa erkenden çıkar.
-- `PluginConfigManager` bir kez oluşturulur ve **kendi bean bağlamınızda** (`pluginBeanContext`) bir singleton olarak kaydedilir. Onu bir uç noktada yapıcı parametresi olarak **almayın** — `@Endpoint` bean'leriniz, `onStart()` bu singleton'ı kaydetmeden önce, eklenti *yüklenirken* örneklenir, bu yüzden yapıcı enjeksiyonu `NoSuchBeanDefinitionException` ile başarısız olurdu. Bunun yerine onu istek anında, tembel (lazy) olarak getirin: `plugin.pluginBeanContext.getBean(PluginConfigManager::class.java)`.
-- `pluginDatabaseManager.initialize(this)`, tablolarınızı oluşturur ve bekleyen migration'ları çalıştırır.
+- `suspend`, veritabanı veya ağ için — tüm sunucuyu dondurmadan — **beklemesine** izin verilen bir fonksiyonu işaretler. Bu sayfada geçersiz kıldığınız fonksiyonların çoğu — yaşam döngüsü kancaları ve her `handle()` — `suspend` olarak bildirilir, dolayısıyla hiç coroutine kodu yazmasanız bile onu koruyun. (Aşağıda tanışacağınız tek istisna, temel sınıfın `suspend` **olmadan** bildirdiği `getValidationHandler`'dır — her zaman geçersiz kıldığınız fonksiyonun tam imzasıyla eşleşin.)
+- `by lazy { ... }`, "bu, gerçekten ilk kullanılana kadar çalıştırılmasın" demektir.
+- `getBean(X::class.java)`, "bana Pano'nun hazır X nesnesini ver" demektir — yukarıdan Pano'nun kutusuna (host bağlamı) uzanır.
 
-### Kurulum kapısı neden var
+Yani ilk satır, `private val pluginDatabaseManager by lazy { applicationContext.getBean(PluginDatabaseManager::class.java) }`, şöyle okunur: *Pano'nun veritabanı yöneticisini getir, ama yalnızca ilk ihtiyaç duyduğumda.*
 
-Birisi eklentinizi Pano'nun ilk-çalıştırma kurulum sihirbazını bitirmeden *önce* kurarsa, henüz bir veritabanı yoktur — `initialize()` başarısız olurdu. Bu yüzden `startPlugin()` erkenden döner. Kurulum tamamlandığı anda işleri tekrar başlatmak için, plugin sınıfının yanına küçük bir olay dinleyicisi ekleyin:
+Şimdi sınıfın ne yaptığı, baştan sona:
+
+- `applicationContext.getBean(...)` **host bean'lerine** ulaşır — Pano'nun kendi servisleri (Pano'nun kutusu). `PluginDatabaseManager` ve `SetupManager` kurucularınıza enjekte edilemez, dolayısıyla onları böyle getirirsiniz.
+- `onStart()`, eklenti yüklendiğinde çalışır. `startPlugin()`'i çağırır ki o da kurulum henüz bitmediyse erkenden çıkar.
+- `PluginConfigManager` bir kez oluşturulur ve **kendi kutunuzda** (`pluginBeanContext`) bir bean olarak kaydedilir. **Bir uç noktada `PluginConfigManager`'ı asla bir kurucu parametresi olarak almayın** — uç noktalarınız oluşturulduğu an henüz mevcut değildir, dolayısıyla onu enjekte etmek çökmeye yol açar. Bölüm 2 nedenini tam olarak açıklar ve yapılandırmayı okumanın güvenli yolunu gösterir.
+- `pluginDatabaseManager.initialize(this)` tablolarınızı oluşturur ve bekleyen migrasyonları çalıştırır.
+
+### Kurulum kapısı neden
+
+Birisi eklentinizi, Pano'nun ilk çalıştırma kurulum sihirbazını bitirmeden *önce* kurarsa, henüz bir veritabanı yoktur — `initialize()` başarısız olur. Bu yüzden `startPlugin()` erkenden döner. Kurulum tamamlandığı an işleri kaldığı yerden almak için, eklenti sınıfının yanına küçük bir etkinlik dinleyicisi ekleyin (dosya `event/SetupEventHandler.kt`):
 
 ```kotlin
 package com.panomc.plugins.shoutbox.event
@@ -110,21 +160,25 @@ class SetupEventHandler(private val plugin: ShoutboxPlugin) : SetupEventListener
 }
 ```
 
-Sihirbaz bittiğinde Pano `onSetupFinished()`'i tetikler, `startPlugin()` tekrar çalışır ve `isInitialized` koruması sayesinde onu birden fazla kez çağırmak güvenlidir. Bu kurulum-kapılama deyimi, veritabanına dokunan her eklenti için kanonik biçimdir — yalnızca sınıf adlarını değiştirerek onu aynen kopyalayın.
+Sihirbaz bittiğinde Pano `onSetupFinished()`'ı tetikler, `startPlugin()` yeniden çalışır ve `isInitialized` koruması onu birden fazla kez çağırmayı güvenli kılar.
+
+- O kurucuda `plugin` nereden geliyor? **Kendi eklenti sınıfınız da enjekte edilebilir.** Pano tek `ShoutboxPlugin` örneğini kutunuza koyar, dolayısıyla sınıflarınızdan herhangi biri onu bir kurucu parametresi olarak alabilir — bu dinleyicinin (ve daha sonra panel uç noktasının) ona nasıl eriştiğidir. Yani "neyi enjekte edebilirim?" kuralı şudur: kutunuzdaki her şey — `@Dao`/`@Endpoint`/vb. sınıflarınız, artı eklenti örneğiniz.
+
+Veritabanına dokunan her eklenti tam olarak bu kurulum-kapısı desenine ihtiyaç duyar. Her iki sınıfı da olduğu gibi kopyalayın ve yalnızca sınıf adlarını değiştirin.
 
 ::: warning Spring'inkini değil, Pano'nun `@EventListener`'ını kullanın
-Anotasyon `com.panomc.platform.api.annotation.EventListener`'dır — Spring'in `org.springframework.context.event.EventListener`'ı **değil**. Aynı basit ada sahip oldukları için yanlış olanı içe aktarmak kolaydır; yaparsanız, olay sistemi dinleyicinizi sessizce hiç çağırmaz.
+İşaretleme `com.panomc.platform.api.annotation.EventListener`'dır — Spring'in `org.springframework.context.event.EventListener`'ı **değil**. Aynı basit ada sahiptirler, dolayısıyla yanlış olanı içe aktarmak kolaydır; yaparsanız, etkinlik sistemi dinleyicinizi sessizce hiç çağırmaz.
 :::
 
-::: tip `PluginDatabaseManager` ile `DatabaseManager`
+::: tip `PluginDatabaseManager` vs `DatabaseManager`
 İki farklı bean, ikisi de `getBean` ile getirilir:
-- **`PluginDatabaseManager`**, *sizin* tablolarınızı ve migration'larınızı yönetir — `initialize(plugin)` ve `uninstall(plugin)`.
-- **`DatabaseManager`**, host'un veritabanı servisidir. Onu paylaşılan SQL istemcisi (`databaseManager.getSqlClient()`) ve çekirdek DAO'lar (kullanıcılar, gönderiler, etkinlik günlükleri, …) için kullanın. Pano'nun kendi tablolarını okumak tam olarak `pano-plugin-bans`'ın yaptığı şeydir — bu desen için oraya bakın.
+- **`PluginDatabaseManager`** *sizin* tablolarınızı ve migrasyonlarınızı yönetir — `initialize(plugin)` ve `uninstall(plugin)`.
+- **`DatabaseManager`** host'un veritabanı servisidir. Onu paylaşılan SQL istemcisi (`databaseManager.getSqlClient()`) için ve Pano'nun kendi **çekirdek DAO'larına** — kullanıcılar, gönderiler, etkinlik günlükleri, … — ulaşmak için kullanın; onları bunun aracılığıyla hem okur *hem de* yazarsınız (Bölüm 6 `databaseManager.panelActivityLogDao.add(...)` ile bir etkinlik günlüğü girdisi yazar). Pano'nun kendi tablolarıyla bu şekilde çalışmak, tam da `pano-plugin-bans`'ın yaptığı şeydir — o deseni orada arayın.
 :::
 
 ## 2. Yapılandırma
 
-Site sahibinin ayarlayabilmesi gereken ayarlar, `PluginConfig`'i genişleten bir yapılandırma sınıfında yaşar:
+Site sahibinin ince ayar yapabilmesi gereken ayarlar, `PluginConfig`'i genişleten bir yapılandırma sınıfında yaşar (dosya `config/ShoutboxConfig.kt`):
 
 ```kotlin
 package com.panomc.plugins.shoutbox.config
@@ -137,13 +191,42 @@ class ShoutboxConfig(
 ) : PluginConfig()
 ```
 
-İlk çalıştırmada Pano bunu, varsayılanlarınızı kullanarak `plugins/pano-plugin-shoutbox/config.conf` konumunda bir HOCON dosyası olarak yazar. 1. adımda kaydettiğiniz `PluginConfigManager`'ı tuttuğunuz herhangi bir yerden, tipli değerleri `configManager.config` ile okur (bu size bir `ShoutboxConfig` verir) ve değişiklikleri `configManager.saveConfig(JsonObject.mapFrom(...))` ile kalıcılaştırırsınız.
+İlk çalıştırmada Pano bu sınıfı bir **yapılandırma dosyası** olarak yazar — HOCON biçiminde, ki JSON'a benzer ama daha az tırnak ve virgülle — `plugins/pano-plugin-shoutbox/config.conf` konumunda, varsayılanlarınızı doldurarak.
 
-Üretilen dosyada tek tek anahtarları bir alandaki `@ConfigComment("…")` ile belgeleyebilir ve ilgili anahtarları bir başlık altında `@ConfigSection("…")` ile gruplayabilirsiniz. Daha sonra anahtar eklemeniz veya yeniden adlandırmanız gerektiğinde, bunu diskteki dosyayı elle düzenleyerek değil, `@Migration` ile anotasyonlanmış bir `PluginConfigMigration(from, to, versionInfo)` sınıfıyla yapın.
+::: tip Kontrol noktası: üretilen yapılandırmayı açın
+Eklentiniz bir kez yüklendikten sonra (yeniden derle → kopyala → yeniden başlat), `plugins/pano-plugin-shoutbox/config.conf`'u açın. İki anahtarınızı varsayılan değerleriyle görmelisiniz: `enabled`, `true`'ya ve `maxShouts`, `5`'e ayarlı.
+:::
+
+### Bir uç noktadan yapılandırma okuma — ve neden bir kurucudan değil
+
+Bölüm 1'deki uyarıyı hatırlayın: `PluginConfigManager`'ı bir kurucuda istemeyin. İşte nedeni, eklentiniz yüklendiğinde ne olduğunun zaman çizelgesi olarak:
+
+```text
+addon loads → your @Endpoint objects are created → onStart() runs → PluginConfigManager is registered → (later) a request arrives
+```
+
+Uç noktalarınız 2. adımda oluşturulur, ama `PluginConfigManager` 4. adıma kadar kaydedilmez. Yani bir uç noktanın kurucusu onu isteseydi, Pano'nun verecek hiçbir şeyi olmazdı ve `NoSuchBeanDefinitionException` ile çökerdi. Çözüm, onu uç nokta oluşturulduğunda değil, **bir istek gerçekten geldiğinde** (5. adım) getirmektir. İşte bir uç noktanın `handle`'ı içinde bir yapılandırma değerini okumanın eksiksiz, güvenli yolu:
+
+```kotlin
+// fetch the config manager only now, at request time — never in the constructor
+val configManager = plugin.pluginBeanContext.getBean(PluginConfigManager::class.java)
+val config = configManager.config as ShoutboxConfig
+val limit = config.maxShouts   // e.g. 5
+```
+
+`configManager.config` size türlü (typed) bir `ShoutboxConfig` geri verir. Değişiklikleri diske kaydetmek için, doldurulmuş bir yapılandırma nesnesiyle `configManager.saveConfig(JsonObject.mapFrom(newConfig))` çağırırsınız. Bu tam okuma desenini Bölüm 5'te işe koşacaksınız; orada `GetShoutsAPI`, kaç shout döndüreceğini sınırlamak için `maxShouts`'u kullanır.
+
+Üretilen dosyada tek tek anahtarları bir alanın üstüne `@ConfigComment("…")` koyarak belgeleyebilir ve ilgili anahtarları bir başlık altında `@ConfigSection("…")` ile gruplayabilirsiniz. Daha sonra yapılandırma anahtarları eklemeniz veya yeniden adlandırmanız gerektiğinde, diskteki dosyayı elle düzenlemeyin — Pano'nun bunun için bir `PluginConfigMigration` sınıfı vardır (`@Migration` ile işaretlenmiş). İlk gün buna ihtiyaç duymayacaksınız; zamanı geldiğinde onu [Backend API Referansı](/tr/addon/backend-reference/) sayfasında görün.
 
 ## 3. Bir veritabanı tablosu
 
-Bir tablo üç küçük dosyadır: bir **model** (tek bir satır), bir **soyut DAO** (söz verdiğiniz sorgu metotları) ve bir **impl** (SQL).
+Bir tablo üç küçük dosyadır:
+
+- bir **model** — tablonun **bir satırını** yansıtan bir Kotlin nesnesi;
+- bir **soyut DAO** — **DAO**, *Data Access Object* (Veri Erişim Nesnesi) demektir; "tek işi tek bir tabloyla konuşmak olan sınıf" için kullanılan jargon. İkiye bölünmüştür: yalnızca **metot adlarını** (imzalarını) bir söz olarak **listeleyen**, içinde hiç kod olmayan *soyut* bir sınıf ve…
+- bir **impl** — *implementation* (uygulama) kısaltması; söz verilen her metodu gerçek SQL ile dolduran dosya.
+
+Pano, kodunuzun geri kalanına yalnızca soyut DAO'yu (sözü) gösterir; impl onun arkasında gizli kalır.
 
 ### Model
 
@@ -160,7 +243,15 @@ open class Shout(
 ) : DBEntity()
 ```
 
-`DBEntity` bir **soyut sınıftır** (bir anotasyon değil). Satırlar Gson ile modelinize ve modelinizden dönüştürülür, bu yüzden **her alan adı aynı adlı bir sütuna eşlenir**. Tablo adı, snake_case biçimindeki sınıf adı artı örneğinizin tablo önekidir — yani `Shout`, `` `<prefix>shout` `` olur.
+Her model `DBEntity`'yi genişletir, böylece Pano veritabanı satırlarını Kotlin nesnelerinize ve geri dönüştürebilir. Her seferinde kopyalanacak üç alışkanlık:
+
+- sınıfı `open` tutun (böylece Pano onunla çalışabilir),
+- her alana bir varsayılan değer verin,
+- `id`'yi null olabilir yapın (`Long? = null`) — Pano satırı ekledikten *sonra* `id`'yi sizin için doldurur, dolayısıyla eklemeden önce bir id yoktur.
+
+Pano satırları nesnelere **ada göre** eşler: `message` adlı bir alan `message` adlı bir sütuna, `username` `username`'e ve böyle devam eder. (Meraklıysanız, arka planda Google'ın Gson kütüphanesini kullanır — ama doğru yapmanız gereken tek şey alan adlarıyla sütun adlarının hizalanmasıdır.)
+
+Tablo adı, sınıf adının snake_case hâli artı örneğinizin **tablo önekidir**. Önek, site sahibinin Pano'nun kurulum sihirbazında seçtiği şeydir — varsayılan `pano_`'dur — dolayısıyla varsayılan bir kurulumda `Shout`, `` `pano_shout` `` tablosu olur.
 
 ### DAO sözleşmesi
 
@@ -178,7 +269,12 @@ abstract class ShoutDao : Dao<Shout>(Shout::class.java) {
 }
 ```
 
-### Uygulama (implementation)
+- `: Dao<Shout>(Shout::class.java)` kısmını olduğu gibi kopyalayın — bu, Pano'ya bu DAO'nun hangi modele ait olduğunu söyler.
+- Her metodun, DAO'nun kendi bağlantısını tutması yerine, bir parametre olarak `sqlClient: SqlClient` aldığına dikkat edin. Bu başta tuhaf görünür ("neden bu şeyi sürekli dolaştırıyorum?"), ama bilinçlidir: *çağıran* taraf, **tek** bir veritabanı bağlantısını birkaç sorgu boyunca geçirebilir — ki işlemler (transaction) daha sonra böyle çalışır. Şimdilik yalnızca parametreyi kabul edin ve onu sorgunuzda kullanın.
+
+### Uygulama (impl)
+
+Bu dosya, sayfadaki en çok tekrar-koda (boilerplate) sahip olandır. **Olduğu gibi kopyalayın** — asla düzenleyeceğiniz tek kısımlar SQL dizeleri ve metot gövdeleridir.
 
 ```kotlin
 package com.panomc.plugins.shoutbox.db.impl
@@ -241,21 +337,36 @@ class ShoutDaoImpl : ShoutDao() {
 }
 ```
 
-Vurgulanmaya değer üç ayrıntı:
+Vurgulamaya değer birkaç şey — ama burada kullanmak için tam olarak anlamanız gereken hiçbir şey yok:
 
-- `@Dao @Lazy @Scope(SCOPE_SINGLETON)` üçlüsü zorunludur — Pano'nun DAO'nuzu bu şekilde keşfeder ve onun tek bir örneğini tutar.
+- `@Dao @Lazy @Scope(SCOPE_SINGLETON)` üçlüsü gereklidir — birlikte, Pano'nun DAO'nuzu keşfetme ve onun tek bir örneğini tutma biçimidir. Üçünü de olduğu gibi kopyalayın.
 - `init()`, `CREATE TABLE IF NOT EXISTS`'inizin yaşadığı yerdir; eklentinin veritabanı başlatıldığında çalışır. `uninstall()` isteğe bağlıdır ve yalnızca eklenti silindiğinde çalışır.
-- `Row.toEntity()` / `RowSet.toEntities()`, sorgu satırlarını doğrudan `Shout` nesnelerine dönüştürür ve `fields.toTableQuery()`, tırnak-içi (backtick) sütun listesini sizin için oluşturur.
+- Sorgu metotlarında üç Vert.x yardımcısı belirir ve onlar hakkında bilmeniz gereken tek şey şudur: `coAwait()`, "veritabanının yanıtlamasını bekle" demektir; `Tuple.of(a, b)`, SQL'deki `?` yer tutucularını sırayla doldurur; ve `rows.property(MySQLClient.LAST_INSERTED_ID)` az önce eklediğiniz satırın otomatik üretilen `id`'sini verir.
+- `Row.toEntity()` / `RowSet.toEntities()` sorgu satırlarını doğrudan `Shout` nesnelerine çevirir ve `fields.toTableQuery()` ters tırnaklı sütun listesini sizin için oluşturur.
 
-Yukarıdaki sütunların `message`, `username`, `date` olduğuna dikkat edin — düz alan adları, ve `date` de SQL tarzı `created_at` yerine camelCase dostudur. Mevcut eklentiler kendi DDL'lerini **modelin alan adlarıyla eşleşen camelCase sütun adlarıyla** yazar, çünkü Gson satır eşlemesinin beklediği budur. Kendi tablolarınız için bu emsali izleyin.
+Yukarıdaki sütunların `message`, `username`, `date` olduğuna dikkat edin — modelin alanlarıyla **aynı adlar**. Kendi `CREATE TABLE` ifadelerinizi yazarken, her sütun adını Kotlin alan adıyla birebir aynı tutun, **camelCase de dâhil**: model alanınız `createdAt` ise, sütun da `createdAt` olmalı — SQL geleneği olan `created_at` **değil**. Ada göre eşleyen satır eşlemesi buna bağlıdır. Kendi tablolarınız için bu örneği izleyin.
 
-::: danger `onUninstall`, tablolarınızı düşürür
-`pluginDatabaseManager.uninstall(this)`, **her DAO'nun `uninstall()`'unu** çalıştırır — ki bu bizim için `DROP TABLE` demektir. Bu, **Devre dışı bırak**'ta değil, panelin **Sil** eyleminde tetiklenir. Devre dışı bırakmak veriyi korur; silmek onu çöpe atar. `uninstall()`'unuzun yalnızca gerçekten size ait olanı kaldırdığından emin olun.
+::: danger `onUninstall` tablolarınızı düşürür
+`pluginDatabaseManager.uninstall(this)`, **her DAO'nun `uninstall()`'ını** çalıştırır — ki bizim için bu `DROP TABLE` demektir. Bu, panelin **Sil** eyleminde tetiklenir, **Devre dışı bırak**'ta değil. Devre dışı bırakmak veriyi korur; silmek onu atar. `uninstall()`'ınızın yalnızca gerçekten size ait olanı kaldırdığından emin olun.
 :::
 
-## 4. Şemayı bir migration ile geliştirme
+::: tip Kontrol noktası: bir kez derleyin ve etrafa bakının
+Şimdi altı dosya yazdınız — eklenti sınıfı, etkinlik işleyicisi, yapılandırma, model, DAO ve impl'i. Daha fazla yazmadan önce çalıştıklarını kanıtlayın: yeniden derleyin, jar'ı `plugins/` içine kopyalayın ve Pano'yu yeniden başlatın (sayfanın başındaki yeniden-derle-ve-yeniden-başlat adımı). Sonra şu üçünü de doğrulayın:
 
-Eklentiniz dünyaya çıktıktan sonra orijinal `CREATE TABLE`'ı değiştiremezsiniz — gerçek kurulumlarda zaten eski yapı vardır. Daha sonra bir sütun eklemek için bir migration yazın:
+- **Panel → Eklentiler**, **Shoutbox**'ı listeliyor.
+- `plugins/pano-plugin-shoutbox/config.conf` diskte var.
+- veritabanınızda artık bir `pano_shout` tablosu var (veritabanı aracınızla kontrol edin veya `SHOW TABLES;` çalıştırın).
+
+Bunlardan biri eksikse, şimdi düzeltin — burada yakalanan bir yazım hatasını bulmak, beş dosya sonra yakalanan aynı yazım hatasından çok daha kolaydır.
+:::
+
+## 4. Şemayı bir migrasyonla geliştirme
+
+::: tip Buna bugün ihtiyacınız yok
+Bu bölüm, eklentinizin **sürüm 2**'sini göndermeden yaşamayacağınız bir sorunu çözer. Var olduğunu bilmek için şimdi göz gezdirin, sonra gerçek kurulumlarda zaten canlı olan bir tabloyu değiştirmeniz gerçekten gerektiğinde geri gelin. Bu, Shoutbox'ın ilk derlemenizse, doğrudan Bölüm 5'e atlayabilirsiniz.
+:::
+
+Eklentiniz dünyaya çıktıktan sonra orijinal `CREATE TABLE`'ı değiştiremezsiniz — gerçek kurulumlarda zaten eski şekil vardır. Daha sonra bir sütun eklemek için, bir migrasyon yazın (dosya `db/migration/ShoutboxMigration1to2.kt`):
 
 ```kotlin
 package com.panomc.plugins.shoutbox.db.migration
@@ -283,15 +394,20 @@ class ShoutboxMigration1to2(
 }
 ```
 
-Pano, **eklenti başına bir şema sürümü** izler (`pluginId`'nize göre anahtarlanır). `from`'u depolanmış sürümle eşleşen bir migration çalışır ve sürüm onun `to`'suna yükseltilir — yani `1 → 2`, hâlâ 1. sürümdeki kurulumlarda bir kez çalışır ve bir daha asla. Yeni kurulumlar doğrudan en sona atlar. Daha sonra başka bir değişiklik eklemek için bir `ShoutboxMigration2to3` yazın ve böyle devam edin.
+O koddaki birkaç şey ileri düzey görünür ama basit bir şey ifade eder:
+
+- `override val handlers: List<suspend (SqlClient) -> Unit>` — `suspend (SqlClient) -> Unit` türü yalnızca "SQL istemcisini alan ve bir şey yapan (ve hiçbir şey döndürmeyen) bir adım" demektir. Yani `handlers`, basitçe bu migrasyonun çalıştırdığı **sıralı adım listesidir**.
+- `DatabaseMigration(1, 2, "Add pinned column")` içindeki üç değer, sırayla: bu migrasyonun yükselttiği **kaynak** sürüm (`1`), yükselttiği **hedef** sürüm (`2`) ve kısa, insan tarafından okunabilir bir etiket.
+
+Pano **eklenti başına bir şema sürümü** izler (platform bunu *scheme* olarak yazar, ama olağan terim *schema version* ile aynı anlama gelir). `pluginId`'nizle anahtarlanır — [Başlangıç](/tr/addon/getting-started/) sayfasında seçtiğiniz id. `from`'u kayıtlı sürümle eşleşen bir migrasyon çalışır ve sürüm sonra `to`'suna yükseltilir — yani `1 → 2` bir kez, hâlâ 1. sürümde olan kurulumlarda çalışır ve bir daha asla çalışmaz. Yeni kurulumlar doğrudan en sona atlar. Daha sonra başka bir değişiklik eklemek için, bir `ShoutboxMigration2to3` yazın ve böyle devam edin.
 
 ::: warning Satır içi `ALTER TABLE` yerine `@Migration` sınıflarını tercih edin
-Bir DAO'nun `init()`'i içine başıboş `ALTER TABLE` ifadeleri eklemek cazip gelir. Yapmayın — bu, şema-sürümü takibini atlar, böylece değişiklik kaydedilmez ve yükseltmede yeniden çalışabilir ya da çakışabilir. 1. sürümden sonraki şema değişiklikleri bir `@Migration` sınıfına aittir.
+Bir DAO'nun `init()`'i içine başıboş `ALTER TABLE` ifadeleri eklemek caziptir. Yapmayın — bu, şema-sürüm izlemesini atlar, dolayısıyla değişiklik kaydedilmez ve yükseltmede yeniden çalışabilir veya çakışabilir. 1. sürümden sonraki şema değişiklikleri bir `@Migration` sınıfına aittir.
 :::
 
 ## 5. Herkese açık bir API uç noktası
 
-Şimdi shout'ları temaya açığa çıkarın. Herkese açık bir JSON uç noktası `Api`'yi genişletir:
+Şimdi shout'ları temaya sunun. Herkese açık bir JSON uç noktası `Api`'yi genişletir (dosya `routes/api/GetShoutsAPI.kt`):
 
 ```kotlin
 package com.panomc.plugins.shoutbox.routes.api
@@ -318,22 +434,64 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 }
 ```
 
-Neler oluyor:
+Ne oluyor:
 
-- `@Endpoint`, eklenti yüklendiği an rotanın kendini kaydetmesini sağlar — hiçbir yerde bir kayıt çağrısı yoktur.
-- `ShoutDao` doğrudan yapıcıya enjekte edilir, çünkü o da bu uç noktayla birlikte sizin bean bağlamınızda yaşar.
-- `paths`, URL'yi ve HTTP metodunu listeler. Bir taban sınıfı, kimin girmesine izin verildiğine göre seçin: `Api` (herkese açık), `LoggedInApi` (oturum açmış herhangi bir kullanıcı), `PanelApi` (yöneticiler), `SetupApi` (yalnızca kurulum sırasında).
-- `getSqlClient()`, `Api` üzerindeki, size paylaşılan SQL istemcisini veren bir kolaylıktır.
-- Başarı `Successful(map)`'tir; bu, `{"result":"ok", …haritanız…}`'a serileştirilir. Başarısız olmak için, bir platform `Error` alt sınıfını (`NotFound`, `BadRequest`, `NoPermission`, …) ya da kendinizinkini **fırlatırsınız (throw)**; istemciye gönderilen hata kodu, `UPPER_SNAKE` biçimindeki sınıf adıdır.
-- Buradaki `getValidationHandler` boştur, çünkü bir `GET` listesi gövdeye ihtiyaç duymaz. Bir sonraki bölümde onun gerçek iş yaptığını göreceksiniz.
+- `@Endpoint`, rotanın eklenti yüklendiği an kendini kaydetmesini sağlar — hiçbir yerde bir kayıt çağrısı yoktur.
+- `ShoutDao` doğrudan kurucuya enjekte edilir, çünkü bu uç noktayla birlikte **sizin kutunuzda** yaşar (bu, sayfanın başındaki kurucu enjeksiyonudur).
+- `paths`, URL'yi ve HTTP metodunu listeler. Temel sınıfı, kime izin verildiğine göre seçin: `Api` (herkese açık), `LoggedInApi` (giriş yapmış herhangi bir kullanıcı), `PanelApi` (yöneticiler), `SetupApi` (yalnızca kurulum sırasında).
+- `getSqlClient()`, `Api` üzerinde paylaşılan SQL istemcisini size veren bir kolaylıktır.
+- **Doğrulanacak bir şey olmasa bile `getValidationHandler`'ı geçersiz kılmalısınız** — boş oluşturucuyu tam olarak gösterildiği gibi döndürün (`ValidationHandlerBuilder.create(schemaRepository).build()`). Bu geçersiz kılmayı silmeyin; derleme buna ihtiyaç duyar. Bölüm 6, onun bir istek gövdesi üzerinde gerçek iş yaptığını gösterir.
+- Başarı `Successful(map)`'tir, ki bu `{"result":"ok", …haritanız…}`'a serileştirilir. Başarısız olmak için, bir platform `Error` alt sınıfını (`NotFound`, `BadRequest`, `NoPermission`, …) veya kendinizinkini **fırlatırsınız** (throw); istemciye gönderilen hata kodu, sınıf adının `UPPER_SNAKE` hâlidir.
+
+::: tip Kontrol noktası: ilk uç noktanıza vurun
+Ödül budur — JSON'unuzu döndüren size ait bir URL. Yeniden derleyin, kopyalayın, yeniden başlatın, sonra uç noktanızı bir tarayıcıda açın (veya `curl` ile isteyin):
+
+```
+http://localhost:8088/api/shoutbox/list
+```
+
+`8088` portu, Pano'yu `--dev` ile başlattığınızdaki adrestir; varsayılan bir kurulumda Pano `80` portunu dinler, dolayısıyla bunun yerine `http://localhost/api/shoutbox/list` kullanın. Her hâlükârda şunu görmelisiniz:
+
+```json
+{"result":"ok","shouts":[]}
+```
+
+**Boş** bir `shouts` listesi — çünkü henüz kimse bir shout yayınlamadı. Bu sayfanın sonunda bir tane yayınlayacaksınız.
+:::
+
+**İsteğe bağlı: `maxShouts`'u işe koşun.** Bölüm 2'deki `maxShouts`'u hatırlıyor musunuz? Bu uç nokta, onun ekmeğini kazandığı yerdir. Bölüm 2'deki yapılandırma-okuma desenini kullanarak, listeyi yapılandırılmış sayıyla sınırlayabilirsiniz. Aşağıdaki her API'yi zaten gördünüz; tek ekler `plugin`'i enjekte etmek (eklenti sınıfınız enjekte edilebilir) ve Kotlin'in standart `take(n)`'idir:
+
+```kotlin
+// Optional variant of handle(): respect maxShouts.
+// For this to compile, also add `private val plugin: ShoutboxPlugin` to the constructor,
+// alongside `shoutDao`, so you can reach pluginBeanContext.
+val sqlClient = getSqlClient()
+val configManager = plugin.pluginBeanContext.getBean(PluginConfigManager::class.java)
+val limit = (configManager.config as ShoutboxConfig).maxShouts
+return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient).take(limit)))
+```
+
+Bu tek değişiklik, yapılandırma sınıfının, istek-anı getirme kuralının ve uç noktanın birbirini pekiştirmesini sağlar — `maxShouts` kullanılmadan durmak yerine.
 
 ::: tip Panel yolları `/api/panel/` ile başlar
-Pano, `/panel/api/*`'yi dahili olarak `/api/*`'ye yeniden yönlendirir, bu yüzden **panel uç noktaları yollarını `/api/panel/...` olarak bildirir** — panel arayüzü `/panel/api/...`'yi çağırsa bile. Aşağıdaki uç noktanın `/api/panel/shoutbox`'ı kullanmasının nedeni budur.
+Panel URL'leri girişte bir kez yeniden yazılır ki bu ilk seferde herkesi şaşırtır. Onu soldan sağa bir eşleme olarak okuyun:
+
+| Panel arayüzü şunu çağırır… | Pano onu şuna yeniden yazar… | Yani Kotlin'de şunu yazarsınız… |
+|---|---|---|
+| `POST /panel/api/shoutbox` | `/api/panel/shoutbox` | `Path("/api/panel/shoutbox", RouteType.POST)` |
+
+**Pratik kural:** Kotlin'de, bir panel uç noktasının yolunu her zaman `/api/panel/` ile başlatın. Sonraki bölümdeki uç noktanın `/api/panel/shoutbox` kullanmasının nedeni budur.
 :::
 
 ## 6. Bir panel uç noktası
 
-Bir shout göndermek bir yönetici eylemidir, bu yüzden herkese açık uç noktanın ihtiyaç duymadığı üç şeye ihtiyaç duyar: **istek doğrulaması**, bir **izin kontrolü** ve bir **etkinlik-günlüğü girdisi**. Üçü de tek bir uç noktada görünür:
+Bir shout yayınlamak bir yönetici eylemidir, dolayısıyla bu uç nokta, herkese açık olanın yapmadığı üç şeyi yapar: **istek gövdesini doğrular**, **bir izni kontrol eder** ve **bir etkinlik günlüğü girdisi yazar**. Sayfadaki en büyük kod bloğudur — onu okurken bu üç işi sırayla arayın (koddan sonraki üç maddeye eşlenirler).
+
+::: warning Dikkat: bu dosya henüz tek başına derlenmez
+`PanelAddShoutAPI`, henüz yazmadığınız iki sınıfa atıfta bulunur — `ManageShoutboxPermission` ve `CreatedShoutLog` — ki bunlar Bölüm 7 ve 8'dir. Üçünü de yazın, **sonra** bir kez derleyin. Bu bölümden hemen sonra derlerseniz, "unresolved reference" hataları bekleyin; bu, eksik iki sınıftan kaynaklanır, bu dosyadaki bir hatadan değil.
+:::
+
+Dosya `routes/panel/PanelAddShoutAPI.kt`:
 
 ```kotlin
 package com.panomc.plugins.shoutbox.routes.panel
@@ -399,15 +557,16 @@ class PanelAddShoutAPI(
 }
 ```
 
-Yeni parçaları adım adım geçelim:
+Üç yeni işin içinden geçelim:
 
-- **Doğrulama**, `Schemas` DSL'ini (`objectSchema()`, `requiredProperty`, `stringSchema()`) artı `RequestPredicate.BODY_REQUIRED`'ı kullanır. Eksik veya bozuk gövdeli bir istek, `handle`'ınız hiç çalışmadan önce reddedilir.
-- **`authProvider.requirePermission(ManageShoutboxPermission(), context)`**, `handle`'ın ilk satırıdır. Oturum açmış yönetici izne sahip değilse, fırlatır ve istek reddedilir. `AuthProvider` ve `DatabaseManager`'ı host'tan tam da öncesi gibi `getBean` ile getirin.
-- **Etkinlik günlüğü**, `databaseManager.panelActivityLogDao.add(CreatedShoutLog(...), sqlClient)` ile yazılır, böylece yönetim panelinin etkinlik akışı kimin ne gönderdiğini gösterir.
-
-Uç nokta, henüz yazmadığımız iki sınıfa atıfta bulunur — `ManageShoutboxPermission` ve `CreatedShoutLog`. Bunlar sonraki iki bölümdür.
+- **Doğrulama** `Schemas` DSL'ini (`objectSchema()`, `requiredProperty`, `stringSchema()`) artı `RequestPredicate.BODY_REQUIRED`'ı kullanır. Eksik veya bozuk gövdeli bir istek, sizin `handle`'ınız hiç çalışmadan reddedilir.
+- **İzin kontrolü:** `authProvider.requirePermission(ManageShoutboxPermission(), context)`, `handle`'ın en ilk satırıdır. Giriş yapmış yöneticide izin yoksa, fırlatır ve istek reddedilir. (`AuthProvider` ve `DatabaseManager` Pano'nun kendi servisleridir, dolayısıyla onları Bölüm 1'deki gibi tam olarak `getBean` ile Pano'nun kutusundan getirirsiniz.)
+- **Etkinlik günlüğü:** `databaseManager.panelActivityLogDao.add(CreatedShoutLog(...), sqlClient)`, kimin ne yayınladığını kaydeder, böylece yönetici panelinin etkinlik akışı onu gösterebilir.
+- Oradaki bir Kotlin söz dizimi parçası: `getUsernameFromUserId(userId, sqlClient)!!` `!!` ile biter, ki bu "bu değer null değildir — bir şekilde null'sa çök" iddiasında bulunur. Burada güvenlidir, çünkü giriş yapmış bir yöneticinin her zaman bir kullanıcı adı vardır.
 
 ## 7. İzin
+
+Dosya `permission/ManageShoutboxPermission.kt`:
 
 ```kotlin
 package com.panomc.plugins.shoutbox.permission
@@ -419,19 +578,25 @@ import com.panomc.platform.auth.PanelPermission
 class ManageShoutboxPermission : PanelPermission("fa-bullhorn")
 ```
 
-`@PermissionDefinition`, izni otomatik olarak kaydeder ve yapıcıdaki dize, panelin izin listesinde onun yanında gösterilen FontAwesome ikonudur.
+`@PermissionDefinition` izni otomatik olarak kaydeder ve kurucudaki dize, panelin izin listesinde onun yanında gösterilen FontAwesome simgesidir.
 
-**İzin düğümü** — başka her yerde kontrol ettiğiniz dize — sınıf adından bir kurala göre türetilir:
+**İzin düğümü** (permission node) — başka her yerde karşılaştırdığınız dize — sınıf adından bir kuralla türetilir:
 
-1. Sondaki `Permission`'ı at → `ManageShoutbox`.
-2. Kelimelere böl, küçük harfe çevir, noktalarla birleştir → `manage.shoutbox`.
-3. `pano.plugin.<pluginId>.` ile öne ekle → **`pano.plugin.pano-plugin-shoutbox.manage.shoutbox`**.
+1. Sondaki `Permission`'ı düşürün → `ManageShoutbox`.
+2. Kelimelere bölün, küçük harfe çevirin, noktalarla birleştirin → `manage.shoutbox`.
+3. `pano.plugin.<pluginId>.` ile öne ekleyin → **`pano.plugin.pano-plugin-shoutbox.manage.shoutbox`**.
 
-Bu düğümü Kotlin'de asla yazmazsınız — `requirePermission`'a `ManageShoutboxPermission()` geçmek yeterlidir. Ancak panel sayfalarını ve gezinme bağlantılarını kapılamak için bu tam dizeyi frontend kodunuzda **tekrarlarsınız**. Nerede olduğu için [Arayüz Geliştirme](/tr/addon/frontend/) sayfasına bakın; Kotlin sınıfını yeniden adlandırırsanız, kopyalanmış o dizeyi güncellemeyi unutmayın.
+O düğümü Kotlin'de asla yazmazsınız — `requirePermission`'a `ManageShoutboxPermission()` geçmek yeterlidir. Ama panel sayfalarını ve gezinme bağlantılarını kapılamak (gate) için o tam dizeyi frontend kodunuzda **tekrarlarsınız**. Nerede olduğu için [Arayüz Geliştirme](/tr/addon/frontend/) sayfasına bakın; Kotlin sınıfını yeniden adlandırırsanız, o kopyalanmış dizeyi güncellemeyi unutmayın.
+
+::: tip Kontrol noktası: izni panelde görün
+Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Roller**'i açın ve bir rolü düzenleyin — bir **megafon** (bullhorn) simgeli yeni bir izin görmelisiniz (kurucudaki `fa-bullhorn` bu). Bir role vererek o rolün üyelerinin shout yayınlamasına izin verin.
+
+İnsanları şaşırtan bir şey: **yöneticiler izin kontrollerini atlar** — bir yönetici hesabı `requirePermission`'ı her zaman geçer, dolayısıyla bir yönetici olarak kendinize hiçbir şey vermeden bile Bölüm 6'nın uç noktasını çağırabilirsiniz. `NO_PERMISSION` reddini gerçekten görmek için, izin verilmemiş **yönetici-olmayan** bir rolle test edin.
+:::
 
 ## 8. Etkinlik günlüğü
 
-Bir etkinlik-günlüğü girdisi, `PluginActivityLog`'u genişleten, ayrıntıların bir `JsonObject`'ini taşıyan küçük bir sınıftır:
+Bir etkinlik günlüğü girdisi, `PluginActivityLog`'u genişleten, ayrıntılardan oluşan bir `JsonObject` taşıyan küçük bir sınıftır (dosya `log/CreatedShoutLog.kt`):
 
 ```kotlin
 package com.panomc.plugins.shoutbox.log
@@ -451,20 +616,59 @@ class CreatedShoutLog(
 )
 ```
 
-Panel bunu, Etkinlik sayfasında, sınıf adıyla (sondaki `Log` eki atılıp `UPPER_SNAKE` biçiminde) anahtarlanan ve yerelleştirme dosyalarınızda bir `activity-logs` nesnesi altında bulunan bir yerelleştirme dizesi kullanarak render eder — yani `CreatedShoutLog`, `activity-logs.CREATED_SHOUT`'a bakar. O dize, ayrıntı yükündeki `{username}` ve `{target}` değerlerini kullanır. Bunu ayarlamak [Çeviriler](/tr/addon/localization/) sayfasında ele alınır.
+Panel her günlük satırını **Etkinlik** sayfasında gösterir. Gösterilecek metni bulmak için, izinlerin düğümlerini türettiği aynı yolla, sınıf adınızdan bir yerelleştirme anahtarı türetir:
+
+1. Sondaki `Log`'u düşürün → `CreatedShout`.
+2. `UPPER_SNAKE`'e çevirin → `CREATED_SHOUT`.
+3. Yerelleştirme dosyalarınızda bir `activity-logs` nesnesi altında arayın → `activity-logs.CREATED_SHOUT`.
+
+O yerelleştirme dizesi, yukarıda oluşturduğunuz `details` yükünden gelen `{username}` ve `{target}` değerlerini kullanır. Kurulumu [Çeviriler](/tr/addon/localization/) sayfasında ele alınmıştır.
+
+::: warning Yerelleştirme dizesini ekleyene kadar ham bir anahtar göreceksiniz
+Yerelleştirme dosyalarınıza `activity-logs.CREATED_SHOUT`'u ekleyene kadar, Etkinlik sayfası bir cümle yerine ham `CREATED_SHOUT` anahtarını gösterir. Bu beklenen bir durum — bir hata değil, yalnızca eksik çeviri.
+:::
+
+## Baştan sona deneyin
+
+İşte bu sayfanın vaat ettiği tam döngü — bir veritabanı tablosu, herkese açık bir JSON API'si, korumalı bir yönetici uç noktası ve bir etkinlik günlüğü girdisi, hepsi birlikte çalışıyor. Boş listeyi zaten gördünüz; şimdi bir shout oluşturun ve belirişini izleyin.
+
+1. **Önce:** `http://localhost:8088/api/shoutbox/list`'i açın (veya varsayılan bir kurulumda `80` port biçimini). Hâlâ `{"result":"ok","shouts":[]}` görmelisiniz.
+2. **Bir shout yayınlayın:** giriş yapmış bir yönetici olarak, JSON gövdesi `{"message":"Hello Pano!"}` ile `POST /panel/api/shoutbox` gönderin. En kolay yol, [Arayüz Geliştirme](/tr/addon/frontend/) sayfasında oluşturacağınız panel arayüzünden; şimdi hemen yapmak için, o URL'yi tarayıcınızın kimliği doğrulanmış oturumu üzerinden `curl` ile isteyin (uç nokta yönetici oturum çerezinize ihtiyaç duyar, panel arayüzünün daha basit yol olmasının nedeni budur).
+3. **Sonra:** `http://localhost:8088/api/shoutbox/list`'i yenileyin — shout'unuz artık JSON'da:
+
+```json
+{"result":"ok","shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
+```
+
+4. **Etkinlik akışı:** **Panel → Etkinlik**'i açın — `CREATED_SHOUT` girdinizi göreceksiniz ([Çeviriler](/tr/addon/localization/) sayfasında yerelleştirme dizesini ekleyene kadar ham anahtar olarak gösterilir).
+
+Dört adım da uyuşuyorsa, Shoutbox'ın backend yarısı bitti.
+
+## Çalışmazsa
+
+Bu sayfanın uyardığı beş hata, tek bir yerde — belirti, neden, çözüm:
+
+| Belirti | Olası neden | Çözüm |
+|---|---|---|
+| Eklenti **Panel → Eklentiler**'de listelenmemiş | jar `plugins/` içine kopyalanmamış veya Pano yeniden başlatılmamış | yeniden derleyin, jar'ı örneğin `plugins/`'ine `cp` edin ve Pano'yu **yeniden başlatın** |
+| Etkinlik dinleyiciniz hiç tetiklenmiyor (kurulum kapısı hiç çalışmıyor) | Pano'nunki yerine Spring'in `@EventListener`'ını içe aktardınız | `com.panomc.platform.api.annotation.EventListener` kullanın |
+| Çökme: `NoSuchBeanDefinitionException` | `PluginConfigManager`'ı (veya `onStart`'ta kaydedilen başka bir bean'i) bir kurucu parametresi olarak aldınız | onu bunun yerine istek anında `plugin.pluginBeanContext.getBean(...)` ile getirin (Bölüm 2) |
+| İstek `NO_PERMISSION` ile reddedildi | panel uç noktasını çağıran (yönetici-olmayan) role izin verilmemiş | onu **Panel → Roller**'de verin veya bir yönetici olarak test edin (yöneticiler kontrolü atlar) |
+| Bir Kotlin düzenlemesi yok sayılıyor gibi | yeniden başlatmak yerine eklentiyi devre dışı bırakıp/etkinleştirdiniz | Kotlin sıcak değildir — yeniden derleyin ve Pano'yu **yeniden başlatın** |
 
 ## Backend başka neler yapabilir
 
-Shoutbox, backend yüzeyinin yalnızca bir dilimini kullanır. Daha fazlası mevcuttur — bunların arasında:
+Shoutbox, backend yüzeyinin yalnızca bir dilimini kullanır. Daha fazlası mevcut — bunların arasında:
 
-- **Olaylar** — girişlere, kayıtlara, hesap silmelere tepki verin ve kendi eklentiler-arası olaylarınızı tetikleyin.
-- **Token'lar ve e-posta** — imzalı token'lar verin ve şablonlu e-postalar gönderin (bkz. `pano-plugin-auth-guard`).
+- **Etkinlikler** — girişlere, kayıtlara, hesap silmelerine tepki verin ve kendi eklentiler-arası etkinliklerinizi tetikleyin.
+- **Jetonlar ve posta** — imzalı jetonlar çıkarın ve şablonlu e-postalar gönderin (bkz. `pano-plugin-auth-guard`).
 - **Bildirimler** — panel ve kullanıcı bildirimleri gönderin.
-- **Minecraft sunucu iletişimi** — oyun içi eklentiye mesaj gönderin ve ondan gelen olayları işleyin.
-- **Konsol komutları** ve **dosya yüklemeleri** — CLI komutları kaydedin ve çok parçalı (multipart) yüklemeleri kabul edin.
+- **Minecraft sunucu iletişimi** — oyun içi eklentiye mesaj gönderin ve ondan gelen etkinlikleri işleyin.
+- **Konsol komutları** ve **dosya yüklemeleri** — CLI komutları kaydedin ve multipart yüklemeleri kabul edin.
 
 ## Sırada ne var
 
+- **[Backend API Referansı](/tr/addon/backend-reference/)** — bu eğitimin tam arama eşlikçisi: adıyla her backend genişletme noktası, imzası ve kaynak konumuyla birlikte, böylece platform kaynağını okumadan bir API bulabilirsiniz.
 - **[Arayüz Geliştirme](/tr/addon/frontend/)** — az önce yazdığınız uç noktaları çağıran Shoutbox widget'ını ve panel arayüzünü oluşturun.
-- **[Çeviriler](/tr/addon/localization/)** — izin etiketlerinizi ve etkinlik-günlüğü mesajlarınızı çevirin.
+- **[Çeviriler](/tr/addon/localization/)** — izin etiketlerinizi ve etkinlik günlüğü mesajlarınızı çevirin.
 - **[Mimari](/tr/addon/architecture/)** — yükleme yaşam döngüsünü ve iki Spring bağlamını yeniden ziyaret edin.
