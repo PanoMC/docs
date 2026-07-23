@@ -10,15 +10,28 @@ Derleme (build) işlemi sırasında Gradle, bu değerleri otomatik olarak okur v
 
 ### Temel Özellikler
 
-*   `pluginId`: **(Zorunlu)** Eklentiniz için benzersiz tanımlayıcı. Tutarlı bir ID kullanın (örn: `pano-plugin-announcement`).
-*   `pluginName`: **(Zorunlu)** Eklentinin insan tarafından okunabilir adı (örn: `Announcements`).
+*   `pluginId`: **(Zorunlu)** Eklentiniz için benzersiz tanımlayıcı. Tutarlı bir ID kullanın (örn. `pano-plugin-announcement`).
+*   `pluginName`: **(Zorunlu)** Eklentinin insan tarafından okunabilir adı (örn. `Announcements`).
 *   `pluginDescription`: **(İsteğe bağlı)** Eklentinizin ne yaptığına dair kısa bir açıklama.
-*   `pluginPanoVersion`: **(Zorunlu)** Eklentinin hangi Pano sürümü için yapıldığı (örn: `local-build` veya `1.0.0`).
-*   `pluginClass`: **(Zorunlu)** `PanoPlugin` sınıfını genişleten ana sınıfınızın tam nitelikli adı.
+*   `pluginPanoVersion`: **(Zorunlu)** Eklentinin hangi Pano sürümü için yapıldığı (örn. `local-build` veya `1.0.0`).
+*   `pluginClass`: **(Zorunlu)** `PanoPlugin`'i genişleten ana sınıfınızın tam nitelikli adı.
 *   `pluginDeveloper`: **(Zorunlu)** Eklentiyi geliştiren yazar veya kuruluş.
-*   `pluginLicense`: **(Zorunlu)** Eklentinin lisansı (örn: `MIT`, `Apache-2.0`).
+*   `pluginLicense`: **(İsteğe bağlı)** Eklentinin lisansı (örn. `MIT`, `Apache-2.0`). Derleme, bunu yalnızca ayarlandığında manifestoya eşler; PF4J'in kendisi yalnızca id, sınıf ve sürümü gerektirir.
 *   `pluginSourceUrl`: **(İsteğe bağlı)** Eklentinin kaynak kodunun URL'si.
 *   `pluginDependencies`: **(İsteğe bağlı)** Eklentinizin bağımlı olduğu diğer eklentilerin listesi.
+*   `pluginRequires`: **(İsteğe bağlı)** Bir PF4J **sistem-sürümü kısıtlaması** — eklentinizin çalışması için gereken Pano sürümü aralığı. Manifestonun `requires` özelliğine eşlenir ve varsayılan olarak boştur ("herhangi bir sürüm" anlamına gelir). Belirli bir Pano sürümünde eklenen bir özelliğe dayanmadığınız sürece boş bırakın.
+
+::: tip `pluginId` her yerde kullanılır
+`pluginId`'niz yalnızca bir manifesto alanı değildir — Pano'nun eklentinizi sistem genelinde tanımlamak için kullandığı anahtardır. Aynı dize şu şekilde yeniden kullanılır:
+
+- eklentinizin veri dizininin adı (`plugins/<pluginId>/`),
+- eklentinizin veritabanı şema-sürümü takibinin anahtarı,
+- eklentinizin arayüzü için URL segmenti,
+- eklentinizin tanımladığı her izin düğümünün öneki (`pano.plugin.<pluginId>.…`) ve
+- yayınladığınızda pazar yeri (marketplace) `resourceId`'si (bkz. [Derleme ve Yayınlama](/tr/addon/publishing/)).
+
+Bir kez seçin ve eklentiniz yayına girdikten sonra asla değiştirmeyin — onu yeniden adlandırmak, depolanmış verileri ve izinleri öksüz bırakır.
+:::
 
 ### Örnek
 
@@ -32,7 +45,24 @@ pluginDeveloper=Pano
 pluginLicense=MIT
 pluginSourceUrl=https://github.com/panomc/pano-plugin-announcement
 pluginDependencies=
+pluginRequires=
 ```
+
+::: warning Sürümleri belirlemek size ait değil
+`pluginPanoVersion=local-build`'i olduğu gibi bırakın ve **`version`'ı asla elle düzenlemeyin**. Gerçek bir yayında CI (semantic-release), gerçek `version`'ı commit geçmişinizden (`-Pversion` aracılığıyla) enjekte eder — onu elle yükseltmek yayın hattını (release pipeline) bozar. Yerelde `version` her zaman `local-build`'tir. CI, `pluginPanoVersion`'a **dokunmaz**; manifestonun `pano-version` özelliği burada ne ayarladıysanız o kalır (normal bir derleme için `local-build`). Pazar Yeri'nde (Marketplace) gösterilen Pano sürümü *ayrı* bir değerdir — `.releaserc.json` içindeki Pano yayınlama plugin'inin `panoVersion` seçeneği. Sürümlerin commit'lerinizden nasıl türetildiği için [Derleme ve Yayınlama](/tr/addon/publishing/) sayfasına bakın.
+:::
+
+::: warning `gradle.properties` ISO-8859-1 olarak okunur
+Gradle, `.properties` dosyalarını UTF-8 değil, **ISO-8859-1 (Latin-1)** kodlamasıyla ayrıştırır. ASCII olmayan herhangi bir karakter — örneğin bir em tire, aksanlı bir harf ya da `pluginDescription` içindeki bir emoji — bir `\uXXXX` kaçış dizisi olarak yazılmalıdır, yoksa manifestoda bozulur. Latin-1 olarak okunan gerçek bir em tire (`—`, UTF-8 baytları `0xE2 0x80 0x94`) `â€"` haline gelir. Ham karakter yerine kaçış dizisini yazın:
+
+```properties
+# Wrong — the literal em dash is mangled to â€"
+pluginDescription=Manage your server — fast and simple.
+
+# Right - \u2014 is the escape for an em dash
+pluginDescription=Manage your server \u2014 fast and simple.
+```
+:::
 
 ## Bağımlılıklar
 
@@ -40,7 +70,7 @@ Pano (PF4J aracılığıyla), doğrudan manifesto üzerinden gelişmiş bağıml
 
 ### Eklenti Bağımlılıkları (`pluginDependencies`)
 Eklentinizin çalışması için hangi diğer eklentilere ihtiyaç duyduğunu tanımlayabilirsiniz.
-- **Sözdizimi**: `pluginId` veya `pluginId@surum`
+- **Sözdizimi**: `pluginId` veya `pluginId@version`
 - **İsteğe Bağlı Bağımlılık**: Eklenti kimliğinin sonuna `?` ekleyin.
 
 **Örnekler:**
@@ -70,6 +100,7 @@ shadowJar {
     val pluginLicense: String? by project
     val pluginSourceUrl: String? by project
     val pluginDependencies: String? by project
+    val pluginRequires: String? by project
 
     manifest {
         attributes["id"] = pluginId
@@ -82,6 +113,11 @@ shadowJar {
         pluginLicense?.let { attributes["license"] = it }
         pluginSourceUrl?.let { attributes["source-url"] = it }
         pluginDependencies?.let { attributes["dependencies"] = it }
+        pluginRequires?.let { attributes["requires"] = it }
     }
 }
 ```
+
+## Premium derleme özellikleri
+
+Bir **premium** eklenti gönderiyorsanız, derleme ayrıca jar'a bir lisans genel anahtarı (public key) gömen birkaç ek özelliği de kabul eder — `-PlicenseServer=dev|prod|<url>`, `-PpanoLicensePublicKey=<base64>` ve `PANO_LICENSE_PUBLIC_KEY` ortam değişkeni. Bunlar manifesto özellikleri değil, derleme bayraklarıdır (build flags) ve bunların hiçbiri olmadan eklentiniz ücretsiz (lisanssız) bir jar olarak derlenir.

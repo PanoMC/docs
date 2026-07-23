@@ -135,12 +135,20 @@ export default defineConfig({
                 link: "/addon/manifest/",
               },
               {
+                text: "Backend Development",
+                link: "/addon/backend/",
+              },
+              {
+                text: "Backend API Reference",
+                link: "/addon/backend-reference/",
+              },
+              {
                 text: "Frontend Development",
                 link: "/addon/frontend/",
               },
               {
-                text: "Backend Development",
-                link: "/addon/backend/",
+                text: "Frontend API Reference",
+                link: "/addon/api-reference/",
               },
               {
                 text: "Localization",
@@ -149,6 +157,10 @@ export default defineConfig({
               {
                 text: "Building & Publishing",
                 link: "/addon/publishing/",
+              },
+              {
+                text: "Premium & Licensing",
+                link: "/addon/premium/",
               },
             ],
           },
@@ -320,12 +332,20 @@ export default defineConfig({
                 link: "/tr/addon/manifest/",
               },
               {
+                text: "Backend Geliştirme",
+                link: "/tr/addon/backend/",
+              },
+              {
+                text: "Backend API Referansı",
+                link: "/tr/addon/backend-reference/",
+              },
+              {
                 text: "Arayüz Geliştirme",
                 link: "/tr/addon/frontend/",
               },
               {
-                text: "Backend Geliştirme",
-                link: "/tr/addon/backend/",
+                text: "Arayüz API Referansı",
+                link: "/tr/addon/api-reference/",
               },
               {
                 text: "Çeviriler",
@@ -334,6 +354,10 @@ export default defineConfig({
               {
                 text: "Derleme ve Yayınlama",
                 link: "/tr/addon/publishing/",
+              },
+              {
+                text: "Premium Eklentiler",
+                link: "/tr/addon/premium/",
               },
             ],
           },
@@ -505,12 +529,20 @@ export default defineConfig({
                 link: "/ru/addon/manifest/",
               },
               {
-                text: "Frontend",
-                link: "/ru/addon/frontend",
+                text: "Разработка бэкенда",
+                link: "/ru/addon/backend/",
               },
               {
-                text: "Backend",
-                link: "/ru/addon/backend/",
+                text: "Справочник Backend API",
+                link: "/ru/addon/backend-reference/",
+              },
+              {
+                text: "Разработка фронтенда",
+                link: "/ru/addon/frontend/",
+              },
+              {
+                text: "Справочник API фронтенда",
+                link: "/ru/addon/api-reference/",
               },
               {
                 text: "Локализация",
@@ -519,6 +551,10 @@ export default defineConfig({
               {
                 text: "Сборка и публикация",
                 link: "/ru/addon/publishing/",
+              },
+              {
+                text: "Премиум-аддоны",
+                link: "/ru/addon/premium/",
               },
             ],
           },
