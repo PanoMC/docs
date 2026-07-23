@@ -21,14 +21,7 @@ This page gets you from nothing to your own addon showing in **Panel → Addons*
 |---|---|
 | **JDK 11 or newer** | The addon compiles against a **Java 11 toolchain**, so it runs on every server Pano supports (Pano itself only needs Java 11+). Any JDK 11 or newer can run Gradle; if yours is newer than 11, the template auto-downloads the Java 11 toolchain for you. |
 | **Bun** | The UI package manager and builder. Install it from [bun.sh](https://bun.sh). Gradle auto-downloads Bun 1.2.0 for release builds, but you want it installed locally so you can run `bun run dev`. |
-| **A running Pano instance** | Self-hosted, with the setup wizard already completed. Your addon lives inside this instance while you work. See [Installation](/platform/installation/) if you have not set one up. |
-| **Development Mode** | A toggle in **Panel → Platform Settings** (config key `development-mode`). It disables the theme's addon-UI caching (so your bundle is re-fetched each request) and makes locale files load live from disk. |
-| **Pano running in a development environment** | The live UI hot loop only works when the Pano *process* runs in its DEVELOPMENT environment — a dev build of Pano, or the platform started with the `EnvironmentType=DEVELOPMENT` environment variable. On a stock release instance the backend always serves the UI bundle baked into your jar, so `bun run dev` output will not appear on refresh even with Development Mode on. |
-| **`init-ui = true`** | A config setting that tells Pano to launch its UI engines (setup, panel, theme) at startup — without them there is no panel or theme to load your addon UI into. It **defaults to `true`**, so normally you do not touch it; just make sure it has not been disabled. |
-
-::: tip Two switches, not one
-The UI hot loop needs **both**: Development Mode on *and* Pano running in a development environment. Development Mode (a config toggle) disables the theme's addon-UI caching and turns on live locale loading. The development **environment** (a dev build of Pano, or `EnvironmentType=DEVELOPMENT` in the process) is what makes the backend build your UI zip fresh from disk on each request instead of streaming the copy baked into your jar. On a normal release instance, flipping Development Mode alone is not enough — the backend still serves the jar's bundle. Turn both on before you start.
-:::
+| **A running Pano instance, with Development Mode on** | Self-hosted, with the setup wizard already completed — your addon lives inside this instance while you work. Turn on **Development Mode** in **Panel → Platform Settings** (config key `development-mode`): it makes your UI bundle and locale files load live from disk instead of being cached. See [Installation](/platform/installation/) if you have not set one up. |
 
 ## Create your addon from the template
 
@@ -96,7 +89,7 @@ For **UI (Svelte) work**, start the watcher and leave it running:
 bun run dev              # rollup watch → src/main/resources/plugin-ui/{client,server}
 ```
 
-`bun run dev` recompiles your UI into the addon's `plugin-ui` folder every time you save. As long as Development Mode is on, Pano is running in a development environment, and the addon lives in the instance's `plugins/` folder, a browser refresh picks the new build up immediately — no JAR rebuild.
+`bun run dev` recompiles your UI into the addon's `plugin-ui` folder every time you save. As long as Development Mode is on and the addon lives in the instance's `plugins/` folder, a browser refresh picks the new build up immediately — no JAR rebuild.
 
 Not every change is that fast, though. Here is exactly what each kind of change needs:
 

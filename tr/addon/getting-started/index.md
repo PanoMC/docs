@@ -21,14 +21,7 @@ Bu sayfa sizi sıfırdan, **Panel → Eklentiler** içinde görünen kendi eklen
 |---|---|
 | **JDK 11 veya daha yenisi** | Eklenti bir **Java 11 araç zinciriyle (toolchain)** derlenir; böylece Pano'nun desteklediği her sunucuda çalışır (Pano'nun kendisi de yalnızca Java 11+ ister). Gradle'ı JDK 11 veya daha yenisi çalıştırabilir; JDK'nız 11'den yeniyse şablon, Java 11 araç zincirini sizin için otomatik indirir. |
 | **Bun** | Arayüz (UI) paket yöneticisi ve derleyicisi. [bun.sh](https://bun.sh) adresinden kurun. Gradle, yayın (release) derlemeleri için Bun 1.2.0'ı otomatik indirir, ancak `bun run dev`'i çalıştırabilmeniz için yerelde kurulu olmasını istersiniz. |
-| **Çalışan bir Pano örneği** | Kurulum sihirbazı zaten tamamlanmış, kendi sunucunuzda barındırılan bir örnek. Eklentiniz, siz çalışırken bu örneğin içinde yaşar. Henüz kurmadıysanız [Kurulum](/tr/platform/installation/) sayfasına bakın. |
-| **Geliştirme Modu** | **Panel → Platform Ayarları** içinde bir anahtar (yapılandırma anahtarı `development-mode`). Temanın eklenti-arayüzü önbelleklemesini devre dışı bırakır (böylece paketiniz her istekte yeniden getirilir) ve yerelleştirme (locale) dosyalarının diskten canlı yüklenmesini sağlar. |
-| **Geliştirme ortamında çalışan bir Pano** | Canlı arayüz sıcak (hot) döngüsü yalnızca Pano *sürecinin* DEVELOPMENT ortamında çalışması durumunda işler — Pano'nun bir geliştirme derlemesi ya da `EnvironmentType=DEVELOPMENT` ortam değişkeniyle başlatılmış platform. Stok bir yayın örneğinde backend her zaman jar'ınıza gömülü arayüz paketini sunar, bu yüzden Geliştirme Modu açık olsa bile `bun run dev` çıktısı yenilemede görünmez. |
-| **`init-ui = true`** | Pano'ya başlangıçta arayüz motorlarını (kurulum, panel, tema) başlatmasını söyleyen bir yapılandırma ayarı — bunlar olmadan eklenti arayüzünüzü yükleyecek bir panel veya tema olmaz. Varsayılan değeri **`true`**'dur, bu yüzden normalde ona dokunmazsınız; sadece devre dışı bırakılmadığından emin olun. |
-
-::: tip Bir değil, iki anahtar
-Arayüz sıcak döngüsü **ikisini birden** gerektirir: Geliştirme Modu açık *ve* geliştirme ortamında çalışan bir Pano. Geliştirme Modu (bir yapılandırma anahtarı) temanın eklenti-arayüzü önbelleklemesini devre dışı bırakır ve canlı yerelleştirme yüklemesini açar. Geliştirme **ortamı** (Pano'nun bir geliştirme derlemesi ya da süreçte `EnvironmentType=DEVELOPMENT`), backend'in arayüz zip'inizi jar'ınıza gömülü kopyayı akıtmak yerine her istekte diskten taze olarak derlemesini sağlayan şeydir. Normal bir yayın örneğinde yalnızca Geliştirme Modu'nu açmak yeterli değildir — backend yine de jar'daki paketi sunar. Başlamadan önce ikisini de açın.
-:::
+| **Geliştirme Modu açık, çalışan bir Pano örneği** | Kurulum sihirbazı zaten tamamlanmış, kendi sunucunuzda barındırılan bir örnek — eklentiniz, siz çalışırken bu örneğin içinde yaşar. **Panel → Platform Ayarları** içinde **Geliştirme Modu**'nu açın (yapılandırma anahtarı `development-mode`): arayüz paketinizin ve yerelleştirme dosyalarınızın önbelleğe alınmak yerine diskten canlı yüklenmesini sağlar. Henüz kurmadıysanız [Kurulum](/tr/platform/installation/) sayfasına bakın. |
 
 ## Eklentinizi şablondan oluşturun
 
@@ -96,7 +89,7 @@ Bu, sayfanın en önemli kısmıdır. Geliştirirken neredeyse hiçbir zaman tam
 bun run dev              # rollup watch → src/main/resources/plugin-ui/{client,server}
 ```
 
-`bun run dev`, siz her kaydettiğinizde arayüzünüzü eklentinin `plugin-ui` klasörüne yeniden derler. Geliştirme Modu açık olduğu, Pano bir geliştirme ortamında çalıştığı ve eklenti örneğin `plugins/` klasöründe bulunduğu sürece, bir tarayıcı yenilemesi yeni derlemeyi anında alır — JAR yeniden derlemesi gerekmez.
+`bun run dev`, siz her kaydettiğinizde arayüzünüzü eklentinin `plugin-ui` klasörüne yeniden derler. Geliştirme Modu açık olduğu ve eklenti örneğin `plugins/` klasöründe bulunduğu sürece, bir tarayıcı yenilemesi yeni derlemeyi anında alır — JAR yeniden derlemesi gerekmez.
 
 Ancak her değişiklik bu kadar hızlı değildir. Her tür değişikliğin tam olarak neye ihtiyaç duyduğu aşağıda:
 
