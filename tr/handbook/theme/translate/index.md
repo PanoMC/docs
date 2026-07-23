@@ -2,7 +2,7 @@
 
 Ember'ın karşılama banner'ı şu anda yalnızca İngilizce konuşuyor. Her yerden oyuncuların olduğu bir survival sunucusunda bu, kaçırılmış bir fırsat. Ember'ın her ziyaretçiyi kendi dilinde karşılamasını sağlayalım.
 
-İyi haber: motor, desteklediği diller için **eksiksiz çevirilerle** gelir. Yalnızca *sizin* eklediğiniz veya değiştirdiğiniz parçaları yazarsınız. Tam referans: [Yerelleştirme](/tr/theme/localization/).
+İyi haber: tema çekirdeği, desteklediği diller için **eksiksiz çevirilerle** gelir. Yalnızca *sizin* eklediğiniz veya değiştirdiğiniz parçaları yazarsınız. Tam referans: [Yerelleştirme](/tr/theme/localization/).
 
 ## Tek bir resimde nasıl çalıştığı
 
@@ -15,7 +15,7 @@ lang-overrides/
 └─ ru.json
 ```
 
-`bun run sync` çalıştırdığınızda Pano, override'larınızı motorun çevirilerinin **üzerine** birleştirir. Birleştirme eklemelidir: yeni metin ekleyebilir veya mevcut metni değiştirebilirsiniz, ama asla bir motor anahtarını kaybedemezsiniz. Bahsetmediğiniz her şey motorun varsayılanını korur.
+`bun run sync` çalıştırdığınızda Pano, override'larınızı tema çekirdeğinin çevirilerinin **üzerine** birleştirir. Birleştirme eklemelidir: yeni metin ekleyebilir veya mevcut metni değiştirebilirsiniz, ama asla bir tema çekirdeği anahtarını kaybedemezsiniz. Bahsetmediğiniz her şey tema çekirdeğinin varsayılanını korur.
 
 ## Adım 1 — görünümde çeviri anahtarlarını kullanın
 
@@ -91,7 +91,7 @@ lang-overrides/
 }
 ```
 
-`bun run sync` sonrasında yeni bir dil, motorun **İngilizce** temeli üzerine inşa edilir — böylece henüz çevirmediğiniz herhangi bir anahtar, ham anahtarı göstermek yerine İngilizce'ye geri düşer.
+`bun run sync` sonrasında yeni bir dil, tema çekirdeğinin **İngilizce** temeli üzerine inşa edilir — böylece henüz çevirmediğiniz herhangi bir anahtar, ham anahtarı göstermek yerine İngilizce'ye geri düşer.
 
 ::: warning Hangi dillerin görüneceğine panel karar verir
 Yalnızca `de.json` eklemek Almanca'nın görünmesini **sağlamaz**. Mevcut dillerin listesi Pano'nun kendisinden gelir: bir yönetici önce panelde **aynı kodla** (`de`) bir yerel ayar tanımlamalıdır. O yerel ayar var olduğunda ziyaretçiler onu seçebilir ve `de.json`'unuz kullanılır. Eşleşen bir panel yerel ayarı olmadan dosya basitçe yok sayılır.

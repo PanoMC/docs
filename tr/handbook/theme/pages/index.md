@@ -8,7 +8,7 @@ Tam referans: [Sayfa Tasarımlarını Değiştirme](/tr/theme/views/).
 
 ## Fikir tek cümlede
 
-Her sayfa **mantık** (veri yükleme, girişler, eklentiler — bunlara motor sahiptir) artı bir **görünümden** (nasıl göründüğü — değiştirmesi sizin) oluşur. Herhangi bir görünümün *görünüşünü*, *mantığına* dokunmadan devralabilirsiniz.
+Her sayfa **mantık** (veri yükleme, girişler, eklentiler — bunlara tema çekirdeği sahiptir) artı bir **görünümden** (nasıl göründüğü — değiştirmesi sizin) oluşur. Herhangi bir görünümün *görünüşünü*, *mantığına* dokunmadan devralabilirsiniz.
 
 ## Adım 1 — hangi görünümlerin olduğunu görün
 
@@ -22,7 +22,7 @@ Tüm seti göreceksiniz — home, login, register, profile ve daha fazlası. Biz
 
 ## Adım 2 — HomeView'ı çıkarın (eject)
 
-Bir görünümün sahipliğini almak için onu **çıkarın** (eject). Bu, motorun varsayılan `HomeView`'ını kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
+Bir görünümün sahipliğini almak için onu **çıkarın** (eject). Bu, tema çekirdeğinin varsayılan `HomeView`'ını kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
 
 ```sh
 bunx @panomc/theme-core eject-view HomeView
@@ -32,7 +32,7 @@ Artık serbestçe düzenleyebileceğiniz, çalışan bir `src/views/HomeView.sve
 
 ## Adım 3 — önce başlığı okuyun
 
-`src/views/HomeView.svelte` dosyasını açın. Motorun görünümünüze verdiği **her prop'u** listeleyen bir yorum başlığıyla başlar — bunları çalışmak için elinizdeki malzemeler olarak düşünün. Şuna benzer:
+`src/views/HomeView.svelte` dosyasını açın. Tema çekirdeğinin görünümünüze verdiği **her prop'u** listeleyen bir yorum başlığıyla başlar — bunları çalışmak için elinizdeki malzemeler olarak düşünün. Şuna benzer:
 
 ```svelte
 <!--
@@ -88,7 +88,7 @@ Bir bağlama noktasını kaldırırsanız, ona güvenen herhangi bir eklenti kul
 
 ## Adım 6 — çalışmanızı denetleyin
 
-Motor, bozuk bir tema yayınlamanızdan önce eksik bir eklenti slot'unu (ve daha fazlasını) yakalayan bir güvenlik ağıyla gelir:
+Tema çekirdeği, bozuk bir tema yayınlamanızdan önce eksik bir eklenti slot'unu (ve daha fazlasını) yakalayan bir güvenlik ağıyla gelir:
 
 ```sh
 bun run check

@@ -38,7 +38,7 @@ console-history-limit = 50
 
 **Detaylar**
 
-- `init-ui`: başlatma sırasında **kurulum sihirbazını, paneli ve tema motorunu** başlatır.
+- `init-ui`: başlatma sırasında **kurulum sihirbazını, paneli ve tema çekirdeğini** başlatır.
 - `accept-plugin-auth`: Pano MC eklentisinin bağlantısını etkinleştirir/devre dışı bırakır (varsayılan: `true`). **Sunucu Bağla** modalından yönetilebilir. Daha iyi güvenlik için kullanılmadığında devre dışı bırakın.
 - `jwt-key`: otomatik oluşturulan **Base64 kimlik anahtarıdır** — **manuel değiştirmeyin**.
 - `update-period`: güncelleme kontrol sıklığını belirler.

@@ -6,7 +6,7 @@
 
 Pano'daki her sayfa iki parçadan oluşur:
 
-- **Mantık (logic)** — veri yükleme, girişleri işleme, eklentileri çalıştırma. Motor buna sahiptir ve siz asla dokunmazsınız.
+- **Mantık (logic)** — veri yükleme, girişleri işleme, eklentileri çalıştırma. Tema çekirdeği buna sahiptir ve siz asla dokunmazsınız.
 - **View (görünüm)** — o sayfanın nasıl *göründüğü*: markup ve düzen. Bunu değiştirmek size aittir.
 
 İkisi ayrı olduğu için, **herhangi bir sayfanın mantığına dokunmadan görünümünün sahipliğini alabilirsiniz**. Veri yine gelir, eklentiler yine çalışır, girişler yine gerçekleşir — siz yalnızca sunumu yeniden stillendirirsiniz.
@@ -23,7 +23,7 @@ bunx @panomc/theme-core list-views
 
 ## Adım 2 — bir view'ın sahipliğini alın
 
-Bir view'ı devralmak için onu **eject** edin. Eject etmek, motorun varsayılan sürümünü kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
+Bir view'ı devralmak için onu **eject** edin. Eject etmek, tema çekirdeğinin varsayılan sürümünü kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
 
 ```sh
 bunx @panomc/theme-core eject-view HomeView
@@ -37,7 +37,7 @@ Eject edilen dosyalar, gerçek varsayılanın **çalışan kopyaları** olarak b
 
 ## Adım 3 — başlığı okuyun ("size verilen malzemeler")
 
-Eject edilen her view, **her prop'u** belgeleyen bir yorum başlığıyla başlar — motorun view'ınıza verdiği veriler ve fonksiyonlar. Bunu, çalışmak için elinizdeki malzemelerin listesi olarak düşünün. İşte blaze-theme'in `HomeView`'ından gerçek bir alıntı:
+Eject edilen her view, **her prop'u** belgeleyen bir yorum başlığıyla başlar — tema çekirdeğinin view'ınıza verdiği veriler ve fonksiyonlar. Bunu, çalışmak için elinizdeki malzemelerin listesi olarak düşünün. İşte blaze-theme'in `HomeView`'ından gerçek bir alıntı:
 
 ```svelte
 <!--
@@ -124,7 +124,7 @@ Başlık bize `data.posts`'un bir gönderi dizisi olduğunu söyledi. Hazır `<P
   </div>
 ```
 
-Kaydedin, yenileyin → aynı gönderiler, tamamen farklı bir düzen ve her pikseline siz sahipsiniz. Motor veriyi yine yükler, yine sayfalar, yine eklentileri çalıştırır — siz yalnızca bir gönderinin nasıl göründüğüne karar verdiniz.
+Kaydedin, yenileyin → aynı gönderiler, tamamen farklı bir düzen ve her pikseline siz sahipsiniz. Tema çekirdeği veriyi yine yükler, yine sayfalar, yine eklentileri çalıştırır — siz yalnızca bir gönderinin nasıl göründüğüne karar verdiniz.
 
 ::: tip `post`'un içinde ne olduğunu nasıl bilirim?
 İki kolay yol: varsayılan markup'ın onu nasıl kullandığına bakın ya da bir anlığına döngünün içine `<pre>{JSON.stringify(post, null, 2)}</pre>` bırakın — nesnenin tamamını sayfaya yazdırır. İşiniz bitince silin.
@@ -146,13 +146,13 @@ Artık afiş panelden kapatılabilir — anahtarı düzgün kaydedilecek şekild
 
 ### Döngünün tamamı bu
 
-Her view tam olarak böyle çalışır, sayfa ne olursa olsun: eject → malzemelerinizi görmek için başlığı okuyun → markup'ı düzenleyin → yenileyin. Giriş sayfası, profil, gönderi detayı — aynı tarif, farklı prop'lar. Bir şey bozulduğunda son düzenlemenizi geri alın; kararsız kaldığınızda motorun varsayılan view'ıyla karşılaştırın (her zaman `node_modules/@panomc/theme-core/src/lib/views/` içinde görünür).
+Her view tam olarak böyle çalışır, sayfa ne olursa olsun: eject → malzemelerinizi görmek için başlığı okuyun → markup'ı düzenleyin → yenileyin. Giriş sayfası, profil, gönderi detayı — aynı tarif, farklı prop'lar. Bir şey bozulduğunda son düzenlemenizi geri alın; kararsız kaldığınızda tema çekirdeğinin varsayılan view'ıyla karşılaştırın (her zaman `node_modules/@panomc/theme-core/src/lib/views/` içinde görünür).
 
 ## View'larınızın içindeki eklenti API'si
 
 Kurulu eklentiler, **view'ların içinde** yaşayan işaretçiler aracılığıyla sayfada görünür. İki tür vardır:
 
-- **`<Hook>` işaretçileri** — eklentilerin kendi bileşenlerini enjekte edebileceği adlandırılmış alanlar. Bir hook, markup'ta `<Hook name="page:home:top" />` şeklinde görünür. Motorun view'ları bugün şu hook adlarını taşır:
+- **`<Hook>` işaretçileri** — eklentilerin kendi bileşenlerini enjekte edebileceği adlandırılmış alanlar. Bir hook, markup'ta `<Hook name="page:home:top" />` şeklinde görünür. Tema çekirdeğinin view'ları bugün şu hook adlarını taşır:
 
   | Hook adı | Eklentilerin göründüğü yer |
   |---|---|
@@ -186,7 +186,7 @@ Yerleşik hook'larla sınırlı değilsiniz — temanız, kendi yeni hook alanla
 
 `my-theme:hero:bottom` için bir bileşen kaydeden herhangi bir eklenti artık orada render edilir. İki kural bunu güvende tutar:
 
-- **Adlarınızı ad alanına alın (namespace).** Motor hook'larıyla veya başka bir temanınkiyle asla çakışamamaları için onları temanızın `id`'siyle başlatın (`my-theme:…`).
+- **Adlarınızı ad alanına alın (namespace).** Tema çekirdeği hook'larıyla veya başka bir temanınkiyle asla çakışamamaları için onları temanızın `id`'siyle başlatın (`my-theme:…`).
 - **Mevcut adları yeniden kullanmayın.** Yukarıdaki tablodaki yerleşik adların, eklentilerin dayandığı sabit bir anlamı vardır — eski adları başka bir yerde yeniden kullanmak yerine yeni adlar ekleyin.
 
 Bir kez gönderdikten sonra, özel hook'larınıza bir söz gibi davranın: eklentiler onlara dayanmaya başlayabilir, bu yüzden onları tıpkı yerleşik olanlar gibi temanızın gelecekteki sürümlerinde koruyun.
@@ -195,15 +195,15 @@ Bir kez gönderdikten sonra, özel hook'larınıza bir söz gibi davranın: ekle
 
 Eklenti içeriği sonradan tarayıcıda üzerine cıvatalanmaz — bu, **sunucu tarafı render'ın (SSR)** bir parçasıdır: bir sayfa sunucuda render edildiğinde, hook'lara bağlanan eklenti bileşenleri de onunla birlikte render edilir, böylece ziyaretçiler (ve arama motorları) ilk yanıtta tam sayfayı alır.
 
-Perde arkasında bunu iki eklenti API'si mümkün kılar ve her ikisi de **motorun controller'ları** tarafından çalıştırılır — temanız onları asla çağırmaz, ama var olduklarını bilmek faydalıdır:
+Perde arkasında bunu iki eklenti API'si mümkün kılar ve her ikisi de **tema çekirdeğinin controller'ları** tarafından çalıştırılır — temanız onları asla çağırmaz, ama var olduklarını bilmek faydalıdır:
 
-- **Hook `load()` fonksiyonları.** Bir hook'a bağlanan bir eklenti bileşeni kendi `load()`'unu dışa aktarabilir; motor bunu sayfanın yüklenmesi sırasında çalıştırır (SSR için sunucuda, gezinirken istemcide) ve sonuçları bileşene otomatik olarak **`hookProps`** olarak iletir — bazı view başlıklarının `data`'sında `hookProps`'un listelendiğini fark etmiş olabilirsiniz. Siz hiçbir şey yapmadan akıp gelir.
-- **Yaşam döngüsü olayları.** Eklentiler ayrıca, bir sayfanın verisi hazırlanırken motorun tetiklediği yükleme zamanı olaylarına da abone olabilir — `theme:app:load`, `theme:navbar:load`, `theme:profile:load`, `theme:post-detail:load`, `theme:support:load`, `theme:tickets:load`, `theme:settings:load` ve benzerleri. Örneğin eklentiler, öğeleri navbar'a sayfa yüklendikten sonra belirmek yerine sunucuda render edilen HTML'de görünecek kadar erken bu şekilde ekler.
+- **Hook `load()` fonksiyonları.** Bir hook'a bağlanan bir eklenti bileşeni kendi `load()`'unu dışa aktarabilir; tema çekirdeği bunu sayfanın yüklenmesi sırasında çalıştırır (SSR için sunucuda, gezinirken istemcide) ve sonuçları bileşene otomatik olarak **`hookProps`** olarak iletir — bazı view başlıklarının `data`'sında `hookProps`'un listelendiğini fark etmiş olabilirsiniz. Siz hiçbir şey yapmadan akıp gelir.
+- **Yaşam döngüsü olayları.** Eklentiler ayrıca, bir sayfanın verisi hazırlanırken tema çekirdeğinin tetiklediği yükleme zamanı olaylarına da abone olabilir — `theme:app:load`, `theme:navbar:load`, `theme:profile:load`, `theme:post-detail:load`, `theme:support:load`, `theme:tickets:load`, `theme:settings:load` ve benzerleri. Örneğin eklentiler, öğeleri navbar'a sayfa yüklendikten sonra belirmek yerine sunucuda render edilen HTML'de görünecek kadar erken bu şekilde ekler.
 
 Bunun bir tema yazarı olarak sizin için anlamı:
 
 - **Bağlanacak hiçbir şey yok** — geçersiz kıldığınız view'lar bağlama noktalarını koruduğu sürece, SSR dahil yukarıdakilerin hepsi çalışmaya devam eder.
-- **Özel hook'lar hakkında dürüst bir uyarı:** sunucu tarafı `load()` hattı yalnızca **yerleşik** hook adları için çalışır. Eklediğiniz özel bir hook'a (örneğin `my-theme:hero:bottom`) bağlanan bir eklenti yine de render edilir — SSR dahil — ama `load()` verisi motor tarafından hazırlanmaz, bu yüzden böyle eklentiler verilerini genellikle istemcide çeker.
+- **Özel hook'lar hakkında dürüst bir uyarı:** sunucu tarafı `load()` hattı yalnızca **yerleşik** hook adları için çalışır. Eklediğiniz özel bir hook'a (örneğin `my-theme:hero:bottom`) bağlanan bir eklenti yine de render edilir — SSR dahil — ama `load()` verisi tema çekirdeği tarafından hazırlanmaz, bu yüzden böyle eklentiler verilerini genellikle istemcide çeker.
 
 ## Özel tema ayarları
 

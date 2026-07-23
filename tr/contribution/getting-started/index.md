@@ -10,7 +10,7 @@ Pano, her biri belirli bir amaca hizmet eden birkaç depodan oluşur:
 - [**panel-ui**](https://github.com/PanoMC/panel-ui): Yönetim paneli arayüzü (SvelteKit).
 - [**setup-ui**](https://github.com/PanoMC/setup-ui): İlk kurulum sihirbazı (SvelteKit).
 - [**vanilla-theme**](https://github.com/PanoMC/vanilla-theme): Varsayılan resmi tema (SvelteKit).
-- [**sdk (theme-core motoru)**](https://github.com/PanoMC/sdk): `@panomc/theme-core` ve `@panomc/sdk` paketlerini yayınlayan motor deposu.
+- [**sdk (theme-core tema çekirdeği)**](https://github.com/PanoMC/sdk): `@panomc/theme-core` ve `@panomc/sdk` paketlerini yayınlayan tema çekirdeği deposu.
 - [**pano-mc-plugin**](https://github.com/PanoMC/pano-mc-plugin): Minecraft sunucu tarafı entegrasyon eklentisi.
 - [**docs**](https://github.com/PanoMC/docs): Bu dokümantasyon deposu.
 

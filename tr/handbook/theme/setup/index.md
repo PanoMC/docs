@@ -30,7 +30,7 @@ cd ember
 bun install
 ```
 
-`bun install`, bağımlılıkları getirmekten fazlasını yapar — ayrıca **motorun sizin için sağladığı dosyaları da üretir**: sayfa route'ları, `$lib` köprüleri, temel `lang/` dosyaları ve bir lisans taslağı. Ayrı bir manuel adım yoktur; hepsi sizin için yapılır.
+`bun install`, bağımlılıkları getirmekten fazlasını yapar — ayrıca **tema çekirdeğinin sizin için sağladığı dosyaları da üretir**: sayfa route'ları, `$lib` köprüleri, temel `lang/` dosyaları ve bir lisans taslağı. Ayrı bir manuel adım yoktur; hepsi sizin için yapılır.
 
 ::: tip `bun install` "Resolving…" adımında takılmış gibi görünürse
 `Ctrl + C` ile durdurun ve bunun yerine şunu çalıştırın:
@@ -41,7 +41,7 @@ bun install --backend=copyfile
 :::
 
 ::: tip Sonradan yeniden üretme
-Motoru güncellediğinizde veya o otomatik dosyaları yeniden üretmek istediğinizde `bun run sync` çalıştırın. Şu anda buna ihtiyacınız yok — `bun install` bunu zaten yaptı.
+Tema çekirdeği güncellediğinizde veya o otomatik dosyaları yeniden üretmek istediğinizde `bun run sync` çalıştırın. Şu anda buna ihtiyacınız yok — `bun install` bunu zaten yaptı.
 :::
 
 Tüm o dosyaların ne olduğunu merak mı ediyorsunuz? [Tema Yapısı](/tr/theme/structure/) sayfasında tam bir harita var. Şimdilik kısa hali: **SİZİN** olarak işaretli dosyalar düzenlediklerinizdir; **otomatik** olanlar sizin için yeniden üretilir, o yüzden onları asla elle düzenlemeyin.

@@ -1,6 +1,6 @@
 # Başlangıç
 
-Bir Pano **teması**, web sitenizin nasıl göründüğünü kontrol eder — renklerini, fontlarını ve düzenini. Zor kısımlar (giriş, eklentiler, veri yükleme, derleme) `@panomc/theme-core` adlı bir motor tarafından sizin için önceden halledilmiştir. Temanız yalnızca bunun üzerine oturur ve görünümü değiştirir.
+Bir Pano **teması**, web sitenizin nasıl göründüğünü kontrol eder — renklerini, fontlarını ve düzenini. Zor kısımlar (giriş, eklentiler, veri yükleme, derleme) `@panomc/theme-core` adlı bir tema çekirdeği tarafından sizin için önceden halledilmiştir. Temanız yalnızca bunun üzerine oturur ve görünümü değiştirir.
 
 Bu sayfa sizi sıfırdan çalışan bir temaya götürür ve yaklaşık iki dakikada ilk değişikliğinizi yaptırır.
 
@@ -48,7 +48,7 @@ bun install --backend=copyfile
 ```
 :::
 
-Ardından, motorun sizin için sağladığı dosyaları üretin:
+Ardından, tema çekirdeğinin sizin için sağladığı dosyaları üretin:
 
 ```sh
 bun run sync

@@ -3,7 +3,7 @@
 Bu, kendi temanıza giden **kod gerektirmeyen yoldur**. Renkleri, boşlukları ve fontları iki SCSS dosyasını düzenleyerek değiştireceksiniz — Svelte, HTML veya JavaScript gerekmez. Daha önce hiç CSS yazmadıysanız endişelenmeyin: buradaki her değişiklik "bir değeri bul, değeri değiştir, yenile" kadar basittir.
 
 ::: tip
-Bu katman hiç Svelte veya JavaScript gerektirmez. Tek bir renk değişikliği bile gözle görülür şekilde farklı bir tema üretir — ve yalnızca motorun zaten anladığı değerleri ayarladığınız için, **motor güncellemeleri temanızı asla bozmaz**.
+Bu katman hiç Svelte veya JavaScript gerektirmez. Tek bir renk değişikliği bile gözle görülür şekilde farklı bir tema üretir — ve yalnızca tema çekirdeğinin zaten anladığı değerleri ayarladığınız için, **tema çekirdeği güncellemeleri temanızı asla bozmaz**.
 :::
 
 ## Düzenleyeceğiniz iki dosya
@@ -12,19 +12,19 @@ Bu sayfadaki her şey temanızın içindeki iki dosyada gerçekleşir:
 
 | Dosya | Ne işe yarar |
 |---|---|
-| `src/styles/tokens.scss` | Motorun kullandığı her renk, font ve köşe yarıçapının bir **menüsü**. Bir satırın yorumunu kaldırın ve değerini değiştirin. |
-| `src/styles/style.scss` | Kendi **ek** CSS'inizin gittiği yer; motorun stillerinden sonra gelir. |
+| `src/styles/tokens.scss` | Tema çekirdeğinin kullandığı her renk, font ve köşe yarıçapının bir **menüsü**. Bir satırın yorumunu kaldırın ve değerini değiştirin. |
+| `src/styles/style.scss` | Kendi **ek** CSS'inizin gittiği yer; tema çekirdeğinin stillerinden sonra gelir. |
 
 ## tokens.scss — değerlerin menüsü
 
-Bir tema iskelesi oluşturduğunuzda, `src/styles/tokens.scss` **motorun kullandığı her değişkenin yorum satırına alınmış bir menüsü** olarak gelir — `$primary` ve `$secondary` gibi renkler, köşe yarıçapı, fontlar ve adlandırılmış koyu temalar. Her satır `//` ile başlar; bu "kapalı" anlamına gelir. Birini kullanmak için:
+Bir tema iskelesi oluşturduğunuzda, `src/styles/tokens.scss` **tema çekirdeğinin kullandığı her değişkenin yorum satırına alınmış bir menüsü** olarak gelir — `$primary` ve `$secondary` gibi renkler, köşe yarıçapı, fontlar ve adlandırılmış koyu temalar. Her satır `//` ile başlar; bu "kapalı" anlamına gelir. Birini kullanmak için:
 
 1. Dosyada istediğiniz değişkeni bulun.
 2. Satırının başındaki `//` işaretini kaldırın (buna *yorumu kaldırmak* denir).
 3. Değeri istediğinizle değiştirin.
 4. Dosyayı kaydedin ve tarayıcıyı yenileyin.
 
-Her motor değişkeni `!default` ile tanımlanmıştır; bu, "**sizin değeriniz her zaman kazanır**" demenin süslü bir yoludur. Motorla asla mücadele etmeniz gerekmez.
+Her tema çekirdeği değişkeni `!default` ile tanımlanmıştır; bu, "**sizin değeriniz her zaman kazanır**" demenin süslü bir yoludur. Tema çekirdeğiyle asla mücadele etmeniz gerekmez.
 
 ### Örnek 1 — birincil rengi değiştirin
 
@@ -54,12 +54,12 @@ $font-family-base: "Inter", sans-serif;
 ```
 
 ::: tip
-Her satırın yorumunu kaldırmanız **gerekmez**. Yalnızca önemsediğiniz birkaç değeri değiştirin ve gerisini yorum satırında bırakın — motor, dokunmadığınız her şey için makul varsayılanları doldurur.
+Her satırın yorumunu kaldırmanız **gerekmez**. Yalnızca önemsediğiniz birkaç değeri değiştirin ve gerisini yorum satırında bırakın — tema çekirdeği, dokunmadığınız her şey için makul varsayılanları doldurur.
 :::
 
 ## style.scss — kendi ek CSS'iniz
 
-`tokens.scss`, motorun zaten bildiği değerleri kapsar. Kendi CSS'inizi eklemek istediğinizde — motorun bir değişkene sahip olmadığı bir şey — bunu **dosyanın en üstündeki içe aktarmalardan sonra** `src/styles/style.scss` içine koyun. Oraya eklediğiniz her şey en son yüklenir, böylece motorun stillerinin üzerine katmanlanır.
+`tokens.scss`, tema çekirdeğinin zaten bildiği değerleri kapsar. Kendi CSS'inizi eklemek istediğinizde — tema çekirdeğinin bir değişkene sahip olmadığı bir şey — bunu **dosyanın en üstündeki içe aktarmalardan sonra** `src/styles/style.scss` içine koyun. Oraya eklediğiniz her şey en son yüklenir, böylece tema çekirdeğinin stillerinin üzerine katmanlanır.
 
 Örneğin, kartlara daha güçlü bir gölge vermek için:
 
@@ -72,7 +72,7 @@ Her satırın yorumunu kaldırmanız **gerekmez**. Yalnızca önemsediğiniz bir
 ```
 
 ::: warning
-CSS'inizi mevcut `@use` / `@import` satırlarının **altına** ekleyin, asla üstüne değil. Kurallarınızın üzerine inşa edilebilmesi için motorun stilleri önce yüklenmelidir.
+CSS'inizi mevcut `@use` / `@import` satırlarının **altına** ekleyin, asla üstüne değil. Kurallarınızın üzerine inşa edilebilmesi için tema çekirdeğinin stilleri önce yüklenmelidir.
 :::
 
 ## Değişikliklerinizi canlı görmek

@@ -1,10 +1,10 @@
 # Yerelleştirme (i18n)
 
-Yerelleştirme (kısaca **i18n**), temanızın metnini farklı dillerde göstermek demektir. İyi haber: Pano motoru zaten tam çevirilerle gelir, bu yüzden yalnızca gerçekten değiştirdiğiniz parçaları yazarsınız.
+Yerelleştirme (kısaca **i18n**), temanızın metnini farklı dillerde göstermek demektir. İyi haber: Pano tema çekirdeği zaten tam çevirilerle gelir, bu yüzden yalnızca gerçekten değiştirdiğiniz parçaları yazarsınız.
 
 ## Nasıl çalışır
 
-Motor, bugün desteklediği diller için tam çevirilerle gelir — **en-US** (İngilizce), **tr** (Türkçe) ve **ru** (Rusça). Bu büyük dosyaları **kopyalamaz veya bakımını yapmazsınız**.
+Tema çekirdeği, bugün desteklediği diller için tam çevirilerle gelir — **en-US** (İngilizce), **tr** (Türkçe) ve **ru** (Rusça). Bu büyük dosyaları **kopyalamaz veya bakımını yapmazsınız**.
 
 Bunun yerine temanız yalnızca **farklılıkları**, her dil için bir dosya olacak şekilde `lang-overrides/` adlı bir klasörde taşır:
 
@@ -15,13 +15,13 @@ lang-overrides/
 └─ ru.json
 ```
 
-`bun run sync` çalıştırdığınızda Pano, override'larınızı motorun çevirilerinin üzerine birleştirir. Birleştirme **eklemelidir**: yepyeni metin ekleyebilir veya mevcut metni değiştirebilirsiniz, ancak asla bir motor anahtarını kaybedemezsiniz. Belirtmediğiniz her şey motorun varsayılanını korur.
+`bun run sync` çalıştırdığınızda Pano, override'larınızı tema çekirdeğinin çevirilerinin üzerine birleştirir. Birleştirme **eklemelidir**: yepyeni metin ekleyebilir veya mevcut metni değiştirebilirsiniz, ancak asla bir tema çekirdeği anahtarını kaybedemezsiniz. Belirtmediğiniz her şey tema çekirdeğinin varsayılanını korur.
 
 Yani işiniz küçüktür: yalnızca değiştirmek veya eklemek istediğiniz anahtarları yazın.
 
 ## Örnek 1 — Mevcut metni değiştirme
 
-Diyelim ki alt bilginin (footer) Türkçe'de farklı bir şey söylemesini istiyorsunuz. Motorun dosyalarına dokunmanıza gerek yok — yalnızca o tek anahtarı override edersiniz.
+Diyelim ki alt bilginin (footer) Türkçe'de farklı bir şey söylemesini istiyorsunuz. Tema çekirdeğinin dosyalarına dokunmanıza gerek yok — yalnızca o tek anahtarı override edersiniz.
 
 `lang-overrides/tr.json` dosyasını oluşturun (ya da daha önce oluşturduysanız açın) ve değiştirmek istediğiniz anahtarı ekleyin:
 
@@ -33,7 +33,7 @@ Diyelim ki alt bilginin (footer) Türkçe'de farklı bir şey söylemesini istiy
 }
 ```
 
-`bun run sync` sonrasında Türkçe ziyaretçiler orada sizin metninizi görür, diğer tüm footer anahtarları ise motordan dokunulmadan gelir. Aynı etiketi İngilizce'de değiştirmek için onu `en-US.json` dosyasına da ekleyin; Rusça'da değiştirmek için `ru.json` dosyasına ekleyin.
+`bun run sync` sonrasında Türkçe ziyaretçiler orada sizin metninizi görür, diğer tüm footer anahtarları ise tema çekirdeğinden dokunulmadan gelir. Aynı etiketi İngilizce'de değiştirmek için onu `en-US.json` dosyasına da ekleyin; Rusça'da değiştirmek için `ru.json` dosyasına ekleyin.
 
 ## Örnek 2 — Yepyeni bir anahtar ekleme
 
@@ -87,7 +87,7 @@ lang-overrides/
 
 **Dosya adı, locale kodudur.** `de.json` demek locale kodu `de` demektir, `en-US.json` ise `en-US` — `.json`'dan önceki kısım koddur ve `en-US`, `tr`, `de` gibi kodlarla aynı biçimdedir (küçük harfli bir dil kodu, isteğe bağlı olarak tire ve büyük harfli bölge kodu). Çevirilerinizi diğer dosyalarla aynı anahtar yapısını kullanarak içine yazın.
 
-`bun run sync` sonrasında yeni diliniz motorun **İngilizce** çevirileri üzerine inşa edilir — yani henüz çevirmediğiniz her anahtar, ham anahtar göstermek yerine İngilizceye geri düşer.
+`bun run sync` sonrasında yeni diliniz tema çekirdeğinin **İngilizce** çevirileri üzerine inşa edilir — yani henüz çevirmediğiniz her anahtar, ham anahtar göstermek yerine İngilizceye geri düşer.
 
 ::: warning Hangi dillerin var olduğuna panel karar verir
 Dosyayı eklemek tek başına dili sitenizde **göstermez**. Kullanılabilir dillerin listesi Pano'nun kendisinden gelir: önce bir yöneticinin panelde **aynı locale koduna** sahip bir locale (örneğin `de`) tanımlamış olması gerekir. O locale panel tarafında var olduğunda ziyaretçiler onu seçebilir ve `de.json` çevirileriniz kullanılır. Panelde eşleşen bir locale tanımlı değilse dosya yok sayılır.

@@ -14,12 +14,12 @@ Bu dosyaların tam referansı için [Renkler ve Stiller](/tr/theme/customization
 
 | Dosya | Ne işe yarar |
 |---|---|
-| `src/styles/tokens.scss` | Motorun kullandığı her renk, font ve köşe yarıçapının bir **menüsü**. Bir satırın yorumunu kaldırın, değerini değiştirin. |
-| `src/styles/style.scss` | Motorun stillerinin üzerine katmanlanan, size ait **ekstra** CSS. |
+| `src/styles/tokens.scss` | Tema çekirdeğinin kullandığı her renk, font ve köşe yarıçapının bir **menüsü**. Bir satırın yorumunu kaldırın, değerini değiştirin. |
+| `src/styles/style.scss` | Tema çekirdeğinin stillerinin üzerine katmanlanan, size ait **ekstra** CSS. |
 
 ## Adım 1 — Ember'ın paletini ayarlayın
 
-`src/styles/tokens.scss` dosyasını açın. Yorum satırına alınmış bir menü olarak gelir — her satır `//` ile başlar, yani "kapalı". Bir değeri kullanmak için `//` işaretini kaldırın ve ayarlayın. Her motor değişkeni `!default` olarak bildirilir, bu yüzden **sizin değeriniz her zaman kazanır**.
+`src/styles/tokens.scss` dosyasını açın. Yorum satırına alınmış bir menü olarak gelir — her satır `//` ile başlar, yani "kapalı". Bir değeri kullanmak için `//` işaretini kaldırın ve ayarlayın. Her tema çekirdeği değişkeni `!default` olarak bildirilir, bu yüzden **sizin değeriniz her zaman kazanır**.
 
 `$primary`'yi zaten açtık. Kamp ateşi paletini tamamlayalım:
 
@@ -32,7 +32,7 @@ $secondary: #ffb347;  // soft flame gold
 Kaydedin ve vurguların tüm site boyunca ısındığını izleyin.
 
 ::: tip Her şeyin yorumunu kaldırmak zorunda değilsiniz
-Yalnızca önemsediğiniz birkaç değeri değiştirin. Yorum satırında bıraktığınız her satır, motorun mantıklı varsayılanını korur.
+Yalnızca önemsediğiniz birkaç değeri değiştirin. Yorum satırında bıraktığınız her satır, tema çekirdeğinin mantıklı varsayılanını korur.
 :::
 
 ## Adım 2 — köşeleri yuvarlayın
@@ -61,7 +61,7 @@ Sayfada henüz bulunmayan bir font kullanıyorsanız, font dosyalarını `static
 
 ## Adım 4 — son dokunuşu style.scss içinde ekleyin
 
-Token'lar, motorun zaten bildiği değerleri kapsar. Motorun **hiç değişkeni olmayan** bir şey istediğinizde, kendi CSS'inizi `src/styles/style.scss` içine, **en üstteki import'ların altına** koyun.
+Token'lar, tema çekirdeğinin zaten bildiği değerleri kapsar. Tema çekirdeğinin **hiç değişkeni olmayan** bir şey istediğinizde, kendi CSS'inizi `src/styles/style.scss` içine, **en üstteki import'ların altına** koyun.
 
 Ember'ın kartlarına sıcak, parlayan bir gölge verelim:
 
@@ -76,7 +76,7 @@ Ember'ın kartlarına sıcak, parlayan bir gölge verelim:
 Kaydedin ve yenileyin. **Şimdi görmelisiniz** ki kartlar yumuşak turuncu bir parıltıyla sayfadan yukarı kalkıyor.
 
 ::: warning CSS'inizi import'ların altına ekleyin, asla üstüne değil
-Kurallarınızın üzerine inşa edebilmesi için motorun stilleri önce yüklenmelidir. Import'ların üstüne koyduğunuz her şey ezilecektir.
+Kurallarınızın üzerine inşa edebilmesi için tema çekirdeğinin stilleri önce yüklenmelidir. Import'ların üstüne koyduğunuz her şey ezilecektir.
 :::
 
 ## Nerede olduğumuz

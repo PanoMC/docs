@@ -82,7 +82,7 @@ Bu komut temanızı inceler ve bozuk bir şey yayınlamanızı engeller. Şunlar
 
 | Denetlediği şey | Neden önemli |
 |---|---|
-| **Svelte sürümü** | `svelte` sürümünüz motorunkiyle tam olarak eşleşmelidir. Bir uyumsuzluk, kurulu eklentileri sessizce bozar. |
+| **Svelte sürümü** | `svelte` sürümünüz tema çekirdeğininkiyle tam olarak eşleşmelidir. Bir uyumsuzluk, kurulu eklentileri sessizce bozar. |
 | **Eklenti slot'larının korunması** | Değiştirdiğiniz her görünüm, orijinalinde bulunan tüm eklenti bağlama noktalarını hâlâ içermelidir. Birini kaldırırsanız kurulu eklentiler sessizce kaybolur. |
 | **Ayar şemasının geçerliliği** | Eklediğiniz ek ayarlar doğru bildirilmelidir; böylece panel bunları kaydedip sıfırlayabilir. |
 | **Çevirilerin ayrıştırılabilirliği** | `lang-overrides/` içindeki her dosya geçerli olmalı ve sorunsuz birleşmelidir. Bkz. [Yerelleştirme](/tr/theme/localization/). |

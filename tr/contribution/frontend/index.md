@@ -32,10 +32,10 @@ Frontend bileşenleri geliştirirken, bunların **SSR uyumlu** olduğundan emin 
 - **vanilla-theme**: Pano ile birlikte gelen, yerleşik referans (sistem) temasıdır. Bir başlangıç şablonu **değildir** — yeni temalar `bunx @panomc/theme-core new` ile oluşturulur.
 
 ## Klonlama ve Alt Modüller (Submodules)
-Temalarımız ve **panel-ui**, [**theme-core motorunu**](https://github.com/PanoMC/sdk) bir `theme-core` git alt modülü olarak taşır (bu depo hem `@panomc/theme-core` hem de `@panomc/sdk` paketlerini yayınlar). **setup-ui** ve **website** ise alt modüle ihtiyaç duymaz — `@panomc/sdk`'yı doğrudan npm üzerinden kullanırlar.
+Temalarımız ve **panel-ui**, [**theme-core tema çekirdeğini**](https://github.com/PanoMC/sdk) bir `theme-core` git alt modülü olarak taşır (bu depo hem `@panomc/theme-core` hem de `@panomc/sdk` paketlerini yayınlar). **setup-ui** ve **website** ise alt modüle ihtiyaç duymaz — `@panomc/sdk`'yı doğrudan npm üzerinden kullanırlar.
 
 ### Tavsiye Edilen Klonlama Yöntemi
-Alt modülü taşıyan projelerde (temalar, panel-ui), motoru da almak için `--recursive` bayrağını kullanın:
+Alt modülü taşıyan projelerde (temalar, panel-ui), tema çekirdeği da almak için `--recursive` bayrağını kullanın:
 ```bash
 git clone https://github.com/PanoMC/panel-ui.git --recursive
 ```
