@@ -62,16 +62,22 @@ VITE_API_URL=http://localhost:8088/api
 ```
 
 ::: tip
-`8088` is the default Pano port. If your Pano runs somewhere else, use that address instead.
+Pano's default port is `80`. When you start Pano with `--dev`, it runs on `8088` — that's the usual setup while developing a theme. If your Pano runs somewhere else, use that address instead.
 :::
 
-Finally, start it:
+One more step on the Pano side: open Pano's config file, disable the `init-ui` setting, and restart Pano. This tells Pano to use **your** development theme instead of launching its own built-in one. The [Server configuration](/platform/configuration/server/) page shows where this setting lives.
+
+Finally, start the theme:
 
 ```sh
 bun run dev
 ```
 
-Open **`http://localhost:3000`** in your browser. You should see your site, running with your new theme.
+Now open your site **through Pano's address**: `http://localhost:8088` if you started Pano with `--dev`, or `http://localhost` (port `80` by default — or whatever port you configured). You should see your site, running with your new theme.
+
+::: warning
+Don't browse the theme at `localhost:3000` — a theme always runs behind Pano. If you open the theme's own port directly, it automatically redirects you to Pano's address.
+:::
 
 ## Your first change in 2 minutes
 

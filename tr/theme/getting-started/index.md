@@ -62,16 +62,22 @@ VITE_API_URL=http://localhost:8088/api
 ```
 
 ::: tip
-`8088`, varsayılan Pano portudur. Pano'nuz başka bir yerde çalışıyorsa, onun adresini kullanın.
+Pano'nun varsayılan portu `80`'dir. Pano'yu `--dev` ile başlatırsanız `8088` portunda çalışır — tema geliştirirken alışıldık düzen budur. Pano'nuz başka bir yerde çalışıyorsa, onun adresini kullanın.
 :::
 
-Son olarak, başlatın:
+Pano tarafında bir adım daha: Pano'nun yapılandırma dosyasını açıp `init-ui` ayarını kapatın ve Pano'yu yeniden başlatın. Bu, Pano'ya kendi gömülü teması yerine **sizin** geliştirme temanızı kullanmasını söyler. Bu ayarın yeri için [Sunucu yapılandırması](/tr/platform/configuration/server/) sayfasına bakın.
+
+Son olarak, temayı başlatın:
 
 ```sh
 bun run dev
 ```
 
-Tarayıcınızda **`http://localhost:3000`** adresini açın. Sitenizi yeni temanızla çalışırken görmelisiniz.
+Şimdi sitenizi **Pano'nun adresi üzerinden** açın: Pano'yu `--dev` ile başlattıysanız `http://localhost:8088`, aksi halde `http://localhost` (varsayılan port `80` — ya da yapılandırmada ne ayarladıysanız). Sitenizi yeni temanızla çalışırken görmelisiniz.
+
+::: warning
+Temaya `localhost:3000` üzerinden gitmeyin — tema her zaman Pano'nun arkasında çalışır. Temanın kendi portunu doğrudan açarsanız, sizi otomatik olarak Pano'nun adresine yönlendirir.
+:::
 
 ## 2 dakikada ilk değişikliğiniz
 
