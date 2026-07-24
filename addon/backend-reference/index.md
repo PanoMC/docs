@@ -384,7 +384,7 @@ Unlike the others, `RouterEventListener`'s `onInitRouteList` and `onRouterCreate
 :::
 
 ::: warning Exception 2 — `PluginLifecycleListener` has no `@EventListener`
-`PluginLifecycleListener` does **not** extend the `EventListener` marker, so you must **not** annotate it `@EventListener`: doing so never fires *and* breaks the host's internal `as EventListener` cast — it throws a `ClassCastException` while your plugin initializes. Register it explicitly instead:
+`PluginLifecycleListener` does **not** extend the `EventListener` marker, so annotating it `@EventListener` does nothing useful — it never fires, *and* it breaks the host's internal `as EventListener` cast, throwing a `ClassCastException` while your plugin initializes. Register it explicitly instead:
 
 ```kotlin
 applicationContext.getBean(PluginManager::class.java).addLifecycleListener(listener)

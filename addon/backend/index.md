@@ -14,7 +14,17 @@ You should already have a renamed, building addon from [Getting Started](/addon/
 
 > **Spring** is the library Pano uses to create your classes for you, so you never write `new`. A **context** is just a box of ready-made objects that Spring fills in. Pano gives your addon its own box and drops one copy of each of your classes into it — you then ask the box for whatever you need.
 
-The backend lives under `src/main/kotlin/com/panomc/plugins/shoutbox/` — the entry class `ShoutboxPlugin.kt` plus packages `config/`, `db/` (`model/`, `dao/`, `impl/`, `migration/`), `routes/` (`api/`, `panel/`), `permission/`, `event/`, and `log/`. You create these files one at a time; each focused page below names the file it builds — don't create them all now.
+The backend lives under `src/main/kotlin/com/panomc/plugins/shoutbox/`. Here is what each part is for, in plain words:
+
+- `ShoutboxPlugin.kt` — the entry class Pano starts from (this page).
+- `config/` — a settings file the site owner can edit.
+- `db/` — everything about your database table, split into `model/` (one row as a Kotlin object), `dao/` (the list of queries you promise to provide), `impl/` (the actual SQL that keeps that promise), and `migration/` (steps that change the table shape in a later version).
+- `routes/` — your URLs, split into `api/` (public) and `panel/` (admin-only).
+- `permission/` — a permission that gates an admin feature.
+- `event/` — code that reacts to platform actions (like setup finishing).
+- `log/` — an entry written to the admin activity feed.
+
+You create these files one at a time; each focused page below names the file it builds — don't create them all now.
 
 ## How Pano builds your classes for you
 
@@ -104,7 +114,7 @@ What the class does, top to bottom:
 ::: tip `PluginDatabaseManager` vs `DatabaseManager`
 Two different beans, both fetched with `getBean`:
 - **`PluginDatabaseManager`** manages *your* tables and migrations — `initialize(plugin)` and `uninstall(plugin)`.
-- **`DatabaseManager`** is the host's database service. Use it for the shared SQL client (`databaseManager.getSqlClient()`) and to reach Pano's own **core DAOs** — users, posts, activity logs, … — which you both read *and* write through it. Working with Pano's own tables this way is exactly what `pano-plugin-bans` does — look there for that pattern.
+- **`DatabaseManager`** is the host's database service. Use it for the shared SQL client (`databaseManager.getSqlClient()`) and to reach Pano's own built-in tables — users, posts, activity logs, … — through their **core DAOs** (a DAO is a small class whose only job is talking to one database table), which you both read *and* write through it. Working with Pano's own tables this way is exactly what `pano-plugin-bans` does — look there for that pattern.
 :::
 
 ::: tip Checkpoint: did it load?

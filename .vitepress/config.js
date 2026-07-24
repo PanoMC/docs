@@ -206,6 +206,10 @@ export default defineConfig({
                 link: "/theme/customization/",
               },
               {
+                text: "Theme Settings",
+                link: "/theme/settings/",
+              },
+              {
                 text: "Changing Page Designs",
                 link: "/theme/views/",
               },
@@ -440,6 +444,10 @@ export default defineConfig({
                 link: "/tr/theme/customization/",
               },
               {
+                text: "Tema Ayarları",
+                link: "/tr/theme/settings/",
+              },
+              {
                 text: "Sayfa Tasarımlarını Değiştirme",
                 link: "/tr/theme/views/",
               },
@@ -672,6 +680,10 @@ export default defineConfig({
               {
                 text: "Цвета и стили",
                 link: "/ru/theme/customization/",
+              },
+              {
+                text: "Настройки темы",
+                link: "/ru/theme/settings/",
               },
               {
                 text: "Изменение дизайна страниц",

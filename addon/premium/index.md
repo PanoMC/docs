@@ -121,7 +121,7 @@ override suspend fun handle(context: RoutingContext): Result {
 }
 ```
 
-Here `plugin` is your `PanoPlugin` instance — pass whichever variable holds it (for example, an endpoint that received the plugin through constructor injection). If the license is not valid, `assert` stops the call the same way the main check does (by throwing) rather than letting the request through. `LicenseGuard.assert(plugin)` reuses the cached license and only re-fetches if it expired, so the cost is negligible — but the more places it appears, the more edits a cracker needs to make.
+Here `plugin` is your `PanoPlugin` instance — pass whichever variable holds it (for example, an endpoint that was handed the plugin when it was created — "constructor injection" is just the framework passing the plugin into the endpoint's constructor for you). If the license is not valid, `assert` stops the call the same way the main check does (by throwing) rather than letting the request through. `LicenseGuard.assert(plugin)` reuses the cached license and only re-fetches if it expired, so the cost is negligible — but the more places it appears, the more edits a cracker needs to make.
 
 This step is optional and can wait until your addon actually sells.
 

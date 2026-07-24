@@ -119,6 +119,7 @@ Now build and load it (next section) — a successful build confirms your six re
 From your addon folder (`plugins/pano-plugin-shoutbox/`), install the UI dependencies and build once:
 
 ```bash
+# in plugins/pano-plugin-shoutbox/ (your addon folder)
 bun install
 ./gradlew build
 ```
@@ -234,6 +235,7 @@ logger.info("Shoutbox is starting up!")
 Then, from your addon folder, rebuild and copy the jar up one level:
 
 ```bash
+# in plugins/pano-plugin-shoutbox/ (your addon folder)
 ./gradlew build -Pnoui
 cp build/libs/pano-plugin-shoutbox-local-build.jar ..
 ```

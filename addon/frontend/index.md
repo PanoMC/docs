@@ -67,7 +67,7 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
 }
 ```
 
-A few rules that matter, all of which the built-in addons follow:
+A few rules that matter, all of which the built-in addons (the working reference addons on the [PanoMC GitHub org](https://github.com/PanoMC)) follow:
 
 - **The class must be the `default` export.** Pano looks for exactly one.
 - **`this.pano` is your whole API.** Pano sets it for you before `onLoad()` runs — inside `onLoad()` you just read `pano.isPanel` and use `pano.ui.*`.
@@ -80,6 +80,10 @@ A few rules that matter, all of which the built-in addons follow:
 Your bundle does **not** ship Svelte, `svelte-i18n`, or `@panomc/sdk` — the host provides them so the whole page shares one Svelte instance. If your build starts failing right after you (or a library you installed with `bun add`) added `svelte` to `package.json`, that is the cause: remove `svelte` from `package.json`. In plain terms, the page can only run one copy of Svelte and the host already provides it; adding your own pins a second copy and breaks **hydration** (the step where the server-rendered HTML gets wired up to become interactive in the browser). See [Architecture](/addon/architecture/) for why.
 :::
 
+::: tip Check your progress
+This skeleton on its own draws nothing on screen yet — it just sets your addon up. With `bun run dev` running, reload both `yoursite.com` (the theme) and `yoursite.com/panel` (the panel) and open the browser console (F12). You should see **no red errors** from your addon. If you see one about a missing `default` export or a bad `pluginId`, fix that before going further — everything below stacks on top of this working skeleton.
+:::
+
 Now fill in the two branches. What goes in each has its own page: **[Theme UI](/addon/theme-ui/)** for the `else` (theme) branch, **[Panel UI](/addon/panel-ui/)** for the `if (pano.isPanel)` branch. The rest of this page covers two things both branches use.
 
 ## Translating text in your components
@@ -90,7 +94,7 @@ Unlike theme development, **no translate helper is injected into your addon comp
 export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
 ```
 
-Here is all it does: it is a Svelte `derived` **store** (a value that recomputes when its source changes) wrapping Pano's translate function, and it automatically prefixes every key you pass with `plugins.<pluginId>.`. So in a component you write `$_('widget.title')` and it looks up `plugins.pano-plugin-shoutbox.widget.title`. You do not need to follow the currying to use it — just import it and read it with the `$` prefix:
+Here is all it does: it is a Svelte `derived` **store** (a value that recomputes when its source changes) wrapping Pano's translate function, and it automatically prefixes every key you pass with `plugins.<pluginId>.`. So in a component you write `$_('widget.title')` and it looks up `plugins.pano-plugin-shoutbox.widget.title`. You do not need to understand how it is built inside to use it — just import it and read it with the `$` prefix:
 
 ```svelte
 <script>
@@ -101,6 +105,10 @@ Here is all it does: it is a Svelte `derived` **store** (a value that recomputes
 ```
 
 `{$_('widget.title')}` resolves to the key `plugins.pano-plugin-shoutbox.widget.title` in your locale files. See [Localization](/addon/localization/) for where those keys live and how they are namespaced.
+
+::: tip Check your progress
+Until you actually add that key in [Localization](/addon/localization/), the screen shows the raw key string (`plugins.pano-plugin-shoutbox.widget.title`) instead of a nice label. That is expected at this stage — it is your sign the helper is wired up correctly and just waiting for the locale file.
+:::
 
 ## Old and AI-hallucinated APIs that do not exist
 

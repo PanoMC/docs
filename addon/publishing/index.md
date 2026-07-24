@@ -235,7 +235,7 @@ The Marketplace on [panomc.com](https://panomc.com) is where server owners disco
 You should now see your addon's page on panomc.com with an **empty version list** — the automation fills it in when you push.
 
 ::: tip Your addon's resource ID is your plugin ID
-Your addon's Marketplace `resourceId` is **exactly your `pluginId`** — for Shoutbox that is `pano-plugin-shoutbox`. That is why the `configs[]` above use `"resourceId": "pano-plugin-shoutbox"` and not a random ID. (Themes are different — they use a random UUID — but addons do not.) The `pluginId` is the single identity Pano uses everywhere your addon touches the system; the full list is on [Manifest Configuration](/addon/manifest/).
+Your addon's Marketplace `resourceId` is **exactly your `pluginId`** — for Shoutbox that is `pano-plugin-shoutbox`. That is why the `configs[]` above use `"resourceId": "pano-plugin-shoutbox"` and not a random ID. (Themes are different — they use a random UUID — but addons do not.) The `pluginId` is the single identity Pano uses everywhere your addon touches the system: the data-directory name, the permission-node prefix, the UI URL segment, and the Marketplace resource. The full list is on [Manifest Configuration](/addon/manifest/).
 :::
 
 ### 2. Create an API token
@@ -296,7 +296,7 @@ The difference the user sees: addons downloaded from the Marketplace are marked 
 
 ## Premium listings
 
-Selling your addon works through the same release flow, plus a build-time license key and a runtime license check baked into your code. The full walkthrough — embedding the key at build time, adding the runtime check, and wiring it into CI — lives in **[Premium Addons & Licensing](/addon/premium/)**. It builds directly on this page.
+Selling your addon works through the same release flow, plus a build-time license key and a runtime license check baked into your code. The full walkthrough — embedding the key at build time, adding the runtime check, and wiring it into CI — lives in **[Premium Addons & Licensing](/addon/premium/)**. It builds directly on this page; the extra license flags it uses (`-PlicenseServer`, `-PpanoLicensePublicKey`, and the `PANO_LICENSE_PUBLIC_KEY` environment variable) are also summarized under [Manifest Configuration](/addon/manifest/).
 
 ## Where to next
 
