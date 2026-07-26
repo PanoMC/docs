@@ -187,6 +187,10 @@ export default defineConfig({
                 text: "Premium & Licensing",
                 link: "/addon/premium/",
               },
+              {
+                text: "Freemium & Packages",
+                link: "/addon/freemium/",
+              },
             ],
           },
           {
@@ -425,6 +429,10 @@ export default defineConfig({
                 text: "Premium Eklentiler",
                 link: "/tr/addon/premium/",
               },
+              {
+                text: "Freemium ve Paketler",
+                link: "/tr/addon/freemium/",
+              },
             ],
           },
           {
@@ -662,6 +670,10 @@ export default defineConfig({
               {
                 text: "Премиум-аддоны",
                 link: "/ru/addon/premium/",
+              },
+              {
+                text: "Freemium и пакеты",
+                link: "/ru/addon/freemium/",
               },
             ],
           },
