@@ -6,6 +6,10 @@ Selling works through the exact same release flow as a free addon, plus two extr
 
 If you have not released a free addon yet, read [Building & Publishing](/addon/publishing/) first — everything there (the release build, versioning, release channels, `.releaserc.json`, creating the resource and API token) still applies. This page only adds the premium layer on top.
 
+::: warning Paid resources are not open to third-party authors yet
+Premium is currently limited to accounts with **panel access** on panomc.com — and so is [freemium](/addon/freemium/), for addons and themes alike. Selling on the Marketplace is not open to third-party authors yet, so both options are disabled on the pricing step and the API rejects them for everyone else. This page documents how premium works so you can plan for it; until the programme opens, publish your addon as free.
+:::
+
 ::: tip TL;DR — going premium is three small changes
 Most of this page is background. The actual work is tiny:
 

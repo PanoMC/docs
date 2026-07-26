@@ -2,8 +2,8 @@
 
 **Freemium** bir eklenti kurulumu ve çalışması ücretsizdir — ancak bazı özellikleri, sunucu sahibi Pazar Yeri'nden bir **paket** (örneğin *Pro* veya *Ultra*) satın alana kadar kilitli kalır. Tamamen ücretsiz bir eklenti ile [premium](/tr/addon/premium/) bir eklentinin arasındaki orta yoldur: herkes kurabilir, yalnızca ekstralar ücretlidir.
 
-::: warning Henüz üçüncü taraf geliştiricilere açık değil
-Freemium şu anda panomc.com üzerinde **panel erişimi** olan hesaplarla sınırlıdır. Üçüncü taraf eklenti geliştiricileri için henüz bir eklenti içi satın alma programı yok; bu yüzden fiyatlandırma adımında seçenek *yakında* olarak görünür ve API diğer herkes için reddeder. Bu sayfa, planlama yapabilesiniz diye sistemin nasıl çalıştığını anlatır — bu arada eklentinizi ücretsiz ya da [premium](/tr/addon/premium/) olarak geliştirin.
+::: warning Ücretli kaynaklar henüz üçüncü taraf geliştiricilere açık değil
+Freemium şu anda panomc.com üzerinde **panel erişimi** olan hesaplarla sınırlıdır — [premium](/tr/addon/premium/) de öyle; eklentide de temada da. Pazar Yeri'nde satış üçüncü taraf geliştiricilere henüz açılmadı; bu yüzden fiyatlandırma adımında iki seçenek de kapalı gelir ve API diğer herkes için reddeder. Bu sayfa, planlama yapabilesiniz diye freemium'un nasıl çalıştığını anlatır; program açılana kadar eklentinizi ücretsiz olarak yayımlayın.
 :::
 
 ## Tek tabloda freemium ve premium

@@ -6,6 +6,10 @@ Satış, ücretsiz bir eklentiyle tam olarak aynı yayın akışıyla, artı iki
 
 Henüz ücretsiz bir eklenti yayınlamadıysanız, önce [Derleme ve Yayınlama](/tr/addon/publishing/)'yı okuyun — oradaki her şey (yayın derlemesi, sürümleme, yayın kanalları, `.releaserc.json`, kaynağı ve API jetonunu oluşturma) hâlâ geçerlidir. Bu sayfa yalnızca premium katmanını üstüne ekler.
 
+::: warning Ücretli kaynaklar henüz üçüncü taraf geliştiricilere açık değil
+Premium şu anda panomc.com üzerinde **panel erişimi** olan hesaplarla sınırlıdır — [freemium](/tr/addon/freemium/) de öyle; eklentide de temada da. Pazar Yeri'nde satış üçüncü taraf geliştiricilere henüz açılmadı; bu yüzden fiyatlandırma adımında iki seçenek de kapalı gelir ve API diğer herkes için reddeder. Bu sayfa, planlama yapabilesiniz diye premium'un nasıl çalıştığını anlatır; program açılana kadar eklentinizi ücretsiz olarak yayımlayın.
+:::
+
 ::: tip Özet — premium'a geçmek üç küçük değişikliktir
 Bu sayfanın çoğu arka plandır. Asıl iş minicik:
 

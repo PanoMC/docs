@@ -2,8 +2,8 @@
 
 A **freemium** addon is free to install and free to run — but some of its features stay locked until the server owner buys a **package** (say *Pro* or *Ultra*) from the Marketplace. It is the middle ground between a fully free addon and a [premium](/addon/premium/) one: everybody can install it, and only the extras are paid.
 
-::: warning Not open to third-party authors yet
-Freemium is currently limited to accounts with **panel access** on panomc.com. There is no in-addon purchase programme for third-party addon authors yet, so the option is shown as *coming soon* on the pricing step and the API rejects it for everyone else. This page documents how it works so you can plan for it — build your addon free or [premium](/addon/premium/) in the meantime.
+::: warning Paid resources are not open to third-party authors yet
+Freemium is currently limited to accounts with **panel access** on panomc.com — and so is [premium](/addon/premium/), for addons and themes alike. Selling on the Marketplace is not open to third-party authors yet, so both options are disabled on the pricing step and the API rejects them for everyone else. This page documents how freemium works so you can plan for it; until the programme opens, publish your addon as free.
 :::
 
 ## Freemium vs premium in one table
