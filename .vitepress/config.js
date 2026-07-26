@@ -35,6 +35,56 @@ export default defineConfig({
 
     search: {
       provider: "local",
+      options: {
+        locales: {
+          tr: {
+            translations: {
+              button: {
+                buttonText: "Ara",
+                buttonAriaLabel: "Ara",
+              },
+              modal: {
+                displayDetails: "Ayrıntılı listeyi göster",
+                resetButtonTitle: "Aramayı sıfırla",
+                backButtonTitle: "Aramayı kapat",
+                noResultsText: "Sonuç bulunamadı",
+                footer: {
+                  selectText: "seç",
+                  selectKeyAriaLabel: "enter",
+                  navigateText: "gezin",
+                  navigateUpKeyAriaLabel: "yukarı ok",
+                  navigateDownKeyAriaLabel: "aşağı ok",
+                  closeText: "kapat",
+                  closeKeyAriaLabel: "esc",
+                },
+              },
+            },
+          },
+          ru: {
+            translations: {
+              button: {
+                buttonText: "Поиск",
+                buttonAriaLabel: "Поиск",
+              },
+              modal: {
+                displayDetails: "Показать подробный список",
+                resetButtonTitle: "Сбросить поиск",
+                backButtonTitle: "Закрыть поиск",
+                noResultsText: "Ничего не найдено",
+                footer: {
+                  selectText: "выбрать",
+                  selectKeyAriaLabel: "enter",
+                  navigateText: "перейти",
+                  navigateUpKeyAriaLabel: "стрелка вверх",
+                  navigateDownKeyAriaLabel: "стрелка вниз",
+                  closeText: "закрыть",
+                  closeKeyAriaLabel: "esc",
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
 
@@ -285,6 +335,15 @@ export default defineConfig({
       lang: "tr",
       link: "/tr/",
       themeConfig: {
+        outline: { label: "Bu sayfada" },
+        docFooter: { prev: "Önceki sayfa", next: "Sonraki sayfa" },
+        lastUpdated: { text: "Son güncelleme" },
+        darkModeSwitchLabel: "Görünüm",
+        lightModeSwitchTitle: "Açık temaya geç",
+        darkModeSwitchTitle: "Koyu temaya geç",
+        sidebarMenuLabel: "Menü",
+        returnToTopLabel: "Başa dön",
+        langMenuLabel: "Dili değiştir",
         sidebar: [
           {
             text: "Platform",
@@ -527,6 +586,15 @@ export default defineConfig({
       lang: "ru",
       link: "/ru/",
       themeConfig: {
+        outline: { label: "На этой странице" },
+        docFooter: { prev: "Предыдущая страница", next: "Следующая страница" },
+        lastUpdated: { text: "Последнее обновление" },
+        darkModeSwitchLabel: "Оформление",
+        lightModeSwitchTitle: "Светлая тема",
+        darkModeSwitchTitle: "Тёмная тема",
+        sidebarMenuLabel: "Меню",
+        returnToTopLabel: "Наверх",
+        langMenuLabel: "Сменить язык",
         sidebar: [
           {
             text: "Платформа",
