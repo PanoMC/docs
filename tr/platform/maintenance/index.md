@@ -269,8 +269,9 @@ canlı önizlemesi ve düzenlenebilir her blok için bir sekme.
 | **Atlama butonu** | `maintenance/skip.hbs` | Yetkili ziyaretçilerin gördüğü **Bakım modunu atla** butonu. |
 | **Bildirim** | `maintenance/notice.hbs` | Hata ve durum mesajlarını taşıyan bant. |
 
-Önizleme, hangi sekmede olursanız olun **bütün** blokları birden gösterir; böylece biçimlendirdiğiniz arayüzün tamamını
-görürsünüz. Canlı bir istek yalnızca kendisine uyan blokları gösterir.
+Önizleme açık sekmeyi izler: o bloğun gerçekten göründüğü sayfa durumunu gösterir — **Giriş formu** sekmesi giriş
+sayfasını, **Atlama butonu** sekmesi yetkili bir ziyaretçinin gördüğünü, **Bildirim** sekmesi bandın yerleşmiş halini,
+**Sayfa** sekmesi de sıradan bir ziyaretçinin gördüğünü. Yani hep düzenlediğiniz şeye bakarsınız.
 
 Beş dosya da Pano'nun çalıştığı klasörde durur ve düz birer Handlebars şablonudur. Zengin metin editörü yoktur: markup'ı
 siz yazarsınız.

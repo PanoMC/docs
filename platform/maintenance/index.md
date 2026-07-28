@@ -267,8 +267,9 @@ underneath it, and one tab per editable block.
 | **Skip button** | `maintenance/skip.hbs` | The **Skip maintenance mode** button authorized visitors see. |
 | **Notice** | `maintenance/notice.hbs` | The banner that carries errors and status messages. |
 
-The preview always renders **every** block at once, whichever tab you are on, so you can see the whole interface you are
-styling. A live request only ever shows the blocks that apply to it.
+The preview follows the open tab: it renders the page state that block actually appears in — the **Login form** tab
+shows the login page, the **Skip button** tab shows what an authorized visitor sees, the **Notice** tab shows the banner
+in place, and the **Page** tab shows what an ordinary visitor gets. So you always look at the thing you are editing.
 
 All five files live in the folder Pano runs from and are plain Handlebars templates. There is no rich-text editor: you
 write the markup.
