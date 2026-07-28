@@ -62,7 +62,7 @@ Everything lives on one card in **Panel → Settings → Platform**:
   which is what the placeholder spells out. See [Who Can Bypass Maintenance Mode](#who-can-bypass-maintenance-mode).
 - **Show Login Button** — adds a login button to the maintenance page.
 - **Custom Login URL** — a path of your own that serves the maintenance login form, for example `/staff-entrance`.
-  Available only while **Show Login Button** is off. It must start with `/`, contain no spaces, stay under 128
+  Available only while **Show Login Button** is off; leave it empty and the form stays on `/login`. It must start with `/`, contain no spaces, stay under 128
   characters, and must not point inside `/api` or `/panel/api`.
 - **Show Site Logo** — displays the logo from **Panel → Settings → Website** above the title.
 - **Edit Maintenance Page** — opens the source editor for the page and its blocks, with a live preview underneath. See
@@ -111,8 +111,8 @@ Where the maintenance login form lives depends on two settings:
 | Show Login Button | Custom Login URL | Button on the page | URL that serves the login form |
 | --- | --- | --- | --- |
 | On | *(ignored, field greyed out)* | Yes → `/login` | `/login` |
-| Off | *(empty)* | No | `/panel` |
-| Off | `/staff-entrance` | No | `/staff-entrance` — and `/panel` no longer shows the form |
+| Off | *(empty)* | No | `/login` — the form stays there, only the button is gone |
+| Off | `/staff-entrance` | No | `/staff-entrance` — and `/login` no longer shows the form |
 
 Three consequences to keep in mind:
 
@@ -373,7 +373,7 @@ maintenance {
   show-login-button = true
 
   # Path that serves the maintenance login form, e.g. "/staff-entrance".
-  # Empty = /login when show-login-button is true, otherwise /panel.
+  # Empty = /login. Only honoured while show-login-button is false.
   custom-login-url = ""
 
   # Show the website logo at the top of the maintenance page.
@@ -445,7 +445,7 @@ Maintenance mode is designed so you can always get back in. In order of preferen
 4. **Reset the page.** If a bad custom CSS or a broken hand edit made the page unusable, delete `maintenance/page.hbs`
    and Pano regenerates it from the default template.
 5. **Forgot the custom login URL?** Read `custom-login-url` from the `maintenance` block in `config.conf`, or clear it —
-   the form then goes back to `/login` or `/panel`, depending on `show-login-button`.
+   the form then goes back to `/login`.
 6. **Locked out by the permission node?** Clear `bypass-permission-node` to fall back to the panel-access permission.
 
 > ⚠️ Always take a backup before large manual edits to `config.conf`, and stop Pano first if you are changing more than

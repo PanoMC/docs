@@ -64,7 +64,7 @@ Her şey **Panel → Ayarlar → Platform** içindeki tek bir kartta:
   [Bakım Modunu Kimler Atlayabilir](#bakım-modunu-kimler-atlayabilir) bölümüne bakın.
 - **Giriş Butonunu Göster** — bakım sayfasına bir giriş butonu ekler.
 - **Özel Giriş Adresi** — bakım giriş formunu sunacak kendi yolunuz, örneğin `/personel-girisi`. Yalnızca
-  **Giriş Butonunu Göster** kapalıyken kullanılabilir. `/` ile başlamalı, boşluk içermemeli, 128 karakteri geçmemeli ve
+  **Giriş Butonunu Göster** kapalıyken kullanılabilir; boş bırakırsanız form `/login` adresinde kalır. `/` ile başlamalı, boşluk içermemeli, 128 karakteri geçmemeli ve
   `/api` ya da `/panel/api` altını göstermemelidir.
 - **Site Logosunu Göster** — **Panel → Ayarlar → Website** bölümündeki logoyu başlığın üstünde gösterir.
 - **Bakım Sayfasını Düzenle** — sayfanın ve bloklarının kaynak kodu düzenleyicisini, altında canlı önizlemeyle birlikte
@@ -112,8 +112,8 @@ Bakım giriş formunun nerede olduğu iki ayara bağlıdır:
 | Giriş Butonunu Göster | Özel Giriş Adresi | Sayfada buton | Giriş formunu sunan adres |
 | --- | --- | --- | --- |
 | Açık | *(yok sayılır, alan pasif)* | Evet → `/login` | `/login` |
-| Kapalı | *(boş)* | Hayır | `/panel` |
-| Kapalı | `/personel-girisi` | Hayır | `/personel-girisi` — ve `/panel` artık formu göstermez |
+| Kapalı | *(boş)* | Hayır | `/login` — form yerinde kalır, yalnızca buton kaybolur |
+| Kapalı | `/personel-girisi` | Hayır | `/personel-girisi` — ve `/login` artık formu göstermez |
 
 Akılda tutulması gereken üç sonuç:
 
@@ -376,7 +376,7 @@ maintenance {
   show-login-button = true
 
   # Bakım giriş formunu sunan yol, örneğin "/personel-girisi".
-  # Boş = show-login-button açıksa /login, değilse /panel.
+  # Boş = /login. Yalnızca show-login-button kapalıyken dikkate alınır.
   custom-login-url = ""
 
   # Bakım sayfasının üstünde web sitesi logosunu göster.
@@ -447,7 +447,7 @@ Bakım modu her zaman geri girebilmeniz için tasarlandı. Tercih sırasıyla:
 4. **Sayfayı sıfırlayın.** Hatalı bir özel CSS veya bozuk bir elle düzenleme sayfayı kullanılmaz hale getirdiyse
    `maintenance/page.hbs` dosyasını silin; Pano onu varsayılan şablondan yeniden üretir.
 5. **Özel giriş adresini mi unuttunuz?** `config.conf` içindeki `maintenance` bloğundan `custom-login-url` değerini
-   okuyun veya boşaltın — form o zaman `show-login-button` ayarına göre `/login` ya da `/panel` adresine geri döner.
+   okuyun veya boşaltın — form o zaman yeniden `/login` adresine döner.
 6. **İzin node'u yüzünden mi kilitlendiniz?** `bypass-permission-node` değerini boşaltın; panel erişim iznine geri
    dönersiniz.
 
