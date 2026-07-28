@@ -10,6 +10,10 @@
 - Database prefix unchanged post-install
 - Correct theme ID set or falls back to Vanilla Theme
 - Regular backups for database and uploads
+- [Maintenance mode](../../maintenance/) tested once before you need it — know your bypass permission and your login URL
+- `server.trusted-proxies` filled in **if Pano sits behind a reverse proxy**. Leave it empty and Pano ignores
+  `X-Forwarded-For` entirely, so every request looks like it comes from the proxy — the maintenance login's
+  IP ban and rate limit then see one address instead of your visitors'
 ## Example Minimal Configuration
 
 ```jsonc

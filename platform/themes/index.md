@@ -11,6 +11,9 @@ staying compatible with the backend.
 Themes operate independently of backend addons, meaning you can switch themes **without restarting your Pano or
 affecting backend addons.**
 
+> For a bigger redesign, turn on [Maintenance Mode](../maintenance/) first — visitors then see a Pano-rendered page
+> instead of a half-finished theme.
+
 ## Creating Your Own Theme
 
 If you want to **build your own theme**, Pano makes it simple and powerful.  

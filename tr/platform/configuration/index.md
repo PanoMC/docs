@@ -72,6 +72,8 @@ keywords = []
 - `allow-user-locale-selection`: kullanıcıların mevcut diller arasından kendi dillerini seçme yeteneğini etkinleştirir/devre dışı bırakır (varsayılan: `true`). **Panel → Ayarlar → Platform → Tercihler** bölümünden yönetilebilir.
 - `register-agreement`: kullanıcı kaydı sırasında gösterilen şartları veya kuralları tanımlar. Bu alan biçimlendirme için **HTML etiketlerini destekler**.
 - `server-ip-address`: temada görünür — oyuncular bunu **kopyalayıp sunucuya bağlanabilir**.
+
+> Siteyi bir süreliğine kapatmanız mı gerekiyor? `maintenance` bloğunun kendi sayfası var: [Bakım Modu →](../maintenance/).
 ## Tema
 
 ```jsonc

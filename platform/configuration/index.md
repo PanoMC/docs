@@ -74,6 +74,8 @@ keywords = []
 - `allow-user-locale-selection`: enables/disables the ability for users to choose their own language from available locales (default: `true`). Can be managed in **Panel → Settings → Platform → Preferences**.
 - `register-agreement`: defines the terms or rules shown during user registration. This field **supports HTML tags** for formatting.
 - `server-ip-address`: visible in your theme — players can **copy and use it to join** your Minecraft server.
+
+> Need to take the public site offline for a while? The `maintenance` block has its own page: [Maintenance Mode →](../maintenance/).
 ## Theme
 
 ```jsonc

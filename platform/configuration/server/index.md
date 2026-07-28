@@ -12,6 +12,7 @@ server {
   ssl-cert = null # Raw certificate content (if MANUAL)
   ssl-key = null  # Raw private key content (if MANUAL)
   ui-max-memory-mb = 200 # Max MB per spawned UI runtime (setup-ui, panel-ui, theme); 0 disables
+  trusted-proxies = [] # e.g. ["127.0.0.1", "10.0.0.5"] — proxies allowed to set X-Forwarded-For
 }
 ```
 
@@ -24,6 +25,7 @@ server {
     - `MANUAL`: Allows you to provide your own certificate and key strings directly via `ssl-cert` and `ssl-key`.
 - `redirect-https`: If set to `true`, all HTTP traffic will be automatically redirected to HTTPS.
 - `ui-max-memory-mb`: Memory ceiling (MB) for **each** spawned UI runtime (setup-ui, panel-ui, active theme); Pano restarts a UI that exceeds it. Default **200**, `0` disables. See [Memory & Limits](../memory/).
+- `trusted-proxies`: IP addresses of reverse proxies allowed to set `X-Forwarded-For`. **Empty by default**, which means the header is ignored and every request is treated as a direct connection. Fill it in when Pano sits behind Nginx, Apache or Cloudflare, otherwise features that identify a visitor by address — such as [maintenance mode](../../maintenance/) login bans — see the proxy instead of the visitor.
 - **Advanced:** For complex setups, you can still use a **reverse proxy** (Nginx, Apache) or Cloudflare.
 ## Initialization, UI, and Updates
 

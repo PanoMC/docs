@@ -11,6 +11,9 @@ kalırken benzersiz görünebilir.
 Temalar, arka uç eklentilerinden bağımsız çalışır; bu sayede temaları **Pano’yu yeniden başlatmadan** ve arka uç
 eklentilerini etkilemeden değiştirebilirsiniz.
 
+> Daha kapsamlı bir yenileme için önce [Bakım Modu](../maintenance/)’nu açın — ziyaretçiler yarım kalmış bir tema
+> yerine Pano’nun oluşturduğu bir sayfa görür.
+
 ## Kendi Temanızı Oluşturma
 
 **Kendi temanızı geliştirmek** istiyorsanız, Pano bunu hem basit hem de güçlü kılar.  

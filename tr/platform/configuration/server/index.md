@@ -12,6 +12,7 @@ server {
   ssl-cert = null # Ham sertifika içeriği (MANUAL ise)
   ssl-key = null  # Ham özel anahtar içeriği (MANUAL ise)
   ui-max-memory-mb = 200 # Spawn edilen her UI runtime'ı için maksimum MB; 0 kapatır
+  trusted-proxies = [] # e.g. ["127.0.0.1", "10.0.0.5"] — proxies allowed to set X-Forwarded-For
 }
 ```
 
@@ -24,6 +25,7 @@ server {
     - `MANUAL`: Kendi sertifikanızı ve anahtar dize bilgilerinizi doğrudan `ssl-cert` ve `ssl-key` üzerinden sağlamanıza olanak tanır.
 - `redirect-https`: `true` olarak ayarlanırsa, tüm HTTP trafiği otomatik olarak HTTPS'ye yönlendirilir.
 - `ui-max-memory-mb`: Spawn edilen **her** UI runtime'ı (setup-ui, panel-ui, aktif tema) için bellek tavanı (MB); Pano aşan UI'ı yeniden başlatır. Varsayılan **200**, `0` kapatır. Bkz. [Bellek ve Limitler](../memory/).
+- `trusted-proxies`: `X-Forwarded-For` başlığını ayarlamasına izin verilen ters vekil (reverse proxy) IP adresleri. **Varsayılan olarak boştur**; bu durumda başlık yok sayılır ve her istek doğrudan bağlantı sayılır. Pano bir Nginx, Apache veya Cloudflare arkasındaysa doldurun; aksi halde ziyaretçiyi adresine göre tanıyan özellikler — örneğin [bakım modu](../../maintenance/) giriş yasakları — ziyaretçi yerine vekili görür.
 - **Gelişmiş:** Karmaşık kurulumlar için hala bir **reverse proxy** (Nginx, Apache) veya Cloudflare kullanabilirsiniz.
 ## Başlatma, Arayüz ve Güncellemeler
 

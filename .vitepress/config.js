@@ -133,6 +133,7 @@ export default defineConfig({
               },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
+              { text: "Maintenance Mode", link: "/platform/maintenance/" },
               {
                 text: "Advanced",
                 link: "/platform/advanced/",
@@ -384,6 +385,7 @@ export default defineConfig({
               },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
+              { text: "Bakım Modu", link: "/tr/platform/maintenance/" },
               {
                 text: "Gelişmiş",
                 link: "/tr/platform/advanced/",
@@ -635,6 +637,7 @@ export default defineConfig({
               },
               { text: "Аддоны", link: "/ru/platform/addons/" },
               { text: "Темы", link: "/ru/platform/themes/" },
+              { text: "Режим обслуживания", link: "/ru/platform/maintenance/" },
               {
                 text: "Дополнительно",
                 link: "/ru/platform/advanced/",

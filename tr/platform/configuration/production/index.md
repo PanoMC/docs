@@ -10,6 +10,10 @@
 - Veritabanı öneki kurulum sonrası değiştirilmemiş
 - Doğru tema ID’si ayarlanmış aksi taktirde Vanilla Tema çalışır
 - Veritabanı ve yüklemeler için düzenli yedekleme yapılmış
+- [Bakım modu](../../maintenance/) ihtiyaç duymadan önce bir kez denenmiş — atlama izninizi ve giriş URL'nizi biliyor olun
+- Pano bir ters vekil (reverse proxy) arkasındaysa `server.trusted-proxies` doldurulmuş. Boş bırakırsanız Pano
+  `X-Forwarded-For` başlığını tamamen yok sayar; o zaman her istek vekilden geliyormuş gibi görünür ve bakım
+  girişinin IP yasağı ile hız sınırı ziyaretçilerin adresi yerine tek bir adres görür
 ## Örnek Minimal Yapılandırma
 
 ```jsonc
