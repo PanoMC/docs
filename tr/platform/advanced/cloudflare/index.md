@@ -62,6 +62,28 @@ Gerçek uçtan uca şifreleme gerekiyorsa (kullanıcı verisi işleyen üretim k
 
 Böylece Cloudflare ⇄ Origin arası da şifrelenir ve sertifika doğrulaması yapılır.
 
+## Cloudflare ve Yük Dengeleyicilerde Boşta Kalma Zaman Aşımları
+
+[Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma)
+sayfasında anlatılan 60 saniyelik boşta kalma zaman aşımı yalnızca Nginx'e özgü bir sorun değildir.
+Cloudflare'in proxy'si ve çoğu bulut yük dengeleyici (AWS ALB/NLB, GCP vb.) de boşta kalan vekillenen
+bağlantıları kendi zaman aşımlarından sonra kapatır ve bunu kendi Nginx'inizdeki `proxy_read_timeout` gibi
+ayarlayamazsınız. Pano'nun heartbeat'i (eklentinin kendi `config.conf` dosyasındaki `heartbeat-interval` /
+`heartbeat-timeout`, varsayılan **25s** / **75s**) tam olarak bu yüzden var: bağlantı, bunlardan hiçbirini
+tetikleyecek kadar boşta kalmaz — Cloudflare tarafında herhangi bir şey değiştirmenize gerek yoktur.
+
+Bağlı bir Minecraft sunucusunun bağlantısı Cloudflare veya bir yük dengeleyici arkasında hâlâ periyodik
+olarak düşüyorsa:
+
+- Eklentinin `config.conf` dosyasındaki `heartbeat-interval` değerinin, yoldaki en kısa boşta kalma zaman
+  aşımına yakın (veya onu aşacak) bir değere çıkarılmadığından emin olun.
+- Eklenti ile Pano arasında **birden fazla sıçrama** olup olmadığını kontrol edin — ek bir yük dengeleyici,
+  bir CDN veya dahili bir ters vekil, her biri kendi boşta kalma zaman aşımını uygular ve yalnızca en kısa
+  olanı önemlidir.
+- Cloudflare'in **arkasında** ayrıca Nginx (veya başka bir ters vekil) çalışıyorsa, onun da zaman aşımının
+  artırıldığından emin olun — bkz.
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma).
+
 ## Yardım ve Destek
 
 - [SSS sayfasını](../../FAQ/) ziyaret edin

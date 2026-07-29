@@ -14,6 +14,9 @@
 - `server.trusted-proxies` filled in **if Pano sits behind a reverse proxy**. Leave it empty and Pano ignores
   `X-Forwarded-For` entirely, so every request looks like it comes from the proxy — the maintenance login's
   IP ban and rate limit then see one address instead of your visitors'
+- If any **Minecraft servers** connect through that same reverse proxy, its WebSocket idle timeout is longer
+  than Pano's heartbeat (`heartbeat-interval` / `heartbeat-timeout`, default **25s** / **75s**) — see
+  [Reverse Proxy WebSocket Keepalive](../server/#reverse-proxy-websocket-keepalive)
 ## Example Minimal Configuration
 
 ```jsonc

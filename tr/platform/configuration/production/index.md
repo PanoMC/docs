@@ -14,6 +14,10 @@
 - Pano bir ters vekil (reverse proxy) arkasındaysa `server.trusted-proxies` doldurulmuş. Boş bırakırsanız Pano
   `X-Forwarded-For` başlığını tamamen yok sayar; o zaman her istek vekilden geliyormuş gibi görünür ve bakım
   girişinin IP yasağı ile hız sınırı ziyaretçilerin adresi yerine tek bir adres görür
+- Aynı ters vekilden bağlanan **Minecraft sunucuları** varsa, WebSocket boşta kalma zaman aşımının Pano'nun
+  heartbeat süresinden (`heartbeat-interval` / `heartbeat-timeout`, varsayılan **25s** / **75s**) uzun
+  olduğundan emin olun — bkz.
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma)
 ## Örnek Minimal Yapılandırma
 
 ```jsonc

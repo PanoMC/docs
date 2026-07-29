@@ -62,6 +62,26 @@ If you need true end-to-end encryption (recommended for production deployments h
 
 This way Cloudflare ⇄ Origin is also encrypted and certificate-validated.
 
+## Idle Timeouts on Cloudflare and Load Balancers
+
+The 60-second idle timeout described in
+[Reverse Proxy WebSocket Keepalive](../../configuration/server/#reverse-proxy-websocket-keepalive) isn't an
+Nginx-only problem. Cloudflare's proxy and most cloud load balancers (AWS ALB/NLB, GCP, etc.) close an idle
+proxied connection after their own timeout too, and you can't tune it the way you tune `proxy_read_timeout`
+on your own Nginx. Pano's heartbeat (`heartbeat-interval` / `heartbeat-timeout` in the plugin's own
+`config.conf`, default **25s** / **75s**) exists specifically so the connection is never idle long enough to
+trip any of these — you don't need to change anything on Cloudflare's side for it to work.
+
+If a connected Minecraft server's connection still drops periodically behind Cloudflare or a load balancer:
+
+- Confirm `heartbeat-interval` in the plugin's `config.conf` hasn't been raised to something close to (or
+  above) the shortest idle timeout anywhere in the path.
+- Check for **more than one hop** between the plugin and Pano — an extra load balancer, a CDN, or an
+  internal reverse proxy each enforces its own idle timeout, and only the shortest one matters.
+- If Nginx (or another reverse proxy) sits **behind** Cloudflare as well, make sure its own timeout is
+  raised too — see
+  [Reverse Proxy WebSocket Keepalive](../../configuration/server/#reverse-proxy-websocket-keepalive).
+
 ## Need help?
 
 - Visit the [FAQ page](../../FAQ/)

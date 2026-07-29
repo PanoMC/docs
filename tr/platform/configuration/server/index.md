@@ -27,6 +27,73 @@ server {
 - `ui-max-memory-mb`: Spawn edilen **her** UI runtime'ı (setup-ui, panel-ui, aktif tema) için bellek tavanı (MB); Pano aşan UI'ı yeniden başlatır. Varsayılan **200**, `0` kapatır. Bkz. [Bellek ve Limitler](../memory/).
 - `trusted-proxies`: `X-Forwarded-For` başlığını ayarlamasına izin verilen ters vekil (reverse proxy) IP adresleri. **Varsayılan olarak boştur**; bu durumda başlık yok sayılır ve her istek doğrudan bağlantı sayılır. Pano bir Nginx, Apache veya Cloudflare arkasındaysa doldurun; aksi halde ziyaretçiyi adresine göre tanıyan özellikler — örneğin [bakım modu](../../maintenance/) giriş yasakları — ziyaretçi yerine vekili görür.
 - **Gelişmiş:** Karmaşık kurulumlar için hala bir **reverse proxy** (Nginx, Apache) veya Cloudflare kullanabilirsiniz.
+## Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma
+
+**pano-mc-plugin** üzerinden bağlanan her Minecraft sunucusu, `GET /api/server/connection` adresine uzun
+ömürlü bir WebSocket bağlantısı tutar. Pano bir ters vekil (reverse proxy) arkasındaysa (Nginx, Cloudflare,
+bulut yük dengeleyici), boşta kalan bir WebSocket *vekilin kendi* boşta kalma zaman aşımı tarafından
+kapatılır — Nginx'in `proxy_read_timeout` değeri varsayılan olarak **60 saniyedir** — bu, Pano veya
+eklentinin bağlantıyı hiç bırakmayacağı sürenin çok altındadır. Eklentinin yeniden bağlanma mantığı bu
+belirtiyi gizler (otomatik olarak yeniden bağlanır), ancak her yeniden bağlanmada tüm RSA/AES anahtar
+değişimi baştan çalışır; yani sağlıklı görünen bir bağlantı aslında sessizce CPU harcar, kayıtları yeniden
+bağlanma satırlarıyla doldurur ve uçuştaki bir mesajın kaybolabileceği kısa bir pencere açar.
+
+Bunu önlemek için **her iki taraf da** ping gönderir — eklenti Pano'ya WebSocket **ping** çerçeveleri
+gönderir, Pano da eklentiye kendi **ping** çerçevelerini gönderir; her biri bağımsız olarak ve kendi
+zamanlamasında çalışır, taraflardan her biri diğerinin ping'ine WebSocket protokolü seviyesinde otomatik
+olarak **pong** ile yanıt verir. Bu, mesaj şifreleme katmanının dışında kalan, protokol seviyesinde bir
+canlı tutma mekanizmasıdır ve AES-256-GCM yüküne asla dokunmaz. İki yön, her biri kendi tarafına ait iki
+*ayrı* yapılandırma tarafından kontrol edilir:
+
+- **Eklentinin** ping'i — **eklentinin kendi** `config.conf` dosyasındaki iki ayar (Minecraft
+  sunucusundaki Pano eklentisinin veri klasöründe — bu sayfanın başka yerinde gösterilen Pano'nun kendi
+  yapılandırması değil):
+    - `heartbeat-interval`: ping'ler arasındaki saniye sayısı. Varsayılan **25**.
+    - `heartbeat-timeout`: bir yanıt için beklenecek saniye sayısı; bu süre dolarsa bağlantı ölü sayılır
+      ve eklenti yeniden bağlanır. Varsayılan **75**.
+- **Pano'nun kendi** ping'i — Pano'nun kendi `config.conf` dosyasındaki `mc-server-connection` bloğu,
+  bkz. [Minecraft Sunucu Bağlantısı](../#minecraft-sunucu-bağlantısı):
+    - `heartbeat-interval-seconds`: Pano'nun bağlı her Minecraft sunucusuna gönderdiği ping'ler
+      arasındaki saniye sayısı. Varsayılan **25**.
+    - `heartbeat-timeout-seconds`: bir pong gelmeden beklenecek saniye sayısı; bu süre dolarsa Pano
+      bağlantıyı ölü sayar ve kapatır. Varsayılan **75**.
+
+Heartbeat yalnızca vekilinizin kendi boşta kalma zaman aşımı, yukarıdaki iki aralıktan **kısa olanından**
+uzunsa işe yarar. Pano'nun önünde Nginx çalıştırıyorsanız, zaman aşımını **yalnızca WebSocket
+location'ında** artırın — bunu tüm `server` bloğunda artırmak, Nginx'in sıradan HTTP isteklerinde ne kadar
+bekleyeceğini de değiştirir; bu genelde istenmez. Bu location içine `proxy_set_header` direktiflerinin
+tamamını da tekrar yazın: aynı isimli bir direktif daha alt seviyede tekrar tanımlandığında, kalıtılan
+tüm seti **eklemek yerine değiştirir**; yani yalnızca `Upgrade`/`Connection` ayarlayan bir location, üst
+seviyede tanımlı `Host` / `X-Real-IP` / `X-Forwarded-For` ayarlarını sessizce düşürür — bu durumda Pano,
+bağlı her Minecraft sunucusunun adresini gerçek adresi yerine vekilin kendi IP'si olarak kaydeder ve
+sayfanın yukarısındaki `trusted-proxies` rehberliğini sessizce bozar:
+
+```nginx
+location /api/server/connection {
+    # 8080'i kendi server.http-port değerinizle değiştirin (config.conf) — varsayılan olsa
+    # bile burada 80 KULLANMAYIN: bu kurulumda Nginx'in kendisi 80 portunu dinliyor, bu yüzden
+    # 127.0.0.1:80'e proxy yapmak Pano'ya değil, Nginx'in kendisine geri döner.
+    proxy_pass http://127.0.0.1:8080;
+    proxy_http_version 1.1;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+
+    proxy_read_timeout 90s;
+    proxy_send_timeout 90s;
+    proxy_socket_keepalive on;
+}
+```
+
+90 saniye, Nginx aksi halde boşta kalan bir soketi kapatmadan önce her iki taraftaki 25 saniyelik
+varsayılan heartbeat'e bolca pay bırakır.
+
+> Cloudflare ve çoğu bulut yük dengeleyici, vekillenen bağlantılarda aynı sınıftan bir boşta kalma zaman
+> aşımı uygular — bkz.
+> [Pano'yu Cloudflare Arkasında Kullanma](../../advanced/cloudflare/#cloudflare-ve-yük-dengeleyicilerde-boşta-kalma-zaman-aşımları).
 ## Başlatma, Arayüz ve Güncellemeler
 
 ```jsonc

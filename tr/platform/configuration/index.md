@@ -85,3 +85,24 @@ current-theme = "vanilla-theme"
 - Hangi temanın aktif olduğunu belirler.
 - Geçersiz bir tema ID’si kullanılırsa, **Pano `vanilla-theme`’e döner**.
 - **Panel → Görünüm → Temalar** üzerinden değiştirilebilir.
+## Minecraft Sunucu Bağlantısı
+
+```jsonc
+mc-server-connection {
+  heartbeat-interval-seconds = 25
+  heartbeat-timeout-seconds = 75
+}
+```
+
+**Detaylar**
+
+- **Pano'nun kendisinin**, bağlı her Minecraft sunucusuna (`pano-mc-plugin` üzerinden) gönderdiği
+  uygulama seviyesindeki WebSocket heartbeat'i. Bu, eklentinin **kendi** `config.conf` dosyasındaki
+  `heartbeat-interval` / `heartbeat-timeout` ayarlarından ayrıdır ve onlara ek olarak çalışır: her iki
+  taraf da bağımsız olarak, kendi zamanlamasında ping gönderir. İki ayarın bir ters vekilin boşta kalma
+  zaman aşımıyla nasıl etkileştiğini görmek için bkz.
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma).
+- `heartbeat-interval-seconds`: Pano'nun bağlı her Minecraft sunucusuna gönderdiği heartbeat ping'leri
+  arasındaki saniye sayısı. Varsayılan **25**.
+- `heartbeat-timeout-seconds`: bir pong gelmeden beklenecek saniye sayısı; bu süre dolarsa Pano o
+  Minecraft sunucusunun bağlantısını ölü sayar ve kapatır. Varsayılan **75**.

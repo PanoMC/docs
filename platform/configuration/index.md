@@ -87,3 +87,24 @@ current-theme = "vanilla-theme"
 - Defines which theme is active.
 - If an invalid theme ID is used, **Pano falls back to `vanilla-theme`**.
 - Can be changed via **Panel → View → Themes**.
+## Minecraft Server Connection
+
+```jsonc
+mc-server-connection {
+  heartbeat-interval-seconds = 25
+  heartbeat-timeout-seconds = 75
+}
+```
+
+**Details**
+
+- Application-level WebSocket heartbeat that **Pano itself** sends to every connected Minecraft server
+  (via `pano-mc-plugin`). This is separate from — and in addition to — the plugin's own
+  `heartbeat-interval` / `heartbeat-timeout` in its **own** `config.conf`: both sides ping
+  independently, each on its own schedule. See
+  [Reverse Proxy WebSocket Keepalive](server/#reverse-proxy-websocket-keepalive) for how the two
+  interact with a reverse proxy's idle timeout.
+- `heartbeat-interval-seconds`: seconds between the heartbeat pings Pano sends to each connected
+  Minecraft server. Default **25**.
+- `heartbeat-timeout-seconds`: seconds without a pong before Pano considers that Minecraft server's
+  connection dead and closes it. Default **75**.
