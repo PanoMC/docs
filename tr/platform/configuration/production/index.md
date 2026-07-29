@@ -17,7 +17,7 @@
 - Aynı ters vekilden bağlanan **Minecraft sunucuları** varsa, WebSocket boşta kalma zaman aşımının Pano'nun
   heartbeat süresinden (`heartbeat-interval` / `heartbeat-timeout`, varsayılan **25s** / **75s**) uzun
   olduğundan emin olun — bkz.
-  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma)
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../server/#ters-vekil-arkasında-websocket-baglantısını-canlı-tutma)
 ## Örnek Minimal Yapılandırma
 
 ```jsonc

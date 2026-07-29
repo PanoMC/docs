@@ -64,7 +64,7 @@ Böylece Cloudflare ⇄ Origin arası da şifrelenir ve sertifika doğrulaması 
 
 ## Cloudflare ve Yük Dengeleyicilerde Boşta Kalma Zaman Aşımları
 
-[Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma)
+[Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-baglantısını-canlı-tutma)
 sayfasında anlatılan 60 saniyelik boşta kalma zaman aşımı yalnızca Nginx'e özgü bir sorun değildir.
 Cloudflare'in proxy'si ve çoğu bulut yük dengeleyici (AWS ALB/NLB, GCP vb.) de boşta kalan vekillenen
 bağlantıları kendi zaman aşımlarından sonra kapatır ve bunu kendi Nginx'inizdeki `proxy_read_timeout` gibi
@@ -82,7 +82,7 @@ olarak düşüyorsa:
   olanı önemlidir.
 - Cloudflare'in **arkasında** ayrıca Nginx (veya başka bir ters vekil) çalışıyorsa, onun da zaman aşımının
   artırıldığından emin olun — bkz.
-  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma).
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-baglantısını-canlı-tutma).
 
 ## Yardım ve Destek
 

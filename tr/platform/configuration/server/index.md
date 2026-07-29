@@ -52,7 +52,7 @@ canlı tutma mekanizmasıdır ve AES-256-GCM yüküne asla dokunmaz. İki yön, 
     - `heartbeat-timeout`: bir yanıt için beklenecek saniye sayısı; bu süre dolarsa bağlantı ölü sayılır
       ve eklenti yeniden bağlanır. Varsayılan **75**.
 - **Pano'nun kendi** ping'i — Pano'nun kendi `config.conf` dosyasındaki `mc-server-connection` bloğu,
-  bkz. [Minecraft Sunucu Bağlantısı](../#minecraft-sunucu-bağlantısı):
+  bkz. [Minecraft Sunucu Bağlantısı](../#minecraft-sunucu-baglantısı):
     - `heartbeat-interval-seconds`: Pano'nun bağlı her Minecraft sunucusuna gönderdiği ping'ler
       arasındaki saniye sayısı. Varsayılan **25**.
     - `heartbeat-timeout-seconds`: bir pong gelmeden beklenecek saniye sayısı; bu süre dolarsa Pano
@@ -93,7 +93,7 @@ varsayılan heartbeat'e bolca pay bırakır.
 
 > Cloudflare ve çoğu bulut yük dengeleyici, vekillenen bağlantılarda aynı sınıftan bir boşta kalma zaman
 > aşımı uygular — bkz.
-> [Pano'yu Cloudflare Arkasında Kullanma](../../advanced/cloudflare/#cloudflare-ve-yük-dengeleyicilerde-boşta-kalma-zaman-aşımları).
+> [Pano'yu Cloudflare Arkasında Kullanma](../../advanced/cloudflare/#cloudflare-ve-yuk-dengeleyicilerde-bosta-kalma-zaman-asımları).
 ## Başlatma, Arayüz ve Güncellemeler
 
 ```jsonc

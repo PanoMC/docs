@@ -30,7 +30,7 @@ açıkken panelin her sayfasında kapatılamaz bir uyarı bandı görünür.
 - **Özel Giriş Adresi** — giriş formunu sunacak gizli bir adres, örneğin `/personel-girisi`. Yalnızca giriş butonu
   kapalıyken kullanılabilir; boş bırakırsanız form `/login` adresinde kalır.
 - **Site Logosunu Göster** — **Panel → Ayarlar → Website** bölümündeki logoyu gösterir.
-- **Bakım Sayfasını Düzenle** — sayfa kaynak kodu düzenleyicisi. Bkz. [Sayfayı düzenleme](#sayfayı-düzenleme).
+- **Bakım Sayfasını Düzenle** — sayfa kaynak kodu düzenleyicisi. Bkz. [Sayfayı düzenleme](#sayfayı-duzenleme).
 - **Yasaklı IP Adresleri** — bakım girişinin dışarıda bıraktığı adresler. Bkz.
   [Engellenen adresler](#engellenen-adresler).
 

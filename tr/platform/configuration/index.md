@@ -101,7 +101,7 @@ mc-server-connection {
   `heartbeat-interval` / `heartbeat-timeout` ayarlarından ayrıdır ve onlara ek olarak çalışır: her iki
   taraf da bağımsız olarak, kendi zamanlamasında ping gönderir. İki ayarın bir ters vekilin boşta kalma
   zaman aşımıyla nasıl etkileştiğini görmek için bkz.
-  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](server/#ters-vekil-arkasında-websocket-bağlantısını-canlı-tutma).
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](server/#ters-vekil-arkasında-websocket-baglantısını-canlı-tutma).
 - `heartbeat-interval-seconds`: Pano'nun bağlı her Minecraft sunucusuna gönderdiği heartbeat ping'leri
   arasındaki saniye sayısı. Varsayılan **25**.
 - `heartbeat-timeout-seconds`: bir pong gelmeden beklenecek saniye sayısı; bu süre dolarsa Pano o
