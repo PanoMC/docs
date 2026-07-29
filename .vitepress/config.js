@@ -7,6 +7,17 @@ export default defineConfig({
 
   lastUpdated: true,
   ignoreDeadLinks: true,
+
+  // Repository-internal notes that live at the docs root but are not part of the site. Without
+  // this they are built as real pages and fed to the local search index, which produced two
+  // visible bugs: PROJECT_SUMMARY.md is written in Turkish yet sits in the root (English) locale,
+  // so searching in English returned Turkish results; and every hit linked to a URL the deployed
+  // site does not serve, e.g. /docs/PROJECT_SUMMARY.
+  srcExclude: [
+    "PROJECT_SUMMARY.md",
+    "DRM_LICENSE_SYSTEM.md",
+    "README.md",
+  ],
   vite: {
     server: {
       allowedHosts: ["f285-130-162-246-99.ngrok-free.app"]
