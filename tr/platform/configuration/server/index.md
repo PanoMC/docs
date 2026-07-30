@@ -51,12 +51,21 @@ canlı tutma mekanizmasıdır ve AES-256-GCM yüküne asla dokunmaz. İki yön, 
     - `heartbeat-interval`: ping'ler arasındaki saniye sayısı. Varsayılan **25**.
     - `heartbeat-timeout`: bir yanıt için beklenecek saniye sayısı; bu süre dolarsa bağlantı ölü sayılır
       ve eklenti yeniden bağlanır. Varsayılan **75**.
+    - Başlangıçta doğrulanır: `heartbeat-interval` `0`'dan büyük olmalıdır (üst sınırı yoktur);
+      `heartbeat-timeout` ise hem aralığın iki katına hem de 10 saniyelik bir kapanış anlaşması payına
+      yer bırakmalıdır — yani `heartbeat-timeout ≥ (2 × heartbeat-interval) + 10`. Sınırların dışında
+      kalan bir çift eklentinin yüklenmesini engellemez — bir uyarı kaydedilir ve her iki değer için de
+      varsayılan **25s** / **75s**'ye dönülür.
 - **Pano'nun kendi** ping'i — Pano'nun kendi `config.conf` dosyasındaki `mc-server-connection` bloğu,
   bkz. [Minecraft Sunucu Bağlantısı](../#minecraft-sunucu-baglantısı):
     - `heartbeat-interval-seconds`: Pano'nun bağlı her Minecraft sunucusuna gönderdiği ping'ler
       arasındaki saniye sayısı. Varsayılan **25**.
     - `heartbeat-timeout-seconds`: bir pong gelmeden beklenecek saniye sayısı; bu süre dolarsa Pano
       bağlantıyı ölü sayar ve kapatır. Varsayılan **75**.
+    - Başlangıçta doğrulanır: `heartbeat-interval-seconds` `0`'dan büyük ve en fazla **55** olmalıdır;
+      `heartbeat-timeout-seconds` ise aralığın en az iki katı olmalıdır. Sınırların dışında kalan bir
+      çift Pano'nun başlamasını engellemez — bir uyarı kaydedilir ve her iki değer için de varsayılan
+      **25s** / **75s**'ye dönülür.
 
 Heartbeat yalnızca vekilinizin kendi boşta kalma zaman aşımı, yukarıdaki iki aralıktan **kısa olanından**
 uzunsa işe yarar. Pano'nun önünde Nginx çalıştırıyorsanız, zaman aşımını **yalnızca WebSocket

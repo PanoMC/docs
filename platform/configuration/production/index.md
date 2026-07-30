@@ -16,7 +16,9 @@
   IP ban and rate limit then see one address instead of your visitors'
 - If any **Minecraft servers** connect through that same reverse proxy, its WebSocket idle timeout is longer
   than Pano's heartbeat (`heartbeat-interval` / `heartbeat-timeout`, default **25s** / **75s**) — see
-  [Reverse Proxy WebSocket Keepalive](../server/#reverse-proxy-websocket-keepalive)
+  [Reverse Proxy WebSocket Keepalive](../server/#reverse-proxy-websocket-keepalive). If you tune those
+  values, keep them within the accepted ranges documented there — an out-of-range pair is not applied:
+  Pano logs a warning, falls back to the 25s / 75s defaults and starts normally
 ## Example Minimal Configuration
 
 ```jsonc

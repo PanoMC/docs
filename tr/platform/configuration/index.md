@@ -106,3 +106,9 @@ mc-server-connection {
   arasındaki saniye sayısı. Varsayılan **25**.
 - `heartbeat-timeout-seconds`: bir pong gelmeden beklenecek saniye sayısı; bu süre dolarsa Pano o
   Minecraft sunucusunun bağlantısını ölü sayar ve kapatır. Varsayılan **75**.
+- Her iki değer de başlangıçta doğrulanır: `heartbeat-interval-seconds` `0`'dan büyük ve en fazla **55**
+  olmalıdır; `heartbeat-timeout-seconds` ise aralığın en az **iki katı** olmalıdır. Bu sınırların dışında
+  kalan bir çift sessizce reddedilmez — Pano başlatılamamak yerine bir uyarı kaydeder ve her iki
+  değer için de varsayılan **25s** / **75s**'ye döner. Eklenti tarafının (biraz daha katı) kuralı için
+  bkz.
+  [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](server/#ters-vekil-arkasında-websocket-baglantısını-canlı-tutma).

@@ -48,12 +48,21 @@ AES-256-GCM payload. The two directions are governed by two *separate* configs, 
     - `heartbeat-interval`: seconds between pings. Default **25**.
     - `heartbeat-timeout`: seconds to wait for a reply before the connection is treated as dead and the
       plugin reconnects. Default **75**.
+    - Validated at startup: `heartbeat-interval` must be greater than `0` (no upper bound);
+      `heartbeat-timeout` must leave room for both a full two intervals *and* a 10-second
+      close-handshake budget — i.e. `heartbeat-timeout ≥ (2 × heartbeat-interval) + 10`. An
+      out-of-range pair doesn't stop the plugin from loading — it logs a warning and falls back to the
+      default **25s** / **75s** for both values.
 - **Pano's own** ping — the `mc-server-connection` block in Pano's own `config.conf`, see
   [Minecraft Server Connection](../#minecraft-server-connection):
     - `heartbeat-interval-seconds`: seconds between the pings Pano sends to each connected Minecraft
       server. Default **25**.
     - `heartbeat-timeout-seconds`: seconds without a pong before Pano considers that connection dead
       and closes it. Default **75**.
+    - Validated at startup: `heartbeat-interval-seconds` must be greater than `0` and at most **55**;
+      `heartbeat-timeout-seconds` must be at least **twice** the interval. An out-of-range pair doesn't
+      stop Pano from starting — it logs a warning and falls back to the default **25s** / **75s** for
+      both values.
 
 The heartbeat only helps if your proxy's own idle timeout is longer than the **shorter** of the two
 intervals above. If you run Nginx in front of Pano, raise the timeout **on the WebSocket location

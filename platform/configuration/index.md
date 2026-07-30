@@ -108,3 +108,9 @@ mc-server-connection {
   Minecraft server. Default **25**.
 - `heartbeat-timeout-seconds`: seconds without a pong before Pano considers that Minecraft server's
   connection dead and closes it. Default **75**.
+- Both settings are validated at startup: `heartbeat-interval-seconds` must be greater than `0` and at
+  most **55**; `heartbeat-timeout-seconds` must be at least **twice** the interval. A pair outside those
+  bounds isn't rejected silently — Pano logs a warning and falls back to the default **25s** / **75s** for
+  both values instead of failing to start. See
+  [Reverse Proxy WebSocket Keepalive](server/#reverse-proxy-websocket-keepalive) for the plugin side's
+  own (slightly stricter) rule.
