@@ -143,6 +143,15 @@ export default defineConfig({
                   { text: "Ban Management", link: "/platform/integrations/ban-management/" },
                 ]
               },
+              {
+                text: "Server Management",
+                link: "/platform/server-management/",
+                collapsed: true,
+                items: [
+                  { text: "What Works With What", link: "/platform/server-management/what-works-with-what/" },
+                  { text: "pano-node Daemon", link: "/platform/server-management/pano-node/" },
+                ],
+              },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
               {
@@ -396,6 +405,15 @@ export default defineConfig({
                   { text: "Ban Management", link: "/tr/platform/integrations/ban-management/" },
                 ]
               },
+              {
+                text: "Sunucu Yönetimi",
+                link: "/tr/platform/server-management/",
+                collapsed: true,
+                items: [
+                  { text: "Hangi Özellik Neyle Çalışır", link: "/tr/platform/server-management/what-works-with-what/" },
+                  { text: "pano-node Arka Plan Süreci", link: "/tr/platform/server-management/pano-node/" },
+                ],
+              },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
               {
@@ -648,6 +666,15 @@ export default defineConfig({
                   { text: "LuckPerms", link: "/ru/platform/integrations/luckperms/" },
                   { text: "Ban Management", link: "/ru/platform/integrations/ban-management/" },
                 ]
+              },
+              {
+                text: "Управление серверами",
+                link: "/ru/platform/server-management/",
+                collapsed: true,
+                items: [
+                  { text: "Что с чем работает", link: "/ru/platform/server-management/what-works-with-what/" },
+                  { text: "Демон pano-node", link: "/ru/platform/server-management/pano-node/" },
+                ],
               },
               { text: "Аддоны", link: "/ru/platform/addons/" },
               { text: "Темы", link: "/ru/platform/themes/" },

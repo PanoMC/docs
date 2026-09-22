@@ -1,39 +1,54 @@
 # Server Management Eklentisi
 
-**Server Management** eklentisi, Minecraft sunucularınızı doğrudan Pano üzerinden yönetmenizi sağlamak için tasarlanmış resmi bir Pano eklentisidir — konsol, başlat/durdur ve oyuncu kontrolü tek bir yerde. Pano ekibi tarafından geliştirilmiştir, kullanımı ücretsizdir ve açık kaynaklıdır.
+::: warning Emekliye ayrıldı — sunucu yönetimi artık Pano çekirdeğinde
+**Server Management** eklentisi hiçbir zaman çalışan bir özellik yayınlamadı ve emekliye ayrıldı.
+Yapması planlanan her şey — panel içi konsol, başlat/durdur kontrolü ve oyuncu yönetimi — artık
+**Pano'nun kendisinde** yerleşik geliyor; kuracak bir şey yok.
 
-::: warning Geliştirme aşamasında — henüz işlevsel değil
-Bu eklenti şu anda erken bir iskelet. Aşağıda açıklanan sunucu yönetimi işlevlerinin hiçbiri henüz uygulanmamıştır: hiçbir panel sayfası, API endpoint'i, ayar veya izin kaydetmez ve kurmak sitenize kullanılabilir bir özellik eklemez. Bu sayfa, neyin planlandığını bilmeniz için **amaçlanan** kapsamı belgeler. İlerleme için GitHub deposunu takip edin.
+**→ [Sunucu Yönetimi](../../platform/server-management/)**
 :::
 
-## Planlanan Özellikler
+## Ne oldu
 
-Aşağıdaki yetenekler, eklentinin amaçlanan kapsamını tanımlar. Bunlar **bugün mevcut değildir** ve yalnızca bir yol haritası olarak listelenmiştir:
+Sunucu yönetimi başlangıçta isteğe bağlı bir eklenti olarak planlanmıştı. Boş bir iskelet olarak
+kaldı: hiçbir panel sayfası, API endpoint'i, ayar veya izin kaydetmedi. Her sunucu sahibinin bulup
+kurması gereken bir eklenti olarak yayınlamak yerine, özellikler doğrudan mevcut Minecraft sunucu
+bağlantısını kullanabilecekleri yere — platformun içine — taşındı.
 
-- **Panel İçi Konsol:** Minecraft sunucu konsolunuzu doğrudan Pano yönetim panelinden görüntüleyin ve etkileşime geçin.
-- **Başlat / Durdur Kontrolü:** Bağlı sunucularınızı Pano'dan ayrılmadan başlatın ve durdurun.
-- **Oyuncu Kontrolü:** Çevrimiçi oyuncuları tek bir merkezi yerden yönetin.
+`pano-plugin-server-management` deposu arşivlendi ve eklentisi yayınlanmıyor. Bir zamanlar
+kurduysanız, jar dosyasını `plugins/` klasörünüzden gönül rahatlığıyla silebilirsiniz — hiçbir işe
+yaramıyor.
 
-Bu özelliklerin, Pano'ya **pano-mc-plugin** bağlantısı aracılığıyla zaten bağlı olan sunucular üzerine inşa edilmesi beklenmektedir, ancak şu anda hiçbir kod bunların hiçbirini desteklememektedir.
+## Özellikler şimdi nerede
 
-## Panel Kontrolleri
+Bir Minecraft sunucusunu [Pano MC Eklentisi](../../platform/integrations/) ile bağlayın ve
+**Panel → Sunucular** sayfasını açın. Her sunucuda şunlar bulunur:
 
-Henüz yok. Uygulandığında, eklentinin kontrollerini **Pano Yönetim Paneli**'ne eklemesi beklenmektedir. Şu anda hiçbir panel sayfası, bölümü veya gezinme bağlantısı yoktur.
+- **Konsol** — komut girişi olan canlı sunucu günlüğü.
+- **Oyuncular** — atma, mesaj, OP, gamemode ve whitelist işlemleriyle çevrimiçi oyuncu listesi.
+- **Eklentiler** — kurulu eklenti ve mod listesi; Bukkit ailesindeki sunucularda açma/kapatma.
+- **Güç** — durdurma ve yeniden başlatma.
+- **Ölçümler** — TPS, MSPT, bellek, CPU ve oyuncu geçmişi.
+- **Dosyalar**, **Yedekler** ve **Zamanlanmış görevler** — sunucunun kendi klasörü, arşivleri ve cron
+  görevleri; bunları eklenti sunucunun içinden sunar.
 
-## Ayarlar ve İzinler
+## Pano MC Eklentisi tek başına çalışır
 
-Tanımlı değil. Eklenti, bu aşamada kullanıcıya yönelik hiçbir ayar ve hiçbir izinle gelmez.
+Bunların hiçbiri [`pano-node`](../../platform/server-management/pano-node/) arka plan sürecini
+gerektirmez. İçinde yalnızca Pano MC Eklentisi olan bir sunucu, panelde tam yetkili bir sunucudur:
+eklenti bağlanırken neler yapabildiğini bildirir — şu anda
 
-## Ön Koşullar
+```
+console, commands, power, metrics, players, plugins, files, backups, plugin-install, schedules
+```
 
-- Standart bir Pano eklenti kurulumu (jar'ı `plugins/` klasörünüze bırakın).
-- Lisans anahtarı gerekmez — eklenti **ücretsizdir**.
+— Pano da tam olarak bunları sunar. Düğüm, oyunun dışındaki bir sürecin yapabildiği ve başka hiçbir
+şeyin yapamadığı şeyleri ekler: **Başlat** ile **Öldür**, duran bir sunucunun konsolu, sunucu
+oluşturma ve yeniden kurma, bir de anında yedek geri yükleme. İkisi birden varsa her özelliği, o işi
+daha iyi yapan taraf üstlenir; yalnızca biri varsa onu o taraf yapar. Eski bir eklenti daha az yetenek
+bildirir ve Pano, kalanlar için düğüme devreder.
 
-::: tip Ücretsiz ve resmi
-Server Management, Pano ekibi tarafından geliştirilip sürdürülür ve premium lisans gerektirmez.
-:::
-
-## Açık Kaynak
-
-Bu eklenti açık kaynaklıdır ve açıkta geliştirilir. Geliştirmeyi takip edebilir ve kaynak kodunu GitHub üzerinden görüntüleyebilirsiniz:
-- [Kaynak Kodu](https://github.com/PanoMC/pano-plugin-server-management)
+Özellik özellik hazırlanmış tablo:
+**[Hangi özellik neyle çalışır](../../platform/server-management/what-works-with-what/)**.
+Gereksinimler, izin node'ları ve platformlar arası farklar dâhil tüm belgeler ise
+[Sunucu Yönetimi](../../platform/server-management/) sayfasındadır.

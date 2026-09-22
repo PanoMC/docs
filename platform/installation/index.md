@@ -102,12 +102,18 @@ http://<your-server-ip>/
 
 You’ll see the **Setup Wizard**, guiding you through five simple steps:
 
-1. **Language Selection**  
-   Choose your preferred language.  
+1. **Language Selection & Usage Mode**  
+   Choose your preferred language, then answer **"How will you use Pano?"** on the same screen:
+   - **Website** — a public website only (the classic Pano experience).
+   - **Server management** — Minecraft server management only: the panel is the product, the sidebar hides **Posts**, **Tickets** and **View**, and the public pages redirect to `/panel`.
+   - **Both** — website + server management. Recommended, and preselected.
+
+   Nothing is locked in here — you can change it later in **Panel → Settings → Platform → Preferences**. It is stored as the [`usage-mode`](../configuration/#general-settings) key in `config.conf`.  
    <small>*(By proceeding, you agree to Pano's Terms & Conditions and Privacy Policy.)*</small>
 
 2. **Website Configuration**  
-   Set up your website details (site name, URL, etc.).
+   Set up your website details (site name, URL, etc.).  
+   In **Server management** mode this step asks for a **panel name** instead of a website name, and the description field is hidden.
 
 3. **Database Setup**  
    Enter your **MySQL** or **MariaDB** credentials.  
@@ -157,14 +163,14 @@ The Pano MC Plugin acts as a bridge between your Minecraft server and Pano, enab
 
 3. **Connect to Pano**
    - After restart, open your **Pano Admin Panel**
-   - Navigate to **Servers** (in the sidebar)
-   - Click the **+** button to add a new server
+   - Open the **server switcher** in the top bar
+   - Click the **+** button beside it to add a new server
    - A connection modal will appear with step-by-step instructions
    - Follow the steps shown in the modal to link your Minecraft server
    - The plugin will automatically establish a secure encrypted connection
 
 4. **Verify Connection**
-   - Once connected, your server will appear in the **Servers** list
+   - Once connected, your server will appear in the server switcher's list
    - You should see server status (online/offline), player count, and other information
    - The connection is now active and ready for integrations
 

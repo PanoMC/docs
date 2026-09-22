@@ -32,6 +32,9 @@ Her günlük rapor şunları içerir:
 - **Etkin tema** ve **kurulu eklentiler** ile sürümleri.
 - **Toplam sayılar** — kayıtlı kullanıcı, gönderi, açık destek talebi, bağlı Minecraft sunucusu ve çevrim içi oyuncu
   sayıları.
+- **Sunucu yönetimi kullanımı** — kullanım kipi, kaç bağlı ve kaç yönetilen sunucu ile kaç düğüm bulunduğu (ve bu
+  düğümlerin kaçının çevrim içi olduğu), ayrıca son 24 saatte kaç konsol komutu çalıştırıldığı ve kaç yedek
+  alındığı. Yalnızca sayılar: sunucu adı, adresi, yazılımı veya düğüm adresi hiçbir zaman gönderilmez.
 - Kuruluma bir **panomc.com hesabının** bağlı olup olmadığı.
 - **Kurulum tarihi** ve **rastgele oluşturulmuş bir kurulum kimliği**.
 

@@ -29,6 +29,9 @@ Each daily report contains:
 - The **server's IP address** and the **country** derived from it.
 - The **active theme** and the **installed plugins**, together with their versions.
 - **Aggregate counts** — registered users, posts, open tickets, connected Minecraft servers and online players.
+- **Server management usage** — the usage mode, how many linked and managed servers and how many nodes exist (and
+  how many of those nodes are online), plus how many console commands were run and backups taken in the last
+  24 hours. Counts only: no server name, address, software or node address is ever sent.
 - Whether a **panomc.com account** is connected to the installation.
 - The **install date** and a **randomly generated install identifier**.
 

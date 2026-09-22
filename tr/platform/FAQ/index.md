@@ -31,6 +31,9 @@ Windows (x64/ARM64) üzerinde Pano, sizin için taşınabilir bir MariaDB örne�
 #### Pano "Başlatılıyor..." veya "Çıkartılıyor..." ekranında takılı kaldı.
 İlk çalıştırmada Pano'nun bağımlılıkları indirmesi ve gerekli dosyaları çıkarması gerekir. İnternet hızınıza bağlı olarak bu işlem birkaç dakika sürebilir. Lütfen sabırlı olun!
 
+#### Pano'yu herkese açık bir web sitesi olmadan, yalnızca Minecraft sunucularımı yönetmek için kullanabilir miyim?
+Evet. Kurulum sihirbazının ilk ekranında **Sunucu yönetimi** seçeneğini seçin ya da daha sonra **Panel → Ayarlar → Platform → Tercihler** bölümünden bu moda geçin. Bu durumda asıl ürün panel olur: kenar çubuğunda **Yazılar**, **Talepler** ve **Görünüm** gizlenir, Pano temayı hiç başlatmaz ve herkese açık tüm adresler `/panel` adresine yönlendirilir; panelin orada [kendine ait bir giriş sayfası](../server-management/#web-sitesi-olmadan-oturum-acma) vardır. Bu tercih `config.conf` dosyasında [`usage-mode`](../configuration/#genel-ayarlar) anahtarı olarak saklanır.
+
 ---
 
 ### Oyun Entegrasyonu

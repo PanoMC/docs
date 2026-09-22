@@ -102,12 +102,18 @@ http://<sunucu-ip-adresiniz>/
 
 Ekranda sizi beş basit adımdan geçiren **Kurulum Sihirbazı** görünecektir:
 
-1. **Dil Seçimi**  
-   Tercih ettiğiniz dili seçin.  
+1. **Dil Seçimi ve Kullanım Şekli**  
+   Tercih ettiğiniz dili seçin; ardından aynı ekranda **"Pano'yu nasıl kullanacaksınız?"** sorusunu yanıtlayın:
+   - **Web sitesi** — yalnızca herkese açık bir web sitesi (klasik Pano deneyimi).
+   - **Sunucu yönetimi** — yalnızca Minecraft sunucu yönetimi: asıl ürün paneldir, kenar çubuğunda **Yazılar**, **Talepler** ve **Görünüm** gizlenir ve herkese açık sayfalar `/panel` adresine yönlendirilir.
+   - **Her ikisi** — web sitesi + sunucu yönetimi. Önerilen seçenektir ve hazır olarak seçili gelir.
+
+   Bu seçim kalıcı değildir — daha sonra **Panel → Ayarlar → Platform → Tercihler** bölümünden değiştirebilirsiniz. Seçiminiz `config.conf` dosyasında [`usage-mode`](../configuration/#genel-ayarlar) anahtarı olarak saklanır.  
    <small>*(Devam ederek, Pano'nun Kullanım Koşullarını ve Gizlilik Politikasını kabul etmiş sayılırsınız.)*</small>
 
 2. **Web Sitesi Ayarları**  
-   Site adı, URL gibi web sitesi bilgilerini girin.
+   Site adı, URL gibi web sitesi bilgilerini girin.  
+   **Sunucu yönetimi** modunda bu adım site adı yerine bir **panel adı** ister ve açıklama alanını gizler.
 
 3. **Veritabanı Ayarları**  
    **MySQL** veya **MariaDB** bilgilerinizi girin.  
@@ -158,14 +164,14 @@ Pano MC Eklentisi, Minecraft sunucunuz ile Pano arasında bir köprü görevi g�
 
 3. **Pano'ya Bağlanın**
    - Yeniden başlatma sonrası **Pano Yönetici Panelinizi** açın
-   - **Sunucular** (kenar çubuğunda) bölümüne gidin
-   - **+** butonuna tıklayarak yeni sunucu ekleyin
+   - Üst çubuktaki **sunucu seçiciyi** açın
+   - Yanındaki **+** butonuna tıklayarak yeni sunucu ekleyin
    - Açılan bağlantı modalında adım adım talimatları göreceksiniz
    - Modal'da gösterilen adımları takip ederek Minecraft sunucunuzu bağlayın
    - Eklenti otomatik olarak güvenli şifreli bağlantı kuracaktır
 
 4. **Bağlantıyı Doğrulayın**
-   - Bağlandıktan sonra sunucunuz **Sunucular** listesinde görünecektir
+   - Bağlandıktan sonra sunucunuz sunucu seçicinin listesinde görünecektir
    - Sunucu durumunu (çevrimiçi/çevrimdışı), oyuncu sayısını ve diğer bilgileri görebilirsiniz
    - Bağlantı artık aktif ve entegrasyonlar için hazır
 
