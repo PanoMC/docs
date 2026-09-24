@@ -32,9 +32,10 @@ curl -fsSL https://panel.example.com/api/node/pano-node.jar.sha256 | sha256sum -
 İki adres de herkese açıktır ve kimlik doğrulaması istemez: jar bir sır değil, yayınlanmış bir
 üründür ve tek başına hiçbir yetki vermez — onu indiren makinenin Pano ile konuşabilmesi için yine de
 eşleşmesi gerekir. Sağlama `sha256sum` biçiminde sunulur, yani tam olarak yukarıdaki gibi
-doğrulanabilir. [Kurulum betiği](../#uzak-dugumler) de jar'ı buradan alır. Diskinde arka plan süreci
-jar'ı bulunmayan bir Pano ikisine de **404** yanıtı verir; betik o durumda aşağıdaki GitHub sürümüne
-geri düşer.
+doğrulanabilir. [Kurulum betiği](../#uzak-dugumler) de jar'ı buradan alır. Baytlar doğrudan Pano
+jar'ının kendisinden gelir — arka plan süreci onun içinde taşınır; Pano'nun yanındaki diskte ne
+olduğunun sunulana bir etkisi yoktur. Yalnızca içinde süreç bulunmadan elle derlenmiş bir Pano jar'ı
+ikisine de **404** yanıtı verir; betik o durumda aşağıdaki GitHub sürümüne geri düşer.
 
 **GitHub sürümünden** — diğer seçenek. `pano-node.jar`, her Pano sürümüyle birlikte platform jar'ının
 yanında ve doğrulayabilmeniz için bir `pano-node.jar.sha256` ile yayınlanır. **Pano'nuzun çalıştırdığı
