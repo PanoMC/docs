@@ -105,7 +105,7 @@ You’ll see the **Setup Wizard**, guiding you through five simple steps:
 1. **Language Selection & Usage Mode**  
    Choose your preferred language, then answer **"How will you use Pano?"** on the same screen:
    - **Website** — a public website only (the classic Pano experience).
-   - **Server management** — Minecraft server management only: the panel is the product, the sidebar hides **Posts**, **Tickets** and **View**, and the public pages redirect to `/panel`.
+   - **Server management** — Minecraft server management only: the panel is the product, **Posts**, **Tickets** and **View** (themes) are turned off, and the public pages redirect to `/panel`.
    - **Both** — website + server management. Recommended, and preselected.
 
    Nothing is locked in here — you can change it later in **Panel → Settings → Platform → Preferences**. It is stored as the [`usage-mode`](../configuration/#general-settings) key in `config.conf`.  

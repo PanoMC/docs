@@ -75,10 +75,10 @@ keywords = []
 - `locale`: use short codes like `en-US` or `tr` (languages can be added in the panel).
 - `website-url`: the base URL of your website. This is **mandatory** for generating system emails, managing session cookies, and other platform features.
 - `usage-mode`: how this installation is used. It is picked on the first screen of the setup wizard and can be changed any time in **Panel → Settings → Platform → Preferences** (three selectable boxes).
-  - `"WEBSITE"`: website only — the classic Pano experience.
-  - `"SERVERS"`: Minecraft server management only — the panel is the product. The sidebar hides **Posts**, **Tickets** and **View**, and every public address redirects to `/panel`.
+  - `"WEBSITE"`: website only — the classic Pano experience. Server management is turned off, pages and APIs alike. Linking a Minecraft server through the Pano MC Plugin still works, and nodes that are already paired keep their servers running.
+  - `"SERVERS"`: Minecraft server management only — the panel is the product. **Posts**, **Tickets** and **View** (themes) are turned off, pages and APIs alike, and every public address redirects to `/panel`. Switching back brings them back without a restart; existing posts and tickets are kept.
   - `"BOTH"`: website + server management. This is the default, and existing installations are migrated to it — exactly their previous behaviour.
-  - In `"SERVERS"` mode Pano does not start the theme process at all: the panel has [a sign-in page of its own](../server-management/#signing-in-without-a-website) at `/panel/login`. Switching the mode here starts or stops the theme without a restart.
+  - In `"SERVERS"` mode Pano does not start the theme process at all: signed-out visitors get [the panel's own sign-in form](../server-management/#using-pano-without-a-website) on any panel address, and only accounts with panel access can sign in. Switching the mode here starts or stops the theme without a restart.
 - `allow-user-locale-selection`: enables/disables the ability for users to choose their own language from available locales (default: `true`). Can be managed in **Panel → Settings → Platform → Preferences**.
 - `register-agreement`: defines the terms or rules shown during user registration. This field **supports HTML tags** for formatting.
 - `server-ip-address`: visible in your theme — players can **copy and use it to join** your Minecraft server.
@@ -122,6 +122,7 @@ mc-server-connection {
   both values instead of failing to start. See
   [Reverse Proxy WebSocket Keepalive](server/#reverse-proxy-websocket-keepalive) for the plugin side's
   own (slightly stricter) rule.
+
 ## Local Node
 
 ```jsonc
@@ -135,28 +136,12 @@ local-node {
 
 **Details**
 
-- Controls the `pano-node` daemon Pano can run on **its own machine**, set up with one button in
-  **Panel → Servers → Nodes → Local node**. The daemon is what installs and supervises *managed*
-  Minecraft servers; see [Server Management →](../server-management/).
-- The daemon always runs as a **separate process**, never inside Pano's own JVM — that is the
-  point: restarting or updating Pano must not take the Minecraft servers it manages offline.
-- `enabled`: set to `false` to stop Pano from spawning or supervising a local node at all. The
-  panel then reports the local node as disabled. Default **true**.
-- `jar-path`: explicit path to `pano-node.jar`. Leave empty and Pano looks next to its own jar and
-  in its working directory, and otherwise unpacks the `pano-node.jar` bundled inside its own jar
-  there — the same one it serves at `/api/node/pano-node.jar`, replaced whenever Pano updates itself.
-- `java-path`: the Java **17 or newer** home (or the `java` binary inside one) the daemon is
-  started with. Leave empty and Pano searches for one: the JVM it is running on itself,
-  `JAVA_HOME`, `/usr/lib/jvm`, `/Library/Java/JavaVirtualMachines`, the usual `C:\Program Files`
-  locations, and `java` on `PATH` — then picks the newest it found. This is a separate setting
-  because **Pano itself runs on Java 11+ while `pano-node.jar` needs 17+**: on a Java 11 host,
-  handing the daemon Pano's own JVM makes it die with `UnsupportedClassVersionError` every time it
-  is started. If nothing suitable is found, setting up the local node fails with a readable error
-  instead of retrying forever, and **Panel → Servers → Nodes** shows the reason.
-- `stop-with-pano`: whether the daemon is stopped when Pano stops. Default **false**, which leaves
-  managed servers running across a panel restart — an operator restarting Pano is not asking for
-  their players to be disconnected. Set it to `true` only if you want everything to go down
-  together.
+- The `pano-node` daemon Pano runs on **its own machine** — see [Adding a node →](../server-management/managed-servers/#adding-a-node).
+- `enabled`: `false` stops Pano from starting a local node at all. Default **true**.
+- `jar-path`: an explicit path to `pano-node.jar`, never replaced by Pano. Empty means Pano looks next to itself and in its working directory, and unpacks the copy bundled in its own jar there.
+- `java-path`: a **Java 17+** home (or its `java` binary) for the daemon. Empty means Pano searches for one. Pano itself runs on Java 11, but the daemon needs 17.
+- `stop-with-pano`: stop the daemon when Pano stops. Default **false**, so servers keep running across a Pano restart.
+
 ## Managed Servers
 
 ```jsonc
@@ -169,28 +154,11 @@ managed-servers {
 
 **Details**
 
-- Settings for the Minecraft servers Pano installs and runs through a node — see
-  [Managed servers →](../server-management/#managed-servers).
-- Pano installs the **Pano MC Plugin** into every managed server it creates, so that a server it
-  runs is also a server it can talk to. By default it uses the newest published plugin release.
-- `plugin-jar-dir`: a directory holding locally built `pano-mc-plugin` jars to use **instead of**
-  downloading them. Point it at a `pano-mc-plugin` checkout and the newest
-  `<module>/build/libs/pano-<platform>-*.jar` found there is copied into every server Pano installs.
-  This is a **plugin development** setting; leave it empty on a real installation and Pano takes the
-  newest published release.
-- `node-auto-update`: whether Pano updates a node's `pano-node` daemon — and every **Pano Agent** —
-  to the one it serves itself as soon as the node connects running an older one. Default **true**.
-  The node downloads the new daemon from Pano, verifies its checksum and restarts; the Minecraft
-  servers keep running. Pano tries at most **once per node and version every 30 minutes**, never
-  while the node is running a task (an install, an import, a backup — it looks again every 5
-  minutes), and records each automatic update in the activity log. Set it to `false` to update nodes
-  only by hand from **Panel → Servers → Nodes**. **Panel → Settings → Updates** writes this same key.
-- `accept-agent-links`: whether Pano accepts new **Pano Agent** links — the switch in the
-  **Link with the Pano Agent** dialog writes this same key. Default **true**. When `false` the dialog
-  hands out no code, every code it already showed stops working at once, and an agent that tries to
-  pair with one is refused exactly like a wrong code. Agents that are already linked keep working,
-  and pairing a node with the node code is not affected. See
-  [The Pano Agent →](../server-management/pano-node/#the-pano-agent).
+- Settings for servers Pano runs through a node — see [Server Management →](../server-management/#linked-and-managed-servers).
+- `plugin-jar-dir`: a folder of locally built `pano-mc-plugin` jars to install instead of the published release. For plugin development only; leave it empty.
+- `node-auto-update`: update nodes and [Pano Agents](../server-management/pano-node/#pano-agent) to Pano's own daemon version when they connect with an older one. Servers keep running. Default **true**. **Panel → Settings → Updates** changes the same key.
+- `accept-agent-links`: accept new Pano Agent links. Default **true**. When `false`, no new agent can pair; linked agents keep working.
+
 ## Plugin Sources
 
 ```jsonc
@@ -201,14 +169,6 @@ plugin-sources {
 
 **Details**
 
-- Where the panel searches for plugins and mods to install on a managed server — the **Browse** tab
-  of a server's plugins page. See [Plugins and mods →](../server-management/#plugins-and-mods).
-- **Modrinth** and **Hangar** need no key and are always on. Nothing has to be configured for them.
-- `curseforge-api-key`: a **CurseForge Eternal API key** enables the CurseForge source. CurseForge
-  requires every application to use its own key, so Pano cannot ship one — request one at
-  [console.curseforge.com](https://console.curseforge.com) and paste it here. Default **empty**,
-  which leaves the source switched off: the panel lists CurseForge as unavailable with the reason
-  and searches the other two.
-- A CurseForge project whose author disallowed third-party downloads offers no files at all. It is
-  still listed, but nothing can be installed from it — download it from CurseForge and upload the
-  jar through the [file manager](../server-management/#files) instead.
+- The plugin sites a server's **Browse** tab searches — see [Plugins & Mods →](../server-management/server-pages/#plugins-and-mods).
+- Modrinth and Hangar need no key.
+- `curseforge-api-key`: your own key from [console.curseforge.com](https://console.curseforge.com) turns CurseForge on. Empty leaves it off.

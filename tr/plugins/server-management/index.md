@@ -43,12 +43,10 @@ console, commands, power, metrics, players, plugins, files, backups, plugin-inst
 ```
 
 — Pano da tam olarak bunları sunar. Düğüm, oyunun dışındaki bir sürecin yapabildiği ve başka hiçbir
-şeyin yapamadığı şeyleri ekler: **Başlat** ile **Öldür**, duran bir sunucunun konsolu, sunucu
+şeyin yapamadığı şeyleri ekler: **Başlat** ile **Sonlandır**, duran bir sunucunun konsolu, sunucu
 oluşturma ve yeniden kurma, bir de anında yedek geri yükleme. İkisi birden varsa her özelliği, o işi
 daha iyi yapan taraf üstlenir; yalnızca biri varsa onu o taraf yapar. Eski bir eklenti daha az yetenek
 bildirir ve Pano, kalanlar için düğüme devreder.
 
-Özellik özellik hazırlanmış tablo:
-**[Hangi özellik neyle çalışır](../../platform/server-management/what-works-with-what/)**.
-Gereksinimler, izin node'ları ve platformlar arası farklar dâhil tüm belgeler ise
+Her tarafın ne yaptığı, gereksinimler ve platformlar arası farklar dâhil tüm belgeler
 [Sunucu Yönetimi](../../platform/server-management/) sayfasındadır.

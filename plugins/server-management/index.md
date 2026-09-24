@@ -47,7 +47,5 @@ servers, and an immediate backup restore. Where both are there, each feature is 
 of the two does it better; where only one is, that one does it. An older plugin announces fewer
 capabilities and Pano falls back to the node for those.
 
-**[What works with what](../../platform/server-management/what-works-with-what/)** is the matrix,
-feature by feature. The full documentation — the requirements, the permission nodes and the
-per-platform differences — is on the
-[Server Management](../../platform/server-management/) page.
+The full documentation — what each side does, the requirements and the per-platform differences —
+is on the [Server Management](../../platform/server-management/) page.

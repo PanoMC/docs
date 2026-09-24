@@ -105,7 +105,7 @@ Ekranda sizi beş basit adımdan geçiren **Kurulum Sihirbazı** görünecektir:
 1. **Dil Seçimi ve Kullanım Şekli**  
    Tercih ettiğiniz dili seçin; ardından aynı ekranda **"Pano'yu nasıl kullanacaksınız?"** sorusunu yanıtlayın:
    - **Web sitesi** — yalnızca herkese açık bir web sitesi (klasik Pano deneyimi).
-   - **Sunucu yönetimi** — yalnızca Minecraft sunucu yönetimi: asıl ürün paneldir, kenar çubuğunda **Yazılar**, **Talepler** ve **Görünüm** gizlenir ve herkese açık sayfalar `/panel` adresine yönlendirilir.
+   - **Sunucu yönetimi** — yalnızca Minecraft sunucu yönetimi: asıl ürün paneldir, **Yazılar**, **Talepler** ve **Görünüm** (temalar) kapatılır ve herkese açık sayfalar `/panel` adresine yönlendirilir.
    - **Her ikisi** — web sitesi + sunucu yönetimi. Önerilen seçenektir ve hazır olarak seçili gelir.
 
    Bu seçim kalıcı değildir — daha sonra **Panel → Ayarlar → Platform → Tercihler** bölümünden değiştirebilirsiniz. Seçiminiz `config.conf` dosyasında [`usage-mode`](../configuration/#genel-ayarlar) anahtarı olarak saklanır.  

@@ -32,7 +32,7 @@ On Windows (x64/ARM64), Pano can automatically download and manage a portable Ma
 On the first run, Pano needs to download dependencies and extract necessary files. Depending on your internet speed, this may take a few minutes. Please be patient!
 
 #### Can I use Pano only to manage my Minecraft servers, without a public website?
-Yes. Pick **Server management** on the first screen of the setup wizard, or switch to it later in **Panel → Settings → Platform → Preferences**. The panel then becomes the product: the sidebar hides **Posts**, **Tickets** and **View**, Pano does not even start the theme, and every public address redirects to `/panel`, where the panel has [a sign-in page of its own](../server-management/#signing-in-without-a-website). The choice is stored as the [`usage-mode`](../configuration/#general-settings) key in `config.conf`.
+Yes. Pick **Server management** on the first screen of the setup wizard, or switch to it later in **Panel → Settings → Platform → Preferences**. The panel then becomes the product: **Posts**, **Tickets** and **View** (themes) are turned off, Pano does not even start the theme, and every public address redirects to `/panel`, where the panel has [a sign-in page of its own](../server-management/#using-pano-without-a-website). The choice is stored as the [`usage-mode`](../configuration/#general-settings) key in `config.conf`.
 
 ---
 
