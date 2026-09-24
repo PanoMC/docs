@@ -330,8 +330,8 @@ Pano'nun kendisinin çalıştığı makine de bir düğüm olabilir ve tek tıkl
 
 Pano bunun üzerine
 
-1. `pano-node.jar` dosyasını bulur — kendi jar'ının yanında, çalışma klasöründe ya da çalıştırdığı
-   Pano sürümünden indirerek; indirdiğini, yanında yayınlanan `pano-node.jar.sha256` ile doğrular,
+1. `pano-node.jar` dosyasını bulur — kendi jar'ının yanında ya da çalışma klasöründe; orada yoksa ya
+   da oradaki başka bir Pano sürümündense, kendi jar'ının içinde taşıdığı kopyayı oraya çıkarır,
 2. tek kullanımlık bir önyükleme anahtarıyla başlatır; böylece yazılacak bir eşleştirme kodu olmaz ve
    düğüm baştan onaylı gelir,
 3. paneli ve temanızı çalıştıran süreçleri zaten gözettiği gibi onu da gözetir.
@@ -1156,9 +1156,9 @@ jar'ı; kötü bir dakika geçiren bir kaynağın bedeli de sayfa değil, o tara
   **Düğüm ekle** penceresi bunu ilerleme ekranında söyler. Java 17 veya daha yeni bir JDK kurun ya
   da hâlihazırda kurulu olanı `local-node.java-path` ile gösterin. Pano'nun kendi Java 11'inin arka
   plan süreci için yeterli olmadığını unutmayın.
-- **Arka plan sürecinin jar'ı indirilemedi** — internete çıkamayan bir makine ya da eşleşen sürüm
-  dosyası olmayan bir Pano derlemesi. `pano-node.jar` dosyasını elle indirip `local-node.jar-path`
-  ayarına yazın.
+- **Arka plan sürecinin jar'ı çıkarılamadı** — Pano `pano-node.jar` dosyasını yanına yazamadı (salt
+  okunur ya da dolu bir disk) ya da içinde süreç bulunmayan, elle derlenmiş bir Pano jar'ı. Eşleşen
+  sürümün `pano-node.jar` dosyasını elle indirip `local-node.jar-path` ayarına yazın.
 - Nedeni ne olursa olsun, arka plan sürecinin kendi çıktısı
   **`<pano-klasörü>/logs/pano-node.log`** dosyasındadır. Uzak bir düğüm ise servisinin standart
   çıktısını nereye yazıyorsa oraya yazar.

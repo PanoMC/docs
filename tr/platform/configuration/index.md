@@ -142,8 +142,9 @@ local-node {
 - `enabled`: `false` yapıldığında Pano hiç yerel düğüm başlatmaz ve gözetmez. Panel bu durumda yerel
   düğümü devre dışı olarak gösterir. Varsayılan **true**.
 - `jar-path`: `pano-node.jar` için açık yol. Boş bırakılırsa Pano önce kendi jar dosyasının yanına ve
-  çalışma dizinine bakar; bulamazsa çalıştığı Pano sürümüyle birlikte yayımlanan `pano-node.jar`
-  dosyasını indirir ve yanında yayımlanan `pano-node.jar.sha256` ile doğrular.
+  çalışma dizinine bakar; bulamazsa kendi jar'ının içinde taşıdığı `pano-node.jar` dosyasını oraya
+  çıkarır — `/api/node/pano-node.jar` adresinden sunduğu dosya da budur ve Pano kendini her
+  güncellediğinde yenilenir.
 - `java-path`: servisin başlatılacağı **17 veya üzeri** Java dizini (ya da içindeki `java` çalıştırılabilir
   dosyası). Boş bırakılırsa Pano kendisi arar: üzerinde çalıştığı JVM, `JAVA_HOME`, `/usr/lib/jvm`,
   `/Library/Java/JavaVirtualMachines`, Windows'taki alışılmış `C:\Program Files` konumları ve `PATH`

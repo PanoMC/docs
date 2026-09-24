@@ -11,8 +11,8 @@ durumu, konsol çıktısını ve ölçümleri geri bildirir.
 
 Her zaman **ayrı bir süreçtir**, asla Pano'nun kendi JVM'inin parçası değildir. Zaten amaç budur:
 Pano'yu güncellemek ya da yeniden başlatmak, onun yönettiği Minecraft sunucularını çevrimdışı
-bırakmamalıdır. Pano'nun kendisinin çalıştığı makinede arka plan sürecini Pano indirir, başlatır ve
-çalışır tutar — bkz. [yerel düğüm](../#yerel-dugum). Bu sayfadaki her şey, süreci kendiniz
+bırakmamalıdır. Pano'nun kendisinin çalıştığı makinede arka plan sürecini Pano kendi jar'ından çıkarır, başlatır
+ve çalışır tutar — bkz. [yerel düğüm](../#yerel-dugum). Bu sayfadaki her şey, süreci kendiniz
 çalıştırdığınız durumlar içindir: ikinci bir makine, bir konteyner ya da sürecin makineyle birlikte
 başlamasını istediğiniz bir sunucu — ve tek bir sunucunun klasörünün içinden başlatılan aynı jar olan
 [Pano Agent](#the-pano-agent).

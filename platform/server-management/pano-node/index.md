@@ -10,7 +10,7 @@ output and metrics back.
 
 It is always a **separate process**, never part of Pano's own JVM. That is the point: updating or
 restarting Pano must not take the Minecraft servers it manages offline. On the machine Pano itself
-runs on, Pano downloads the daemon, starts it and keeps it running for you — see
+runs on, Pano unpacks the daemon it ships with, starts it and keeps it running for you — see
 [the local node](../#the-local-node). Everything on this page is for the cases where you run it
 yourself: a second machine, a container, or a host you want the daemon to start with — and for
 [the Pano Agent](#the-pano-agent), the same jar started from inside one server's folder.

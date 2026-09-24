@@ -143,8 +143,8 @@ local-node {
 - `enabled`: set to `false` to stop Pano from spawning or supervising a local node at all. The
   panel then reports the local node as disabled. Default **true**.
 - `jar-path`: explicit path to `pano-node.jar`. Leave empty and Pano looks next to its own jar and
-  in its working directory, and otherwise downloads the `pano-node.jar` published with the Pano
-  release it is running, verifying it against the `pano-node.jar.sha256` published beside it.
+  in its working directory, and otherwise unpacks the `pano-node.jar` bundled inside its own jar
+  there — the same one it serves at `/api/node/pano-node.jar`, replaced whenever Pano updates itself.
 - `java-path`: the Java **17 or newer** home (or the `java` binary inside one) the daemon is
   started with. Leave empty and Pano searches for one: the JVM it is running on itself,
   `JAVA_HOME`, `/usr/lib/jvm`, `/Library/Java/JavaVirtualMachines`, the usual `C:\Program Files`
