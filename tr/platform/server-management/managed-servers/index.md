@@ -61,7 +61,8 @@ Değişiklikler bir sonraki açılışta uygulanır.
   başlat**.
 - **Bellek**, yalnızca Java heap'i değil sunucunun toplam belleğidir: heap, bundan JVM'in payı düşülerek
   verilir (%25, 384 MB ile 1 GB arası) — örneğin 2048 MB, 1536 MB heap demektir. Docker çalışma
-  ortamında konteynerin sınırıdır.
+  ortamında konteynerin sınırıdır. Heap, üst sınırının dörtte biriyle başlar ve gerektikçe büyür;
+  Java 12+ üzerinde boşta duran sunucu belleği geri verir. Kendi JVM argümanlarınız yine önceliklidir.
 - **Server properties:** `server.properties` için bir form. Yalnızca değiştirdiğiniz anahtarlar
   yazılır; dosyanın geri kalanı olduğu gibi kalır.
 - **Java:** **Otomatik** seçiliyken Minecraft sürümünün desteklediği en düşük sürüm — 26.1+ için 25,

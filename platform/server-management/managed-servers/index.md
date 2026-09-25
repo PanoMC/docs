@@ -61,7 +61,8 @@ Changes apply on the next start.
   crash**.
 - **Memory** is the server's whole memory, not just the Java heap: the heap gets it minus a share for
   the JVM (25 %, between 384 MB and 1 GB) — for example 2048 MB gives a 1536 MB heap. Under the
-  Docker runtime it is the container's limit.
+  Docker runtime it is the container's limit. The heap starts at a quarter of its maximum and grows
+  as needed; on Java 12+ an idle server hands memory back. Your own JVM arguments still win.
 - **Server properties:** a form for `server.properties`. Only the keys you change are written; the
   rest of the file stays as it is.
 - **Java:** on **Automatic**, the lowest version the Minecraft version supports — 25 for 26.1+, 21
