@@ -36,7 +36,8 @@ Yazılım → Ayarlar → Özet** adımlarından geçirir.
 
 - **Yazılım:** Paper (önerilen), Purpur, Folia, Spigot, Fabric, Vanilla ve proxy'ler: Velocity
   (önerilen), Waterfall ve BungeeCord. **Spigot** düğümde BuildTools ile derlenir — bir sürümün ilk
-  derlemesi yaklaşık on dakika sürer, sonrakiler onu yeniden kullanır.
+  derlemesi yaklaşık on dakika sürer, sonrakiler onu yeniden kullanır. Derleme bir JDK ister; makinede
+  yoksa düğüm bir tane indirir.
 - **Ayarlar:** ad, bellek, port (boş = `25565-25600` aralığından boş bir port), Java sürümü, JVM
   argümanları, **Pano ile başlat**, **Çökünce yeniden başlat**, **Beyaz liste** (varsayılan olarak
   kapalı; içe aktarmalarda ve proxy'lerde yok) ve Minecraft EULA.
@@ -80,7 +81,11 @@ Değişiklikler bir sonraki açılışta uygulanır.
 
 - **Düğüm çevrimdışı kalıyor** — yerel düğüm Java 17+ ister (`LOCAL_NODE_JAVA_MISSING`); Pano onu
   bulamıyorsa `local-node.java-path` ayarlayın. Aksi hâlde `pano-node.log` dosyasına bakın.
-- **Kurulum başarısız oluyor** — düğümün indirme sitelerine internet erişimi ve boş disk alanı olmalı.
+- **Kurulum başarısız oluyor** — düğümün indirme sitelerine internet erişimi ve boş disk alanı
+  olmalı. Sunucu başlığı sebebiyle birlikte **Kurulum başarısız oldu** uyarısını ve **Yeniden
+  Yükle** / **Yazılımı değiştir** düğmelerini göstermeye devam eder; bir kurulum başarılı olana
+  kadar sunucu başlatılamaz. Çalışan bir sunucunun başarısız yeniden yüklemesi ise eski sunucuyu
+  geri getirir.
 - **Sunucu Çöktü durumunda** — hata konsolundadır. `137` çıkış kodu, dışarıdan öldürüldüğü anlamına
   gelir; çoğu zaman belleği tükendiği için.
 - **Port kullanımda** — **Başlangıç** altından değiştirin ya da boş bir port için boş bırakın.

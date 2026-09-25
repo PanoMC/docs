@@ -35,7 +35,8 @@ Software → Settings → Review**.
 
 - **Software:** Paper (recommended), Purpur, Folia, Spigot, Fabric, Vanilla, and the proxies Velocity
   (recommended), Waterfall and BungeeCord. **Spigot** is compiled on the node with BuildTools — the
-  first build of a version takes about ten minutes, later ones reuse it.
+  first build of a version takes about ten minutes, later ones reuse it. The build needs a JDK; the
+  node downloads one when the host has none.
 - **Settings:** name, memory, port (empty = a free one from `25565-25600`), Java version, JVM
   arguments, **Start with Pano**, **Restart after a crash**, **Whitelist** (off by default; not for
   imports or proxies) and the Minecraft EULA.
@@ -80,6 +81,9 @@ Changes apply on the next start.
 - **The node stays offline** — the local node needs Java 17+ (`LOCAL_NODE_JAVA_MISSING`); set
   `local-node.java-path` if Pano cannot find it. Otherwise read `pano-node.log`.
 - **The install fails** — the node needs internet access to the download sites, and free disk space.
+  The server header keeps showing **The install failed** with the reason and **Reinstall** /
+  **Change software** buttons; the server cannot be started until an install succeeds. A failed
+  reinstall of a working server puts the old server back instead.
 - **The server shows CRASHED** — its console has the error. Exit code `137` means it was killed from
   outside, usually for running out of memory.
 - **The port is in use** — change it in **Startup**, or leave it empty for a free one.
