@@ -72,7 +72,9 @@ Changes apply on the next start.
   the node.
 - **Danger zone → Change software / Reinstall:** switch to another software or version, keeping
   worlds, plugins and configuration where they fit. A backup is taken first, and a failed change is
-  rolled back. Needs **Create Servers** and your password.
+  rolled back. Worlds kept on the way to an **older** Minecraft version stop the server at startup —
+  the dialog warns about it; restore the pre-change backup to go back. Needs **Create Servers** and
+  your password.
 - **Remove server:** on a managed server this deletes its folder **and its backups**. A linked server
   is only removed from Pano.
 

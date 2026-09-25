@@ -73,7 +73,9 @@ Değişiklikler bir sonraki açılışta uygulanır.
   düğüm indirir.
 - **Tehlikeli bölge → Yazılımı değiştir / Yeniden Yükle:** başka bir yazılıma ya da sürüme geçer;
   dünyaları, eklentileri ve yapılandırmayı uydukları ölçüde korur. Önce bir yedek alınır, başarısız
-  bir değişiklik geri alınır. **Sunucu Oluştur** izni ve parolanızı ister.
+  bir değişiklik geri alınır. Dünyalar korunarak **daha eski** bir Minecraft sürümüne geçilirse sunucu
+  açılışta durur — pencere bu konuda uyarır; geri dönmek için değişiklik öncesi yedeği geri yükleyin.
+  **Sunucu Oluştur** izni ve parolanızı ister.
 - **Sunucuyu kaldır:** yönetilen bir sunucuda bu, klasörünü **ve yedeklerini** siler. Bağlı bir sunucu
   ise yalnızca Pano'dan kaldırılır.
 
