@@ -59,10 +59,12 @@ Değişiklikler bir sonraki açılışta uygulanır.
 
 - **Başlangıç:** Java sürümü, bellek, port, JVM argümanları, **Pano ile başlat**, **Çökünce yeniden
   başlat**.
-- **Bellek**, yalnızca Java heap'i değil sunucunun toplam belleğidir: heap, bundan JVM'in payı düşülerek
-  verilir (%25, 384 MB ile 1 GB arası) — örneğin 2048 MB, 1536 MB heap demektir. Docker çalışma
-  ortamında konteynerin sınırıdır. Heap, üst sınırının dörtte biriyle başlar ve gerektikçe büyür;
-  Java 12+ üzerinde boşta duran sunucu belleği geri verir. Kendi JVM argümanlarınız yine önceliklidir.
+- **Bellek**, yalnızca Java heap'i değil sunucunun toplam belleğidir: JVM bunun 512 MB artı %15'ini
+  (en fazla 2 GB) kendine ayırır, kalanı heap'e verilir ama heap asla yarısının altına düşmez —
+  örneğin 2048 MB 1229 MB heap, 4096 MB ise 2970 MB heap demektir. Panel, ortaya çıkan heap'i alanın
+  altında gösterir. Docker çalışma ortamında konteynerin sınırıdır. Heap, üst sınırının dörtte
+  biriyle başlar ve gerektikçe büyür; Java 12+ üzerinde boşta duran sunucu belleği geri verir. Kendi
+  JVM argümanlarınız yine önceliklidir.
 - **Server properties:** `server.properties` için bir form. Yalnızca değiştirdiğiniz anahtarlar
   yazılır; dosyanın geri kalanı olduğu gibi kalır.
 - **Java:** **Otomatik** seçiliyken Minecraft sürümünün desteklediği en düşük sürüm — 26.1+ için 25,
