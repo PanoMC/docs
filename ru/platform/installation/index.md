@@ -6,8 +6,10 @@
 
 Перед установкой Pano убедитесь, что ваше окружение соответствует следующим требованиям:
 
-1. **Java (JVM 17+)**
+1. **Java (JVM 11+)**
    - Pano работает на Java 11 или выше.
+   - [Управляемым серверам](../server-management/managed-servers/) на локальном `pano-node` нужна Java 17 или выше.
+   - Запускаете Pano в Docker? См. [Запуск Pano в контейнерах](../containers/).
    - Убедитесь, что **JDK** или **JRE** установлены и доступны через командную строку.
    - [→ Скачать Java](https://www.oracle.com/java/technologies/javase-downloads.html)
 

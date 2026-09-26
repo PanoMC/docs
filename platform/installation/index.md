@@ -6,8 +6,10 @@ Follow this guide to set up **Pano** and get it running on your Minecraft server
 
 Before installing Pano, make sure your environment meets the following requirements:
 
-1. **Java (JVM 17+)**
+1. **Java (JVM 11+)**
    - Pano runs on Java 11 or higher.
+   - [Managed servers](../server-management/managed-servers/) on the local `pano-node` need Java 17 or higher.
+   - Running Pano in Docker? See [Run Pano with Containers](../containers/).
    - Make sure the **JDK** or **JRE** is installed and accessible via your command line.
    - [→ Download Java](https://www.oracle.com/java/technologies/javase-downloads.html)
 

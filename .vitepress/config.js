@@ -154,6 +154,15 @@ export default defineConfig({
                   { text: "pano-node & Agent", link: "/platform/server-management/pano-node/" },
                 ],
               },
+              {
+                text: "Containers",
+                link: "/platform/containers/",
+                collapsed: true,
+                items: [
+                  { text: "Configuration", link: "/platform/containers/configuration/" },
+                  { text: "Runtime", link: "/platform/containers/runtime/" },
+                ],
+              },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
               {
@@ -418,6 +427,15 @@ export default defineConfig({
                   { text: "pano-node ve Agent", link: "/tr/platform/server-management/pano-node/" },
                 ],
               },
+              {
+                text: "Konteynerler",
+                link: "/tr/platform/containers/",
+                collapsed: true,
+                items: [
+                  { text: "Yapılandırma", link: "/tr/platform/containers/configuration/" },
+                  { text: "Çalışma Ortamı", link: "/tr/platform/containers/runtime/" },
+                ],
+              },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
               {
@@ -680,6 +698,15 @@ export default defineConfig({
                   { text: "Управляемые серверы", link: "/ru/platform/server-management/managed-servers/" },
                   { text: "Права и оповещения", link: "/ru/platform/server-management/permissions/" },
                   { text: "pano-node и Agent", link: "/ru/platform/server-management/pano-node/" },
+                ],
+              },
+              {
+                text: "Контейнеры",
+                link: "/ru/platform/containers/",
+                collapsed: true,
+                items: [
+                  { text: "Конфигурация", link: "/ru/platform/containers/configuration/" },
+                  { text: "Среда выполнения", link: "/ru/platform/containers/runtime/" },
                 ],
               },
               { text: "Аддоны", link: "/ru/platform/addons/" },

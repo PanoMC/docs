@@ -13,7 +13,7 @@ Pano, Minecraft sunucu sahipleri için tasarlanmış gelişmiş, açık kaynakl�
 Evet! Pano, GPLv3 lisansı ile lisanslanmıştır ve herkes için ücretsizdir. Ayrıca geliştiricilerin kendi eklentilerini ve temalarını oluşturup satabildikleri bir ekosistemi de destekliyoruz.
 
 #### Pano'yu çalıştırmak için güçlü bir sunucuya ihtiyacım var mı?
-Hayır. Pano performans için optimize edilmiştir. 1 GB RAM ve Java 17+ yüklü temel bir VPS, çoğu topluluk için genellikle fazlasıyla yeterlidir.
+Hayır. Pano performans için optimize edilmiştir. 1 GB RAM ve Java 11+ yüklü temel bir VPS, çoğu topluluk için genellikle fazlasıyla yeterlidir.
 
 ---
 

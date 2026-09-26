@@ -6,8 +6,10 @@ Bu rehberi takip ederek **Pano**’yu kurabilir ve Minecraft sunucunuzda birkaç
 
 Pano’yu kurmadan önce aşağıdaki gereksinimlerin karşılandığından emin olun:
 
-1. **Java (JVM 17+)**
+1. **Java (JVM 11+)**
     - Pano, Java 11 veya üzeri sürümlerde çalışır.
+    - Yerel `pano-node` üzerindeki [yönetilen sunucular](../server-management/managed-servers/) Java 17 veya üzerini ister.
+    - Pano'yu Docker ile mi çalıştıracaksınız? Bkz. [Pano'yu Konteynerle Çalıştırma](../containers/).
     - **JDK** veya **JRE**’nin kurulu olduğundan ve komut satırında erişilebilir olduğundan emin olun.
     - [→ Java’yı İndir](https://www.oracle.com/java/technologies/javase-downloads.html)
 
