@@ -71,4 +71,5 @@ Pano'ya verin.
 ## Başkaları için Pano barındırma
 
 Pano Host, her Pano Instance için aynı imajlarla ve [Yapılandırma](configuration/) sayfasındaki ortam
-değişkenleriyle bir konteyner çalıştırır.
+değişkenleriyle bir konteyner çalıştırır. Modelin tamamı — izolasyon, güncellemeler ve yedekler —
+[Başkaları için Pano Instance Barındırma](../hosting/) sayfasında.

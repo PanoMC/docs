@@ -69,4 +69,5 @@ Pano its address in the wizard or through [environment variables](configuration/
 ## Hosting Pano for others
 
 Pano Host runs one container per Pano Instance, with the same images and the environment variables
-described in [Configuration](configuration/).
+described in [Configuration](configuration/). [Hosting Pano Instances for Others](../hosting/) explains
+the whole model: isolation, updates and backups.

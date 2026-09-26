@@ -163,6 +163,15 @@ export default defineConfig({
                   { text: "Runtime", link: "/platform/containers/runtime/" },
                 ],
               },
+              {
+                text: "Hosting for Others",
+                link: "/platform/hosting/",
+                collapsed: true,
+                items: [
+                  { text: "Isolation", link: "/platform/hosting/isolation/" },
+                  { text: "Operations", link: "/platform/hosting/operations/" },
+                ],
+              },
               { text: "Addons", link: "/platform/addons/" },
               { text: "Themes", link: "/platform/themes/" },
               {
@@ -436,6 +445,15 @@ export default defineConfig({
                   { text: "Çalışma Ortamı", link: "/tr/platform/containers/runtime/" },
                 ],
               },
+              {
+                text: "Başkaları için Barındırma",
+                link: "/tr/platform/hosting/",
+                collapsed: true,
+                items: [
+                  { text: "İzolasyon", link: "/tr/platform/hosting/isolation/" },
+                  { text: "İşletim", link: "/tr/platform/hosting/operations/" },
+                ],
+              },
               { text: "Eklentiler", link: "/tr/platform/addons/" },
               { text: "Temalar", link: "/tr/platform/themes/" },
               {
@@ -707,6 +725,15 @@ export default defineConfig({
                 items: [
                   { text: "Конфигурация", link: "/ru/platform/containers/configuration/" },
                   { text: "Среда выполнения", link: "/ru/platform/containers/runtime/" },
+                ],
+              },
+              {
+                text: "Хостинг для других",
+                link: "/ru/platform/hosting/",
+                collapsed: true,
+                items: [
+                  { text: "Изоляция", link: "/ru/platform/hosting/isolation/" },
+                  { text: "Эксплуатация", link: "/ru/platform/hosting/operations/" },
                 ],
               },
               { text: "Аддоны", link: "/ru/platform/addons/" },
