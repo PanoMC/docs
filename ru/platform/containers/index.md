@@ -14,7 +14,7 @@ Docker — альтернатива [установке из `.jar`](../installa
 
 | Тег | Что вы получаете |
 | --- | --- |
-| `latest` | Новейший стабильный релиз |
+| `latest` | Новейший стабильный релиз. До выхода 1.0.0: новейшая beta (или alpha, пока нет образа beta) |
 | `beta`, `alpha` | Новейший релиз этого канала предварительных версий |
 | `<version>`, напр. `1.0.0-alpha.520` | Ровно этот релиз, никогда не меняется |
 | `runtime-jre<N>` | Java `N` и лаунчер, **без** Pano. См. [Runtime-образ](runtime/#runtime-image) |
@@ -31,6 +31,7 @@ Docker — альтернатива [установке из `.jar`](../installa
    #   echo "PANO_DB_PASSWORD=$(openssl rand -hex 24)" > .env
    #   docker compose up -d        # then open http://<server>:8088 and finish the setup wizard
    # PANO_TAG picks the image tag (latest, beta, alpha or a version such as 1.0.0), PANO_PORT the host port.
+   # latest = newest stable release, or the most stable prerelease channel until 1.0.0 ships.
    name: pano
 
    services:
@@ -83,7 +84,7 @@ Docker — альтернатива [установке из `.jar`](../installa
    чтобы выбрать тег.
 
 3. Откройте `http://<ip-вашего-сервера>:8088/` и пройдите [мастер настройки](../installation/).
-   Шаг базы данных уже заполнен из переменных окружения.
+   Шаг базы данных уже заполнен из переменных окружения; оставьте пароль пустым, чтобы использовать `PANO_DB_PASSWORD`.
 
 ## docker run {#docker-run}
 

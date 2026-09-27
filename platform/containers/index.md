@@ -14,7 +14,7 @@ All tags live in one public package, `ghcr.io/panomc/pano-web-platform`, built f
 
 | Tag | What you get |
 | --- | --- |
-| `latest` | The newest stable release |
+| `latest` | The newest stable release. Until 1.0.0 ships: the newest beta (or alpha while no beta image exists) |
 | `beta`, `alpha` | The newest release of that prerelease channel |
 | `<version>`, e.g. `1.0.0-alpha.520` | Exactly that release, never moves |
 | `runtime-jre<N>` | Java `N` and the launcher, **no** Pano. See [The runtime image](runtime/#runtime-image) |
@@ -31,6 +31,7 @@ both examples below start MariaDB next to it.
    #   echo "PANO_DB_PASSWORD=$(openssl rand -hex 24)" > .env
    #   docker compose up -d        # then open http://<server>:8088 and finish the setup wizard
    # PANO_TAG picks the image tag (latest, beta, alpha or a version such as 1.0.0), PANO_PORT the host port.
+   # latest = newest stable release, or the most stable prerelease channel until 1.0.0 ships.
    name: pano
 
    services:
@@ -82,7 +83,7 @@ both examples below start MariaDB next to it.
    Add `PANO_PORT=80` to `.env` to serve Pano on port 80, and `PANO_TAG=beta` (or a version) to pick a tag.
 
 3. Open `http://<your-server-ip>:8088/` and follow the [Setup Wizard](../installation/#setup-wizard-step-by-step).
-   The database step is already filled in from the environment.
+   The database step is already filled in from the environment; leave the password empty to keep `PANO_DB_PASSWORD`.
 
 ## docker run {#docker-run}
 

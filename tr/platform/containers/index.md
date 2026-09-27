@@ -14,7 +14,7 @@ Tüm etiketler herkese açık tek bir pakette, `ghcr.io/panomc/pano-web-platform
 
 | Etiket | Ne alırsınız |
 | --- | --- |
-| `latest` | En yeni kararlı sürüm |
+| `latest` | En yeni kararlı sürüm. 1.0.0 çıkana kadar: en yeni beta (beta imajı yokken en yeni alpha) |
 | `beta`, `alpha` | O ön sürüm kanalının en yeni sürümü |
 | `<version>`, ör. `1.0.0-alpha.520` | Tam olarak o sürüm, hiç değişmez |
 | `runtime-jre<N>` | Java `N` ve başlatıcı, Pano **yok**. Bkz. [Runtime imajı](runtime/#runtime-image) |
@@ -31,6 +31,7 @@ MariaDB** veritabanına ihtiyaç duyar; aşağıdaki iki örnek de yanında bir 
    #   echo "PANO_DB_PASSWORD=$(openssl rand -hex 24)" > .env
    #   docker compose up -d        # then open http://<server>:8088 and finish the setup wizard
    # PANO_TAG picks the image tag (latest, beta, alpha or a version such as 1.0.0), PANO_PORT the host port.
+   # latest = newest stable release, or the most stable prerelease channel until 1.0.0 ships.
    name: pano
 
    services:
@@ -83,7 +84,7 @@ MariaDB** veritabanına ihtiyaç duyar; aşağıdaki iki örnek de yanında bir 
    `PANO_TAG=beta` (ya da bir sürüm) ekleyin.
 
 3. `http://<sunucu-ip-adresiniz>:8088/` adresini açın ve [Kurulum Sihirbazı](../installation/)'nı
-   izleyin. Veritabanı adımı ortam değişkenlerinden önceden doldurulmuştur.
+   izleyin. Veritabanı adımı ortam değişkenlerinden önceden doldurulmuştur; `PANO_DB_PASSWORD` kullanılsın diye şifreyi boş bırakın.
 
 ## docker run {#docker-run}
 
