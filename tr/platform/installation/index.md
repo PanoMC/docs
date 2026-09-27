@@ -9,7 +9,7 @@ Pano’yu kurmadan önce aşağıdaki gereksinimlerin karşılandığından emin
 1. **Java (JVM 11+)**
     - Pano, Java 11 veya üzeri sürümlerde çalışır.
     - Yerel `pano-node` üzerindeki [yönetilen sunucular](../server-management/managed-servers/) Java 17 veya üzerini ister.
-    - Pano'yu Docker ile mi çalıştıracaksınız? Bkz. [Pano'yu Konteynerle Çalıştırma](../containers/).
+    - Pano'yu Docker ile mi çalıştıracaksınız? Bkz. [Docker ile Kurulum](../containers/).
     - **JDK** veya **JRE**’nin kurulu olduğundan ve komut satırında erişilebilir olduğundan emin olun.
     - [→ Java’yı İndir](https://www.oracle.com/java/technologies/javase-downloads.html)
 
@@ -31,6 +31,7 @@ Pano’nun en son sürümünü resmi web sitesinden indirebilirsiniz:
 
 - [En Son Sürümü İndir →](https://panomc.com/download)
 - Daha eski sürümler için [GitHub Releases](https://github.com/PanoMC/Pano/releases) sayfasını ziyaret edin.
+- **Alternatif: Docker.** Java ve Pano tek bir imajda, MariaDB ile birlikte Docker Compose ile başlatılır. Bkz. [Docker ile Kurulum](../containers/).
 
 Pano, **`.jar`** dosyası olarak dağıtılır — tıpkı **Spigot** veya **Paper** gibi.  
 İndirdikten sonra dosyayı uygun bir klasöre (örneğin `/pano`) kaydedin.

@@ -3,17 +3,13 @@
 In a container, Pano keeps everything in the **`/data`** volume and can take its database and mail
 settings from **environment variables** instead of the Setup Wizard.
 
-> [!WARNING]
-> **Not released yet.** Environment variable support ships together with the container images. Names
-> may change before release. See [Run Pano with Containers](../).
-
-## The `/data` volume
+## The `/data` volume {#the-data-volume}
 
 `/data` is the only place Pano writes to. Mount a volume or a folder there and back it up.
 
 | In `/data` | What it is |
 | --- | --- |
-| `Pano-<version>.jar` and the UIs | The Pano release (with the `pano-runtime` image) |
+| `Pano-<version>.jar` and the UIs | The Pano release. The full image copies its jar here on first start |
 | `.pano-jar` | File name of the jar the launcher starts. See [Container mode](../runtime/#container-mode) |
 | `config.conf` | Pano's [configuration file](../../configuration/) |
 | `plugins/`, uploads, logs | Everything Pano creates while it runs |
@@ -21,21 +17,23 @@ settings from **environment variables** instead of the Setup Wizard.
 The rest of the container can stay **read-only**; Pano only needs `/data` and a temporary `/tmp`.
 Pano Host runs every Pano Instance that way.
 
+The image runs as uid **10000**. A named volume just works; a host folder must be writable by that
+user (`chown -R 10000:10000 <folder>`) or you pass your own `--user`.
+
 ## Environment variables {#environment-variables}
 
-On first boot Pano writes these variables into `config.conf`, so it already knows its database and
-mail server.
+On **first boot** Pano writes these variables into `config.conf`, so it already knows its database and
+mail server. Later changes to them are ignored; change the settings in the panel instead. All are optional.
 
 | Variable | Sets |
 | --- | --- |
-| `PANO_DB_HOST` | Database host |
-| `PANO_DB_NAME` | Database name |
-| `PANO_DB_USER` | Database user |
-| `PANO_DB_PASSWORD` | Database password |
-| `PANO_SMTP_HOST` | SMTP server |
-| `PANO_SMTP_PORT` | SMTP port |
-| `PANO_SMTP_USER` | SMTP user |
-| `PANO_SMTP_PASSWORD` | SMTP password |
+| `PANO_DB_HOST`, `PANO_DB_PORT` (3306) | Database server |
+| `PANO_DB_NAME`, `PANO_DB_USER`, `PANO_DB_PASSWORD` | Database and its user |
+| `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP server |
+| `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | SMTP login |
+| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Sender address, STARTTLS on or off |
+| `PANO_HTTP_PORT` | Port Pano listens on inside the container (8088) |
+| `PANO_JVM_ARGS` | Java options, space separated (`-XX:MaxRAMPercentage=75`) |
 
 Example:
 
@@ -46,7 +44,7 @@ docker run -d --name pano \
   -e PANO_DB_USER=pano \
   -e PANO_DB_PASSWORD=change-me \
   -v pano-data:/data \
-  ghcr.io/panomc/pano:<version>
+  ghcr.io/panomc/pano-web-platform:latest
 ```
 
 Keep passwords out of shell history: use `--env-file` or your orchestrator's secrets.

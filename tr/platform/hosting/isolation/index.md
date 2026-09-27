@@ -5,9 +5,6 @@ varsayın. Pano Host'un uyduğu kural: **instance'a asla güvenme.** Faturaland�
 uyguladığınız her şey — trafik, CPU, bellek, disk, e-posta, sürüm, çalışma süresi — instance'ın
 dışından ölçülür.
 
-> [!WARNING]
-> **Henüz yayınlanmadı.** Bkz. [Başkaları için Pano Instance Barındırma](../).
-
 ## Konteyner sıkılaştırma {#container-hardening}
 
 Her instance konteynerini şunlarla çalıştırın:

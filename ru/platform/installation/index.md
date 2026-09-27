@@ -9,7 +9,7 @@
 1. **Java (JVM 11+)**
    - Pano работает на Java 11 или выше.
    - [Управляемым серверам](../server-management/managed-servers/) на локальном `pano-node` нужна Java 17 или выше.
-   - Запускаете Pano в Docker? См. [Запуск Pano в контейнерах](../containers/).
+   - Запускаете Pano в Docker? См. [Установка через Docker](../containers/).
    - Убедитесь, что **JDK** или **JRE** установлены и доступны через командную строку.
    - [→ Скачать Java](https://www.oracle.com/java/technologies/javase-downloads.html)
 
@@ -31,6 +31,7 @@
 
 - [Скачать последнюю версию →](https://panomc.com/download)
 - Для старых версий посетите [GitHub Releases](https://github.com/PanoMC/Pano/releases)
+- **Альтернатива: Docker.** Один образ с Java и Pano, запускается через Docker Compose вместе с MariaDB. См. [Установка через Docker](../containers/).
 
 Pano распространяется в виде **`.jar`** файла — точно так же, как **Spigot** или **Paper**.  
 После загрузки сохраните файл в удобном месте (например, в специальной папке, такой как `/pano`).

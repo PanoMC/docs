@@ -9,9 +9,8 @@ modeli kendi sunucularınızda da uygulayabilirsiniz.
 - [İzolasyon](isolation/): konteyner sıkılaştırma, ağlar, veritabanı kullanıcıları, giden trafik, e-posta, kotalar.
 - [İşletim](operations/): güncelleme ve geri alma, yedekler, çökmeler, loglar.
 
-> [!WARNING]
-> **Henüz yayınlanmadı.** Bu sayfalar henüz hiçbir Pano sürümünde olmayan
-> [konteyner imajlarına ve konteyner moduna](../containers/) dayanır. Ayrıntılar yayından önce değişebilir.
+> [!NOTE]
+> Bu sayfalar Pano **1.0.0-alpha.520** sürümünden itibaren yayınlanan [konteyner imajlarına](../containers/) dayanır.
 
 ## Instance başına bir konteyner ve bir veritabanı {#model}
 
@@ -19,7 +18,7 @@ Her Pano Instance'ın şunları olur:
 
 | Parça | Instance başına | Paylaşılan |
 | --- | --- | --- |
-| Konteyner | bir tane, `ghcr.io/panomc/pano-runtime:jre<N>` imajından | — |
+| Konteyner | bir tane, `ghcr.io/panomc/pano-web-platform:runtime-jre<N>` imajından | — |
 | Veri birimi | `/data` olarak bağlanan kendi klasörü | — |
 | Veritabanı | kendi veritabanı ve veritabanı kullanıcıları | MySQL / MariaDB sunucusu |
 | Ağ | kendi Docker ağı | reverse proxy, veritabanı ve e-posta relay'i bu ağa bağlanır |
@@ -34,7 +33,7 @@ ve arayüzde görünür.
 
 ## Sürüm `/data` içinde durur {#release-in-data}
 
-`pano-runtime` imajında imaj yalnızca Java'yı ve bir başlatıcıyı içerir. Pano sürümünün kendisi — jar
+`runtime-jre<N>` imajında imaj yalnızca Java'yı ve bir başlatıcıyı içerir. Pano sürümünün kendisi — jar
 ve arayüzleri — instance'ın `/data` klasöründe `config.conf`, eklentiler, temalar ve yüklemelerle
 birlikte durur:
 

@@ -9,7 +9,7 @@ Before installing Pano, make sure your environment meets the following requireme
 1. **Java (JVM 11+)**
    - Pano runs on Java 11 or higher.
    - [Managed servers](../server-management/managed-servers/) on the local `pano-node` need Java 17 or higher.
-   - Running Pano in Docker? See [Run Pano with Containers](../containers/).
+   - Running Pano in Docker? See [Install with Docker](../containers/).
    - Make sure the **JDK** or **JRE** is installed and accessible via your command line.
    - [→ Download Java](https://www.oracle.com/java/technologies/javase-downloads.html)
 
@@ -31,6 +31,7 @@ You can get the latest version of Pano from the official website:
 
 - [Download Latest Version →](https://panomc.com/download)
 - For older releases, visit [GitHub Releases](https://github.com/PanoMC/Pano/releases)
+- **Alternative: Docker.** One image with Java and Pano, started with Docker Compose next to MariaDB. See [Install with Docker](../containers/).
 
 Pano is distributed as a **`.jar`** file — just like **Spigot** or **Paper**.  
 After downloading, save the file somewhere convenient (for example, in a dedicated folder like `/pano`).

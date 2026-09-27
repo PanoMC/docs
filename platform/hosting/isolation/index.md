@@ -4,9 +4,6 @@ When the instances on one server belong to different people, assume any of them 
 rule Pano Host follows: **never trust the instance.** Everything you bill or enforce — traffic, CPU,
 memory, disk, mail, version, uptime — is measured outside it.
 
-> [!WARNING]
-> **Not released yet.** See [Hosting Pano Instances for Others](../).
-
 ## Container hardening {#container-hardening}
 
 Run every instance container with:

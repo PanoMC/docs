@@ -155,7 +155,7 @@ export default defineConfig({
                 ],
               },
               {
-                text: "Containers",
+                text: "Docker",
                 link: "/platform/containers/",
                 collapsed: true,
                 items: [
@@ -437,7 +437,7 @@ export default defineConfig({
                 ],
               },
               {
-                text: "Konteynerler",
+                text: "Docker",
                 link: "/tr/platform/containers/",
                 collapsed: true,
                 items: [
@@ -719,7 +719,7 @@ export default defineConfig({
                 ],
               },
               {
-                text: "Контейнеры",
+                text: "Docker",
                 link: "/ru/platform/containers/",
                 collapsed: true,
                 items: [

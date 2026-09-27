@@ -9,9 +9,8 @@ servers.
 - [Isolation](isolation/): container hardening, networks, database users, outbound traffic, mail, quotas.
 - [Operations](operations/): updates and rollback, backups, crashes, logs.
 
-> [!WARNING]
-> **Not released yet.** These pages rely on the [container images and container mode](../containers/),
-> which are not part of any Pano release yet. Details may change before release.
+> [!NOTE]
+> These pages rely on the [container images](../containers/), published from Pano **1.0.0-alpha.520** on.
 
 ## One container and one database per instance {#model}
 
@@ -19,7 +18,7 @@ Every Pano Instance gets:
 
 | Piece | Per instance | Shared |
 | --- | --- | --- |
-| Container | one, from `ghcr.io/panomc/pano-runtime:jre<N>` | — |
+| Container | one, from `ghcr.io/panomc/pano-web-platform:runtime-jre<N>` | — |
 | Data volume | its own folder, mounted at `/data` | — |
 | Database | its own database and database users | the MySQL / MariaDB server |
 | Network | its own Docker network | reverse proxy, database, mail relay are attached to it |
@@ -34,7 +33,7 @@ appear in hostnames and in the UI.
 
 ## The release lives in `/data` {#release-in-data}
 
-With the `pano-runtime` image, the image holds only Java and a launcher. The Pano release itself — the
+With the `runtime-jre<N>` image, the image holds only Java and a launcher. The Pano release itself — the
 jar and its UIs — lives in the instance's `/data` folder next to `config.conf`, plugins, themes and
 uploads:
 
