@@ -46,7 +46,7 @@ These words appear all over this page. Skim them once.
 :::
 
 ::: tip How to read this page
-Each group below has a **table** (the API name, a one-line purpose, and its signature) and a `Source:` line — the file where it is defined (package `com.panomc.platform`, under `Pano/src/main/kotlin/` in the `pano-web-platform` repo), so you can always open the real code. Everything here is transcribed straight from that source. Watch for the word `suspend` in signatures — see the box just above.
+Each group below has a **table** (the API name, a one-line purpose, and its signature) and a `Source:` line — the file where it is defined (package `com.panomc.platform`, under `Pano/src/main/kotlin/` in the [`PanoMC/Pano`](https://github.com/PanoMC/Pano) repo), so you can always open the real code. Everything here is transcribed straight from that source. Watch for the word `suspend` in signatures — see the box just above.
 :::
 
 ::: tip Addons are plugins in code
@@ -54,7 +54,7 @@ As everywhere in these docs: prose says **addon**, but the code uses `plugin` �
 :::
 
 ::: tip Example plugins referenced on this page
-Several rows point at real, working plugins as examples — `pano-plugin-slider`, `pano-plugin-auth-guard`, `pano-plugin-market`, `pano-plugin-social-login`, `pano-plugin-premium-login`. These are the built-in plugins that ship with Pano; their source lives in the `pano-web-platform` repository under `plugins/pano-plugin-*`. When a row says "see `pano-plugin-slider` `PanelAddSliderItemAPI`", open that plugin's source to read the full example.
+Several rows point at real, working plugins as examples — `pano-plugin-slider`, `pano-plugin-auth-guard`, `pano-plugin-market`, `pano-plugin-social-login`, `pano-plugin-premium-login`. These are the built-in plugins that ship with Pano; each has its own repository under [github.com/PanoMC](https://github.com/PanoMC) with the same name (for example [`PanoMC/pano-plugin-slider`](https://github.com/PanoMC/pano-plugin-slider)). When a row says "see `pano-plugin-slider` `PanelAddSliderItemAPI`", open that plugin's source to read the full example.
 :::
 
 ## 1. Entry class & lifecycle — `PanoPlugin`

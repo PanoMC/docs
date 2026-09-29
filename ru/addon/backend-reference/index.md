@@ -46,7 +46,7 @@
 :::
 
 ::: tip Как читать эту страницу
-У каждой группы ниже есть **таблица** (имя API, назначение в одну строку и его сигнатура) и строка `Source:` — файл, где он определён (пакет `com.panomc.platform`, под `Pano/src/main/kotlin/` в репозитории `pano-web-platform`), так что вы всегда можете открыть реальный код. Всё здесь переписано прямо из этого исходника. Следите за словом `suspend` в сигнатурах — смотрите блок чуть выше.
+У каждой группы ниже есть **таблица** (имя API, назначение в одну строку и его сигнатура) и строка `Source:` — файл, где он определён (пакет `com.panomc.platform`, под `Pano/src/main/kotlin/` в репозитории [`PanoMC/Pano`](https://github.com/PanoMC/Pano)), так что вы всегда можете открыть реальный код. Всё здесь переписано прямо из этого исходника. Следите за словом `suspend` в сигнатурах — смотрите блок чуть выше.
 :::
 
 ::: tip Дополнения в коде — это плагины
@@ -54,7 +54,7 @@
 :::
 
 ::: tip Примеры плагинов, упомянутые на этой странице
-Несколько строк указывают на реальные, работающие плагины как примеры — `pano-plugin-slider`, `pano-plugin-auth-guard`, `pano-plugin-market`, `pano-plugin-social-login`, `pano-plugin-premium-login`. Это встроенные плагины, поставляемые с Pano; их исходники живут в репозитории `pano-web-platform` под `plugins/pano-plugin-*`. Когда строка говорит «смотрите `pano-plugin-slider` `PanelAddSliderItemAPI`», откройте исходники этого плагина, чтобы прочитать полный пример.
+Несколько строк указывают на реальные, работающие плагины как примеры — `pano-plugin-slider`, `pano-plugin-auth-guard`, `pano-plugin-market`, `pano-plugin-social-login`, `pano-plugin-premium-login`. Это встроенные плагины, поставляемые с Pano; у каждого есть свой репозиторий с тем же именем на [github.com/PanoMC](https://github.com/PanoMC) (например, [`PanoMC/pano-plugin-slider`](https://github.com/PanoMC/pano-plugin-slider)). Когда строка говорит «смотрите `pano-plugin-slider` `PanelAddSliderItemAPI`», откройте исходники этого плагина, чтобы прочитать полный пример.
 :::
 
 ## 1. Входной класс и жизненный цикл — `PanoPlugin`

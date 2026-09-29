@@ -46,7 +46,7 @@ Bu kelimeler bu sayfanın her yerinde görünür. Bir kez göz gezdirin.
 :::
 
 ::: tip Bu sayfa nasıl okunur
-Aşağıdaki her grup bir **tablo** (API adı, tek satırlık amaç ve imzası) ve bir `Source:` satırına sahiptir — tanımlandığı dosya (`com.panomc.platform` paketi, `pano-web-platform` deposundaki `Pano/src/main/kotlin/` altında), böylece gerçek kodu her zaman açabilirsiniz. Buradaki her şey doğrudan o kaynaktan aktarılmıştır. İmzalarda `suspend` kelimesine dikkat edin — hemen yukarıdaki kutuya bakın.
+Aşağıdaki her grup bir **tablo** (API adı, tek satırlık amaç ve imzası) ve bir `Source:` satırına sahiptir — tanımlandığı dosya (`com.panomc.platform` paketi, [`PanoMC/Pano`](https://github.com/PanoMC/Pano) deposundaki `Pano/src/main/kotlin/` altında), böylece gerçek kodu her zaman açabilirsiniz. Buradaki her şey doğrudan o kaynaktan aktarılmıştır. İmzalarda `suspend` kelimesine dikkat edin — hemen yukarıdaki kutuya bakın.
 :::
 
 ::: tip Eklentiler kodda plugin'dir
@@ -54,7 +54,7 @@ Bu dokümanlarda her yerde olduğu gibi: düz metin **eklenti** der, ama kod `pl
 :::
 
 ::: tip Bu sayfada başvurulan örnek eklentiler
-Birkaç satır örnek olarak gerçek, çalışan eklentilere işaret eder — `pano-plugin-slider`, `pano-plugin-auth-guard`, `pano-plugin-market`, `pano-plugin-social-login`, `pano-plugin-premium-login`. Bunlar Pano ile gelen yerleşik eklentilerdir; kaynakları `pano-web-platform` deposunda `plugins/pano-plugin-*` altında yaşar. Bir satır "bkz. `pano-plugin-slider` `PanelAddSliderItemAPI`" dediğinde, tam örneği okumak için o eklentinin kaynağını açın.
+Birkaç satır örnek olarak gerçek, çalışan eklentilere işaret eder — `pano-plugin-slider`, `pano-plugin-auth-guard`, `pano-plugin-market`, `pano-plugin-social-login`, `pano-plugin-premium-login`. Bunlar Pano ile gelen yerleşik eklentilerdir; her birinin [github.com/PanoMC](https://github.com/PanoMC) altında aynı adlı kendi deposu vardır (örneğin [`PanoMC/pano-plugin-slider`](https://github.com/PanoMC/pano-plugin-slider)). Bir satır "bkz. `pano-plugin-slider` `PanelAddSliderItemAPI`" dediğinde, tam örneği okumak için o eklentinin kaynağını açın.
 :::
 
 ## 1. Giriş sınıfı ve yaşam döngüsü — `PanoPlugin`
