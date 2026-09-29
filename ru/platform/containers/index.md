@@ -10,7 +10,7 @@ Docker — альтернатива [установке из `.jar`](../installa
 
 ## Образ
 
-Все теги лежат в одном публичном пакете `ghcr.io/panomc/pano-web-platform`, собранном для **amd64** и **arm64**:
+Все теги лежат в одном публичном пакете `ghcr.io/panomc/pano`, собранном для **amd64** и **arm64**:
 
 | Тег | Что вы получаете |
 | --- | --- |
@@ -36,7 +36,7 @@ Docker — альтернатива [установке из `.jar`](../installa
 
    services:
      pano:
-       image: ghcr.io/panomc/pano-web-platform:${PANO_TAG:-latest}
+       image: ghcr.io/panomc/pano:${PANO_TAG:-latest}
        restart: unless-stopped
        depends_on:
          db:
@@ -97,7 +97,7 @@ docker run -d --name pano-db --network pano --restart unless-stopped \
   -e MARIADB_RANDOM_ROOT_PASSWORD=1 -v pano-db:/var/lib/mysql mariadb:11.4
 docker run -d --name pano --network pano --restart unless-stopped -p 8088:8088 \
   -e PANO_DB_HOST=pano-db -e PANO_DB_NAME=pano -e PANO_DB_USER=pano -e PANO_DB_PASSWORD=change-me \
-  -v pano-data:/data ghcr.io/panomc/pano-web-platform:latest
+  -v pano-data:/data ghcr.io/panomc/pano:latest
 ```
 
 Уже есть сервер баз данных? Пропустите первые две команды и укажите его в `PANO_DB_HOST`.

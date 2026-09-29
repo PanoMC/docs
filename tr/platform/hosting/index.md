@@ -18,7 +18,7 @@ Her Pano Instance'ın şunları olur:
 
 | Parça | Instance başına | Paylaşılan |
 | --- | --- | --- |
-| Konteyner | bir tane, `ghcr.io/panomc/pano-web-platform:runtime-jre<N>` imajından | — |
+| Konteyner | bir tane, `ghcr.io/panomc/pano:runtime-jre<N>` imajından | — |
 | Veri birimi | `/data` olarak bağlanan kendi klasörü | — |
 | Veritabanı | kendi veritabanı ve veritabanı kullanıcıları | MySQL / MariaDB sunucusu |
 | Ağ | kendi Docker ağı | reverse proxy, veritabanı ve e-posta relay'i bu ağa bağlanır |

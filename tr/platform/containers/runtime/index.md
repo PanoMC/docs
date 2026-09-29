@@ -43,7 +43,7 @@ sağlar. Konteynerde bu kapanış konteyneri sonlandırır. İmajlar hiçbir zam
 
 ## Runtime imajı (ileri düzey) {#runtime-image}
 
-`ghcr.io/panomc/pano-web-platform:runtime-jre<N>` Java `N`'i, Bun'ı ve başlatıcıyı içerir, ancak Pano
+`ghcr.io/panomc/pano:runtime-jre<N>` Java `N`'i, Bun'ı ve başlatıcıyı içerir, ancak Pano
 sürümü **içermez**. Jar `/data` içinde durur ve `.pano-jar` onun adını tutar. Pano Host her instance'ı
 bu şekilde çalıştırır.
 
@@ -52,7 +52,7 @@ mkdir pano && cd pano
 # Pano-<version>.jar dosyasını https://panomc.com/download adresinden bu klasöre indirin
 echo "Pano-<version>.jar" > .pano-jar
 docker run -d --name pano --user "$(id -u):$(id -g)" --memory 1g \
-  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano-web-platform:runtime-jre11
+  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano:runtime-jre11
 ```
 
 Hiçbir şey otomatik kurulmaz: Pano sürümünü jar'ı ve `.pano-jar`'ı değiştirerek değiştirirsiniz. `<N>`

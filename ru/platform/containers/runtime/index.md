@@ -43,7 +43,7 @@ docker compose pull && docker compose up -d
 
 ## Runtime-образ (для опытных) {#runtime-image}
 
-`ghcr.io/panomc/pano-web-platform:runtime-jre<N>` содержит Java `N`, Bun и лаунчер, но **без** релиза
+`ghcr.io/panomc/pano:runtime-jre<N>` содержит Java `N`, Bun и лаунчер, но **без** релиза
 Pano. Jar лежит в `/data`, а `.pano-jar` хранит его имя. Pano Host запускает так каждый инстанс.
 
 ```bash
@@ -51,7 +51,7 @@ mkdir pano && cd pano
 # скачайте Pano-<version>.jar с https://panomc.com/download в эту папку
 echo "Pano-<version>.jar" > .pano-jar
 docker run -d --name pano --user "$(id -u):$(id -g)" --memory 1g \
-  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano-web-platform:runtime-jre11
+  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano:runtime-jre11
 ```
 
 Ничего не устанавливается автоматически: версию Pano меняют заменой jar и `.pano-jar`. `<N>` — 11, 17,

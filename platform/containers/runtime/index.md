@@ -43,7 +43,7 @@ exit. In a container that exit ends the container. The images never pass `-bg`; 
 
 ## The runtime image (advanced) {#runtime-image}
 
-`ghcr.io/panomc/pano-web-platform:runtime-jre<N>` holds Java `N`, Bun and the launcher, but **no**
+`ghcr.io/panomc/pano:runtime-jre<N>` holds Java `N`, Bun and the launcher, but **no**
 Pano release. The jar lives in `/data` and `.pano-jar` names it. Pano Host runs every instance this way.
 
 ```bash
@@ -51,7 +51,7 @@ mkdir pano && cd pano
 # download Pano-<version>.jar from https://panomc.com/download into this folder
 echo "Pano-<version>.jar" > .pano-jar
 docker run -d --name pano --user "$(id -u):$(id -g)" --memory 1g \
-  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano-web-platform:runtime-jre11
+  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano:runtime-jre11
 ```
 
 Nothing is seeded: you change the Pano version by replacing the jar and `.pano-jar`. `<N>` is 11, 17,

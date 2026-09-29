@@ -18,7 +18,7 @@
 
 | Часть | На каждый instance | Общее |
 | --- | --- | --- |
-| Контейнер | один, из `ghcr.io/panomc/pano-web-platform:runtime-jre<N>` | — |
+| Контейнер | один, из `ghcr.io/panomc/pano:runtime-jre<N>` | — |
 | Том данных | своя папка, смонтированная в `/data` | — |
 | База данных | своя база и свои пользователи БД | сервер MySQL / MariaDB |
 | Сеть | своя сеть Docker | к ней подключаются reverse proxy, БД и почтовый relay |

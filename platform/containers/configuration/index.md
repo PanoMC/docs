@@ -44,7 +44,7 @@ docker run -d --name pano \
   -e PANO_DB_USER=pano \
   -e PANO_DB_PASSWORD=change-me \
   -v pano-data:/data \
-  ghcr.io/panomc/pano-web-platform:latest
+  ghcr.io/panomc/pano:latest
 ```
 
 Keep passwords out of shell history: use `--env-file` or your orchestrator's secrets.

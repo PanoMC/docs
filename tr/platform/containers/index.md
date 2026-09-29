@@ -10,7 +10,7 @@ Docker, [`.jar` kurulumuna](../installation/) bir alternatiftir: tek bir imaj Ja
 
 ## İmaj
 
-Tüm etiketler herkese açık tek bir pakette, `ghcr.io/panomc/pano-web-platform`, **amd64** ve **arm64** için:
+Tüm etiketler herkese açık tek bir pakette, `ghcr.io/panomc/pano`, **amd64** ve **arm64** için:
 
 | Etiket | Ne alırsınız |
 | --- | --- |
@@ -36,7 +36,7 @@ MariaDB** veritabanına ihtiyaç duyar; aşağıdaki iki örnek de yanında bir 
 
    services:
      pano:
-       image: ghcr.io/panomc/pano-web-platform:${PANO_TAG:-latest}
+       image: ghcr.io/panomc/pano:${PANO_TAG:-latest}
        restart: unless-stopped
        depends_on:
          db:
@@ -97,7 +97,7 @@ docker run -d --name pano-db --network pano --restart unless-stopped \
   -e MARIADB_RANDOM_ROOT_PASSWORD=1 -v pano-db:/var/lib/mysql mariadb:11.4
 docker run -d --name pano --network pano --restart unless-stopped -p 8088:8088 \
   -e PANO_DB_HOST=pano-db -e PANO_DB_NAME=pano -e PANO_DB_USER=pano -e PANO_DB_PASSWORD=change-me \
-  -v pano-data:/data ghcr.io/panomc/pano-web-platform:latest
+  -v pano-data:/data ghcr.io/panomc/pano:latest
 ```
 
 Zaten bir veritabanı sunucunuz mu var? İlk iki komutu atlayın ve `PANO_DB_HOST`'u ona yönlendirin.

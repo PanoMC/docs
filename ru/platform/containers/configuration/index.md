@@ -45,7 +45,7 @@ docker run -d --name pano \
   -e PANO_DB_USER=pano \
   -e PANO_DB_PASSWORD=change-me \
   -v pano-data:/data \
-  ghcr.io/panomc/pano-web-platform:latest
+  ghcr.io/panomc/pano:latest
 ```
 
 Не оставляйте пароли в истории оболочки: используйте `--env-file` или секреты вашего оркестратора.

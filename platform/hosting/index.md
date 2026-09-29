@@ -18,7 +18,7 @@ Every Pano Instance gets:
 
 | Piece | Per instance | Shared |
 | --- | --- | --- |
-| Container | one, from `ghcr.io/panomc/pano-web-platform:runtime-jre<N>` | — |
+| Container | one, from `ghcr.io/panomc/pano:runtime-jre<N>` | — |
 | Data volume | its own folder, mounted at `/data` | — |
 | Database | its own database and database users | the MySQL / MariaDB server |
 | Network | its own Docker network | reverse proxy, database, mail relay are attached to it |
