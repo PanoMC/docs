@@ -11,6 +11,7 @@
 - **Hesap Bağlama:** Kullanıcı ayarlarındaki bir "Sosyal Hesaplar" kartı, üyelerin sağlayıcıları bağlamasına veya bağlantısını kaldırmasına olanak tanır ve profilleri salt-okunur bir "Bağlı Sosyal Hesaplar" kartı gösterir.
 - **Yönetici Yönetimi:** Herhangi bir oyuncunun bağlı hesaplarını paneldeki detay sayfasından görüntüleyin ve bağlantısını kaldırın.
 - **Dostça Hatalar:** İptal edilen girişler, süresi dolmuş bağlantılar, zaten bağlı hesaplar ve daha fazlası için net, yerelleştirilmiş mesajlar. İngilizce, Türkçe ve Rusça olarak mevcuttur.
+- **Sunucu yönetimi kurulumları:** Tema çalışmadığında (bkz. [Pano'yu web sitesi olmadan kullanma](../../platform/server-management/#using-pano-without-a-website)) sağlayıcı düğmeleri panelin kendi giriş sayfasında görünür ve her OAuth adımı panele döner. Yalnızca panel erişimi olan hesaplar girebilir ve orada yeni hesap oluşturulmaz — henüz bağlanmamış bir sağlayıcı, aynı e-postalı hesaba bir kez giriş yapılarak yine bağlanabilir.
 
 ## Yapılandırma
 

@@ -113,6 +113,24 @@ To confirm an action to the admin, show a toast (a small pop-up message). Import
 Wire this `save` up to a button and click it. You should see a toast slide in — the success message when the request works, the error message when it fails.
 :::
 
+## Login widgets on a server-management install
+
+An install in **Server management** mode runs no theme, so admins sign in on the panel's own page. If your addon puts something on the theme's login (a captcha, a sign-in button), register it in the panel too — the calls are the same:
+
+```js
+if (pano.isPanel && pano.ui.auth?.login) {
+  pano.ui.auth.login.onLoad(async (data, event) => {
+    pano.ui.auth.login.alternativeMethods.add({
+      id: 'shoutbox-login',
+      priority: 50,
+      component: viewComponent(() => import('./theme/components/LoginButton.svelte')),
+    });
+  });
+}
+```
+
+A page your sign-in flow lands on (an OAuth callback) needs `public: true` in the panel, and a flow that ends signed in calls `pano.ui.auth.login.complete(csrfToken)`. Details in the [Frontend API Reference](/addon/api-reference/#auth-surfaces).
+
 ## Where to next
 
 The admin side is done: a settings section, a full panel page with a nav link, and toasts.

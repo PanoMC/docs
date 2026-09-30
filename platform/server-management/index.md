@@ -81,8 +81,13 @@ public addresses redirect to the panel.
 
 - Signed out, every panel address shows the panel's own **sign-in form** in place, and you stay on
   that page after signing in. `/panel/login` works too.
-- Only accounts with **panel access** can sign in there. Two-step verification works when
-  [Auth Guard](../../plugins/auth-guard/) asks for it.
+- Only accounts with **panel access** can sign in there. Sign-in addons work on it as on a website:
+  [Auth Guard](../../plugins/auth-guard/)'s captcha, two-step verification and email link, and the
+  [Social Login](../../plugins/social-login/) and [Premium Login](../../plugins/premium-login/)
+  buttons.
+- A public address that carries a query string — an OAuth callback, an emailed link — keeps its
+  path under `/panel` (`/x?code=…` opens `/panel/x?code=…`); any other public address opens the
+  dashboard.
 - Signing out reloads the page and shows the form again.
 - **Settings → Website** keeps only the **Panel name**; the website-only fields are hidden.
 

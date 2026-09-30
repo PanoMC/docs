@@ -113,6 +113,7 @@ export default class extends PanoPlugin {
 | `layout` | `viewComponent(...)` | Использовать собственный компонент макета вместо встроенного. |
 | `resetLayout` | boolean | Отрисовать **без** шапки, боковой панели или футера хоста — ваш компонент получает всю страницу. («Chrome» — общее слово для этого окружающего UI хоста.) |
 | `permission` | string | Узел разрешения (строка разрешения вроде `x.y.z` — смотрите [Справочник Backend API](/ru/addon/backend-reference/) для списка), необходимый для просмотра. Если у текущего пользователя его нет, страница отрисовывает **404**. |
+| `public` | boolean | **Только панель.** Страница открывается без сессии — для страниц, которые являются частью входа (возврат OAuth, страница, куда ведёт ссылка из письма). Отрисовывается в оболочке входа (`AuthShell`, без обрамления панели), если вы сами не задали `systemLayout`/`resetLayout`. Любая другая страница панели показывает посетителю без входа форму входа. |
 
 **Формы пути:**
 
@@ -132,7 +133,7 @@ export default class extends PanoPlugin {
 
 **Имена `systemLayout` — тема:** `AppLayout`, `AuthLayout`, `MainLayout`, `ProfileLayout`, `ThemeSettingsLayout`, `TicketsLayout`.
 
-**Имена `systemLayout` — панель:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerLayout`, `ServerSettingsLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
+**Имена `systemLayout` — панель:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `AuthShell`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerDetailLayout`, `ServerSettingsLayout`, `ServersLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
 
 ::: tip Контрольная точка — зарегистрировалась ли моя страница?
 После вызова `pano.ui.page.register({ path: '/your-path', component })` пересоберите ваше дополнение и перезагрузите сайт. Посещение `/your-path` теперь должно показывать ваш компонент. Ничего там нет? Проверьте, что `component` обёрнут в `viewComponent(() => import('./X.svelte'))` и что `register` выполнился внутри `onLoad()`.
@@ -239,7 +240,7 @@ Props `post`, `playerData`, `addon`, `player` и `category` выше — это 
 После `pano.ui.hook.register({ name: 'theme:top', component })` пересоберите и перезагрузите страницу темы. Ваш компонент должен появиться в месте этого хука. Если нет, подтвердите, что вы использовали реальное имя хука из таблиц выше и обернули компонент в `viewComponent(...)`.
 :::
 
-## 4. Слоты представлений — `pano.ui.view` (только тема)
+## 4. Слоты представлений — `pano.ui.view` (тема + панель)
 
 **Слот представления** — именованный контейнер, отрисовывающий **упорядоченный по приоритету список** компонентов плагина (дополнительные методы входа, дополнительные строки профиля и так далее). Как хук, но каждый элемент слота несёт `id` и `priority`, так что элементы можно индивидуально скрывать, переупорядочивать или заменять.
 
@@ -249,12 +250,12 @@ Props `post`, `playerData`, `addon`, `player` и `category` выше — это 
 |---|---|---|
 | Упорядочивание | нет (плоский список) | по `priority` (выше отрисовывается первым) |
 | id на элемент | нет | да (`id`) — позволяет скрыть/переместить/заменить один элемент |
-| Где работает | тема + панель | **только тема** |
+| Где работает | тема + панель | тема + панель (панель отрисовывает только слоты входа) |
 
-::: warning `pano.ui.view` / `pano.ui.sidebar` существуют только в теме
-- **Строите для панели?** Пропустите весь этот раздел — панель вообще не предоставляет `view.register/hide/show/move/get/onLoad/load` или `pano.ui.sidebar`.
-- **Исключение панели 1:** дополнительные строки в модальном окне редактирования игрока имеют собственный выделенный API — смотрите «Панель: строки модального окна редактирования игрока» ниже.
-- **Исключение панели 2:** единственный член `pano.ui.view` панели — это `pano.ui.view.themes.editMenu` — смотрите §8.
+::: warning Панель отрисовывает только два слота
+- В панели есть те же вызовы `view.register/hide/show/move/get/onLoad/load`, но отрисовывает она только слоты `login-content` и `login-alt-methods` на собственной странице входа (§7). `onLoad` там вызывает `panel:view:<viewId>:load`.
+- `pano.ui.sidebar` существует только в теме.
+- Дополнительные строки в модальном окне редактирования игрока имеют собственный выделенный API — смотрите «Панель: строки модального окна редактирования игрока» ниже.
 :::
 
 | Вызов | Назначение |
@@ -295,7 +296,7 @@ Props `post`, `playerData`, `addon`, `player` и `category` выше — это 
 
 ### Панель: строки модального окна редактирования игрока
 
-У панели **нет** реестра слотов `pano.ui.view`. Её единственная точка расширения такого рода — дополнительные строки в модальном окне редактирования игрока — вместо этого имеет собственный выделенный API:
+Дополнительные строки в модальном окне редактирования игрока — не слот представления; у них собственный выделенный API:
 
 | Вызов | Назначение |
 |---|---|
@@ -369,7 +370,7 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 | Вызов | Назначение |
 |---|---|
 | `pano.ui.lifecycle.on(name, handler)` | Подписаться на любое событие жизненного цикла по имени (тема + панель). |
-| `pano.ui.lifecycle.execute(name, data, event)` | **Только тема.** Запустить жизненный цикл самостоятельно — например, ваш плагин отрисовывает собственную страницу входа и хочет, чтобы жизненный цикл входа хоста (и обработчики других дополнений) выполнились на ней. `pano.ui.lifecycle` панели предоставляет только `on`. |
+| `pano.ui.lifecycle.execute(name, data, event)` | Тема + панель. Запустить жизненный цикл самостоятельно — например, ваш плагин отрисовывает собственную страницу входа и хочет, чтобы жизненный цикл входа хоста (и обработчики других дополнений) выполнились на ней. Возвращает `data`. |
 
 ### События жизненного цикла темы
 
@@ -398,8 +399,10 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 | `panel:posts:load` | `pano.ui.posts.onLoad(h)` | — |
 | `panel:addon-detail:load` | `pano.ui.addon.onLoad(h)` | `data = { addon }` |
 | `panel:player-detail:edit-modal:load` | `pano.ui.player.onEditLoad(h)` | `data = { player }` |
+| `panel:login:load` | `pano.ui.auth.login.onLoad(h)` | `data = { error, username, event }` — как `theme:login:load`; вызывается на собственной странице входа панели (§7) |
+| `panel:view:<viewId>:load` | `pano.ui.view.onLoad(viewId, h)` | вызывается для каждого слота |
 
-## 7. Поверхности аутентификации (только тема)
+## 7. Поверхности аутентификации (тема; вход также в панели) {#auth-surfaces}
 
 Помощники для страниц аутентификации. `<page>` — это одно из `login`, `register`, `resetPassword`, `activate`, `activateNewEmail`, `renewPassword`.
 
@@ -415,6 +418,14 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 | `pano.ui.auth.register.form.get()` | То же для формы регистрации. |
 
 `resetPassword`, `activate`, `activateNewEmail` и `renewPassword` предоставляют только `content.edit`/`content.get` и `onLoad`.
+
+**В панели.** Установка с режимом использования **Управление серверами** не запускает тему, поэтому у панели есть собственная страница входа, и она принимает те же плагины: `pano.ui.auth.login` есть и в панели — с `content`, `alternativeMethods`, `onLoad` (вызывает `panel:login:load`) и `load`. Регистрируйте те же элементы в ветке `if (pano.isPanel)` — под проверкой `if (pano.ui.auth?.login)`, чтобы старая панель их пропустила. Элементы с `priority` ниже `100` отрисовываются внутри формы (капча), остальные — после неё (модальное окно 2FA); альтернативные методы — под разделителем «или». В панели нет `form.get()` и других страниц аутентификации. Она добавляет один собственный вызов:
+
+| Вызов | Назначение |
+|---|---|
+| `pano.ui.auth.login.complete(csrfToken, { target? })` | **Только панель.** Завершить вход, cookies которого ваш бэкенд уже установил: проверяет, что у аккаунта есть доступ к панели (если нет — снова выходит), затем открывает `?next=`, `target` или дашборд. Возвращает `'ok'` или `'NO_PANEL_ACCESS'`. |
+
+Страницы, на которые попадает поток входа (возвраты OAuth, ссылки из писем), регистрируются в панели с `public: true` (§2). На такой установке Pano переносит адрес сайта со строкой запроса под `/panel` без изменений — `/my-plugin/callback?code=…` открывает `/panel/my-plugin/callback?code=…`, — поэтому регистрируйте тот же путь в панели и ведите ссылки между своими страницами на `/panel/…`, когда `pano.isPanel` истинно.
 
 ## 8. Разное
 

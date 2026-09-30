@@ -30,6 +30,8 @@ Settings live on the plugin's own detail page in the **Pano Admin Panel** (Addon
 - An *Authentication Status* row in their account settings (a type dropdown plus link/unlink premium account).
 - An *Authentication Status* card in their public profile sidebar, a success toast after signing in, and a `/set-username` page reached from the username-change email.
 
+On a **Server management** install (no theme — see [Using Pano without a website](../../platform/server-management/#using-pano-without-a-website)) the **Sign in with Minecraft Account** button appears on the panel's own sign-in page and the Microsoft round trip returns to the panel. Only accounts with panel access get in there.
+
 ## Required Permissions
 
 - **Manage Premium Status** (`MANAGE_PREMIUM_STATUS`) — view and change a player's authentication status from the player pages.
