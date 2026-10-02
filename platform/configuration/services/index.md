@@ -56,6 +56,9 @@ email {
   ssl = true
   starttls = ""    # "DISABLED" or "OPTIONAL" or "REQUIRED
   authMethods = "" # optional, mostly "PLAIN"
+  host-managed = true # Pano Host only
+  host-sender = null  # Pano Host only
+  custom = null       # Pano Host only
 }
 ```
 
@@ -63,3 +66,7 @@ email {
 
 - Optional during setup; configurable later via **Panel → Settings → Platform**.
 - Without SMTP, password recovery and verification emails will not work.
+- `host-managed`, `host-sender` and `custom` only matter on a **Pano Host** instance; leave them alone elsewhere.
+    - `host-managed`: `true` means this block follows the instance's Pano Host mail and is rewritten on every boot. Saving other mail settings in **Panel → Settings** sets it to `false`, so they stay. Default **true**.
+    - `host-sender`: the sender used with Pano Host mail instead of the instance's default, kept across boots. Empty (`null`) means the default.
+    - `custom`: a copy of your own SMTP settings (`sender`, `hostname`, `port`, `username`, `password`, `ssl`, `starttls`, `authMethods`), kept while Pano Host mail is in use so switching back to them loses nothing. Filled in automatically.
