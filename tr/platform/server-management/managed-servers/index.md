@@ -11,7 +11,7 @@ yanındaki **düğüm simgesinden** yönetilir ve **Düğümleri Yönet** izni g
 
 | Sekme | |
 | --- | --- |
-| **Yerel** | Pano'nun kendi makinesi, tek tıkla. Java 17+ ister. Dosyalar `<pano-dir>/node-data/`, günlük `<pano-dir>/logs/pano-node.log` içine gider. |
+| **Yerel** | Pano'nun kendi makinesi, tek tıkla. Pano'nun çalıştığı Java ile çalışır. Dosyalar `<pano-dir>/node-data/`, günlük `<pano-dir>/logs/pano-node.log` içine gider. |
 | **Elle** | Herhangi bir makine: gösterdiği tek satırlık komutu çalıştırın, ardından düğümü onaylayın. |
 | **SSH** | Makine anahtarını onayladıktan sonra kurulumu Pano sizin yerinize SSH üzerinden yapar. Giriş bilgileri hiçbir zaman saklanmaz. |
 | **Coolify** | `ghcr.io/panomc/pano-node` konteynerini bir `/data` birimi ve oyun portlarıyla dağıtır. |
@@ -81,8 +81,9 @@ Değişiklikler bir sonraki açılışta uygulanır.
 
 ## Bir şeyler ters gittiğinde {#troubleshooting}
 
-- **Düğüm çevrimdışı kalıyor** — yerel düğüm Java 17+ ister (`LOCAL_NODE_JAVA_MISSING`); Pano onu
-  bulamıyorsa `local-node.java-path` ayarlayın. Aksi hâlde `pano-node.log` dosyasına bakın.
+- **Düğüm çevrimdışı kalıyor** — yerel düğüm Pano'nun kendi Java'sı (11+) ile çalışır;
+  `LOCAL_NODE_JAVA_MISSING` gelirse `local-node.java-path` ayarını düzeltin ya da boş bırakın. Aksi
+  hâlde `pano-node.log` dosyasına bakın.
 - **Kurulum başarısız oluyor** — düğümün indirme sitelerine internet erişimi ve boş disk alanı
   olmalı. Sunucu başlığı sebebiyle birlikte **Kurulum başarısız oldu** uyarısını ve **Yeniden
   Yükle** / **Yazılımı değiştir** düğmelerini göstermeye devam eder; bir kurulum başarılı olana

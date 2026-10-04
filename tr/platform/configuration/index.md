@@ -138,9 +138,8 @@ local-node {
   [Düğüm ekleme →](../server-management/managed-servers/#adding-a-node).
 - `enabled`: `false`, Pano'nun hiç yerel düğüm başlatmamasını sağlar. Varsayılan **true**.
 - `jar-path`: `pano-node.jar` için açık bir yol; Pano bunu hiçbir zaman değiştirmez. Boş bırakılırsa Pano kendi yanına ve çalışma klasörüne bakar, kendi jar'ında gömülü kopyayı oraya çıkarır.
-- `java-path`: arka plan süreci için bir **Java 17+** kökü (ya da içindeki `java` ikilisi). Boş
-  bırakılırsa Pano uygun birini kendisi arar. Pano'nun kendisi Java 11 ile çalışır, ama arka plan
-  süreci 17 ister.
+- `java-path`: arka plan süreci için bir **Java 11+** kökü (ya da içindeki `java` ikilisi). Boş
+  bırakılırsa arka plan süreci Pano'nun çalıştığı Java ile çalışır.
 - `stop-with-pano`: Pano durduğunda arka plan sürecini de durdurur. Varsayılan **false**; böylece
   sunucular Pano yeniden başlatılırken çalışmaya devam eder.
 
