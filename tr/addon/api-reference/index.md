@@ -113,6 +113,7 @@ Bunları kendi tam sayfalarınızı kaydetmek için kullanın — tema (`/…`) 
 | `layout` | `viewComponent(...)` | Yerleşik bir tane yerine kendi düzen bileşeninizi kullanın. |
 | `resetLayout` | boolean | Host başlığı, kenar çubuğu veya alt bilgisi **olmadan** render et — bileşeniniz tüm sayfayı alır. ("Chrome", o çevreleyen host arayüzü için genel kelimedir.) |
 | `permission` | string | Görüntülemek için gereken izin düğümü (`x.y.z` gibi bir izin dizesi — liste için [Backend API Referansı](/tr/addon/backend-reference/)'na bakın). Mevcut kullanıcı ona sahip değilse, sayfa **404** render eder. |
+| `public` | boolean | **Yalnızca panel.** Sayfa oturum olmadan açılır — girişin parçası olan sayfalar için (OAuth dönüşü, e-postadaki sihirli bağlantının açıldığı sayfa). `systemLayout`/`resetLayout`'u kendiniz vermezseniz giriş kabuğunda (`AuthShell`, panel çerçevesi olmadan) render edilir. Diğer tüm panel sayfaları oturumu olmayan ziyaretçiye giriş formunu gösterir. |
 
 **Yol biçimleri:**
 
@@ -132,7 +133,7 @@ Bir sayfa modülü ayrıca **`load(event)` dışa aktarabilir** (üstteki "üç 
 
 **`systemLayout` adları — tema:** `AppLayout`, `AuthLayout`, `MainLayout`, `ProfileLayout`, `ThemeSettingsLayout`, `TicketsLayout`.
 
-**`systemLayout` adları — panel:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerLayout`, `ServerSettingsLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
+**`systemLayout` adları — panel:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `AuthShell`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerDetailLayout`, `ServerSettingsLayout`, `ServersLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
 
 ::: tip Kontrol noktası — sayfam kaydoldu mu?
 Bir `pano.ui.page.register({ path: '/your-path', component })` çağrısından sonra, eklentinizi yeniden derleyin ve siteyi yeniden yükleyin. `/your-path`'i ziyaret etmek artık bileşeninizi göstermeli. Orada bir şey yok mu? `component`'in `viewComponent(() => import('./X.svelte'))` içine sarıldığını ve `register`'ın `onLoad()` içinde çalıştığını kontrol edin.
@@ -239,7 +240,7 @@ Yukarıdaki `post`, `playerData`, `addon`, `player` ve `category` prop'ları, o 
 `pano.ui.hook.register({ name: 'theme:top', component })`'ten sonra, yeniden derleyin ve temalı bir sayfayı yeniden yükleyin. Bileşeniniz o kancanın yerinde görünmeli. Değilse, yukarıdaki tablolardan gerçek bir kanca adı kullandığınızı ve bileşeni `viewComponent(...)` içine sardığınızı onaylayın.
 :::
 
-## 4. View slotları — `pano.ui.view` (yalnızca tema)
+## 4. View slotları — `pano.ui.view` (tema + panel)
 
 Bir **view slotu**, eklenti bileşenlerinin **önceliğe göre sıralı bir listesini** render eden adlandırılmış bir kaptır (ekstra giriş yöntemleri, ekstra profil satırları vb.). Bir kanca gibi, ama her slot öğesi bir `id` ve bir `priority` taşır, böylece öğeler tek tek gizlenebilir, yeniden sıralanabilir veya değiştirilebilir.
 
@@ -249,12 +250,12 @@ Bir **view slotu**, eklenti bileşenlerinin **önceliğe göre sıralı bir list
 |---|---|---|
 | Sıralama | yok (düz bir liste) | `priority`'ye göre (yüksek olan önce render eder) |
 | Öğe başına id | hayır | evet (`id`) — bir öğeyi gizlemenizi/taşımanızı/değiştirmenizi sağlar |
-| Nerede çalışır | tema + panel | **yalnızca tema** |
+| Nerede çalışır | tema + panel | tema + panel (panel yalnızca giriş slotlarını render eder) |
 
-::: warning `pano.ui.view` / `pano.ui.sidebar` yalnızca temada var
-- **Panel için mi inşa ediyorsunuz?** Bütün bu bölümü atlayın — panel `view.register/hide/show/move/get/onLoad/load` veya `pano.ui.sidebar`'ı hiç açığa çıkarmaz.
-- **Panel istisnası 1:** oyuncu düzenleme modalındaki ekstra satırların kendi özel API'si vardır — aşağıdaki "Panel: oyuncu düzenleme-modalı satırları"na bakın.
-- **Panel istisnası 2:** panelin tek `pano.ui.view` üyesi `pano.ui.view.themes.editMenu`'dur — §8'e bakın.
+::: warning Panel yalnızca iki slot render eder
+- Panelde de aynı `view.register/hide/show/move/get/onLoad/load` çağrıları var, ama render ettiği slotlar yalnızca kendi giriş sayfasındaki `login-content` ve `login-alt-methods`'tur (§7). Oradaki `onLoad`, `panel:view:<viewId>:load`'u tetikler.
+- `pano.ui.sidebar` yalnızca temada var.
+- Oyuncu düzenleme modalındaki ekstra satırların kendi özel API'si vardır — aşağıdaki "Panel: oyuncu düzenleme-modalı satırları"na bakın.
 :::
 
 | Çağrı | Amaç |
@@ -295,7 +296,7 @@ Bir **view slotu**, eklenti bileşenlerinin **önceliğe göre sıralı bir list
 
 ### Panel: oyuncu düzenleme-modalı satırları
 
-Panelin **hiçbir** `pano.ui.view` slot kayıt defteri yoktur. Bu türden tek uzatma noktası — oyuncu düzenleme modalındaki ekstra satırlar — bunun yerine kendi özel API'sine sahiptir:
+Oyuncu düzenleme modalındaki ekstra satırlar bir view slotu değildir; kendi özel API'leri vardır:
 
 | Çağrı | Amaç |
 |---|---|
@@ -369,7 +370,7 @@ Host'un bir sayfanın verisi hazırlanırken tetiklediği yükleme-zamanı olayl
 | Çağrı | Amaç |
 |---|---|
 | `pano.ui.lifecycle.on(name, handler)` | Herhangi bir yaşam döngüsü olayına ada göre abone ol (tema + panel). |
-| `pano.ui.lifecycle.execute(name, data, event)` | **Yalnızca tema.** Bir yaşam döngüsünü kendiniz çalıştırın — örn. eklentiniz kendi giriş sayfasını render eder ve host'un giriş yaşam döngüsünün (ve diğer eklentilerin işleyicilerinin) onun üzerinde çalışmasını ister. Panelin `pano.ui.lifecycle`'ı yalnızca `on`'u açığa çıkarır. |
+| `pano.ui.lifecycle.execute(name, data, event)` | Tema + panel. Bir yaşam döngüsünü kendiniz çalıştırın — örn. eklentiniz kendi giriş sayfasını render eder ve host'un giriş yaşam döngüsünün (ve diğer eklentilerin işleyicilerinin) onun üzerinde çalışmasını ister. `data`'yı döndürür. |
 
 ### Tema yaşam döngüsü olayları
 
@@ -398,8 +399,10 @@ Host'un bir sayfanın verisi hazırlanırken tetiklediği yükleme-zamanı olayl
 | `panel:posts:load` | `pano.ui.posts.onLoad(h)` | — |
 | `panel:addon-detail:load` | `pano.ui.addon.onLoad(h)` | `data = { addon }` |
 | `panel:player-detail:edit-modal:load` | `pano.ui.player.onEditLoad(h)` | `data = { player }` |
+| `panel:login:load` | `pano.ui.auth.login.onLoad(h)` | `data = { error, username, event }` — `theme:login:load` ile aynı; panelin kendi giriş sayfasında tetiklenir (§7) |
+| `panel:view:<viewId>:load` | `pano.ui.view.onLoad(viewId, h)` | her slot için tetiklenir |
 
-## 7. Kimlik doğrulama yüzeyleri (yalnızca tema)
+## 7. Kimlik doğrulama yüzeyleri (tema; giriş panelde de) {#auth-surfaces}
 
 Kimlik doğrulama sayfaları için yardımcılar. `<page>`, şunlardan biridir: `login`, `register`, `resetPassword`, `activate`, `activateNewEmail`, `renewPassword`.
 
@@ -415,6 +418,14 @@ Kimlik doğrulama sayfaları için yardımcılar. `<page>`, şunlardan biridir: 
 | `pano.ui.auth.register.form.get()` | Kayıt formu için aynısı. |
 
 `resetPassword`, `activate`, `activateNewEmail` ve `renewPassword` yalnızca `content.edit`/`content.get` ve `onLoad`'ı açığa çıkarır.
+
+**Panelde.** Kullanım modu **Sunucu Yönetimi** olan bir kurulum tema çalıştırmaz; bu yüzden panelin kendi giriş sayfası vardır ve aynı eklentileri alır: `pano.ui.auth.login` panelde de vardır; `content`, `alternativeMethods`, `onLoad` (`panel:login:load`'u tetikler) ve `load` ile. Aynı öğeleri `if (pano.isPanel)` dalında kaydedin — eski bir panel atlasın diye `if (pano.ui.auth?.login)` ile koruyun. `priority`'si `100`'ün altındaki öğeler formun içinde (captcha), diğerleri formun ardından (2FA modalı) render edilir; alternatif yöntemler "veya" ayracının altında görünür. Panelde `form.get()` ve başka kimlik doğrulama sayfası yoktur. Panele özgü tek bir çağrı ekler:
+
+| Çağrı | Amaç |
+|---|---|
+| `pano.ui.auth.login.complete(csrfToken, { target? })` | **Yalnızca panel.** Çerezlerini backend'inizin zaten ayarladığı bir girişi tamamlar: hesabın panel erişimi olduğunu kontrol eder (yoksa oturumu yeniden kapatır), sonra `?next=`, `target` ya da panoyu açar. `'ok'` veya `'NO_PANEL_ACCESS'` döndürür. |
+
+Bir giriş akışının vardığı sayfalar (OAuth dönüşleri, e-postayla gelen bağlantılar) panelde `public: true` ile kaydedilir (§2). Böyle bir kurulumda Pano, sorgu dizesi taşıyan bir site adresini olduğu gibi `/panel` altına taşır — `/my-plugin/callback?code=…`, `/panel/my-plugin/callback?code=…`'yu açar — bu yüzden aynı yolu panelde kaydedin ve `pano.isPanel` doğruyken sayfalarınız arasındaki bağlantıları `/panel/…`'a yönlendirin.
 
 ## 8. Çeşitli
 

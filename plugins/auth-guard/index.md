@@ -42,6 +42,8 @@ Player 2FA controls appear in two more places: a **2FA** status card in the play
 - A **Sign in with Email Link** button plus a **"Check Your Email"** flow, and a verification page at `/auth-guard/magic-login` that consumes the emailed link.
 - A **Two-Factor Authentication** setup card (QR code, manual key, verify, and a disable dialog) in their account settings.
 
+On a **Server management** install (no theme — see [Using Pano without a website](../../platform/server-management/#using-pano-without-a-website)) the same captcha, two-step prompt and **Sign in with Email Link** button appear on the panel's own sign-in page, and the emailed link opens the panel. Only accounts with panel access get in there.
+
 ## Required Permissions
 
 - **Manage Auth Guard Settings** (`MANAGE_AUTH_GUARD_SETTINGS`) — configure captcha, 2FA, and magic login.

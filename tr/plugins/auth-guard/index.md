@@ -42,6 +42,8 @@ Oyuncu 2FA kontrolleri iki yerde daha görünür: oyuncu detay kenar çubuğunda
 - Bir **E-posta Bağlantısıyla Giriş Yap** düğmesi ve bir **"E-postanızı Kontrol Edin"** akışı ile e-postayla gönderilen bağlantıyı tüketen `/auth-guard/magic-login` adresindeki bir doğrulama sayfası.
 - Hesap ayarlarında bir **İki Adımlı Kimlik Doğrulama** kurulum kartı (QR kodu, elle giriş anahtarı, doğrulama ve bir devre dışı bırakma penceresi).
 
+**Sunucu Yönetimi** kurulumunda (tema yok — bkz. [Pano'yu web sitesi olmadan kullanma](../../platform/server-management/#using-pano-without-a-website)) aynı captcha, iki adımlı doğrulama istemi ve **E-posta Bağlantısı ile Giriş Yap** düğmesi panelin kendi giriş sayfasında görünür; e-postadaki bağlantı paneli açar. Oradan yalnızca panel erişimi olan hesaplar girebilir.
+
 ## Gerekli İzinler
 
 - **Auth Guard Ayarlarını Yönet** (`MANAGE_AUTH_GUARD_SETTINGS`) — captcha, 2FA ve sihirli girişi yapılandırın.

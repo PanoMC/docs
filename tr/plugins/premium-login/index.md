@@ -30,6 +30,8 @@ Ayarlar, **Pano Yönetim Paneli**'nde eklentinin kendi detay sayfasında (Eklent
 - Hesap ayarlarında bir *Kimlik Doğrulama Durumu* satırı (bir tür açılır menüsü ile premium hesap bağla/bağlantı kaldır).
 - Herkese açık profil kenar çubuğunda bir *Kimlik Doğrulama Durumu* kartı, giriş yaptıktan sonra bir başarı bildirimi ve kullanıcı-adı-değiştirme e-postasından ulaşılan bir `/set-username` sayfası.
 
+**Sunucu Yönetimi** kurulumunda (tema yok — bkz. [Pano'yu web sitesi olmadan kullanma](../../platform/server-management/#using-pano-without-a-website)) **Minecraft Hesabıyla Giriş Yap** düğmesi panelin kendi giriş sayfasında görünür ve Microsoft dönüşü panele gelir. Oradan yalnızca panel erişimi olan hesaplar girebilir.
+
 ## Gerekli İzinler
 
 - **Premium Durumunu Yönet** (`MANAGE_PREMIUM_STATUS`) — oyuncu sayfalarından bir oyuncunun kimlik doğrulama durumunu görüntüleyin ve değiştirin.

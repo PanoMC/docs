@@ -82,8 +82,13 @@ adresler panele yönlendirilir.
 
 - Oturum kapalıyken her panel adresi, panelin kendi **giriş formunu** o adreste gösterir; giriş
   yaptıktan sonra aynı sayfada kalırsınız. `/panel/login` de çalışır.
-- Orada yalnızca **panel erişimi** olan hesaplar giriş yapabilir.
-  [Auth Guard](../../plugins/auth-guard/) istediğinde iki adımlı doğrulama da çalışır.
+- Orada yalnızca **panel erişimi** olan hesaplar giriş yapabilir. Giriş eklentileri burada da web
+  sitesindeki gibi çalışır: [Auth Guard](../../plugins/auth-guard/)'ın captcha'sı, iki adımlı
+  doğrulaması ve e-posta bağlantısı, [Social Login](../../plugins/social-login/) ve
+  [Premium Login](../../plugins/premium-login/) düğmeleri.
+- Sorgu dizesi taşıyan herkese açık bir adres — OAuth dönüşü, e-postayla gelen bağlantı — yolunu
+  `/panel` altında korur (`/x?code=…`, `/panel/x?code=…`'yu açar); diğer herkese açık adresler panoyu
+  açar.
 - Çıkış yapmak sayfayı yeniler ve formu yeniden gösterir.
 - **Ayarlar → Web sitesi** yalnızca **Panel adı**'nı gösterir; web sitesine özgü alanlar gizlenir.
 

@@ -56,6 +56,9 @@ email {
   ssl = true
   starttls = ""    # "DISABLED" veya "OPTIONAL" veya "REQUIRED"
   authMethods = "" # opsiyonel, genelde "PLAIN"
+  host-managed = true # yalnızca Pano Host
+  host-sender = null  # yalnızca Pano Host
+  custom = null       # yalnızca Pano Host
 }
 ```
 
@@ -63,3 +66,7 @@ email {
 
 - Kurulum sırasında opsiyoneldir; sonradan **Panel → Ayarlar → Platform** üzerinden yapılandırılabilir.
 - SMTP olmadan, şifre sıfırlama ve doğrulama e-postaları çalışmaz.
+- `host-managed`, `host-sender` ve `custom` yalnızca bir **Pano Host** kurulumunda işe yarar; başka yerde dokunmayın.
+    - `host-managed`: `true` ise bu blok kurulumun Pano Host e-postasını izler ve her açılışta yeniden yazılır. **Panel → Ayarlar**'da başka e-posta ayarları kaydetmek bunu `false` yapar, böylece ayarlarınız kalır. Varsayılan **true**.
+    - `host-sender`: Pano Host e-postasında kurulumun varsayılanı yerine kullanılan gönderen; açılışlar arasında korunur. Boş (`null`) varsayılan demektir.
+    - `custom`: kendi SMTP ayarlarınızın bir kopyası (`sender`, `hostname`, `port`, `username`, `password`, `ssl`, `starttls`, `authMethods`); Pano Host e-postası kullanılırken saklanır, böylece onlara geri dönünce hiçbir şey kaybolmaz. Otomatik doldurulur.

@@ -113,6 +113,24 @@ Bir eylemi yöneticiye doğrulamak için, bir toast gösterin (küçük bir aç�
 Bu `save`'i bir düğmeye bağlayın ve ona tıklayın. Bir toast'ın kayarak geldiğini görmelisiniz — istek çalıştığında başarı mesajı, başarısız olduğunda hata mesajı.
 :::
 
+## Sunucu yönetimi kurulumunda giriş öğeleri
+
+**Sunucu Yönetimi** modundaki bir kurulum tema çalıştırmaz; yöneticiler panelin kendi sayfasında giriş yapar. Eklentiniz temanın giriş sayfasına bir şey koyuyorsa (captcha, giriş düğmesi), onu panelde de kaydedin — çağrılar aynıdır:
+
+```js
+if (pano.isPanel && pano.ui.auth?.login) {
+  pano.ui.auth.login.onLoad(async (data, event) => {
+    pano.ui.auth.login.alternativeMethods.add({
+      id: 'shoutbox-login',
+      priority: 50,
+      component: viewComponent(() => import('./theme/components/LoginButton.svelte')),
+    });
+  });
+}
+```
+
+Giriş akışınızın vardığı bir sayfa (OAuth dönüşü) panelde `public: true` ister; oturum açarak biten bir akış `pano.ui.auth.login.complete(csrfToken)` çağırır. Ayrıntılar [Frontend API Referansı](/tr/addon/api-reference/#auth-surfaces)'nda.
+
 ## Sırada ne var
 
 Yönetici tarafı bitti: bir ayarlar bölümü, gezinme bağlantısı olan tam bir panel sayfası ve toast'lar.

@@ -11,6 +11,7 @@ The **Social Login** plugin lets visitors sign in to your Pano-powered website w
 - **Account Linking:** A "Social Accounts" card in user settings lets members link or unlink providers, and their profile shows a read-only "Linked Social Accounts" card.
 - **Admin Management:** View and unlink any player's connected accounts from their detail page in the panel.
 - **Friendly Errors:** Clear, localized messages for cancelled sign-ins, expired links, already-linked accounts, and more. Available in English, Turkish, and Russian.
+- **Server-management installs:** With no theme running (see [Using Pano without a website](../../platform/server-management/#using-pano-without-a-website)), the provider buttons appear on the panel's own sign-in page and every OAuth step returns to the panel. Only accounts with panel access get in, and no new account is created there — a provider that is not linked yet can still be linked by signing in once to the account with the same email.
 
 ## Configuration
 

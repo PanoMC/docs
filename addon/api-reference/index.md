@@ -113,6 +113,7 @@ Use these to register whole pages of your own — under the theme (`/…`) or th
 | `layout` | `viewComponent(...)` | Use your own layout component instead of a built-in one. |
 | `resetLayout` | boolean | Render with **no** host header, sidebar, or footer — your component gets the whole page. ("Chrome" is the general word for that surrounding host UI.) |
 | `permission` | string | Permission node (a permission string like `x.y.z` — see the [Backend API Reference](/addon/backend-reference/) for the list) required to view. If the current user lacks it, the page renders **404**. |
+| `public` | boolean | **Panel only.** The page opens without a session — for pages that are part of signing in (an OAuth callback, a magic-link landing). It renders in the sign-in shell (`AuthShell`, no panel chrome) unless you set `systemLayout`/`resetLayout` yourself. Every other panel page shows the sign-in form to a signed-out visitor. |
 
 **Path forms:**
 
@@ -132,7 +133,7 @@ A page module may also **export `load(event)`** (see the "three kinds of `load()
 
 **`systemLayout` names — theme:** `AppLayout`, `AuthLayout`, `MainLayout`, `ProfileLayout`, `ThemeSettingsLayout`, `TicketsLayout`.
 
-**`systemLayout` names — panel:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerLayout`, `ServerSettingsLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
+**`systemLayout` names — panel:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `AuthShell`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerDetailLayout`, `ServerSettingsLayout`, `ServersLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
 
 ::: tip Checkpoint — did my page register?
 After a `pano.ui.page.register({ path: '/your-path', component })` call, rebuild your addon and reload the site. Visiting `/your-path` should now show your component. Nothing there? Check that `component` is wrapped in `viewComponent(() => import('./X.svelte'))` and that `register` ran inside `onLoad()`.
@@ -239,7 +240,7 @@ The `post`, `playerData`, `addon`, `player`, and `category` props above are the 
 After `pano.ui.hook.register({ name: 'theme:top', component })`, rebuild and reload a themed page. Your component should appear at that hook's spot. If not, confirm you used a real hook name from the tables above and wrapped the component in `viewComponent(...)`.
 :::
 
-## 4. View slots — `pano.ui.view` (theme only)
+## 4. View slots — `pano.ui.view` (theme + panel)
 
 A **view slot** is a named container that renders a **priority-ordered list** of plugin components (extra login methods, extra profile rows, and so on). Like a hook, but each slot item carries an `id` and a `priority`, so items can be individually hidden, reordered, or replaced.
 
@@ -249,12 +250,12 @@ A **view slot** is a named container that renders a **priority-ordered list** of
 |---|---|---|
 | Ordering | none (a flat list) | by `priority` (higher renders first) |
 | Per-item id | no | yes (`id`) — lets you hide/move/replace one item |
-| Where it works | theme + panel | **theme only** |
+| Where it works | theme + panel | theme + panel (the panel renders only its sign-in slots) |
 
-::: warning `pano.ui.view` / `pano.ui.sidebar` exist only in the theme
-- **Building for the panel?** Skip this whole section — the panel does not expose `view.register/hide/show/move/get/onLoad/load` or `pano.ui.sidebar` at all.
-- **Panel exception 1:** extra rows in the player edit modal have their own dedicated API — see "Panel: player edit-modal rows" below.
-- **Panel exception 2:** the panel's only `pano.ui.view` member is `pano.ui.view.themes.editMenu` — see §8.
+::: warning The panel renders only two slots
+- The panel has the same `view.register/hide/show/move/get/onLoad/load` calls, but the only slots it renders are `login-content` and `login-alt-methods`, on its own sign-in page (§7). `onLoad` there fires `panel:view:<viewId>:load`.
+- `pano.ui.sidebar` exists only in the theme.
+- Extra rows in the player edit modal have their own dedicated API — see "Panel: player edit-modal rows" below.
 :::
 
 | Call | Purpose |
@@ -295,7 +296,7 @@ A **view slot** is a named container that renders a **priority-ordered list** of
 
 ### Panel: player edit-modal rows
 
-The panel has **no** `pano.ui.view` slot registry. Its one extension point of this kind — extra rows in the player edit modal — has its own dedicated API instead:
+Extra rows in the player edit modal are not a view slot; they have their own dedicated API:
 
 | Call | Purpose |
 |---|---|
@@ -369,7 +370,7 @@ Load-time events the host fires while a page's data is being prepared. Every han
 | Call | Purpose |
 |---|---|
 | `pano.ui.lifecycle.on(name, handler)` | Subscribe to any lifecycle event by name (theme + panel). |
-| `pano.ui.lifecycle.execute(name, data, event)` | **Theme only.** Run a lifecycle yourself — e.g. your plugin renders its own login page and wants the host's login lifecycle (and other addons' handlers) to run on it. The panel's `pano.ui.lifecycle` exposes only `on`. |
+| `pano.ui.lifecycle.execute(name, data, event)` | Theme + panel. Run a lifecycle yourself — e.g. your plugin renders its own login page and wants the host's login lifecycle (and other addons' handlers) to run on it. Returns `data`. |
 
 ### Theme lifecycle events
 
@@ -398,8 +399,10 @@ Load-time events the host fires while a page's data is being prepared. Every han
 | `panel:posts:load` | `pano.ui.posts.onLoad(h)` | — |
 | `panel:addon-detail:load` | `pano.ui.addon.onLoad(h)` | `data = { addon }` |
 | `panel:player-detail:edit-modal:load` | `pano.ui.player.onEditLoad(h)` | `data = { player }` |
+| `panel:login:load` | `pano.ui.auth.login.onLoad(h)` | `data = { error, username, event }` — same as `theme:login:load`; fires on the panel's own sign-in page (§7) |
+| `panel:view:<viewId>:load` | `pano.ui.view.onLoad(viewId, h)` | fired per slot |
 
-## 7. Auth surfaces (theme only)
+## 7. Auth surfaces (theme; login also in the panel) {#auth-surfaces}
 
 Helpers for the auth pages. `<page>` is one of `login`, `register`, `resetPassword`, `activate`, `activateNewEmail`, `renewPassword`.
 
@@ -415,6 +418,14 @@ Helpers for the auth pages. `<page>` is one of `login`, `register`, `resetPasswo
 | `pano.ui.auth.register.form.get()` | Same, for the register form. |
 
 `resetPassword`, `activate`, `activateNewEmail`, and `renewPassword` expose only `content.edit`/`content.get` and `onLoad`.
+
+**In the panel.** An install whose usage mode is **Server management** runs no theme, so the panel has a sign-in page of its own, and it takes the same plugins: `pano.ui.auth.login` exists in the panel too, with `content`, `alternativeMethods`, `onLoad` (fires `panel:login:load`) and `load`. Register the same items in the `if (pano.isPanel)` branch — guard with `if (pano.ui.auth?.login)` so an older panel skips them. Items with `priority` below `100` render inside the form (a captcha), the rest after it (a 2FA modal); alternative methods render under an "or" divider. The panel has no `form.get()` and no other auth pages. It adds one call of its own:
+
+| Call | Purpose |
+|---|---|
+| `pano.ui.auth.login.complete(csrfToken, { target? })` | **Panel only.** Finish a sign-in whose cookies your backend already set: checks the account has panel access (if not, signs it out again), then opens `?next=`, `target` or the dashboard. Resolves to `'ok'` or `'NO_PANEL_ACCESS'`. |
+
+Pages a sign-in flow lands on (OAuth callbacks, emailed links) go in the panel with `public: true` (§2). On such an install Pano moves a site address that carries a query string under `/panel` unchanged — `/my-plugin/callback?code=…` opens `/panel/my-plugin/callback?code=…` — so register the same path in the panel, and send links between your pages to `/panel/…` when `pano.isPanel` is true.
 
 ## 8. Miscellaneous
 
