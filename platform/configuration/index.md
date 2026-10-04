@@ -139,7 +139,7 @@ local-node {
 - The `pano-node` daemon Pano runs on **its own machine** — see [Adding a node →](../server-management/managed-servers/#adding-a-node).
 - `enabled`: `false` stops Pano from starting a local node at all. Default **true**.
 - `jar-path`: an explicit path to `pano-node.jar`, never replaced by Pano. Empty means Pano looks next to itself and in its working directory, and unpacks the copy bundled in its own jar there.
-- `java-path`: a **Java 17+** home (or its `java` binary) for the daemon. Empty means Pano searches for one. Pano itself runs on Java 11, but the daemon needs 17.
+- `java-path`: a **Java 11+** home (or its `java` binary) for the daemon. Empty means the daemon runs on the same Java Pano does.
 - `stop-with-pano`: stop the daemon when Pano stops. Default **false**, so servers keep running across a Pano restart.
 
 ## Managed Servers

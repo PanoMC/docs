@@ -7,7 +7,7 @@ Pano runs it for you (the **Local** node); this page is for running it yourself.
 ## Installing {#installing}
 
 Download it from your own Pano, so the version always matches — it is also attached to every
-[Pano release](https://github.com/PanoMC/Pano/releases). It needs **Java 17 or newer**.
+[Pano release](https://github.com/PanoMC/Pano/releases). It needs **Java 11 or newer**.
 
 ```bash
 curl -fsSL https://panel.example.com/api/node/pano-node.jar -o pano-node.jar

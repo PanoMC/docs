@@ -11,7 +11,7 @@ opened on it. Nodes are managed from the **node icon** next to the server switch
 
 | Tab | |
 | --- | --- |
-| **Local** | Pano's own machine, in one click. Needs Java 17+. Files go to `<pano-dir>/node-data/`, the log to `<pano-dir>/logs/pano-node.log`. |
+| **Local** | Pano's own machine, in one click. Runs on the Java Pano runs on. Files go to `<pano-dir>/node-data/`, the log to `<pano-dir>/logs/pano-node.log`. |
 | **Manual** | Any machine: run the one-line command it shows, then approve the node. |
 | **SSH** | Pano runs the install for you over SSH, after you confirm the host key. The login is never stored. |
 | **Coolify** | Deploys the `ghcr.io/panomc/pano-node` container with a `/data` volume and the game ports. |
@@ -80,8 +80,8 @@ Changes apply on the next start.
 
 ## When something goes wrong {#troubleshooting}
 
-- **The node stays offline** — the local node needs Java 17+ (`LOCAL_NODE_JAVA_MISSING`); set
-  `local-node.java-path` if Pano cannot find it. Otherwise read `pano-node.log`.
+- **The node stays offline** — the local node runs on Pano's own Java (11+); on `LOCAL_NODE_JAVA_MISSING`
+  fix `local-node.java-path` or leave it empty. Otherwise read `pano-node.log`.
 - **The install fails** — the node needs internet access to the download sites, and free disk space.
   The server header keeps showing **The install failed** with the reason and **Reinstall** /
   **Change software** buttons; the server cannot be started until an install succeeds. A failed

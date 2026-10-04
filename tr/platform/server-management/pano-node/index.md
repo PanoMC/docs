@@ -8,7 +8,7 @@ Pano'nun kendi makinesinde onu Pano sizin için çalıştırır (**Yerel** düğ
 ## Kurulum {#installing}
 
 Sürümünün her zaman uyması için onu kendi Pano'nuzdan indirin — her
-[Pano sürümüne](https://github.com/PanoMC/Pano/releases) de eklenir. **Java 17 veya daha yenisini**
+[Pano sürümüne](https://github.com/PanoMC/Pano/releases) de eklenir. **Java 11 veya daha yenisini**
 ister.
 
 ```bash

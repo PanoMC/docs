@@ -8,7 +8,7 @@
 ## Установка {#installing}
 
 Скачивайте его у своей собственной Pano, чтобы версия всегда совпадала, — он также прикладывается к
-каждому [выпуску Pano](https://github.com/PanoMC/Pano/releases). Нужна **Java 17 или новее**.
+каждому [выпуску Pano](https://github.com/PanoMC/Pano/releases). Нужна **Java 11 или новее**.
 
 ```bash
 curl -fsSL https://panel.example.com/api/node/pano-node.jar -o pano-node.jar
