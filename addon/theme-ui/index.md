@@ -28,10 +28,10 @@ A hook component can export a `load(event)` function from its **module script** 
 ```svelte
 <!-- src/theme/ShoutboxWidget.svelte -->
 <script module>
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export async function load(event) {
-    const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+    const res = await api.get({ path: '/shouts', request: event });
     return { shouts: res.shouts ?? [] };
   }
 </script>
@@ -47,12 +47,12 @@ A hook component can export a `load(event)` function from its **module script** 
 </div>
 ```
 
-`event` is the incoming page request — it carries the visitor's cookies and session. You mostly just forward it to `ApiUtil` (as `request: event`) so the API knows who is asking.
+`event` is the incoming page request — it carries the visitor's cookies and session. You mostly just forward it to `api` (as `request: event`) so the API knows who is asking.
 
 The object you return becomes the component's props — here `shouts` arrives ready to render. (The host calls this props flow `hookProps`; you'll meet that name in the API reference and in error messages.)
 
 ::: warning `load()` runs on the server *and* the client
-The same `load()` executes during SSR and again on client-side navigation, so keep it **safe to run twice**: it should only fetch and return data. Don't change global variables, don't write anything, and don't modify the objects you were handed — because the same function runs once on the server and again in the browser. (The one-word name for "safe to run twice with no side effects" is *idempotent*.) Always pass `request: event` to `ApiUtil` (next section) so the server-side call carries the visitor's session.
+The same `load()` executes during SSR and again on client-side navigation, so keep it **safe to run twice**: it should only fetch and return data. Don't change global variables, don't write anything, and don't modify the objects you were handed — because the same function runs once on the server and again in the browser. (The one-word name for "safe to run twice with no side effects" is *idempotent*.) Always pass `request: event` to `api` (next section) so the server-side call carries the visitor's session.
 :::
 
 ::: tip Check
@@ -65,18 +65,19 @@ If `load()` returns `{ hookOptions: { invisible: true } }`, the host renders not
 
 ## Calling your API
 
-All network calls go through `ApiUtil`. Import the default export and use the verb methods, each taking a single options object:
+Calls to your own plugin's endpoints go through `api`, a client that already knows your plugin id. Paths are the relative ones your Kotlin endpoint declared (`/shouts`), and `api.panel` reaches the endpoints of a `PanelApi`. Calls to core endpoints use `ApiUtil` with paths relative to `/api/v1`. Each method takes a single options object:
 
 ```js
-import ApiUtil from '@panomc/sdk/utils/api';
+import { api } from '@panomc/sdk/plugin-api';
+import ApiUtil from '@panomc/sdk/utils/api';   // core endpoints only
 
 // In a load() — pass request so the server-side call has the session:
-const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+const res = await api.get({ path: '/shouts', request: event });
 
 // In a browser event handler — body is your JSON payload:
-await ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } });
-await ApiUtil.delete({ path: `/api/panel/shoutbox/${id}` });
-await ApiUtil.put({ path: '/api/panel/shoutbox/config', body: config });
+await api.panel.post({ path: '/shouts', body: { message } });
+await api.panel.delete({ path: `/shouts/${id}` });
+await api.panel.put({ path: '/config', body: config });
 ```
 
 The rule: **inside `load()`, always pass `request: event`** so the fetch runs with the visitor's session during SSR. In a click handler running in the browser you can omit it.
@@ -86,7 +87,7 @@ The call still works in the browser, but during SSR it runs **logged out**. The 
 :::
 
 ::: tip How `ApiUtil` reports errors
-`ApiUtil` never throws on API errors — a failed call resolves to an object with `error` set (it does not throw and you do not check an HTTP status). Always check `res.error` before using the response; you'll see this in every example.
+`api` and `ApiUtil` never throw on API errors: a failed call resolves to `{ error: { code, message?, details?, fields? } }`. Always check `res.error` (and branch on `res.error.code`) before using the response. Lists come back as `{ items, page }`; see [Pages](/addon/api-reference/#pages).
 :::
 
 ## Advanced — skip on first read
@@ -114,7 +115,7 @@ const registeredPaths = new Set();
 const customPageComponent = viewComponent(() => import('./theme/CustomPage.svelte'));
 
 pano.ui.app.onLoad(async (data, event) => {
-  const res = await ApiUtil.get({ path: '/api/pages', request: event });
+  const res = await ApiUtil.get({ path: '/pages', request: event });
   const incoming = new Set(res.pages.map((p) => p.url));
 
   // Remove routes we registered before that are no longer present.
@@ -145,4 +146,4 @@ The visitor side is done: a home-page widget with SSR data, API calls, and (opti
 - **Add admin screens → [Panel UI](/addon/panel-ui/)** — settings sections, full panel pages with nav links, and toasts.
 - **[Frontend API Reference](/addon/api-reference/)** — every hook name, view slot, and lifecycle event in one place.
 - **[Translating text](/addon/frontend/#translating-text-in-your-components)** — the `$_` helper your components use for labels.
-- **[Backend Development](/addon/backend/)** — the Kotlin endpoints your `load()` and `ApiUtil` calls hit.
+- **[Backend Development](/addon/backend/)** — the Kotlin endpoints your `load()` and `api` calls hit.

@@ -12,12 +12,12 @@ Bu sayfadaki her şey temanızın içindeki iki dosyada gerçekleşir:
 
 | Dosya | Ne işe yarar |
 |---|---|
-| `src/styles/tokens.scss` | Tema çekirdeğinin kullandığı her renk, font ve köşe yarıçapının bir **menüsü**. Bir satırın yorumunu kaldırın ve değerini değiştirin. |
+| `src/styles/tokens.scss` | Tema çekirdeğinin kullandığı her renk ve font değişkeninin bir **menüsü**. Bir satırın yorumunu kaldırın ve değerini değiştirin. |
 | `src/styles/style.scss` | Kendi **ek** CSS'inizin gittiği yer; tema çekirdeğinin stillerinden sonra gelir. |
 
 ## tokens.scss — değerlerin menüsü
 
-Bir tema iskelesi oluşturduğunuzda, `src/styles/tokens.scss` **tema çekirdeğinin kullandığı her değişkenin yorum satırına alınmış bir menüsü** olarak gelir — `$primary` ve `$secondary` gibi renkler, köşe yarıçapı, fontlar ve adlandırılmış koyu temalar. Her satır `//` ile başlar; bu "kapalı" anlamına gelir. Birini kullanmak için:
+Bir tema iskelesi oluşturduğunuzda, `src/styles/tokens.scss` **tema çekirdeğinin kullandığı her değişkenin yorum satırına alınmış bir menüsü** olarak gelir — `$primary` ve `$secondary` gibi renkler, fontlar ve adlandırılmış koyu temalar. Her satır `//` ile başlar; bu "kapalı" anlamına gelir. Birini kullanmak için:
 
 1. Dosyada istediğiniz değişkeni bulun.
 2. Satırının başındaki `//` işaretini kaldırın (buna *yorumu kaldırmak* denir).
@@ -37,12 +37,18 @@ $primary: #ff5722;
 
 ### Örnek 2 — köşe yarıçapını değiştirin
 
-Köşe yarıçapı, köşelerin ne kadar yuvarlak olduğunu kontrol eder (kartlar, düğmeler, girişler). Daha büyük bir sayı daha yumuşak ve yuvarlaktır; `0` tamamen köşelidir:
+Köşe yarıçapı bir `tokens.scss` değişkeni değildir. `--pano-radius` ailesini kendi CSS'inizde (`src/styles/style.scss`, import'ların altında) ayarlayın; her varsayılan view ve motorun kendi view'ları onu okur:
 
 ```scss
-// src/styles/tokens.scss
-$radius: 12px;
+// src/styles/style.scss — import'lardan sonra
+:root {
+  --pano-radius: 12px;
+  --pano-radius-sm: 8px;
+  --pano-radius-lg: 18px;
+}
 ```
+
+Daha büyük bir sayı daha yumuşaktır; `0` köşelidir. Aşağıdaki [`--pano-*` token'ları](#the-pano-tokens) bölümüne bakın.
 
 ### Örnek 3 — fontu değiştirin
 
@@ -56,6 +62,16 @@ $font-family-base: "Inter", sans-serif;
 ::: tip
 Her satırın yorumunu kaldırmanız **gerekmez**. Yalnızca önemsediğiniz birkaç değeri değiştirin ve gerisini yorum satırında bırakın — tema çekirdeği, dokunmadığınız her şey için makul varsayılanları doldurur.
 :::
+
+## `--pano-*` token'ları {#the-pano-tokens}
+
+SCSS menüsüne ek olarak bir tema `--pano-*` adlı **34 CSS değişkeni** okur: renkler (`--pano-color-bg`, `--pano-color-text`, `--pano-color-primary`, `--pano-color-border`...), köşe yarıçapları (`--pano-radius`, `-sm`, `-lg`, `-pill`), `--pano-border-width`, gölgeler (`--pano-shadow-sm`, `--pano-shadow`, `--pano-shadow-lg`), fontlar (`--pano-font-body`, `--pano-font-heading`, `--pano-font-mono`, `--pano-font-size`...) ve `--pano-space`. Bootstrap'li bir temada ilgili Bootstrap değişkenini yansıtırlar. Eklentiler varsayılan view'larını aynı değişkenlerle biçimlendirir; böylece tek bir değer kümesi eklentileri de yeniden renklendirir:
+
+```css
+:root { --pano-color-primary: #7c3aed; --pano-radius: 0.5rem; }
+```
+
+Her eklenti view'ı ayrıca anlamsal sınıflar taşır (`market-product-card__title`). Sizin CSS'iniz katmanlı değildir, bu yüzden eklentinin yedek stillerini ezer: `.market-product-card__title { margin: 1rem }` doğrudan çalışır. Bootstrap'siz tema [View'lar](/tr/theme/views/#themes-without-bootstrap) sayfasında anlatılır.
 
 ## style.scss — kendi ek CSS'iniz
 

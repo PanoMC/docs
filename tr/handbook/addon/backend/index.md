@@ -124,10 +124,7 @@ Gerçek kurulumlar eski şekle sahip olduktan sonra orijinal `CREATE TABLE`'ı d
 ```kotlin
 @Endpoint
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
-    override val paths = listOf(Path("/api/shoutbox/list", RouteType.GET))
-
-    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
-        ValidationHandlerBuilder.create(schemaRepository).build()
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
@@ -138,20 +135,20 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint`, eklenti yüklendiği an route'un kendini kaydetmesini sağlar — bir kayıt çağrısı yoktur.
 - Temel sınıf, kimin girebileceğini seçer: `Api` (herkese açık), `LoggedInApi` (giriş yapmış), `PanelApi` (yöneticiler), `SetupApi` (yalnızca kurulum).
-- **Doğrulanacak hiçbir şey olmasa bile `getValidationHandler`'ı geçersiz kılmalısınız** — boş oluşturucuyu tam gösterildiği gibi döndürün. Onu silmeyin; derleme buna ihtiyaç duyar.
-- `Successful(map)`, `{"result":"ok", …haritanız…}`'a serileştirilir.
+- Yol **görelidir**: Pano bu uç noktayı `/api/plugins/pano-plugin-shoutbox/shouts` adresinde sunar. `getValidationHandler` isteğe bağlıdır; doğrulanacak bir şey yoksa yazılmaz.
+- `Successful(map)` tam olarak haritanıza serileştirilir. Hatalar `{"error":{"code":"…"}}` biçimindedir.
 
 ::: tip Kontrol noktası: ilk uç noktanıza ulaşın
 Yeniden derleyin, kopyalayın, yeniden başlatın, sonra uç noktanızı bir tarayıcıda açın (veya `curl` ile isteyin):
 
 ```
-http://localhost:8088/api/shoutbox/list
+http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
 ```
 
-(Port `8088`, Pano'nun `--dev` adresidir; varsayılan bir kurulumda `http://localhost/api/shoutbox/list` kullanın.) Şunu görmelisiniz:
+(Port `8088`, Pano'nun `--dev` adresidir; varsayılan bir kurulumda `http://localhost/api/plugins/pano-plugin-shoutbox/shouts` kullanın.) Şunu görmelisiniz:
 
 ```json
-{"result":"ok","shouts":[]}
+{"shouts":[]}
 ```
 
 **Boş** bir liste — henüz hiç kimse shout yayınlamadı. O boş `shouts` dizisi, tablonuzun, DAO'nuzun ve uç noktanızın hepsinin hizalandığının kanıtıdır.
@@ -176,11 +173,11 @@ Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Roller**'i açın
 
 Herkese açık `GET` yalnızca okur. Bir shout *yayınlamak* için, gövdeyi doğrulayan, `ManageShoutboxPermission`'ı kontrol eden, satırı yazan ve bir etkinlik günlüğü girdisi kaydeden bir panel `POST` uç noktası (`PanelApi`) eklersiniz. Bu, backend'deki en büyük kod bloğudur, o yüzden onu burada yeniden basmıyoruz — onu [Endpoint'ler](/tr/addon/endpoints/#bir-panel-uc-noktası)'den inşa edin.
 
-::: tip Panel yolları `/api/panel/` ile başlar
-Panel arayüzü `POST /panel/api/shoutbox`'ı çağırır, ama Pano onu yeniden yazar, dolayısıyla Kotlin'de yolu her zaman `Path("/api/panel/shoutbox", RouteType.POST)` olarak yazarsınız.
+::: tip Panel uç noktaları `/panel` bildirmez
+Bir panel uç noktası `PanelApi`'yi genişletir ve `Path("/shouts", RouteType.POST)` bildirir. Pano onu `/api/plugins/pano-plugin-shoutbox/panel/shouts` adresinde sunar; panel arayüzü koduna `api.panel.post({ path: '/shouts' })` ile ulaşır.
 :::
 
-O uç nokta var olduğunda, bir yönetici olarak ona `{"message":"Hello Pano!"}` yayınlayın ve `/api/shoutbox/list`'i yenileyin — shout'unuz artık JSON'da. (O POST'u göndermenin en kolay yolu, birazdan inşa edeceğimiz panel arayüzünden.)
+O uç nokta var olduğunda, bir yönetici olarak ona `{"message":"Hello Pano!"}` yayınlayın ve `/api/plugins/pano-plugin-shoutbox/shouts`'i yenileyin — shout'unuz artık JSON'da. (O POST'u göndermenin en kolay yolu, birazdan inşa edeceğimiz panel arayüzünden.)
 
 ## Nerede olduğumuz
 

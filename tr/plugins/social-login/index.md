@@ -32,7 +32,11 @@ Panel kontrolleri bu izinlerle denetlenir.
 
 Bir sağlayıcıyı etkinleştirmeden önce, o sağlayıcının geliştirici konsolunda bir OAuth uygulaması oluşturmalı ve panelde gösterilen tam yönlendirme URI'sini kaydetmelisiniz:
 
-`{your-site}/api/social-login/{provider}/callback`
+`{your-site}/api/plugins/pano-plugin-social-login/providers/{provider}/callback`
+
+::: warning Eski sürümden güncelleme
+Yönlendirme adresi `/api/plugins` altına taşındı. Yeni adresi her sağlayıcıda kaydedin ve eski `/api/social-login/...` adresini silin; aksi halde giriş yönlendirme uyuşmazlığı hatası verir.
+:::
 
 Siteniz herkese açık bir URL'den erişilebilir olmalıdır. Birkaç sağlayıcının, panel içi kılavuzun belirttiği ekstra gereksinimleri vardır:
 

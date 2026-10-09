@@ -37,11 +37,13 @@ Change only the handful of values you care about. Every line you leave commented
 
 ## Step 2 — round the corners
 
-Ember is cozy, so let's soften every card, button, and input. Find the radius token and give it a bigger value:
+Ember is cozy, so let's soften every card, button, and input. Radius is a `--pano-*` CSS variable, so it goes in `src/styles/style.scss` (below the imports), not in `tokens.scss`:
 
 ```scss
-// src/styles/tokens.scss
-$radius: 14px;
+// src/styles/style.scss — after the imports
+:root {
+  --pano-radius: 14px;
+}
 ```
 
 Save and refresh — the interface immediately feels rounder and friendlier.

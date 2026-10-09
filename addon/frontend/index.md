@@ -1,6 +1,6 @@
 # Frontend Development
 
-**What this page gives you:** the one entry point every addon frontend shares — `src/main.js` — plus a map to the two topic pages that build the UI itself.
+**What this page gives you:** how an addon's site UI is written (named views, helpers, controllers, samples, widgets), the `src/main.js` entry for everything that is not a view, and a map to the two topic pages that build the UI itself.
 
 Your addon has two halves: a Kotlin [backend](/addon/backend/) and a **Svelte** frontend (the visual part users see and click). When you build your addon, the compiled Kotlin backend and your built Svelte files get zipped together into one `.jar` file — that whole file *is* your addon. You don't do anything special for this; the build handles it.
 
@@ -15,8 +15,62 @@ Addon UIs are written in Svelte, the same as Pano themes. If you have never used
 :::
 
 ::: tip Before you start
-You should have scaffolded your addon from the **pano-boilerplate-plugin** template and completed [Backend Development](/addon/backend/). The file `src/main.js` already exists in the boilerplate — you'll be *editing* it, not creating it. Start the dev loop with `bun run dev` and keep it running the whole time; every change on these pages hot-reloads, so you can see it immediately. (Turning the finished addon into a release is covered in [Building & Publishing](/addon/publishing/).)
+You should have scaffolded your addon with `bunx @panomc/plugin-kit new` ([Getting Started](/addon/getting-started/)). The file `src/main.js` already exists — you'll be *editing* it, not creating it. Start the dev loop with `bun run dev` and keep it running the whole time; every change on these pages hot-reloads, so you can see it immediately. (Turning the finished addon into a release is covered in [Building & Publishing](/addon/publishing/).)
 :::
+
+## Views: one file per page or widget
+
+A plugin's site UI is a set of **named views**. A view is one `.svelte` file under `src/theme/views/`. Its name is the file name, its id is `<ns>:<Name>` (`ns` is the plugin id without `pano-plugin-`, so `shoutbox:ShoutboxWidget`). Everything about the view is in that file: there is no registration code and nothing to add to `main.js`.
+
+```svelte
+<!-- src/theme/views/ShoutboxPage.svelte  ->  view "shoutbox:ShoutboxPage", the page /shoutbox -->
+<script module>
+  import { api } from '@panomc/sdk/plugin-api';
+
+  export const view = { path: '/shoutbox' };
+
+  export async function load(event) {
+    const res = await api.get({ path: '/shouts', request: event });
+    return { shouts: res.items ?? [] };
+  }
+</script>
+
+<script>
+  let { shouts = [] } = $props();
+</script>
+
+{#each shouts as shout}<p>{shout.message}</p>{/each}
+```
+
+`export const view` holds literals only (it is read, never run). The keys:
+
+| Key | Meaning |
+|---|---|
+| `path` (plus `layout`, `permission`, `loginRequired`) | the view is a page |
+| `slot`, `hook`, `sidebar`, `priority` | the view mounts itself in a slot, hook or sidebar |
+| `block` | made for a theme to place with `<PluginBlock id="shoutbox:Latest" />` |
+| `home: { label }` | offer this page as a home page option for the admin |
+| `widget` | also build a web component (`<pano-shoutbox-latest>`) for any web page |
+| `controller` | the page's `load` comes from this controller |
+| `contract` | integer version a theme override is written against (default `1`) |
+
+Rules the build enforces, each with file, line and fix: a view imports only `svelte*`, `svelte-i18n`, `@panomc/sdk*`, other views and helpers; it never calls `setContext` or `getContext`; no duplicate file names; no slot id outside your namespace.
+
+**Styling.** A plugin's default views are drawn in the vanilla look, and vanilla overrides none of them, so your look lives in your views. Put it on semantic classes (`shoutbox-latest__title`) and, if you need more, in a `<style>` block. The `style-block-scope` rule fails the build unless every selector starts with a class `shoutbox-...`, there is no `:global`, and keyframes and custom properties are named `shoutbox-...`. Read theme values with `var(--pano-*)`. Other themes restyle your views their own way.
+
+**SDK 2 only.** A plugin built without `panoSdk 2` is skipped. An item registered with `component` and no `view` is dropped with an error; use `export const view` in the file or `view: 'shoutbox:Name'`.
+
+**Helpers.** Any `.js` file beside the views, imported as usual, ships as readable source and goes with a view when a theme redraws it.
+
+**Controllers.** Logic that is not markup (a cart, a formatter) goes into `src/theme/controllers/<name>.js` as a framework-free `defineController({ name, version, state, actions })` from `@panomc/plugin-kit/controller`. It ships compiled. Views, theme pages, widgets and non-Svelte front-ends all use the same one: `plugin('shoutbox').require('counter')` from `@panomc/sdk/controllers`. When you remove or rename a state or action key, raise `version`: the build fails otherwise.
+
+**Samples.** `bunx pano-plugin samples ShoutboxPage` writes `ShoutboxPage.samples.js` (empty, loading, filled and error states). The theme catalogue at `/__pano/views` renders them, and `bunx pano-plugin check` uses them.
+
+**Widgets.** Add `widget: true` to `view` and the build also produces a web component, embedded with `<script type="module" src="https://your-pano/api/v1/widgets/loader.js"></script>` and `<pano-shoutbox-latest></pano-shoutbox-latest>`. The same view then works in a theme and on any other site; its data still comes from its own `load`.
+
+**Contract.** A theme can redraw your view (`theme-core eject-view shoutbox:ShoutboxPage`). The build writes `pano-plugin.lock.json` (commit it) and fails with the exact line to change when you remove a prop without raising `contract`.
+
+Everything that is not a view (panel pages, panel hooks, lifecycle handlers) is still registered in `src/main.js`, below.
 
 ## Your addon's files
 
@@ -25,8 +79,9 @@ Here is the layout these pages refer to. The `theme/` and `panel/` folders are j
 ```text
 src/
 ├─ main.js                    ← entry point; Pano loads this first
-├─ theme/                     ← components shown to visitors (the public site)
-│   └─ ShoutboxWidget.svelte
+├─ theme/                     ← what visitors see (the public site)
+│   ├─ views/ShoutboxWidget.svelte   ← one file per view, with `export const view`
+│   └─ controllers/                  ← optional closed logic
 └─ panel/                     ← components shown to admins (the dashboard)
     ├─ ShoutboxSettings.svelte
     └─ ShoutboxPage.svelte
@@ -43,7 +98,7 @@ Here is the skeleton the whole addon builds on. One line in it — `export const
 ```js
 // src/main.js
 import { PanoPlugin, viewComponent } from '@panomc/sdk';
-import ApiUtil from '@panomc/sdk/utils/api';
+import { api } from '@panomc/sdk/plugin-api';
 import { derived } from 'svelte/store';
 import { _ as i18n } from '@panomc/sdk/utils/language';
 
@@ -117,7 +172,7 @@ If an AI tool, an old tutorial, or scaffolding suggests any of these, ignore it 
 - **`pano.ui.page.register({ name, view, scopes })`** — the real `page.register` takes `{ path, component, permission, ... }` (see [Panel UI](/addon/panel-ui/)). There is no `name`/`view`/`scopes` form.
 - **`import { Button, Card } from '@panomc/sdk/components/panel'`** — there is no such component library in the SDK.
 - **`onContextUpdate`** — older boilerplate defines this method, but **no host ever calls it**. If your scaffolded `main.js` contains `onContextUpdate`, delete it.
-- **`ApiUtil.get('/api/...')` with a plain string** — every `ApiUtil` call takes an options object, e.g. `ApiUtil.get({ path: '/api/...' })`.
+- **`api.get('/shouts')` with a plain string**, or a path that starts with `/api` — every call takes an options object with a relative path, e.g. `api.get({ path: '/shouts' })`.
 - **`pano.utils.toast`** — there is no such thing; toasts come only from `@panomc/sdk/toasts`.
 
 ## Where to next

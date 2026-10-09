@@ -32,8 +32,8 @@ my-theme/
 │  ├─ styles/tokens.scss  ← SİZİN   renkleriniz, fontlarınız, boyutlarınız
 │  ├─ styles/style.scss   ← SİZİN   ek CSS'iniz
 │  ├─ views/              ← SİZİN   düzen geçersiz kılmalarınız (gerektiğinde)
-│  ├─ routes/             ← oto     `bun run sync` üretir — asla düzenlemeyin
-│  ├─ lib/                ← oto     `bun run sync` üretir — asla düzenlemeyin
+│  ├─ routes/             ← oto     `theme-core sync` üretir — asla düzenlemeyin
+│  ├─ lib/                ← oto     `theme-core sync` üretir — asla düzenlemeyin
 │  ├─ hooks.server.js     ← oto     üretilmiş
 │  └─ hooks.client.js     ← oto     üretilmiş
 └─ lang/                  ← oto     temel metin dosyaları — asla düzenlemeyin
@@ -56,7 +56,7 @@ Bunlar düzenlediğiniz dosyalardır. Temanızı *sizin* temanız yapan şey bun
 
 ### Üretilen dosyalar
 
-Bu dosyalar tema çekirdeği tarafından sizin **için** oluşturulur. Onları asla elle düzenlemeyin — bir sonraki `bun run sync` veya tema çekirdeği güncellemesi bunların üzerine yazar ve değişiklikleriniz kaybolur.
+Bu dosyalar tema çekirdeği tarafından sizin **için** oluşturulur. Onları asla elle düzenlemeyin — bir sonraki `theme-core sync` veya tema çekirdeği güncellemesi bunların üzerine yazar ve değişiklikleriniz kaybolur.
 
 | Dosya veya klasör | Nedir |
 |---|---|
@@ -67,7 +67,7 @@ Bu dosyalar tema çekirdeği tarafından sizin **için** oluşturulur. Onları a
 | `core-meta.json`, `package.json`, `svelte.config.js`, `vite.config.js` | İskele oluşturucunun sizin için ayarladığı yapılandırma. |
 
 ::: warning Her değişikliği size ait bir dosyaya koyun
-Üretilen bir dosyayı düzenlerseniz, bir sonraki `bun run sync` çalıştırdığınızda emeğiniz kaybolur. Yalnızca yukarıda "sizin" olarak işaretlenen dosyaları düzenleyin.
+Üretilen bir dosyayı düzenlerseniz, bir sonraki `theme-core sync` çalıştırdığınızda emeğiniz kaybolur. Yalnızca yukarıda "sizin" olarak işaretlenen dosyaları düzenleyin.
 :::
 
 ## Manifest

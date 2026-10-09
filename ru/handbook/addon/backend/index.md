@@ -124,10 +124,7 @@ abstract class ShoutDao : Dao<Shout>(Shout::class.java) {
 ```kotlin
 @Endpoint
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
-    override val paths = listOf(Path("/api/shoutbox/list", RouteType.GET))
-
-    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
-        ValidationHandlerBuilder.create(schemaRepository).build()
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
@@ -138,20 +135,20 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint` заставляет маршрут зарегистрироваться сам в тот миг, когда аддон загружается — вызова регистрации нет.
 - Базовый класс выбирает, кому разрешён вход: `Api` (публичный), `LoggedInApi` (авторизованные), `PanelApi` (администраторы), `SetupApi` (только установка).
-- **Вы обязаны переопределить `getValidationHandler`, даже если проверять нечего** — верните пустой билдер ровно так, как показано. Не удаляйте его; сборке он нужен.
-- `Successful(map)` сериализуется в `{"result":"ok", …ваша карта…}`.
+- Путь **относительный**: Pano отдаёт этот эндпоинт по `/api/plugins/pano-plugin-shoutbox/shouts`. `getValidationHandler` необязателен; если проверять нечего, его не пишут.
+- `Successful(map)` сериализуется ровно в вашу map. Ошибки имеют вид `{"error":{"code":"…"}}`.
 
 ::: tip Контрольная точка: обратитесь к своему первому эндпоинту
 Пересоберите, скопируйте, перезапустите, затем откройте свой эндпоинт в браузере (или через `curl`):
 
 ```
-http://localhost:8088/api/shoutbox/list
+http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
 ```
 
-(Порт `8088` — это адрес `--dev` для Pano; на установке по умолчанию используйте `http://localhost/api/shoutbox/list`.) Вы должны увидеть:
+(Порт `8088` — это адрес `--dev` для Pano; на установке по умолчанию используйте `http://localhost/api/plugins/pano-plugin-shoutbox/shouts`.) Вы должны увидеть:
 
 ```json
-{"result":"ok","shouts":[]}
+{"shouts":[]}
 ```
 
 **Пустой** список — ещё никто не опубликовал выкрик. Этот пустой массив `shouts` доказывает, что ваша таблица, DAO и эндпоинт согласованы.
@@ -176,11 +173,11 @@ class ManageShoutboxPermission : PanelPermission("fa-bullhorn")
 
 Публичный `GET` только читает. Чтобы *опубликовать* выкрик, вы добавляете эндпоинт панели `POST` (`PanelApi`), который валидирует тело, проверяет `ManageShoutboxPermission`, записывает строку и заносит запись в журнал активности. Это самый большой блок кода в бэкенде, поэтому мы не будем перепечатывать его здесь — соберите его из [Эндпоинтов](/ru/addon/endpoints/#эндпоинт-панели).
 
-::: tip Пути панели начинаются с `/api/panel/`
-UI панели вызывает `POST /panel/api/shoutbox`, но Pano переписывает это, поэтому в Kotlin вы всегда пишете путь как `Path("/api/panel/shoutbox", RouteType.POST)`.
+::: tip Эндпоинты панели не объявляют `/panel`
+Эндпоинт панели расширяет `PanelApi` и объявляет `Path("/shouts", RouteType.POST)`. Pano отдаёт его по `/api/plugins/pano-plugin-shoutbox/panel/shouts`, а код UI панели вызывает его через `api.panel.post({ path: '/shouts' })`.
 :::
 
-Как только этот эндпоинт существует, опубликуйте в него `{"message":"Hello Pano!"}` от имени администратора и обновите `/api/shoutbox/list` — ваш выкрик теперь в JSON. (Проще всего отправить этот POST из UI панели, который мы соберём следующим.)
+Как только этот эндпоинт существует, опубликуйте в него `{"message":"Hello Pano!"}` от имени администратора и обновите `/api/plugins/pano-plugin-shoutbox/shouts` — ваш выкрик теперь в JSON. (Проще всего отправить этот POST из UI панели, который мы соберём следующим.)
 
 ## Где мы находимся
 

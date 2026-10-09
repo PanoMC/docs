@@ -21,6 +21,8 @@ Geçersiz kılabileceğiniz her view'ı, her birinin aldığı verilerle birlikt
 bunx @panomc/theme-core list-views
 ```
 
+Bunları **örnek verilerle çizilmiş** görmek için tema geliştirme modundayken `<Pano adresiniz>/__pano/views` adresini açın. Bu, view kataloğudur: her motor view'ı ve her eklenti view'ı tek sayfada.
+
 ## Adım 2 — bir view'ın sahipliğini alın
 
 Bir view'ı devralmak için onu **eject** edin. Eject etmek, tema çekirdeğinin varsayılan sürümünü kendi `src/views/` klasörünüze kopyalar ve `theme.config.js` içinde kaydeder:
@@ -205,6 +207,113 @@ Bunun bir tema yazarı olarak sizin için anlamı:
 - **Bağlanacak hiçbir şey yok** — geçersiz kıldığınız view'lar bağlama noktalarını koruduğu sürece, SSR dahil yukarıdakilerin hepsi çalışmaya devam eder.
 - **Özel hook'lar hakkında dürüst bir uyarı:** sunucu tarafı `load()` hattı yalnızca **yerleşik** hook adları için çalışır. Eklediğiniz özel bir hook'a (örneğin `my-theme:hero:bottom`) bağlanan bir eklenti yine de render edilir — SSR dahil — ama `load()` verisi tema çekirdeği tarafından hazırlanmaz, bu yüzden böyle eklentiler verilerini genellikle istemcide çeker.
 
+## Eklenti view'ını yeniden çizmek
+
+Bir eklentinin site arayüzü **adlandırılmış view'lardan** oluşur. Bir view'ın kimliği `<ns>:<Name>`'dir (örneğin `market:ProductCard`); motor view'ları çıplak adlarını korur (`Navbar`). Bir tema bunlardan herhangi birini motor view'ı gibi yeniden çizebilir:
+
+```sh
+bunx @panomc/theme-core eject-view market:ProductCard
+bunx @panomc/theme-core eject-view 'market:*' --pages
+```
+
+Komut, eklentinin okunabilir kaynağını `src/views/market/ProductCard.svelte` dosyasına kopyalar, içinden `load` ve `view`'ı çıkarır, diğer eklenti view'larının import'larını `pluginView("market:PriceTag")` olarak yeniden yazar, gereken yardımcı dosyaları kopyalar ve girdiyi `theme.config.js` içine yazar:
+
+```js
+views: {
+  Navbar: () => import("./src/views/Navbar.svelte"),
+  "market:ProductCard": {
+    contract: 2,
+    controllers: ["market/cart"],
+    component: () => import("./src/views/market/ProductCard.svelte"),
+  },
+},
+```
+
+İki kural iki tarafı da korur:
+
+- **Veri eklentide kalır.** Sayfalar, enjeksiyonlar ve bloklar eklentinin kendi `load`'unu korur; sizin dosyanız yalnızca işaretleme sağlar. Bir override'ın dışa aktardığı `load` yok sayılır.
+- **Bir eklenti güncellemesi temanız yüzünden asla engellenmez.** Override yalnızca `contract`'ı (ve sabitlediği her controller'ın sürümü) eklentiyle eşleştiği sürece kullanılır. Aksi halde eklentinin kendi view'ı çizilir ve panel view'ı geri düşmüş olarak listeler. Güncellemek için `eject-view market:ProductCard` komutunu yeniden çalıştırın (yanınıza bir `.new` dosyası yazar), birleştirin, sonra `bunx @panomc/theme-core accept market:ProductCard` çalıştırın.
+
+Markup olmayan eklenti mantığı (sepet, oturum) bir **controller**'dır ve `<ns>/<name>` olarak adlandırılır. Kendi view'larınızda ve sayfalarınızda kullanın: `@panomc/sdk/controllers` içinden `plugin('market').use('cart')`. `bunx @panomc/theme-core check --fix` sürüm sabitlerini sizin için yazar.
+
+## Bloklar, sahiplenmeler ve slotlar
+
+**Bloklar.** Bir eklenti view'ını işaretlemenizin herhangi bir yerine `<PluginBlock>` ile yerleştirin. Verisi her yerleştirme için sunucuda yüklenir; farklı prop'lu iki ızgara iki ayrı veri kümesi alır. Prop'lar sabit değer olmalıdır:
+
+```svelte
+<script>
+  import { PluginBlock } from "@panomc/sdk/components/theme";
+</script>
+<PluginBlock id="market:ProductGrid" limit={8} category="vip" />
+```
+
+Bilinmeyen bir kimlik ya da kurulu olmayan eklenti hiçbir şey çizmez.
+
+**Sahiplenmeler (claims).** Bir eklentinin kendiliğinden bağladığı gezinme öğesi, kenar çubuğu widget'ı veya hook bir *enjeksiyondur*. Aynı view'ı `<PluginBlock id="market:NavCart" />` ile kendiniz yerleştirirseniz otomatik kopya kaybolur: temanız onu sahiplenmiştir. `theme.config.js` bunu elle ayarlayabilir (`false` otomatik kopyayı korur):
+
+```js
+claims: { "market:NavCart": true, "market:CartOffcanvas": false },
+```
+
+**Slotlar.** Bir eklenti view'ı diğer eklentiler için `<PluginSlot id="market:checkout:payment" />` ile slot açabilir. Bu view'ı override ederseniz varsayılandaki her `<PluginSlot>`'u koruyun.
+
+## Bir eklenti kurulu olduğunda veya olmadığında {#plugin-installed}
+
+En çok emekten en aza üç yol:
+
+1. **Davranış ve yerleşim: `hasPlugin`.** `siteInfo.plugins`, kurulu ve çalışan eklentileri eklenti kimliğiyle listeler. `hasPlugin(siteInfo, "market")` (`$pano/lib/plugins.js` içinden) bunu yanıtlar; tam kimlik `"pano-plugin-market"` esastır, kısa ad alanı da çalışır. `pluginInfo(siteInfo, "market")` `{ version, uiHash, dependencies }` ya da `null` döndürür. Kendi durumunu tutmaz, bu yüzden sunucuda güvenlidir. `load()` içinde `siteInfo`'yu `(await parent()).session`'dan alın, bileşende `$session.siteInfo` kullanın:
+
+```svelte
+<Hero cta={hasPlugin($session.siteInfo, "market") ? "store" : "register"} />
+```
+
+2. **Şu bloğu ya da bunu göster.** Eklenti yoksa `<PluginBlock>` `fallback` snippet'ini çizer: `<PluginBlock id="market:GoalWidget">{#snippet fallback()}<p>Bize katılın!</p>{/snippet}</PluginBlock>`.
+3. **Override'lar ve eklenti CSS'i için koruma gerekmez.** Eklenti yoksa kullanılmadan kalırlar; panel eklentiyi hata olarak değil "kurulu değil" olarak gösterir.
+
+Kontrol etmeden bir eklentinin API'sini ya da controller'ını çağırmayın ve menüye bir eklenti sayfasına giden girdiyi elle yazmayın.
+
+## Rotalar
+
+`theme.config.js` rota ekleyebilir, devre dışı bırakabilir ve yeniden adlandırabilir. Rota dosyalarındaki ve eklenti sayfalarındaki kanonik yollar asla değişmez; yapılandırma yalnızca ziyaretçilerin gördüğünü değiştirir:
+
+```js
+routes: {
+  add:     { "/staff-team": "./src/pages/StaffTeam.svelte" },
+  disable: ["/rules"],
+  rename:  { "/store": "/shop", "/store/[slug]": "/shop/[slug]" },
+},
+```
+
+Yeniden adlandırılarak terk edilen yol yenisine 308 verir, devre dışı bırakılan yol 404'tür ve yeniden adlandırmanın iki tarafı da aynı `[param]` adlarına ihtiyaç duyar. Kendi işaretlemenizde bağlantılar haritayı izlesin diye `href={route("/store")}` yazın. Pano'nun gönderdiği e-postalar ve yönlendirmeler de yeniden adlandırmayı izler. Hiçbir şey `/posts` veya `/__pano*` yolunu hedefleyemez.
+
+## Ana sayfa
+
+Ana sayfayı yönetici panelde bir seçim kutusundan seçer; seçenekleri siz bildirirsiniz:
+
+```js
+home: {
+  default: "landing",
+  options: {
+    posts:   { label: "Posts" },
+    landing: { label: { "en-US": "Landing", tr: "Acilis" }, page: "./src/pages/Landing.svelte" },
+    store:   { label: "Store", path: "/store" },
+    custom:  { label: "Custom page", path: "*" },
+  },
+},
+```
+
+`home` anahtarı yoksa seçenekler gönderi akışı, kendini ana sayfa olarak sunan her kurulu eklenti sayfası ve özel bir yoldur. Gösterilemeyen bir seçim (eklenti kaldırıldı) önce `default`'a, sonra gönderi akışına düşer.
+
+## Bootstrap'siz temalar {#themes-without-bootstrap}
+
+Tüm resmî temalar Bootstrap ve Font Awesome ile gelir ve eklentilerin varsayılan view'ları onlara göre yazılmıştır. Kendi CSS'i olan bir tema bunu söyler:
+
+```js
+provides: { bootstrap: false, fontawesome: false },
+```
+
+Birini `bunx @panomc/theme-core new my-theme --bare` ile oluşturun. Motor, override etmediğiniz her varsayılan eklenti view'ı için kapsamlı bir yedek stil sayfası bağlar; bu sayfa [Özelleştirme](/tr/theme/customization/#the-pano-tokens) sayfasındaki `--pano-*` değişkenleriyle çalışır. `bootstrap: false` deyip Bootstrap'i hâlâ import eden tema için `check` uyarır. Yedek stil Chrome 118, Safari 17.4 veya Firefox 146 ister; altında Bootstrap'siz temada varsayılan bir eklenti view'ı stilsiz kalır. Bir CSS çocuk birleştiricisi (`.a > .b`), motorun her eklentinin varsayılan view'ı etrafına koyduğu sarmalayıcıyı aşamaz.
+
 ## Özel tema ayarları
 
 Yeniden tasarladığınız view, site sahibinin değiştirebilmesi gereken **yeni seçenekler** eklerse (örneğin ana sayfada bir hero başlığı), bu seçeneklerin panelin **kaydedip sıfırlayabilmesi** için tanımlanması gerekir. Bunu `theme.config.js` içinde `settingsSchema` altında yaparsınız.
@@ -227,6 +336,13 @@ export default {
 ```
 
 Bu olmadan, yeni girişleriniz panelde görüntülenir ancak asla gerçekten kaydedilmez. Yalnızca markup'ta *okuduğunuz* bir anahtarın (ayarlar view'ında bir girişi olmayan) burada bir kaydı olması gerekmez.
+
+## Denetim
+
+```sh
+bunx @panomc/theme-core check            # uyarılar ve hatalar
+bunx @panomc/theme-core check --strict   # uyarılar hata sayılır
+```
 
 ## Dürüst bir not
 

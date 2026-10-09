@@ -168,7 +168,7 @@ class ShoutDaoImpl : ShoutDao()
 
 ## 3. HTTP-эндпоинты и маршрутизация
 
-**Эндпоинт** = один URL, на который отвечает ваше дополнение, например `GET /api/shouts`. Вы создаёте его, написав класс с аннотацией `@Endpoint`, расширяющий один из базовых API-классов ниже; Pano передаёт ваши DAO и bean-ы в его конструктор за вас (внедрение через конструктор).
+**Эндпоинт** = один URL, на который отвечает ваше дополнение, например `GET /api/plugins/pano-plugin-shoutbox/shouts`. Вы создаёте его, написав класс с аннотацией `@Endpoint`, расширяющий один из базовых API-классов ниже; Pano передаёт ваши DAO и bean-ы в его конструктор за вас (внедрение через конструктор).
 
 Наименьший компилирующийся эндпоинт — это класс, пути, на которые он отвечает, и `handle`, возвращающий результат:
 
@@ -176,7 +176,7 @@ class ShoutDaoImpl : ShoutDao()
 // imports: com.panomc.platform.model.* (Api, Path, RouteType, Result, Successful), com.panomc.platform.annotation.Endpoint
 @Endpoint
 class GetShoutsAPI : Api() {
-    override val paths = listOf(Path("/api/shouts", RouteType.GET))
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         return Successful(mapOf("shouts" to listOf<String>()))
@@ -202,19 +202,16 @@ class GetShoutsAPI : Api() {
 
 | Базовый класс | Кому разрешено | Объявляйте пути как |
 |---|---|---|
-| `Api` | Кому угодно (публично) | `/api/...` |
-| `LoggedInApi` | Любому вошедшему пользователю | `/api/...` |
-| `PanelApi` | Админам (расширяет `LoggedInApi`) | `/api/panel/...` |
-| `SetupApi` | Только во время первоначальной настройки | `/api/...` |
+| `Api` | Кому угодно (публично) | `/shouts` (под `/api/plugins/<pluginId>`) |
+| `LoggedInApi` | Любому вошедшему пользователю | `/shouts` |
+| `PanelApi` | Админам (расширяет `LoggedInApi`) | `/shouts` (`/api/plugins/<pluginId>/panel`) |
+| `SetupApi` | Только во время первоначальной настройки | `/...` (core) |
 | `Template` | Маршрут HTML, отрисованный на сервере | — |
 
 Маршруты `SetupApi` существуют только пока работает мастер первоначальной установки и исчезают, как только сайт настроен — он вам редко понадобится.
 
-::: tip Пути панели объявляются как `/api/panel/...`
-UI панели вызывает URL вроде `/panel/api/...`, но Pano перенаправляет их на `/api/...` внутри — так что вы всегда объявляете форму `/api/panel/...`. Конкретно:
-
-- Браузер вызывает: `GET /panel/api/shouts`
-- Вы объявляете: `Path("/api/panel/shouts", RouteType.GET)`
+::: tip Объявляйте только относительные пути
+Никогда не пишите в `Path` `/api`, `/v1`, `/panel` или id плагина. Pano монтирует эндпоинт по адресу `/api/plugins/<pluginId>/...`, а для класса `PanelApi` по `/api/plugins/<pluginId>/panel/...`. Путь, начинающийся с `/api` или `/panel`, пустой или начинающийся с параметра (или `_`), останавливает плагин при старте с сообщением, называющим класс. См. [Относительные пути эндпоинтов](/ru/addon/api-reference/#relative-endpoint-paths).
 :::
 
 ### Обработка запроса (члены `Api`)
@@ -231,10 +228,10 @@ UI панели вызывает URL вроде `/panel/api/...`, но Pano пе
 
 | Вещь | Сигнатура | Назначение |
 |---|---|---|
-| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Успех → `{"result":"ok", …map…}` |
-| `Errors` | `Errors(map: Map<String, Any?>)` | Полезная нагрузка ошибок на уровне полей — например `Errors(mapOf("email" to true))` говорит фронтенду подсветить поле email |
+| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Успех → `{…map…}` |
+| `InvalidFields` | `InvalidFields(mapOf("email" to "EXISTS"))` | Ошибки на уровне полей → `{"error":{"code":"INVALID_FIELDS","fields":{"email":"EXISTS"}}}` |
 | Подклассы `Error` | `throw NotFound()` / `BadRequest()` / … | ~100 предопределённых в `com.panomc.platform.error` (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
-| Своя ошибка | `class MyError : Error(statusCode, …)` | Код ошибки клиента = имя класса в `UPPER_SNAKE`: `class SlugTaken : Error(...)` → клиент получает `"error": "SLUG_TAKEN"` |
+| Своя ошибка | `class SlugTaken : Error("SLUG_TAKEN", 409)` | Код (`^[A-Z][A-Z0-9_]*$`) и статус объявляете вы; клиент получает `{"error":{"code":"SLUG_TAKEN"}}` |
 
 Чтобы сообщить об ошибке запроса, вы **бросаете** `Error` (Pano `com.panomc.platform.model.Error`, **не** встроенный `Error` Kotlin) — вы не возвращаете её. Сбои валидации превращаются в `BadRequest` за вас.
 

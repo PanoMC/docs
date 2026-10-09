@@ -162,7 +162,7 @@ Her host servisine bu şekilde ulaşırsınız — servisin türüyle `applicati
 
 Arayüz asla gevşek dosyalar olarak gönderilmez. Bir yayın derlemesi çalıştırdığınızda, derlenmiş `plugin-ui/{client,server}` klasörleri tek bir jar kaynağına, **`plugin-ui.zip`**'e ziplenir. Oradan:
 
-1. Yüklemede, Pano o zip'in bir **arayüz hash'ini** hesaplar ve eklentiniz için tema ve panelin zaten çağırdığı site-info API'si (`/api/siteInfo`) aracılığıyla `{ version, uiHash }` duyurur.
+1. Yüklemede, Pano o zip'in bir **arayüz hash'ini** hesaplar ve eklentiniz için tema ve panelin zaten çağırdığı site-info API'si (`/api/v1/site-info`) aracılığıyla `{ version, uiHash }` duyurur.
 2. Tema (tarayıcı), önbellek kırıcı bir sorguyla — `client.mjs?v=<uiHash>` — **istemci** paketinizi içe aktarır, böylece yeni bir derleme eski önbelleğe alınmış kopyayı geçersiz kılar. Node işlemi SSR için **sunucu** paketini, `server/server.mjs`, içe aktarır.
 3. İçe aktarıldıktan sonra, Pano varsayılan-dışa aktarılan sınıfınızı inşa eder ve onun `onLoad()`'ını çağırır — bu sayfanın başındaki aynı `onLoad()`. Bu, arayüzün eklediği her şeyi kaydettiğiniz tek giriş noktasıdır: kancalar, sayfalar, gezinme bağlantıları.
 

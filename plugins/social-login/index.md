@@ -32,7 +32,11 @@ Panel controls are gated on these permissions.
 
 Before enabling a provider you must create an OAuth application in that provider's developer console and register the exact redirect URI shown in the panel:
 
-`{your-site}/api/social-login/{provider}/callback`
+`{your-site}/api/plugins/pano-plugin-social-login/providers/{provider}/callback`
+
+::: warning Updating from an older version
+The redirect URI moved under `/api/plugins`. Register the new address at every provider and remove the old `/api/social-login/...` one, or sign-in fails with a redirect mismatch.
+:::
 
 Your site must be reachable at a public URL. A few providers have extra requirements that the in-panel guide calls out:
 

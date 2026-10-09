@@ -28,10 +28,10 @@ pano.ui.hook.register({
 ```svelte
 <!-- src/theme/ShoutboxWidget.svelte -->
 <script module>
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export async function load(event) {
-    const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+    const res = await api.get({ path: '/shouts', request: event });
     return { shouts: res.shouts ?? [] };
   }
 </script>
@@ -68,15 +68,16 @@ pano.ui.hook.register({
 Все сетевые вызовы идут через `ApiUtil`. Импортируйте экспорт по умолчанию и используйте методы-глаголы, каждый из которых принимает один объект опций:
 
 ```js
-import ApiUtil from '@panomc/sdk/utils/api';
+import { api } from '@panomc/sdk/plugin-api';
+import ApiUtil from '@panomc/sdk/utils/api';   // core endpoints only
 
 // In a load() — pass request so the server-side call has the session:
-const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+const res = await api.get({ path: '/shouts', request: event });
 
 // In a browser event handler — body is your JSON payload:
-await ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } });
-await ApiUtil.delete({ path: `/api/panel/shoutbox/${id}` });
-await ApiUtil.put({ path: '/api/panel/shoutbox/config', body: config });
+await api.panel.post({ path: '/shouts', body: { message } });
+await api.panel.delete({ path: `/shouts/${id}` });
+await api.panel.put({ path: '/config', body: config });
 ```
 
 Правило: **внутри `load()` всегда передавайте `request: event`**, чтобы запрос выполнялся с сессией посетителя во время SSR. В обработчике клика, выполняющемся в браузере, вы можете его опустить.
@@ -114,7 +115,7 @@ const registeredPaths = new Set();
 const customPageComponent = viewComponent(() => import('./theme/CustomPage.svelte'));
 
 pano.ui.app.onLoad(async (data, event) => {
-  const res = await ApiUtil.get({ path: '/api/pages', request: event });
+  const res = await ApiUtil.get({ path: '/pages', request: event });
   const incoming = new Set(res.pages.map((p) => p.url));
 
   // Remove routes we registered before that are no longer present.

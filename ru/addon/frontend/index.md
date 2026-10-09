@@ -18,6 +18,60 @@ UI дополнений пишутся на Svelte, так же как темы 
 У вас должно быть дополнение, созданное из шаблона **pano-boilerplate-plugin**, и завершённая [Разработка бэкенда](/ru/addon/backend/). Файл `src/main.js` уже существует в boilerplate — вы будете его *редактировать*, а не создавать. Запустите цикл разработки командой `bun run dev` и держите его запущенным всё время; каждое изменение на этих страницах перезагружается горячо, так что вы можете сразу видеть результат. (Превращение готового дополнения в релиз рассмотрено в [Сборка и публикация](/ru/addon/publishing/).)
 :::
 
+## Представления: один файл на страницу или виджет
+
+Интерфейс плагина на сайте это набор **именованных представлений**. Представление это один файл `.svelte` в `src/theme/views/`. Его имя это имя файла, id: `<ns>:<Name>` (`ns` это id плагина без `pano-plugin-`, то есть `shoutbox:ShoutboxWidget`). Всё о представлении лежит в этом файле: кода регистрации нет, в `main.js` ничего добавлять не нужно.
+
+```svelte
+<!-- src/theme/views/ShoutboxPage.svelte  ->  view "shoutbox:ShoutboxPage", /shoutbox -->
+<script module>
+  import { api } from '@panomc/sdk/plugin-api';
+
+  export const view = { path: '/shoutbox' };
+
+  export async function load(event) {
+    const res = await api.get({ path: '/shouts', request: event });
+    return { shouts: res.items ?? [] };
+  }
+</script>
+
+<script>
+  let { shouts = [] } = $props();
+</script>
+
+{#each shouts as shout}<p>{shout.message}</p>{/each}
+```
+
+`export const view` содержит только литералы (его читают, но не выполняют). Ключи:
+
+| Ключ | Значение |
+|---|---|
+| `path` (плюс `layout`, `permission`, `loginRequired`) | представление является страницей |
+| `slot`, `hook`, `sidebar`, `priority` | представление само монтируется в слот, хук или боковую панель |
+| `block` | создано, чтобы тема размещала его через `<PluginBlock id="shoutbox:Latest" />` |
+| `home: { label }` | предложить эту страницу админу как вариант главной |
+| `widget` | дополнительно собрать веб-компонент (`<pano-shoutbox-latest>`) для любой веб-страницы |
+| `controller` | `load` страницы берётся из этого контроллера |
+| `contract` | целочисленная версия, под которую пишется переопределение темы (по умолчанию `1`) |
+
+Правила, которые обеспечивает сборка (каждое с файлом, строкой и исправлением): представление импортирует только `svelte*`, `svelte-i18n`, `@panomc/sdk*`, другие представления и помощники; не вызывает `setContext` и `getContext`; нет файлов с одинаковыми именами; нет id слота вне вашего пространства имён.
+
+**Стили.** Представления плагина по умолчанию рисуются в стиле vanilla, и vanilla не переопределяет ни одно из них, поэтому внешний вид живёт в ваших представлениях. Задавайте его через семантические классы (`shoutbox-latest__title`) и при необходимости блоком `<style>`. Правило `style-block-scope` ломает сборку, если селектор не начинается с класса `shoutbox-...`, есть `:global`, либо keyframes и пользовательские свойства названы иначе. Значения темы читайте через `var(--pano-*)`. Другие темы перерисовывают ваши представления по-своему.
+
+**Только SDK 2.** Плагин, собранный без `panoSdk 2`, пропускается. Элемент с `component` без `view` отбрасывается с ошибкой; используйте `export const view` в файле или `view: 'shoutbox:Name'`.
+
+**Помощники.** Любой `.js` рядом с представлениями импортируется как обычно, поставляется читаемым исходником и уходит с представлением, когда тема его перерисовывает.
+
+**Контроллеры.** Логика, не являющаяся разметкой (корзина, форматтер), пишется в `src/theme/controllers/<name>.js` как независимый от фреймворка `defineController({ name, version, state, actions })` из `@panomc/plugin-kit/controller`. Он поставляется скомпилированным и закрытым. Представления, страницы тем, виджеты и не-Svelte фронтенды используют один и тот же: `plugin('shoutbox').require('counter')` из `@panomc/sdk/controllers`. Удаляя или переименовывая ключ state или action, поднимите `version`: иначе сборка завершится ошибкой.
+
+**Примеры данных.** `bunx pano-plugin samples ShoutboxPage` пишет `ShoutboxPage.samples.js` (пустое, загрузка, заполненное, ошибка). Каталог тем `/__pano/views` отрисовывает их, а `bunx pano-plugin check` использует.
+
+**Виджеты.** Добавьте `widget: true` в `view`, и сборка дополнительно создаст веб-компонент. Встраивается так: `<script type="module" src="https://your-pano/api/v1/widgets/loader.js"></script>` и `<pano-shoutbox-latest></pano-shoutbox-latest>`. Одно и то же представление работает в теме и на любом другом сайте; данные по-прежнему приходят из его `load`.
+
+**Контракт.** Тема может перерисовать ваше представление (`theme-core eject-view shoutbox:ShoutboxPage`). Сборка пишет `pano-plugin.lock.json` (закоммитьте его) и падает со строкой для исправления, если вы убрали проп, не подняв `contract`.
+
+Всё, что не является представлением (страницы панели, хуки панели, обработчики жизненного цикла), по-прежнему регистрируется в `src/main.js`, как описано ниже.
+
 ## Файлы вашего дополнения
 
 Вот раскладка, на которую ссылаются эти страницы. Папки `theme/` и `panel/` — просто аккуратное соглашение для разделения компонентов посетителей и компонентов админов — Pano не принуждает к именам, вы могли бы организовать файлы как угодно.
@@ -43,7 +97,7 @@ src/
 ```js
 // src/main.js
 import { PanoPlugin, viewComponent } from '@panomc/sdk';
-import ApiUtil from '@panomc/sdk/utils/api';
+import { api } from '@panomc/sdk/plugin-api';
 import { derived } from 'svelte/store';
 import { _ as i18n } from '@panomc/sdk/utils/language';
 
@@ -117,7 +171,7 @@ export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}
 - **`pano.ui.page.register({ name, view, scopes })`** — реальный `page.register` принимает `{ path, component, permission, ... }` (смотрите [UI панели](/ru/addon/panel-ui/)). Формы `name`/`view`/`scopes` не существует.
 - **`import { Button, Card } from '@panomc/sdk/components/panel'`** — в SDK нет такой библиотеки компонентов.
 - **`onContextUpdate`** — более старый boilerplate определяет этот метод, но **ни один хост его не вызывает**. Если ваш каркасный `main.js` содержит `onContextUpdate`, удалите его.
-- **`ApiUtil.get('/api/...')` с обычной строкой** — каждый вызов `ApiUtil` принимает объект опций, например `ApiUtil.get({ path: '/api/...' })`.
+- **`api.get('/shouts')` с обычной строкой** или путь, начинающийся с `/api`, — каждый вызов принимает объект опций с относительным путём, например `api.get({ path: '/shouts' })`.
 - **`pano.utils.toast`** — такого нет; тосты приходят только из `@panomc/sdk/toasts`.
 
 ## Куда дальше

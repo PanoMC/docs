@@ -1,116 +1,66 @@
 # Getting Started
 
-A Pano **theme** controls how your website looks — its colors, fonts, and layout. The hard parts (login, plugins, loading data, building) are already done for you by an engine called `@panomc/theme-core`. Your theme just sits on top and changes the look.
+A Pano **theme** controls how your website looks: its colors, fonts, and layout. The hard parts (login, plugins, loading data, building) are done for you by an engine called `@panomc/theme-core`. Your theme sits on top and changes the look.
 
-This page gets you from nothing to a running theme, and makes your first change in about two minutes.
+This page takes you from nothing to a running theme with your own color. It is three steps, and you write no file by hand until the color.
 
 ::: tip You do not need to be an expert
-You can follow every step here by copying and pasting commands. It **helps** to know a little **HTML**, **CSS**, **JavaScript**, and **Svelte**, but none of it is required to start.
-
-New to these? These free guides are great:
-
-- **Svelte** — [svelte.dev/tutorial](https://svelte.dev/tutorial)
-- **HTML / CSS / JavaScript** — [MDN Web Docs](https://developer.mozilla.org/)
+Every step is copy and paste. A little **HTML**, **CSS**, **JavaScript** and **Svelte** helps, but none of it is required to start. Free guides: [svelte.dev/tutorial](https://svelte.dev/tutorial) and [MDN Web Docs](https://developer.mozilla.org/).
 :::
 
 ## What you need
 
-Before you start, make sure you have these three things:
-
 | You need | What it is |
 |---|---|
-| **Bun** | The tool that installs and runs Pano front-ends. Install it from [bun.sh](https://bun.sh). |
-| **A running Pano** | Your own Pano server, or one running on your computer — Pano must be installed and running first; see [Installation](/platform/installation/) if you haven't set it up yet. Your theme talks to it while you work. |
-| **A code editor** | Any text editor for code, such as [VS Code](https://code.visualstudio.com/). |
+| **Bun** | Installs and runs Pano front-ends. Get it from [bun.sh](https://bun.sh). |
+| **A running Pano** | Your own server, or one on your computer. See [Installation](/platform/installation/) if it is not set up yet. Your theme talks to it while you work. |
+| **A code editor** | Any editor, such as [VS Code](https://code.visualstudio.com/). |
 
-## Create your theme
-
-You create a new theme with **one command**. Open a terminal and run:
+## The quick-start
 
 ```sh
-bunx @panomc/theme-core new my-theme
+bunx @panomc/theme-core new my-theme     # asks four questions, then installs
+cd my-theme && bun run dev:ui            # prints one panel field to set, once
 ```
 
-This makes a new folder called `my-theme` with everything a theme needs inside it.
+Then, in the panel, switch **Platform Settings → Development Mode** on and fill **Appearance → Front-end → Theme dev server** with the address the command printed (`http://localhost:3000`). Save, and open your Pano address. Your theme is running.
 
-Now go into that folder and install its parts:
-
-```sh
-cd my-theme
-bun install
-```
+That is all: **three steps** (scaffold, dev, one panel field). You edit no Pano config file and you do not restart Pano, so the panel stays available while you work.
 
 ::: tip If `bun install` seems stuck
-If it hangs on "Resolving…", stop it (press `Ctrl + C`) and run this instead:
-
-```sh
-bun install --backend=copyfile
-```
+If it hangs on "Resolving...", stop it (`Ctrl + C`) and run `bun install --backend=copyfile` inside the folder.
 :::
 
-Next, generate the files the engine provides for you:
-
-```sh
-bun run sync
-```
-
-Now tell your theme where your running Pano is. Open the file called `.env` and set the address:
-
-```sh
-# .env
-VITE_API_URL=http://localhost:8088/api
-```
-
-::: tip
-Pano's default port is `80`. When you start Pano with `--dev`, it runs on `8088` — that's the usual setup while developing a theme. If your Pano runs somewhere else, use that address instead.
+::: tip Giving the theme a name on the command line
+`bunx @panomc/theme-core new my-theme` with a name asks nothing and does not install. Run `bun install` in the folder before `bun run dev:ui`. The first install also generates the routes, language files and bridges, so there is no separate sync step.
 :::
 
-One more step on the Pano side: open Pano's config file, disable the `init-ui` setting, and restart Pano. This tells Pano to use **your** development theme instead of launching its own built-in one. The [Server configuration](/platform/configuration/server/#initialization-ui-and-updates) page shows where this setting lives.
+::: warning Browse through Pano, not through the theme's port
+A theme always runs behind Pano. Open your Pano address (for example `http://localhost:8088` when Pano runs with `--dev`). The theme's own port redirects you there.
+:::
 
-Finally, start the theme:
+## What the panel field does
 
-```sh
-bun run dev:ui
+While the **Theme dev server** field is set, the front-end mode is `THEME` and Development Mode is on: Pano does not start its own theme process and proxies the site to your dev server. The panel, setup and plugin UIs run as usual. Clear the field and Pano goes back to the installed theme.
+
+## Your first change
+
+Open `src/styles/tokens.scss`. It is a commented menu of every token. Turn one on:
+
+```scss
+$primary: #10b981;
 ```
 
-::: tip Why `dev:ui`?
-`dev:ui` runs the dev server **plus a style watcher** that recompiles your styles whenever you save. Plain `bun run dev` starts only the server, so color and token changes would not show up.
-:::
+Save. The page updates by itself. A theme that looks different from vanilla is **four steps**: the three above plus this edit.
 
-Now open your site **through Pano's address**: `http://localhost:8088` if you started Pano with `--dev`, or `http://localhost` (port `80` by default — or whatever port you configured). You should see your site, running with your new theme.
-
-::: warning
-Don't browse the theme at `localhost:3000` — a theme always runs behind Pano. If you open the theme's own port directly, it automatically redirects you to Pano's address.
-:::
-
-## Your first change in 2 minutes
-
-Let's change the main color of your theme.
-
-1. In your editor, open `src/styles/tokens.scss`.
-2. Find the line for the primary color. It starts commented out, like this:
-   ```scss
-   // $primary: #ff5722;
-   ```
-3. Remove the `//` at the start to turn it on, and change the color:
-   ```scss
-   $primary: #10b981;
-   ```
-4. Save the file, then refresh your browser.
-
-Your site now uses the new color. That is the whole loop: edit, save, refresh.
-
-::: tip What just happened
-`tokens.scss` is a list of your theme's design values — colors, fonts, sizes. Every value in the engine can be replaced from here. Change a token, and it changes everywhere it is used.
-:::
+`bun run dev:ui` also recompiles your styles on every save. Plain `bun run dev` starts only the server, so style edits would not show.
 
 ## Where to next
 
-You now have a running theme and know how to change it. Here is where to go depending on what you want to do:
+- **[Theme Structure](/theme/structure/)**: which files are yours and which are generated.
+- **[Customization](/theme/customization/)**: tokens, `--pano-*` variables and your own CSS.
+- **[Views](/theme/views/)**: change markup, redraw a plugin's view, place blocks, rename routes, pick a home page.
+- **[Localization](/theme/localization/)**: translate your theme.
+- **[Packaging](/theme/packaging/)** and **[Publishing](/theme/publishing/)**: ship it.
 
-- **[Theme Structure](/theme/structure/)** — what all the files are, and which ones are yours to edit.
-- **[Customization](/theme/customization/)** — go deeper with tokens and styles.
-- **[Views](/theme/views/)** — change the actual layout and markup, not just colors.
-- **[Localization](/theme/localization/)** — translate your theme into other languages.
-- **[Packaging](/theme/packaging/)** — build your theme into a file you can install.
-- **[Publishing](/theme/publishing/)** — share your theme with others.
+The same page, shorter, lives in the engine repository as `QUICKSTART-THEME.md`; the long reference is `THEME-AUTHOR-GUIDE.md`.

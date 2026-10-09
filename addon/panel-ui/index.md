@@ -2,7 +2,7 @@
 
 **What this page gives you:** the admin side of your addon — a settings section on its detail page, a full panel page with its own sidebar link, and toasts to confirm actions. By the end admins can manage Shoutbox from the panel.
 
-Everything here goes in the **`if (pano.isPanel)` branch** of `onLoad()` in [`main.js`](/addon/frontend/). If you have not set up `main.js` yet, read [Frontend Development](/addon/frontend/) first. Network calls use `ApiUtil` — its rules and error handling are covered in [Calling your API](/addon/theme-ui/#calling-your-api).
+Everything here goes in the **`if (pano.isPanel)` branch** of `onLoad()` in [`main.js`](/addon/frontend/). If you have not set up `main.js` yet, read [Frontend Development](/addon/frontend/) first. Network calls use `api` — its rules and error handling are covered in [Calling your API](/addon/theme-ui/#calling-your-api).
 
 ## A settings section on your addon's detail page
 
@@ -14,9 +14,10 @@ pano.ui.hook.register({
   component: viewComponent(() => import('./panel/ShoutboxSettings.svelte')),
 });
 
+// at the top of main.js: import { api } from '@panomc/sdk/plugin-api';
 pano.ui.addon.onLoad(async (data, event) => {
   if (data.addon.id !== pluginId) return;
-  const res = await ApiUtil.get({ path: '/api/panel/shoutbox/config', request: event });
+  const res = await api.panel.get({ path: '/config', request: event });
   if (!res.error) data.addon.config = res;
 });
 ```
@@ -100,10 +101,11 @@ To confirm an action to the admin, show a toast (a small pop-up message). Import
 ```svelte
 <script>
   import { showToast } from '@panomc/sdk/toasts';
+  import { api } from '@panomc/sdk/plugin-api';
   import { _ } from '../main.js';
 
   async function save(config) {
-    const res = await ApiUtil.put({ path: '/api/panel/shoutbox/config', body: config });
+    const res = await api.panel.put({ path: '/config', body: config });
     showToast(res.error ? $_('toasts.save-error') : $_('toasts.save-success'));
   }
 </script>
@@ -137,7 +139,7 @@ The admin side is done: a settings section, a full panel page with a nav link, a
 
 - **[Localization](/addon/localization/)** — add the `plugins.<pluginId>.<key>` strings behind your nav label and toast messages so they show real text.
 - **[Frontend API Reference](/addon/api-reference/)** — every hook name, nav area, page layout, and lifecycle event in one place.
-- **[Theme UI](/addon/theme-ui/)** — the visitor-facing side, including `ApiUtil` in full.
+- **[Theme UI](/addon/theme-ui/)** — the visitor-facing side, including `api` in full.
 - **[Backend Development](/addon/backend/)** — the Kotlin endpoints and the permission this page gates on.
 - **[Building & Publishing](/addon/publishing/)** — turn the finished addon into a release jar. A release build **must** include the UI, so never use `-Pnoui` for it.
 - **Reference addons** — the built-in addons on the [PanoMC GitHub org](https://github.com/PanoMC) are the working reference for every pattern here: the **Announcement** addon (conditional `invisible`), the **FAQ** and **Pages** addons (`skipLoad` + `app.onLoad`), the **Comments** addon (`systemLayout`), and **`pano-plugin-link-redirects`** (dynamic pages + cleanup).

@@ -168,7 +168,7 @@ Açıklama `com.panomc.platform.api.annotation.EventListener`'dır — `org.spri
 
 ## 3. HTTP endpoint'leri ve yönlendirme
 
-Bir **endpoint** = eklentinizin yanıtladığı bir URL, örneğin `GET /api/shouts`. Aşağıdaki temel API sınıflarından birini genişleten `@Endpoint`-açıklamalı bir sınıf yazarak bir tane yaparsınız; Pano DAO'larınızı ve bean'lerinizi kurucusuna sizin için geçirir (kurucu enjeksiyonu).
+Bir **endpoint** = eklentinizin yanıtladığı bir URL, örneğin `GET /api/plugins/pano-plugin-shoutbox/shouts`. Aşağıdaki temel API sınıflarından birini genişleten `@Endpoint`-açıklamalı bir sınıf yazarak bir tane yaparsınız; Pano DAO'larınızı ve bean'lerinizi kurucusuna sizin için geçirir (kurucu enjeksiyonu).
 
 Derlenen en küçük endpoint bir sınıf, yanıtladığı yollar ve bir sonuç döndüren bir `handle`'dır:
 
@@ -176,7 +176,7 @@ Derlenen en küçük endpoint bir sınıf, yanıtladığı yollar ve bir sonuç 
 // imports: com.panomc.platform.model.* (Api, Path, RouteType, Result, Successful), com.panomc.platform.annotation.Endpoint
 @Endpoint
 class GetShoutsAPI : Api() {
-    override val paths = listOf(Path("/api/shouts", RouteType.GET))
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         return Successful(mapOf("shouts" to listOf<String>()))
@@ -202,19 +202,16 @@ class GetShoutsAPI : Api() {
 
 | Temel sınıf | Kime izin veriliyor | Yolları şöyle bildirin |
 |---|---|---|
-| `Api` | Herkes (herkese açık) | `/api/...` |
-| `LoggedInApi` | Giriş yapmış herhangi bir kullanıcı | `/api/...` |
-| `PanelApi` | Yöneticiler (`LoggedInApi`'yi genişletir) | `/api/panel/...` |
-| `SetupApi` | Yalnızca ilk kurulum sırasında | `/api/...` |
+| `Api` | Herkes (herkese açık) | `/shouts` (`/api/plugins/<pluginId>` altında) |
+| `LoggedInApi` | Giriş yapmış herhangi bir kullanıcı | `/shouts` |
+| `PanelApi` | Yöneticiler (`LoggedInApi`'yi genişletir) | `/shouts` (`/api/plugins/<pluginId>/panel`) |
+| `SetupApi` | Yalnızca ilk kurulum sırasında | `/...` (core) |
 | `Template` | Sunucu-render'lı HTML rotası | — |
 
 `SetupApi` rotaları yalnızca ilk kurulum sihirbazı çalışırken var olur ve site kurulduğunda kaybolur — ona nadiren ihtiyacınız olur.
 
-::: tip Panel yolları `/api/panel/...` olarak bildirilir
-Panel arayüzü `/panel/api/...` gibi URL'ler çağırır, ama Pano bunları dahili olarak `/api/...`'ye yeniden yönlendirir — bu yüzden her zaman `/api/panel/...` biçimini bildirirsiniz. Somut olarak:
-
-- Tarayıcı çağırır: `GET /panel/api/shouts`
-- Siz bildirirsiniz: `Path("/api/panel/shouts", RouteType.GET)`
+::: tip Yalnızca göreli yollar bildirin
+Bir `Path` içine asla `/api`, `/v1`, `/panel` ya da eklenti kimliğini yazmayın. Pano uç noktayı `/api/plugins/<pluginId>/...` altına, sınıf `PanelApi` ise `/api/plugins/<pluginId>/panel/...` altına bağlar. `/api` ya da `/panel` ile başlayan, boş olan ya da parametreyle (veya `_` ile) başlayan bir yol, eklentinizi sınıfı adlandıran bir iletiyle başlangıçta durdurur. Bkz. [Göreli uç nokta yolları](/tr/addon/api-reference/#relative-endpoint-paths).
 :::
 
 ### Bir isteği işleme (`Api` üyeleri)
@@ -231,10 +228,10 @@ Panel arayüzü `/panel/api/...` gibi URL'ler çağırır, ama Pano bunları dah
 
 | Şey | İmza | Amaç |
 |---|---|---|
-| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Başarı → `{"result":"ok", …map…}` |
-| `Errors` | `Errors(map: Map<String, Any?>)` | Alan düzeyinde hata yükü — örn. `Errors(mapOf("email" to true))` frontend'e e-posta alanını vurgulamasını söyler |
+| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Başarı → `{…map…}` |
+| `InvalidFields` | `InvalidFields(mapOf("email" to "EXISTS"))` | Alan düzeyinde hatalar → `{"error":{"code":"INVALID_FIELDS","fields":{"email":"EXISTS"}}}` |
 | `Error` alt sınıfları | `throw NotFound()` / `BadRequest()` / … | `com.panomc.platform.error`'da ~100 önceden tanımlı (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
-| Özel hata | `class MyError : Error(statusCode, …)` | İstemci hata kodu = `UPPER_SNAKE`'te sınıf adı: `class SlugTaken : Error(...)` → istemci `"error": "SLUG_TAKEN"` alır |
+| Özel hata | `class SlugTaken : Error("SLUG_TAKEN", 409)` | Kodu (`^[A-Z][A-Z0-9_]*$`) ve durumu siz bildirirsiniz; istemci `{"error":{"code":"SLUG_TAKEN"}}` alır |
 
 Bir isteği başarısız kılmak için bir `Error` (Pano'nun `com.panomc.platform.model.Error`'ı, Kotlin'in yerleşik `Error`'ı **değil**) **fırlatırsınız** — onu döndürmezsiniz. Doğrulama hataları sizin için `BadRequest`'e dönüştürülür.
 

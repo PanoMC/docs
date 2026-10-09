@@ -8,25 +8,19 @@ Her backend düzenlemesi yürürlüğe girmeden önce bir yeniden-derle-ve-yenid
 
 ## Herkese açık bir API uç noktası
 
-Shout'ları temaya sunun. Herkese açık bir JSON uç noktası `Api`'yi genişletir (dosya `routes/api/GetShoutsAPI.kt`):
+Shout'ları temaya sunun. Herkese açık bir JSON uç noktası `Api`'yi genişletir (dosya `routes/GetShoutsAPI.kt`):
 
 ```kotlin
-package com.panomc.plugins.shoutbox.routes.api
+package com.panomc.plugins.shoutbox.routes
 
 import com.panomc.platform.annotation.Endpoint
 import com.panomc.platform.model.*
 import com.panomc.plugins.shoutbox.db.dao.ShoutDao
 import io.vertx.ext.web.RoutingContext
-import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
-import io.vertx.json.schema.SchemaRepository
 
 @Endpoint
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
-    override val paths = listOf(Path("/api/shoutbox/list", RouteType.GET))
-
-    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
-        ValidationHandlerBuilder.create(schemaRepository).build()
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
@@ -39,22 +33,22 @@ Ne oluyor:
 
 - `@Endpoint`, rotanın eklenti yüklendiği an kendini kaydetmesini sağlar — hiçbir yerde bir kayıt çağrısı yoktur.
 - `ShoutDao` doğrudan kurucuya enjekte edilir, çünkü bu uç noktayla birlikte **sizin kutunuzda** yaşar (kurucu enjeksiyonu — bkz. [Backend genel bakışı](/tr/addon/backend/#pano-sınıflarınızı-sizin-icin-nasıl-olusturur)). DAO'nun kendisi [Veritabanı ve Migrasyonlar](/tr/addon/database/) sayfasında inşa edilir.
-- `paths`, URL'yi ve HTTP metodunu listeler. Temel sınıfı, kime izin verildiğine göre seçin: `Api` (herkese açık), `LoggedInApi` (giriş yapmış herhangi bir kullanıcı), `PanelApi` (yöneticiler), `SetupApi` (yalnızca kurulum sırasında).
+- `paths`, **göreli** yolu ve HTTP metodunu listeler. `/api`, `/panel` ya da eklenti kimliğini asla yazmazsınız: Pano bu uç noktayı `/api/plugins/pano-plugin-shoutbox/shouts` adresine bağlar. Yolu bir kaynak adıyla başlatın (`/shouts`, `/items/:id`); parametreyle ya da `_` ile değil.
 - `getSqlClient()`, `Api` üzerinde paylaşılan SQL istemcisini size veren bir kolaylıktır.
-- **Doğrulanacak bir şey olmasa bile `getValidationHandler`'ı geçersiz kılmalısınız** — boş oluşturucuyu tam olarak gösterildiği gibi döndürün (`ValidationHandlerBuilder.create(schemaRepository).build()`). Bu geçersiz kılmayı silmeyin; derleme buna ihtiyaç duyar. Aşağıdaki panel uç noktası, onun bir istek gövdesi üzerinde gerçek iş yaptığını gösterir.
-- Başarı `Successful(map)`'tir, ki bu `{"result":"ok", …haritanız…}`'a serileştirilir. Başarısız olmak için, bir platform `Error` alt sınıfını (`NotFound`, `BadRequest`, `NoPermission`, …) veya kendinizinkini **fırlatırsınız** (throw); istemciye gönderilen hata kodu, sınıf adının `UPPER_SNAKE` hâlidir.
+- **`getValidationHandler` isteğe bağlıdır.** Doğrulanacak bir şey yoksa hiçbir şey bildirmeyin. Aşağıdaki panel uç noktası, istek gövdesini doğrulamak için onu geçersiz kılar.
+- Başarı `Successful(map)`'tir ve tam olarak haritanıza serileştirilir (`result` anahtarı yoktur). Başarısız olmak için bir platform `Error` alt sınıfını (`NotFound`, `BadRequest`, `NoPermission`, …) veya kendinizinkini **fırlatırsınız**. Her hata `{"error":{"code":"…"}}` biçimindedir; bkz. [Hata kodları](/tr/addon/api-reference/#error-codes).
 
 ::: tip Kontrol noktası: ilk uç noktanıza vurun
 Ödül budur — JSON'unuzu döndüren size ait bir URL. Yeniden derleyin, kopyalayın, yeniden başlatın, sonra uç noktanızı bir tarayıcıda açın (veya `curl` ile isteyin):
 
 ```
-http://localhost:8088/api/shoutbox/list
+http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
 ```
 
-`8088` portu, Pano'yu `--dev` ile başlattığınızdaki adrestir; varsayılan bir kurulumda Pano `80` portunu dinler, dolayısıyla bunun yerine `http://localhost/api/shoutbox/list` kullanın. Her hâlükârda şunu görmelisiniz:
+`8088` portu, Pano'yu `--dev` ile başlattığınızdaki adrestir; varsayılan bir kurulumda Pano `80` portunu dinler, dolayısıyla bunun yerine `http://localhost/api/plugins/pano-plugin-shoutbox/shouts` kullanın. Her hâlükârda şunu görmelisiniz:
 
 ```json
-{"result":"ok","shouts":[]}
+{"shouts":[]}
 ```
 
 **Boş** bir `shouts` listesi — çünkü henüz kimse bir shout yayınlamadı. Bu sayfanın sonunda bir tane yayınlayacaksınız.
@@ -76,14 +70,14 @@ return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient).take(limit)))
 
 Bir shout yayınlamak bir yönetici eylemidir, dolayısıyla bu uç nokta, herkese açık olanın yapmadığı üç şeyi yapar: **istek gövdesini doğrular**, **bir izni kontrol eder** ve **bir etkinlik günlüğü girdisi yazar**. Buradaki en büyük kod bloğudur — onu okurken bu üç işi sırayla arayın.
 
-::: tip Panel yolları `/api/panel/` ile başlar
-Panel URL'leri girişte bir kez yeniden yazılır ki bu ilk seferde herkesi şaşırtır. Onu soldan sağa bir eşleme olarak okuyun:
+::: tip Panel uç noktaları `PanelApi`'yi genişletir ve `/panel` bildirmez
+Pano, bir `PanelApi`'yi panel kapsamının altına kendisi bağlar. Siz yalnızca sonrasını bildirirsiniz:
 
-| Panel arayüzü şunu çağırır… | Pano onu şuna yeniden yazar… | Yani Kotlin'de şunu yazarsınız… |
-|---|---|---|
-| `POST /panel/api/shoutbox` | `/api/panel/shoutbox` | `Path("/api/panel/shoutbox", RouteType.POST)` |
+| Kotlin'de bildirdiğiniz | Pano onu şuraya bağlar |
+|---|---|
+| `PanelApi` sınıfında `Path("/shouts", RouteType.POST)` | `POST /api/plugins/pano-plugin-shoutbox/panel/shouts` |
 
-**Pratik kural:** Kotlin'de, bir panel uç noktasının yolunu her zaman `/api/panel/` ile başlatın.
+Panel arayüzü kodu bu URL'yi de yazmaz: `api.panel.post({ path: '/shouts' })` çağırır (bkz. [Panel UI](/tr/addon/panel-ui/)).
 :::
 
 ::: warning Dikkat: bu dosya henüz tek başına derlenmez
@@ -106,10 +100,10 @@ import com.panomc.plugins.shoutbox.db.model.Shout
 import com.panomc.plugins.shoutbox.log.CreatedShoutLog
 import com.panomc.plugins.shoutbox.permission.ManageShoutboxPermission
 import io.vertx.ext.web.RoutingContext
+import com.panomc.platform.schema.dsl.Bodies
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Bodies
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.*
 
@@ -118,7 +112,7 @@ class PanelAddShoutAPI(
     private val plugin: ShoutboxPlugin,
     private val shoutDao: ShoutDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/shoutbox", RouteType.POST))
+    override val paths = listOf(Path("/shouts", RouteType.POST))
 
     private val authProvider by lazy { plugin.applicationContext.getBean(AuthProvider::class.java) }
     private val databaseManager by lazy { plugin.applicationContext.getBean(DatabaseManager::class.java) }
@@ -167,12 +161,12 @@ class PanelAddShoutAPI(
 
 İşte bu sayfanın vaat ettiği tam döngü — bir veritabanı tablosu, herkese açık bir JSON API'si, korumalı bir yönetici uç noktası ve bir etkinlik günlüğü girdisi, hepsi birlikte çalışıyor. Boş listeyi zaten gördünüz; şimdi bir shout oluşturun ve belirişini izleyin.
 
-1. **Önce:** `http://localhost:8088/api/shoutbox/list`'i açın (veya varsayılan bir kurulumda `80` port biçimini). Hâlâ `{"result":"ok","shouts":[]}` görmelisiniz.
-2. **Bir shout yayınlayın:** giriş yapmış bir yönetici olarak, JSON gövdesi `{"message":"Hello Pano!"}` ile `POST /panel/api/shoutbox` gönderin. En kolay yol, [Frontend Geliştirme](/tr/addon/frontend/) sayfasında oluşturacağınız panel arayüzünden; şimdi hemen yapmak için, o URL'yi tarayıcınızın kimliği doğrulanmış oturumu üzerinden `curl` ile isteyin (uç nokta yönetici oturum çerezinize ihtiyaç duyar, panel arayüzünün daha basit yol olmasının nedeni budur).
-3. **Sonra:** `http://localhost:8088/api/shoutbox/list`'i yenileyin — shout'unuz artık JSON'da:
+1. **Önce:** `http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts`'i açın (veya varsayılan bir kurulumda `80` port biçimini). Hâlâ `{"shouts":[]}` görmelisiniz.
+2. **Bir shout yayınlayın:** giriş yapmış bir yönetici olarak, JSON gövdesi `{"message":"Hello Pano!"}` ile `POST /api/plugins/pano-plugin-shoutbox/panel/shouts` gönderin. En kolay yol, [Frontend Geliştirme](/tr/addon/frontend/) sayfasında oluşturacağınız panel arayüzünden; şimdi hemen yapmak için, o URL'yi tarayıcınızın kimliği doğrulanmış oturumu üzerinden `curl` ile isteyin (uç nokta yönetici oturum çerezinize ihtiyaç duyar, panel arayüzünün daha basit yol olmasının nedeni budur).
+3. **Sonra:** `http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts`'i yenileyin — shout'unuz artık JSON'da:
 
 ```json
-{"result":"ok","shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
+{"shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
 ```
 
 4. **Etkinlik akışı:** **Panel → Etkinlik**'i açın — `CREATED_SHOUT` girdinizi göreceksiniz ([Çeviriler](/tr/addon/localization/) sayfasında yerelleştirme dizesini ekleyene kadar ham anahtar olarak gösterilir).

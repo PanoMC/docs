@@ -11,15 +11,17 @@ Every page in Pano is made of two parts:
 
 Because the two are separate, you can **take ownership of any page's look without touching its logic**. The data still arrives, plugins still work, logins still happen — you only restyle the presentation.
 
-There are **26 views** you can take over, one for each kind of page (home, login, register, profile, and so on).
+There are **26 engine views** you can take over, one for each kind of page (home, login, register, profile, and so on), plus every view that installed plugins offer.
 
 ## Step 1 — see what's available
 
-List every view you can override, along with the data each one receives:
+List every view you can override (engine views and the views of installed plugins), with the contract of each and which ones you already override:
 
 ```sh
 bunx @panomc/theme-core list-views
 ```
+
+To see them **rendered with sample data**, open `<your Pano address>/__pano/views` while the theme runs in dev mode. It is the view catalogue: every engine view and every plugin view on one page, so you can pick the one to change.
 
 ## Step 2 — take ownership of a view
 
@@ -205,6 +207,113 @@ What this means for you as a theme author:
 - **Nothing to wire up** — as long as your overridden views keep the mount points, all of the above keeps working, SSR included.
 - **One honest caveat about custom hooks:** the server-side `load()` pipeline runs only for the **built-in** hook names. A plugin mounted in a custom hook you added (like `my-theme:hero:bottom`) still renders — SSR included — but its `load()` data is not prepared by the engine, so such plugins typically fetch their data on the client.
 
+## Redrawing a plugin's view
+
+A plugin's site UI is a set of **named views**. The id of a view is `<ns>:<Name>` (for example `market:ProductCard`); engine views keep their bare names (`Navbar`). A theme can redraw any of them the same way as an engine view:
+
+```sh
+bunx @panomc/theme-core eject-view market:ProductCard
+bunx @panomc/theme-core eject-view 'market:*' --pages
+```
+
+The command copies the plugin's readable source to `src/views/market/ProductCard.svelte`, removes `load` and `view` from it, rewrites imports of other plugin views to `pluginView("market:PriceTag")`, copies the helper files it needs, and writes the entry in `theme.config.js`:
+
+```js
+views: {
+  Navbar: () => import("./src/views/Navbar.svelte"),
+  "market:ProductCard": {
+    contract: 2,
+    controllers: ["market/cart"],
+    component: () => import("./src/views/market/ProductCard.svelte"),
+  },
+},
+```
+
+Two rules keep this safe for both sides:
+
+- **Data stays with the plugin.** Pages, injections and blocks keep the plugin's own `load`; your file supplies markup only. A `load` exported by an override is ignored.
+- **A plugin update is never blocked by your theme.** The override is used only while its `contract` (and the version of every controller it pins) matches the plugin. Otherwise the plugin's own view renders and the panel lists the view as fallen back. To bring it up to date, run `eject-view market:ProductCard` again (it writes a `.new` file beside yours), merge, then `bunx @panomc/theme-core accept market:ProductCard`.
+
+Plugin logic that is not markup (a cart, a session) is a **controller**, named `<ns>/<name>`. Use it in your own views and pages: `plugin('market').use('cart')` from `@panomc/sdk/controllers`. `bunx @panomc/theme-core check --fix` writes the version pins for you.
+
+## Blocks, claims and slots
+
+**Blocks.** Place a plugin view anywhere in your markup with `<PluginBlock>`. Its data loads per placement on the server, so two grids with different props get two data sets. Props must be literals:
+
+```svelte
+<script>
+  import { PluginBlock } from "@panomc/sdk/components/theme";
+</script>
+<PluginBlock id="market:ProductGrid" limit={8} category="vip" />
+```
+
+An unknown id or a plugin that is not installed renders nothing.
+
+**Claims.** A nav item, sidebar widget or hook that a plugin mounts by itself is an *injection*. When you place the same view yourself with `<PluginBlock id="market:NavCart" />`, the automatic copy disappears: your theme has claimed it. `theme.config.js` can set it by hand (`false` keeps the automatic copy):
+
+```js
+claims: { "market:NavCart": true, "market:CartOffcanvas": false },
+```
+
+**Slots.** A plugin view can open a slot for other plugins with `<PluginSlot id="market:checkout:payment" />`. If you override that view, keep every `<PluginSlot>` of the default.
+
+## When a plugin is or is not installed {#plugin-installed}
+
+Three ways, from most to least work:
+
+1. **Behaviour and layout: `hasPlugin`.** `siteInfo.plugins` lists the installed, running plugins by plugin id. `hasPlugin(siteInfo, "market")` (from `$pano/lib/plugins.js`) answers it; the full id `"pano-plugin-market"` is canonical and the short namespace works too. `pluginInfo(siteInfo, "market")` returns `{ version, uiHash, dependencies }` or `null`. It keeps no state, so it is safe on the server. In a `load()` take `siteInfo` from `(await parent()).session`, in a component use `$session.siteInfo`:
+
+```svelte
+<Hero cta={hasPlugin($session.siteInfo, "market") ? "store" : "register"} />
+```
+
+2. **Show this block or that.** `<PluginBlock>` renders its `fallback` snippet when the plugin is missing: `<PluginBlock id="market:GoalWidget">{#snippet fallback()}<p>Join us!</p>{/snippet}</PluginBlock>`.
+3. **Overrides and plugin CSS need no guard.** They stay unused when the plugin is missing, and the panel shows the plugin as "not installed", not as an error.
+
+Do not call a plugin's API or controller without the check, and do not hard-code a menu entry to a plugin page.
+
+## Routes
+
+`theme.config.js` can add, disable and rename routes. The canonical paths in route files and plugin pages never change; the config changes only what visitors see:
+
+```js
+routes: {
+  add:     { "/staff-team": "./src/pages/StaffTeam.svelte" },
+  disable: ["/rules"],
+  rename:  { "/store": "/shop", "/store/[slug]": "/shop/[slug]" },
+},
+```
+
+A renamed-away path answers 308 to the new one, a disabled path is a 404, and both sides of a rename need the same `[param]` names. In your own markup write `href={route("/store")}` so links follow the map. Emails and redirects sent by Pano follow a rename too. Nothing may target `/posts` or `/__pano*`.
+
+## The home page
+
+The admin picks the home page from a select in the panel; you declare the options:
+
+```js
+home: {
+  default: "landing",
+  options: {
+    posts:   { label: "Posts" },
+    landing: { label: { "en-US": "Landing", tr: "Acilis" }, page: "./src/pages/Landing.svelte" },
+    store:   { label: "Store", path: "/store" },
+    custom:  { label: "Custom page", path: "*" },
+  },
+},
+```
+
+Without a `home` key the options are the posts feed, every installed plugin page that offers itself as a home page, and a custom path. A choice that cannot be shown (plugin removed) falls back to `default`, then to the posts feed.
+
+## Themes without Bootstrap
+
+All official themes ship Bootstrap and Font Awesome, and plugin default views are written for them. A theme with its own CSS says so:
+
+```js
+provides: { bootstrap: false, fontawesome: false },
+```
+
+Scaffold one with `bunx @panomc/theme-core new my-theme --bare`. The engine then links a scoped fallback stylesheet for every default plugin view you did not override, driven by the `--pano-*` variables from [Customization](/theme/customization/#the-pano-tokens). `check` reports a theme that says `bootstrap: false` but still imports Bootstrap. The fallback needs Chrome 118, Safari 17.4 or Firefox 146; below that a default plugin view is unstyled in a Bootstrap-free theme. A CSS child combinator (`.a > .b`) cannot cross the wrapper element the engine puts around each plugin's default view.
+
 ## Custom theme settings
 
 If your redesigned view adds **new options** the site owner should be able to change (say, a hero title on the home page), those options need to be declared so the panel can **save and reset** them. You do this in `theme.config.js` under `settingsSchema`.
@@ -227,6 +336,13 @@ export default {
 ```
 
 Without this, your new inputs would render in the panel but never actually save. A key you only *read* in markup (with no input in the settings view) needs no entry here.
+
+## Checking
+
+```sh
+bunx @panomc/theme-core check            # warnings and errors
+bunx @panomc/theme-core check --strict   # warnings count as errors
+```
 
 ## An honest note
 

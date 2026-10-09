@@ -18,6 +18,60 @@ Eklenti arayüzleri, Pano temalarıyla aynı şekilde Svelte'te yazılır. Onu h
 Eklentinizi **pano-boilerplate-plugin** şablonundan iskele olarak oluşturmuş ve [Backend Geliştirme](/tr/addon/backend/)'yi tamamlamış olmalısınız. `src/main.js` dosyası boilerplate'te zaten var — onu oluşturmayacak, *düzenleyeceksiniz*. Dev döngüsünü `bun run dev` ile başlatın ve tüm süre boyunca çalışır bırakın; bu sayfalardaki her değişiklik sıcak yeniden yüklenir, böylece onu hemen görebilirsiniz. (Bitmiş eklentiyi bir yayına dönüştürmek [Derleme ve Yayınlama](/tr/addon/publishing/)'da kapsanır.)
 :::
 
+## View'lar: sayfa veya widget başına bir dosya
+
+Bir eklentinin site arayüzü **adlandırılmış view'lardan** oluşur. Bir view, `src/theme/views/` altındaki bir `.svelte` dosyasıdır. Adı dosya adıdır, kimliği `<ns>:<Name>`'dir (`ns`, eklenti kimliğinden `pano-plugin-` çıkarılmış hâlidir; yani `shoutbox:ShoutboxWidget`). View ile ilgili her şey o dosyadadır: kayıt kodu yoktur ve `main.js`'e hiçbir şey eklenmez.
+
+```svelte
+<!-- src/theme/views/ShoutboxPage.svelte  ->  view "shoutbox:ShoutboxPage", /shoutbox -->
+<script module>
+  import { api } from '@panomc/sdk/plugin-api';
+
+  export const view = { path: '/shoutbox' };
+
+  export async function load(event) {
+    const res = await api.get({ path: '/shouts', request: event });
+    return { shouts: res.items ?? [] };
+  }
+</script>
+
+<script>
+  let { shouts = [] } = $props();
+</script>
+
+{#each shouts as shout}<p>{shout.message}</p>{/each}
+```
+
+`export const view` yalnızca sabit değerler taşır (okunur, çalıştırılmaz). Anahtarlar:
+
+| Anahtar | Anlamı |
+|---|---|
+| `path` (artı `layout`, `permission`, `loginRequired`) | view bir sayfadır |
+| `slot`, `hook`, `sidebar`, `priority` | view kendini bir slota, hook'a veya kenar çubuğuna bağlar |
+| `block` | temanın `<PluginBlock id="shoutbox:Latest" />` ile yerleştirmesi için yapılmış |
+| `home: { label }` | bu sayfayı yöneticiye ana sayfa seçeneği olarak sun |
+| `widget` | her web sayfası için bir web bileşeni de üret (`<pano-shoutbox-latest>`) |
+| `controller` | sayfanın `load`'u bu controller'dan gelir |
+| `contract` | bir tema override'ının yazıldığı tamsayı sürüm (varsayılan `1`) |
+
+Derlemenin zorunlu kıldığı kurallar (her biri dosya, satır ve çözümle): bir view yalnızca `svelte*`, `svelte-i18n`, `@panomc/sdk*`, diğer view'ları ve yardımcıları import eder; `setContext` veya `getContext` çağırmaz; yinelenen dosya adı olmaz; kendi ad alanınızın dışında slot kimliği olmaz.
+
+**Stil.** Bir eklentinin varsayılan view'ları vanilla görünümüyle çizilir ve vanilla hiçbirini ezmez; görünümünüz kendi view'larınızda durur. Anlamlı sınıflara yazın (`shoutbox-latest__title`), gerekirse bir `<style>` bloğu kullanın. `style-block-scope` kuralı, her seçici `shoutbox-...` sınıfıyla başlamıyorsa, `:global` varsa ya da keyframes ve özel özellikler `shoutbox-...` diye adlanmamışsa derlemeyi durdurur. Tema değerlerini `var(--pano-*)` ile okuyun. Diğer temalar view'larınızı kendi yollarıyla yeniden biçimlendirir.
+
+**Yalnızca SDK 2.** `panoSdk 2` olmadan derlenen eklenti atlanır. `view` olmadan `component` ile kaydedilen öğe hata verilerek düşürülür; dosyada `export const view` veya `view: 'shoutbox:Ad'` kullanın.
+
+**Yardımcılar.** View'ların yanındaki herhangi bir `.js` dosyası olağan biçimde import edilir, okunabilir kaynak olarak gönderilir ve bir tema view'ı yeniden çizerken onunla gider.
+
+**Controller'lar.** Markup olmayan mantık (sepet, biçimleyici), `@panomc/plugin-kit/controller` içinden çerçevesiz bir `defineController({ name, version, state, actions })` olarak `src/theme/controllers/<name>.js` içine yazılır. Derlenmiş ve kapalı gönderilir. View'lar, tema sayfaları, widget'lar ve Svelte olmayan ön yüzler aynısını kullanır: `@panomc/sdk/controllers` içinden `plugin('shoutbox').require('counter')`. Bir state veya action anahtarını kaldırır ya da yeniden adlandırırsanız `version`'ı yükseltin; aksi halde derleme başarısız olur.
+
+**Örnekler.** `bunx pano-plugin samples ShoutboxPage`, `ShoutboxPage.samples.js` yazar (boş, yükleniyor, dolu ve hata durumları). `/__pano/views` tema kataloğu bunları çizer, `bunx pano-plugin check` da kullanır.
+
+**Widget'lar.** `view` içine `widget: true` ekleyin; derleme bir web bileşeni de üretir. Şöyle gömülür: `<script type="module" src="https://your-pano/api/v1/widgets/loader.js"></script>` ve `<pano-shoutbox-latest></pano-shoutbox-latest>`. Aynı view bir temada ve başka bir sitede çalışır; verisi yine kendi `load`'undan gelir.
+
+**Sözleşme.** Bir tema view'ınızı yeniden çizebilir (`theme-core eject-view shoutbox:ShoutboxPage`). Derleme `pano-plugin.lock.json` yazar (commit'leyin) ve `contract`'ı yükseltmeden bir prop kaldırırsanız değiştirilecek satırla başarısız olur.
+
+View olmayan her şey (panel sayfaları, panel hook'ları, yaşam döngüsü işleyicileri) aşağıda anlatıldığı gibi hâlâ `src/main.js` içinde kaydedilir.
+
 ## Eklentinizin dosyaları
 
 İşte bu sayfaların atıfta bulunduğu düzen. `theme/` ve `panel/` klasörleri yalnızca ziyaretçi bileşenleri ile yönetici bileşenlerini ayrı tutmak için düzenli bir gelenektir — Pano adları zorlamaz, dosyaları istediğiniz gibi düzenleyebilirsiniz.
@@ -43,7 +97,7 @@ Her şey `main.js`'te başlar. `PanoPlugin`'i genişleten varsayılan bir sını
 ```js
 // src/main.js
 import { PanoPlugin, viewComponent } from '@panomc/sdk';
-import ApiUtil from '@panomc/sdk/utils/api';
+import { api } from '@panomc/sdk/plugin-api';
 import { derived } from 'svelte/store';
 import { _ as i18n } from '@panomc/sdk/utils/language';
 
@@ -117,7 +171,7 @@ Bir AI aracı, eski bir eğitim veya iskele bunlardan herhangi birini önerirse,
 - **`pano.ui.page.register({ name, view, scopes })`** — gerçek `page.register`, `{ path, component, permission, ... }` alır (bkz. [Panel Arayüzü](/tr/addon/panel-ui/)). `name`/`view`/`scopes` biçimi yoktur.
 - **`import { Button, Card } from '@panomc/sdk/components/panel'`** — SDK'da böyle bir bileşen kütüphanesi yoktur.
 - **`onContextUpdate`** — eski boilerplate bu metodu tanımlar, ama **hiçbir host onu çağırmaz**. İskele oluşturulan `main.js`'iniz `onContextUpdate` içeriyorsa, onu silin.
-- **Düz bir dizeyle `ApiUtil.get('/api/...')`** — her `ApiUtil` çağrısı bir seçenekler nesnesi alır, örn. `ApiUtil.get({ path: '/api/...' })`.
+- **Düz bir dizeyle `api.get('/shouts')`** ya da `/api` ile başlayan bir yol — her çağrı, göreli bir yol içeren bir seçenekler nesnesi alır, örn. `api.get({ path: '/shouts' })`.
 - **`pano.utils.toast`** — böyle bir şey yoktur; toast'lar yalnızca `@panomc/sdk/toasts`'tan gelir.
 
 ## Sonraki adım

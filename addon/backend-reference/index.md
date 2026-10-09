@@ -168,7 +168,7 @@ The annotation is `com.panomc.platform.api.annotation.EventListener` — **not**
 
 ## 3. HTTP endpoints & routing
 
-An **endpoint** = one URL your addon answers, for example `GET /api/shouts`. You make one by writing an `@Endpoint`-annotated class that extends one of the base API classes below; Pano passes your DAOs and beans into its constructor for you (constructor injection).
+An **endpoint** = one URL your addon answers, for example `GET /api/plugins/pano-plugin-shoutbox/shouts`. You make one by writing an `@Endpoint`-annotated class that extends one of the base API classes below; Pano passes your DAOs and beans into its constructor for you (constructor injection).
 
 The smallest endpoint that compiles is a class, the paths it answers, and a `handle` that returns a result:
 
@@ -176,7 +176,7 @@ The smallest endpoint that compiles is a class, the paths it answers, and a `han
 // imports: com.panomc.platform.model.* (Api, Path, RouteType, Result, Successful), com.panomc.platform.annotation.Endpoint
 @Endpoint
 class GetShoutsAPI : Api() {
-    override val paths = listOf(Path("/api/shouts", RouteType.GET))
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         return Successful(mapOf("shouts" to listOf<String>()))
@@ -200,21 +200,18 @@ class GetShoutsAPI : Api() {
 
 ### Base classes — pick by who may call
 
-| Base class | Who is allowed | Declare paths as |
+| Base class | Who is allowed | Declare paths as (relative) |
 |---|---|---|
-| `Api` | Anyone (public) | `/api/...` |
-| `LoggedInApi` | Any signed-in user | `/api/...` |
-| `PanelApi` | Admins (extends `LoggedInApi`) | `/api/panel/...` |
-| `SetupApi` | Only during first-run setup | `/api/...` |
+| `Api` | Anyone (public) | `/shouts` (served under `/api/plugins/<pluginId>`) |
+| `LoggedInApi` | Any signed-in user | `/shouts` (same prefix) |
+| `PanelApi` | Admins (extends `LoggedInApi`) | `/shouts` (served under `/api/plugins/<pluginId>/panel`) |
+| `SetupApi` | Only during first-run setup | `/...` (core only) |
 | `Template` | Server-rendered HTML route | — |
 
 `SetupApi` routes only exist while the first-run install wizard is running and disappear once the site is set up — you'll rarely need it.
 
-::: tip Panel paths are declared `/api/panel/...`
-The panel UI calls URLs like `/panel/api/...`, but Pano reroutes those to `/api/...` internally — so you always declare the `/api/panel/...` form. Concretely:
-
-- Browser calls: `GET /panel/api/shouts`
-- You declare: `Path("/api/panel/shouts", RouteType.GET)`
+::: tip Declare relative paths only
+Never write `/api`, `/v1`, `/panel` or your plugin id in a `Path`. Pano mounts the endpoint at `/api/plugins/<pluginId>/...`, or at `/api/plugins/<pluginId>/panel/...` when the class extends `PanelApi`. A declared path that starts with `/api` or `/panel`, is empty, or begins with a parameter or `_` stops your plugin at startup with a message naming the class. See [Relative endpoint paths](/addon/api-reference/#relative-endpoint-paths).
 :::
 
 ### Handling a request (`Api` members)
@@ -231,10 +228,10 @@ The panel UI calls URLs like `/panel/api/...`, but Pano reroutes those to `/api/
 
 | Thing | Signature | Purpose |
 |---|---|---|
-| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Success → `{"result":"ok", …map…}` |
-| `Errors` | `Errors(map: Map<String, Any?>)` | Field-level error payload — e.g. `Errors(mapOf("email" to true))` tells the frontend to highlight the email field |
+| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Success → exactly your map (no `result` key) |
+| `InvalidFields` | `InvalidFields(mapOf("email" to "EXISTS"))` | Field-level errors → `{"error":{"code":"INVALID_FIELDS","fields":{"email":"EXISTS"}}}` |
 | `Error` subclasses | `throw NotFound()` / `BadRequest()` / … | ~100 predefined in `com.panomc.platform.error` (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
-| Custom error | `class MyError : Error(statusCode, …)` | Client error code = the class name in `UPPER_SNAKE`: `class SlugTaken : Error(...)` → the client receives `"error": "SLUG_TAKEN"` |
+| Custom error | `class SlugTaken : Error("SLUG_TAKEN", 409)` | You declare the code literal (`^[A-Z][A-Z0-9_]*$`) and the status; the client receives `{"error":{"code":"SLUG_TAKEN"}}` |
 
 To fail a request you **throw** an `Error` (Pano's `com.panomc.platform.model.Error`, **not** Kotlin's built-in `Error`) — you do not return it. Validation failures are turned into `BadRequest` for you.
 

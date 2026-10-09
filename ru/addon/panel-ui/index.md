@@ -14,9 +14,10 @@ pano.ui.hook.register({
   component: viewComponent(() => import('./panel/ShoutboxSettings.svelte')),
 });
 
+// at the top of main.js: import { api } from '@panomc/sdk/plugin-api';
 pano.ui.addon.onLoad(async (data, event) => {
   if (data.addon.id !== pluginId) return;
-  const res = await ApiUtil.get({ path: '/api/panel/shoutbox/config', request: event });
+  const res = await api.panel.get({ path: '/config', request: event });
   if (!res.error) data.addon.config = res;
 });
 ```
@@ -100,10 +101,11 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 ```svelte
 <script>
   import { showToast } from '@panomc/sdk/toasts';
+  import { api } from '@panomc/sdk/plugin-api';
   import { _ } from '../main.js';
 
   async function save(config) {
-    const res = await ApiUtil.put({ path: '/api/panel/shoutbox/config', body: config });
+    const res = await api.panel.put({ path: '/config', body: config });
     showToast(res.error ? $_('toasts.save-error') : $_('toasts.save-success'));
   }
 </script>

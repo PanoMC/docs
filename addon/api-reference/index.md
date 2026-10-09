@@ -10,7 +10,7 @@ This page lists **every hook name, view slot, lifecycle event, navigation helper
 - A **navigation helper** = an API for adding or editing links in the site menu or the admin sidebar.
 
 ::: tip How to read this page
-It is a set of dense reference tables, grouped by API area (§1–§10). You don't read it top to bottom — you jump to the section for the thing you're wiring up. Each section opens with one plain sentence saying what it's for and **where it works** (theme, panel, or both). If a term in a table cell is unfamiliar, it's almost certainly defined in the "Concepts this page assumes" box just below — read that box once first.
+It is a set of dense reference tables, grouped by API area (§1–§11). You don't read it top to bottom — you jump to the section for the thing you're wiring up. Each section opens with one plain sentence saying what it's for and **where it works** (theme, panel, or both). If a term in a table cell is unfamiliar, it's almost certainly defined in the "Concepts this page assumes" box just below — read that box once first.
 :::
 
 ::: tip Concepts this page assumes (read once, ~60 seconds)
@@ -440,7 +440,7 @@ For the two `editMenu` calls, the exact fields of a menu item aren't listed here
 
 ## 9. `@panomc/sdk` module exports
 
-This is the frozen **`@panomc/sdk`** import surface — each specifier maps to a stable host runtime module. Import from these exact paths, and never deep-import inside these packages (e.g. `@panomc/sdk/utils/api/something` will not resolve). (Svelte's own specifiers and any npm package you bundle also resolve — see §10 for the complete import picture.)
+This is the frozen **`@panomc/sdk`** import surface — each specifier maps to a stable host runtime module. Import from these exact paths, and never deep-import inside these packages (a sub-path such as `@panomc/sdk/utils/api-internals` will not resolve). (Svelte's own specifiers and any npm package you bundle also resolve — see §10 for the complete import picture.)
 
 | Specifier | Exports |
 |---|---|
@@ -498,7 +498,7 @@ These mirror SvelteKit's exports — `page`, `navigating`, `browser` (from `$app
 
 | Option | Meaning |
 |---|---|
-| `path` | The API path, **relative to `/api`** — pass `'shoutbox/list'` and the util calls `/api/shoutbox/list`. |
+| `path` | The API path, **relative to `/api/v1`** and starting with `/` — `'/posts'` calls `/api/v1/posts`. A path that starts with `/api` is refused in development. For your own plugin's endpoints use `api` (see §11), which adds the plugin prefix for you. |
 | `request` | The `load(event)` argument. Pass it whenever you call from inside a `load()` so the request has the CSRF token and works during SSR (see the note under the example). |
 | `body` | The request payload (an object, sent as JSON; or a `FormData` for file uploads). POST/PUT only. |
 | `headers` | Extra request headers. POST/PUT/DELETE. |
@@ -509,14 +509,14 @@ These mirror SvelteKit's exports — `page`, `navigating`, `browser` (from `$app
 | `onUploadProgress` | Upload-progress callback (POST/PUT/customRequest) — use it to drive a progress bar. |
 | `data` | (customRequest only) the raw fetch options — `method`, `body`, `headers`. The `get`/`post`/etc. helpers build this for you. |
 
-A minimal GET during page load — note `path` (relative to `/api`) and `request: event` in position:
+A minimal GET of a core endpoint during page load — note `path` (relative to `/api/v1`) and `request: event` in position:
 
 ```js
 import ApiUtil from '@panomc/sdk/utils/api';
 
 export async function load(event) {
   // pass request: event so the call works during SSR (the first page view)
-  const response = await ApiUtil.get({ path: 'your-endpoint', request: event });
+  const response = await ApiUtil.get({ path: '/posts', request: event });
   return { response }; // this object becomes your page component's props
 }
 ```
@@ -548,6 +548,84 @@ Anything else — `chart.js`, `svelte-select`, any other npm package — must be
 ::: warning Never add `svelte` to your `package.json`
 The SDK controls which Svelte version everyone compiles with (its version is pinned), and the build **fails** on a mismatch. A second copy of `svelte` in your `package.json` silently breaks your pages (the two copies disagree during hydration). See [Architecture](/addon/architecture/).
 :::
+
+## 11. Your plugin's API from the UI
+
+### Relative endpoint paths
+
+A Kotlin endpoint declares a path **relative to its scope** and Pano adds the prefix:
+
+| Class | Declared | Served at |
+|---|---|---|
+| `Api`, `LoggedInApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/hello` |
+| `PanelApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/panel/hello` |
+| core (not yours) | `/posts` | `/api/v1/posts` |
+
+Starting a declared path with `/api` or `/panel`, leaving it empty, or putting a parameter or `_` first (`/:id`) stops your plugin at startup with a message that names the class and the fix. Every response carries `Pano-Api-Level`.
+
+### `api.get` and friends
+
+Import the plugin-scoped client. The plugin id never appears in your code; the build adds it:
+
+```js
+import { api } from '@panomc/sdk/plugin-api';          // main.js, components and load()
+
+const body = await api.get({ path: '/hello', request: event });   // site
+await api.post({ path: '/shouts', body: { message } });
+await api.panel.get({ path: '/hello' });                          // endpoints of a PanelApi
+```
+
+`api` has `get`, `post`, `put`, `delete` and `customRequest` (same options as `ApiUtil`, section 9), and the same set under `api.panel`. A theme or another plugin calls a plugin it does not belong to with `createPluginApi('pano-plugin-market')` from `@panomc/sdk/utils/api`; the full plugin id is required. Failures never throw; they resolve to the error body below.
+
+### Error codes
+
+Every failed call has one shape; there is no `result` key any more:
+
+```json
+{ "error": { "code": "EMPTY_CART", "message": "optional English text",
+             "details": { "any": "extra" }, "fields": { "email": "EXISTS" } } }
+```
+
+`code` is always there; `message`, `details` and `fields` only when not empty. Read `res.error?.code`, never compare `res.error` to a string. A network failure resolves to `{ error: { code: "NETWORK_ERROR" } }`. In Kotlin the code is a literal you declare, so renaming the class cannot break a client:
+
+```kotlin
+class EmptyCart : Error("EMPTY_CART", 400)     // code: ^[A-Z][A-Z0-9_]*$, then the HTTP status
+throw EmptyCart()
+```
+
+Plugin codes are not prefixed and must be unique inside the plugin. A success body is exactly the map you return and may not contain a top-level `error` or `result` key.
+
+### Pages
+
+Every list endpoint answers the same shape. The request takes `page` (1-based, default 1) and `pageSize` (default per endpoint, at most 100); a value outside the range is refused with `INVALID_FIELDS`, a page past the end with `PAGE_NOT_FOUND`:
+
+```json
+{ "items": [ ... ], "page": { "number": 2, "size": 20, "totalItems": 57, "totalPages": 3 } }
+```
+
+Other top-level keys (`category`, `filters`) are allowed. The Kotlin helpers are `PageRequest` and `Paging` in `com.panomc.platform.model`.
+
+### Link targets and fallback pages
+
+A link your plugin sends out (an email, a payment return) is a **target**, not a path, so it follows a theme's route renames. Declare them in `src/main/resources/frontend-targets.json`; ids get your namespace in front:
+
+```json
+{ "store": "/store", "product": "/store/{slug}", "order": { "path": "/store/order/{id}", "fallback": true } }
+```
+
+In Kotlin: `frontendUrlMap.url("market.order", mapOf("id" to publicId))`. The URL is resolved in this order: the admin's override, the active front-end's own map, the theme's route config applied to your default path, and finally `/_pano/<target>` when you marked the target `fallback: true`. `null` means "no such page": omit the link. A `fallback: true` target needs a Kotlin `FallbackPage` bean (extends `FallbackPage(target, template)`, annotated `@FallbackPageDefinition`) that renders a plain built-in page until a front-end claims the target. `bunx pano-plugin check` warns about a default path that matches no page of the plugin.
+
+### Webhooks
+
+Core and plugins publish events to the admin's webhook endpoints through one injectable bean, `WebhookPublisher`:
+
+```kotlin
+if (webhooks.hasListeners(plugin, "order.paid", conn)) {
+    webhooks.publish(plugin, "order.paid", subjectKey = orderId.toString(), data = data, sqlClient = conn)
+}
+```
+
+`event` is given without the source; Pano prefixes your namespace (`market.order.paid`), and a plugin cannot emit `core.*`. Passing the caller's `sqlClient` writes the delivery in the same transaction. Optional `register(plugin, listOf(WebhookEventType("order.paid", sample)))` fills the panel catalogue. Receivers get a signed JSON envelope `{ id, event, source, createdAt, apiVersion, site, data }` with the headers `X-Pano-Event`, `X-Pano-Event-Id`, `X-Pano-Delivery`, `X-Pano-Attempt` and `X-Pano-Signature: t=<unix s>,v1=<hex HMAC-SHA256(secret, "<t>.<body>")>`. Failed deliveries retry with a growing delay (8 attempts by default). Core events: `core.user.registered`, `core.user.deleted`, `core.ticket.created`, `core.ticket.replied`, `core.post.published`.
 
 ## Known dead surfaces (don't use)
 

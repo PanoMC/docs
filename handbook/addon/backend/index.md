@@ -124,10 +124,7 @@ Now expose the shouts to the theme. A public endpoint extends `Api`, and `ShoutD
 ```kotlin
 @Endpoint
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
-    override val paths = listOf(Path("/api/shoutbox/list", RouteType.GET))
-
-    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
-        ValidationHandlerBuilder.create(schemaRepository).build()
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
@@ -138,20 +135,20 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint` makes the route register itself the instant the addon loads — there's no registration call.
 - The base class picks who's allowed in: `Api` (public), `LoggedInApi` (signed-in), `PanelApi` (admins), `SetupApi` (setup only).
-- **You must override `getValidationHandler` even with nothing to validate** — return the empty builder exactly as shown. Don't delete it; the build needs it.
-- `Successful(map)` serializes to `{"result":"ok", …your map…}`.
+- The path is **relative**: Pano serves this endpoint at `/api/plugins/pano-plugin-shoutbox/shouts`. `getValidationHandler` is optional and left out when there is nothing to validate.
+- `Successful(map)` serializes to exactly your map. Failures are `{"error":{"code":"…"}}`.
 
 ::: tip Checkpoint: hit your first endpoint
 Rebuild, copy, restart, then open your endpoint in a browser (or `curl` it):
 
 ```
-http://localhost:8088/api/shoutbox/list
+http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
 ```
 
-(Port `8088` is Pano's `--dev` address; on a default install use `http://localhost/api/shoutbox/list`.) You should see:
+(Port `8088` is Pano's `--dev` address; on a default install use `http://localhost/api/plugins/pano-plugin-shoutbox/shouts`.) You should see:
 
 ```json
-{"result":"ok","shouts":[]}
+{"shouts":[]}
 ```
 
 An **empty** list — nothing has posted a shout yet. That empty `shouts` array is proof your table, DAO, and endpoint all line up.
@@ -176,11 +173,11 @@ After a rebuild and restart, open **Panel → Roles** and edit a role — a new 
 
 The public `GET` only reads. To *post* a shout you add a panel `POST` endpoint (`PanelApi`) that validates the body, checks `ManageShoutboxPermission`, writes the row, and records an activity-log entry. It's the biggest code block in the backend, so we won't reprint it here — build it from [Endpoints](/addon/endpoints/#a-panel-endpoint).
 
-::: tip Panel paths start with `/api/panel/`
-The panel UI calls `POST /panel/api/shoutbox`, but Pano rewrites it, so in Kotlin you always write the path as `Path("/api/panel/shoutbox", RouteType.POST)`.
+::: tip Panel endpoints declare no `/panel`
+A panel endpoint extends `PanelApi` and declares `Path("/shouts", RouteType.POST)`. Pano serves it at `/api/plugins/pano-plugin-shoutbox/panel/shouts`, and panel UI code reaches it with `api.panel.post({ path: '/shouts' })`.
 :::
 
-Once that endpoint exists, post `{"message":"Hello Pano!"}` to it as an admin and refresh `/api/shoutbox/list` — your shout is now in the JSON. (The easiest way to send that POST is from the panel UI, which we build next.)
+Once that endpoint exists, post `{"message":"Hello Pano!"}` to it as an admin and refresh `/api/plugins/pano-plugin-shoutbox/shouts` — your shout is now in the JSON. (The easiest way to send that POST is from the panel UI, which we build next.)
 
 ## Where we are
 

@@ -63,10 +63,10 @@ Bir widget veriye ihtiyaç duyar ve bu veriye **ilk sunucu yanıtında** ihtiya�
 ```svelte
 <!-- src/theme/ShoutboxWidget.svelte -->
 <script module>
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export async function load(event) {
-    const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+    const res = await api.get({ path: '/shouts', request: event });
     return { shouts: res.shouts ?? [] };
   }
 </script>
@@ -129,7 +129,7 @@ Bilmeye değer birkaç şey:
 - **`text` bir çeviri anahtarıdır, bir etiket değil.** Onu ekleyene kadar (sonraki sayfa), kenar çubuğu ham anahtarı gösterir: `plugins.pano-plugin-shoutbox.nav.shoutbox`. Bu burada beklenen bir durumdur.
 - **Yinelenenlere karşı koruyun.** `editNavLinks`, uzun ömürlü sunucuda her sayfa yüklemesinde yeniden çalışır, dolayısıyla eklemeden önce `links.some(...)`'i kontrol edin — ve diziyi her zaman **döndürün**.
 
-`ShoutboxPage.svelte` içinde asıl yönetim arayüzünü inşa edersiniz: shout'ları listeleyin, bir tane eklemek için `ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } })`'yi çağıran bir form ve bir silme butonu. Bir eylemi onaylamak için, `@panomc/sdk/toasts`'tan `showToast` ile bir toast gösterin. Tam örnekler [Panel Arayüzü](/tr/addon/panel-ui/#toast-ları-gosterme)'nde.
+`ShoutboxPage.svelte` içinde asıl yönetim arayüzünü inşa edersiniz: shout'ları listeleyin, bir tane eklemek için `api.panel.post({ path: '/shouts', body: { message } })`'yi çağıran bir form ve bir silme butonu. Bir eylemi onaylamak için, `@panomc/sdk/toasts`'tan `showToast` ile bir toast gösterin. Tam örnekler [Panel Arayüzü](/tr/addon/panel-ui/#toast-ları-gosterme)'nde.
 
 ::: tip Kontrol
 Paneli yeniden yükleyin. **Gönderiler**'in hemen altındaki kenar çubuğunda bir megafon simgesi belirir, ham anahtarla etiketlenmiş (sonraki sayfada yerel ayar anahtarını ekleyince gerçek metne dönüşür). Sayfanızı `/shoutbox`'ta açmak için ona tıklayın. `permission` karşılanmazsa, sayfa 404 verir ve bağlantı gizlenir.
@@ -141,7 +141,7 @@ Bütün bir sayfaya ihtiyacınız yoksa, bunun yerine eklentinizin detay sayfas�
 
 ## Sahte API'lere dikkat edin
 
-Bir YZ asistanı veya eski bir eğitim size [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir çağrı verirse, o çağrı yoktur. Yaygın sahteler: düz bir dizeyle `ApiUtil.get('/api/...')` (her çağrı bir seçenek nesnesi alır), bir `@panomc/sdk/components/panel` bileşen kütüphanesi (öyle bir şey yok) ve `onContextUpdate` (hiçbir host onu asla çağırmaz — iskele eklediyse silin). Tam liste [Arayüz referansının altında](/tr/addon/frontend/#var-olmayan-eski-ve-yz-uydurması-api-ler).
+Bir YZ asistanı veya eski bir eğitim size [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir çağrı verirse, o çağrı yoktur. Yaygın sahteler: düz bir dizeyle `api.get('/shouts')` (her çağrı bir seçenek nesnesi alır), bir `@panomc/sdk/components/panel` bileşen kütüphanesi (öyle bir şey yok) ve `onContextUpdate` (hiçbir host onu asla çağırmaz — iskele eklediyse silin). Tam liste [Arayüz referansının altında](/tr/addon/frontend/#var-olmayan-eski-ve-yz-uydurması-api-ler).
 
 ## Nerede olduğumuz
 

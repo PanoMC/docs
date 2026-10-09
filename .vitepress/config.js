@@ -211,6 +211,19 @@ export default defineConfig({
             ],
           },
           {
+            text: "API & Headless",
+            collapsed: true,
+            items: [
+              { text: "API Basics", link: "/integration/api-basics/" },
+              { text: "Reading the API Reference", link: "/integration/openapi/" },
+              { text: "Access", link: "/integration/access/" },
+              { text: "Headless Quick Start", link: "/integration/headless/" },
+              { text: "Typed Client", link: "/integration/client/" },
+              { text: "Widgets", link: "/integration/widgets/" },
+              { text: "Webhooks", link: "/integration/webhooks/" },
+            ],
+          },
+          {
             text: "Integration Development",
             collapsed: true,
             items: [
@@ -493,6 +506,19 @@ export default defineConfig({
             ],
           },
           {
+            text: "API ve Ön Yüz",
+            collapsed: true,
+            items: [
+              { text: "API Temelleri", link: "/tr/integration/api-basics/" },
+              { text: "OpenAPI Referansını Okuma", link: "/tr/integration/openapi/" },
+              { text: "Erişim", link: "/tr/integration/access/" },
+              { text: "Ön Yüz Hızlı Başlangıç", link: "/tr/integration/headless/" },
+              { text: "Tipli İstemci", link: "/tr/integration/client/" },
+              { text: "Widget'lar", link: "/tr/integration/widgets/" },
+              { text: "Webhooklar", link: "/tr/integration/webhooks/" },
+            ],
+          },
+          {
             text: "Entegrasyon Geliştirme",
             collapsed: true,
             items: [
@@ -772,6 +798,19 @@ export default defineConfig({
               { text: "Social Login", link: "/ru/plugins/social-login/" },
               { text: "Staff Page", link: "/ru/plugins/staff-page/" },
               { text: "Whitelist", link: "/ru/plugins/whitelist/" },
+            ],
+          },
+          {
+            text: "API и фронтенд",
+            collapsed: true,
+            items: [
+              { text: "Основы API", link: "/ru/integration/api-basics/" },
+              { text: "Чтение справочника OpenAPI", link: "/ru/integration/openapi/" },
+              { text: "Доступ", link: "/ru/integration/access/" },
+              { text: "Быстрый старт фронтенда", link: "/ru/integration/headless/" },
+              { text: "Типизированный клиент", link: "/ru/integration/client/" },
+              { text: "Виджеты", link: "/ru/integration/widgets/" },
+              { text: "Вебхуки", link: "/ru/integration/webhooks/" },
             ],
           },
           {

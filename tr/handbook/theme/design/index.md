@@ -37,11 +37,13 @@ Yalnızca önemsediğiniz birkaç değeri değiştirin. Yorum satırında bırak
 
 ## Adım 2 — köşeleri yuvarlayın
 
-Ember samimidir, o yüzden her kartı, butonu ve girişi yumuşatalım. Köşe yarıçapı (radius) token'ını bulun ve ona daha büyük bir değer verin:
+Ember samimidir, o yüzden her kartı, butonu ve girişi yumuşatalım. Köşe yarıçapı bir `--pano-*` CSS değişkenidir; bu yüzden `tokens.scss` içine değil, `src/styles/style.scss` içine (import'ların altına) yazılır:
 
 ```scss
-// src/styles/tokens.scss
-$radius: 14px;
+// src/styles/style.scss — import'lardan sonra
+:root {
+  --pano-radius: 14px;
+}
 ```
 
 Kaydedin ve yenileyin — arayüz anında daha yuvarlak ve daha sıcak hissettirir.

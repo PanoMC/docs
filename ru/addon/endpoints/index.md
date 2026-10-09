@@ -8,25 +8,19 @@
 
 ## Публичный API-эндпоинт
 
-Откройте выкрики теме. Публичный JSON-эндпоинт расширяет `Api` (файл `routes/api/GetShoutsAPI.kt`):
+Откройте выкрики теме. Публичный JSON-эндпоинт расширяет `Api` (файл `routes/GetShoutsAPI.kt`):
 
 ```kotlin
-package com.panomc.plugins.shoutbox.routes.api
+package com.panomc.plugins.shoutbox.routes
 
 import com.panomc.platform.annotation.Endpoint
 import com.panomc.platform.model.*
 import com.panomc.plugins.shoutbox.db.dao.ShoutDao
 import io.vertx.ext.web.RoutingContext
-import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
-import io.vertx.json.schema.SchemaRepository
 
 @Endpoint
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
-    override val paths = listOf(Path("/api/shoutbox/list", RouteType.GET))
-
-    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
-        ValidationHandlerBuilder.create(schemaRepository).build()
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
@@ -39,22 +33,22 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint` заставляет маршрут зарегистрировать себя в тот миг, как загружается аддон, — вызова регистрации нигде нет.
 - `ShoutDao` внедряется прямо в конструктор, потому что он живёт в **вашей коробке** рядом с этим эндпоинтом (внедрение через конструктор — см. [Обзор бэкенда](/ru/addon/backend/#как-pano-строит-ваши-классы-за-вас)). Сам DAO строится на странице [База данных и миграции](/ru/addon/database/).
-- `paths` перечисляет URL и HTTP-метод. Выбирайте базовый класс по тому, кому разрешён вход: `Api` (публичный), `LoggedInApi` (любой вошедший пользователь), `PanelApi` (администраторы), `SetupApi` (только во время установки).
+- `paths` перечисляет **относительный** путь и HTTP-метод. Вы никогда не пишете `/api`, `/panel` или id плагина: Pano монтирует этот эндпоинт по адресу `/api/plugins/pano-plugin-shoutbox/shouts`. Начинайте путь с имени ресурса (`/shouts`, `/items/:id`), а не с параметра или `_`.
 - `getSqlClient()` — это удобство на `Api`, которое передаёт вам общий SQL-клиент.
-- **Вы должны переопределить `getValidationHandler`, даже когда валидировать нечего** — верните пустой builder ровно как показано (`ValidationHandlerBuilder.create(schemaRepository).build()`). Не удаляйте это переопределение; сборке оно нужно. Эндпоинт панели ниже показывает его за настоящей работой над телом запроса.
-- Успех — это `Successful(map)`, который сериализуется в `{"result":"ok", …ваша map…}`. Чтобы провалить, вы **бросаете** подкласс платформенного `Error` (`NotFound`, `BadRequest`, `NoPermission`, …) или свой собственный; код ошибки, отправляемый клиенту, — это имя класса в `UPPER_SNAKE`.
+- **`getValidationHandler` необязателен.** Если валидировать нечего, ничего не объявляйте. Эндпоинт панели ниже переопределяет его для проверки тела запроса.
+- Успех — это `Successful(map)`, он сериализуется ровно в вашу map (ключа `result` нет). Чтобы провалить, вы **бросаете** подкласс платформенного `Error` (`NotFound`, `BadRequest`, `NoPermission`, …) или свой. Любая ошибка имеет вид `{"error":{"code":"…"}}`; см. [Коды ошибок](/ru/addon/api-reference/#error-codes).
 
 ::: tip Контрольная точка: постучитесь в свой первый эндпоинт
 Это награда — ваш URL, возвращающий ваш JSON. Пересоберите, скопируйте, перезапустите, затем откройте свой эндпоинт в браузере (или `curl` его):
 
 ```
-http://localhost:8088/api/shoutbox/list
+http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
 ```
 
-Порт `8088` — это адрес Pano, когда вы запустили его с `--dev`; на установке по умолчанию Pano слушает порт `80`, поэтому используйте вместо этого `http://localhost/api/shoutbox/list`. В любом случае вы должны увидеть:
+Порт `8088` — это адрес Pano, когда вы запустили его с `--dev`; на установке по умолчанию Pano слушает порт `80`, поэтому используйте вместо этого `http://localhost/api/plugins/pano-plugin-shoutbox/shouts`. В любом случае вы должны увидеть:
 
 ```json
-{"result":"ok","shouts":[]}
+{"shouts":[]}
 ```
 
 **Пустой** список `shouts` — потому что пока никто не опубликовал выкрик. Вы опубликуете один в конце этой страницы.
@@ -76,14 +70,14 @@ return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient).take(limit)))
 
 Публикация выкрика — административное действие, поэтому этот эндпоинт делает три вещи, которых не делал публичный: он **валидирует тело запроса**, **проверяет право доступа** и **пишет строку в журнал активности**. Это самый большой блок кода здесь — пока читаете его, ищите эти три работы по порядку.
 
-::: tip Пути панели начинаются с `/api/panel/`
-URL-адреса панели переписываются один раз на входе, что каждого спотыкает в первый раз. Читайте это как отображение, слева направо:
+::: tip Эндпоинты панели расширяют `PanelApi` и не объявляют `/panel`
+Pano сама монтирует `PanelApi` под областью панели. Вы объявляете только остаток:
 
-| UI панели вызывает… | Pano переписывает это в… | Значит в Kotlin вы пишете… |
-|---|---|---|
-| `POST /panel/api/shoutbox` | `/api/panel/shoutbox` | `Path("/api/panel/shoutbox", RouteType.POST)` |
+| Вы объявляете в Kotlin | Pano монтирует по адресу |
+|---|---|
+| класс `PanelApi` с `Path("/shouts", RouteType.POST)` | `POST /api/plugins/pano-plugin-shoutbox/panel/shouts` |
 
-**Правило большого пальца:** в Kotlin всегда начинайте путь эндпоинта панели с `/api/panel/`.
+Код UI панели тоже не пишет этот URL: он вызывает `api.panel.post({ path: '/shouts' })` (см. [Panel UI](/ru/addon/panel-ui/)).
 :::
 
 ::: warning Внимание: этот файл сам по себе пока не скомпилируется
@@ -106,10 +100,10 @@ import com.panomc.plugins.shoutbox.db.model.Shout
 import com.panomc.plugins.shoutbox.log.CreatedShoutLog
 import com.panomc.plugins.shoutbox.permission.ManageShoutboxPermission
 import io.vertx.ext.web.RoutingContext
+import com.panomc.platform.schema.dsl.Bodies
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Bodies
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.*
 
@@ -118,7 +112,7 @@ class PanelAddShoutAPI(
     private val plugin: ShoutboxPlugin,
     private val shoutDao: ShoutDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/shoutbox", RouteType.POST))
+    override val paths = listOf(Path("/shouts", RouteType.POST))
 
     private val authProvider by lazy { plugin.applicationContext.getBean(AuthProvider::class.java) }
     private val databaseManager by lazy { plugin.applicationContext.getBean(DatabaseManager::class.java) }
@@ -167,12 +161,12 @@ class PanelAddShoutAPI(
 
 Вот полный цикл, который обещал бэкенд, — таблица базы данных, публичный JSON-API, защищённый административный эндпоинт и строка журнала активности, работающие вместе. Вы уже видели пустой список; теперь создайте выкрик и посмотрите, как он появится.
 
-1. **До:** откройте `http://localhost:8088/api/shoutbox/list` (или форму с портом `80` на установке по умолчанию). Вы всё ещё должны видеть `{"result":"ok","shouts":[]}`.
-2. **Опубликуйте выкрик:** отправьте `POST /panel/api/shoutbox` с телом JSON `{"message":"Hello Pano!"}` от имени вошедшего администратора. Проще всего — из UI панели, который вы построите в [Разработке фронтенда](/ru/addon/frontend/); чтобы сделать это прямо сейчас, `curl` этот URL через аутентифицированную сессию вашего браузера (эндпоинту нужна ваша админская сессионная кука, поэтому UI панели — более простой путь).
-3. **После:** обновите `http://localhost:8088/api/shoutbox/list` — ваш выкрик теперь в JSON:
+1. **До:** откройте `http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts` (или форму с портом `80` на установке по умолчанию). Вы всё ещё должны видеть `{"shouts":[]}`.
+2. **Опубликуйте выкрик:** отправьте `POST /api/plugins/pano-plugin-shoutbox/panel/shouts` с телом JSON `{"message":"Hello Pano!"}` от имени вошедшего администратора. Проще всего — из UI панели, который вы построите в [Разработке фронтенда](/ru/addon/frontend/); чтобы сделать это прямо сейчас, `curl` этот URL через аутентифицированную сессию вашего браузера (эндпоинту нужна ваша админская сессионная кука, поэтому UI панели — более простой путь).
+3. **После:** обновите `http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts` — ваш выкрик теперь в JSON:
 
 ```json
-{"result":"ok","shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
+{"shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
 ```
 
 4. **Лента активности:** откройте **Панель → Активность** — вы увидите свою запись `CREATED_SHOUT` (показанную как сырой ключ, пока вы не добавите строку локали в [Локализации](/ru/addon/localization/)).

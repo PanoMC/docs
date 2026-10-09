@@ -10,7 +10,7 @@ Bu sayfa, eklentinizin arayüzünün kullanabileceği **her kanca adını, view 
 - Bir **gezinme yardımcısı** = site menüsüne veya yönetici kenar çubuğuna bağlantı eklemek veya düzenlemek için bir API.
 
 ::: tip Bu sayfa nasıl okunur
-API alanına göre gruplanmış (§1–§10) yoğun referans tablolarından oluşur. Onu baştan sona okumazsınız — bağladığınız şey için bölüme atlarsınız. Her bölüm ne için olduğunu ve **nerede çalıştığını** (tema, panel veya her ikisi) söyleyen sade bir cümleyle açılır. Bir tablo hücresindeki bir terim tanıdık değilse, neredeyse kesinlikle hemen aşağıdaki "Bu sayfanın varsaydığı kavramlar" kutusunda tanımlanmıştır — önce o kutuyu bir kez okuyun.
+API alanına göre gruplanmış (§1–§11) yoğun referans tablolarından oluşur. Onu baştan sona okumazsınız — bağladığınız şey için bölüme atlarsınız. Her bölüm ne için olduğunu ve **nerede çalıştığını** (tema, panel veya her ikisi) söyleyen sade bir cümleyle açılır. Bir tablo hücresindeki bir terim tanıdık değilse, neredeyse kesinlikle hemen aşağıdaki "Bu sayfanın varsaydığı kavramlar" kutusunda tanımlanmıştır — önce o kutuyu bir kez okuyun.
 :::
 
 ::: tip Bu sayfanın varsaydığı kavramlar (bir kez okuyun, ~60 saniye)
@@ -440,7 +440,7 @@ Bir giriş akışının vardığı sayfalar (OAuth dönüşleri, e-postayla gele
 
 ## 9. `@panomc/sdk` modül dışa aktarımları
 
-Bu, dondurulmuş **`@panomc/sdk`** içe aktarma yüzeyidir — her belirteç kararlı bir host çalışma zamanı modülüne eşlenir. Bu tam yollardan içe aktarın ve bu paketlerin içinde asla derin içe aktarma yapmayın (örn. `@panomc/sdk/utils/api/something` çözülmez). (Svelte'in kendi belirteçleri ve paketlediğiniz herhangi bir npm paketi de çözülür — tam içe aktarma resmi için §10'a bakın.)
+Bu, dondurulmuş **`@panomc/sdk`** içe aktarma yüzeyidir — her belirteç kararlı bir host çalışma zamanı modülüne eşlenir. Bu tam yollardan içe aktarın ve bu paketlerin içinde asla derin içe aktarma yapmayın (örn. `@panomc/sdk/utils/api-internals` çözülmez). (Svelte'in kendi belirteçleri ve paketlediğiniz herhangi bir npm paketi de çözülür — tam içe aktarma resmi için §10'a bakın.)
 
 | Belirteç | Dışa aktarımlar |
 |---|---|
@@ -498,7 +498,7 @@ Bunlar SvelteKit'in dışa aktarımlarını yansıtır — `page`, `navigating`,
 
 | Seçenek | Anlamı |
 |---|---|
-| `path` | API yolu, **`/api`'ye göreli** — `'shoutbox/list'` geçirin, yardımcı `/api/shoutbox/list`'i çağırır. |
+| `path` | API yolu, **`/api/v1`'e göreli**, `/` ile başlar — `'/posts'` `/api/v1/posts`'u çağırır. `/api` ile başlayan yol geliştirmede reddedilir. Kendi eklentinizin uç noktaları için `api` kullanın (bkz. §11); eklenti önekini sizin yerinize ekler. |
 | `request` | `load(event)` argümanı. İsteğin CSRF jetonuna sahip olması ve SSR sırasında çalışması için bir `load()`'un içinden çağırdığınızda onu her zaman geçirin (örnekten sonraki nota bakın). |
 | `body` | İstek yükü (bir nesne, JSON olarak gönderilir; veya dosya yüklemeleri için bir `FormData`). Yalnızca POST/PUT. |
 | `headers` | Ekstra istek başlıkları. POST/PUT/DELETE. |
@@ -516,7 +516,7 @@ import ApiUtil from '@panomc/sdk/utils/api';
 
 export async function load(event) {
   // pass request: event so the call works during SSR (the first page view)
-  const response = await ApiUtil.get({ path: 'your-endpoint', request: event });
+  const response = await ApiUtil.get({ path: '/posts', request: event });
   return { response }; // this object becomes your page component's props
 }
 ```
@@ -548,6 +548,84 @@ Başka her şey — `chart.js`, `svelte-select`, başka herhangi bir npm paketi 
 ::: warning `package.json`'ınıza asla `svelte` eklemeyin
 SDK, herkesin hangi Svelte sürümüyle derlediğini kontrol eder (sürümü sabitlenmiştir) ve derleme bir uyumsuzlukta **başarısız olur**. `package.json`'ınızdaki ikinci bir `svelte` kopyası sayfalarınızı sessizce bozar (iki kopya hydration sırasında anlaşmazlığa düşer). [Mimari](/tr/addon/architecture/)'ye bakın.
 :::
+
+## 11. Eklentinizin API'si arayüzden
+
+### Göreli uç nokta yolları {#relative-endpoint-paths}
+
+Bir Kotlin uç noktası yolunu **kapsamına göre göreli** bildirir ve Pano öneki ekler:
+
+| Sınıf | Bildirilen | Sunulduğu yer |
+|---|---|---|
+| `Api`, `LoggedInApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/hello` |
+| `PanelApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/panel/hello` |
+| çekirdek (sizin değil) | `/posts` | `/api/v1/posts` |
+
+Bildirilen bir yolun `/api` veya `/panel` ile başlaması, boş olması ya da parametreyle veya `_` ile başlaması (`/:id`) eklentinizi sınıfı ve çözümü adlandıran bir iletiyle başlangıçta durdurur. Her yanıt `Pano-Api-Level` başlığını taşır.
+
+### `api.get` ve diğerleri
+
+Eklenti kapsamlı istemciyi import edin. Eklenti kimliği kodunuzda hiç geçmez; derleme ekler:
+
+```js
+import { api } from '@panomc/sdk/plugin-api';          // main.js, bileşenler ve load()
+
+const body = await api.get({ path: '/hello', request: event });   // site
+await api.post({ path: '/shouts', body: { message } });
+await api.panel.get({ path: '/hello' });                          // PanelApi uç noktaları
+```
+
+`api` içinde `get`, `post`, `put`, `delete` ve `customRequest` vardır (`ApiUtil` ile aynı seçenekler, bölüm 9); `api.panel` altında da aynı küme bulunur. Bir tema ya da başka bir eklenti, ait olmadığı bir eklentiyi `@panomc/sdk/utils/api` içindeki `createPluginApi('pano-plugin-market')` ile çağırır; tam eklenti kimliği gerekir. Hatalar fırlatılmaz; aşağıdaki hata gövdesine çözülür.
+
+### Hata kodları {#error-codes}
+
+Başarısız her çağrı tek bir biçimdedir; artık `result` anahtarı yoktur:
+
+```json
+{ "error": { "code": "EMPTY_CART", "message": "isteğe bağlı İngilizce metin",
+             "details": { "any": "extra" }, "fields": { "email": "EXISTS" } } }
+```
+
+`code` her zaman vardır; `message`, `details` ve `fields` yalnızca boş değilse. `res.error?.code` okuyun, `res.error`'ı asla bir dizeyle karşılaştırmayın. Ağ hatası `{ error: { code: "NETWORK_ERROR" } }` olarak çözülür. Kotlin'de kod sizin bildirdiğiniz bir sabittir; bu yüzden sınıfı yeniden adlandırmak istemciyi bozamaz:
+
+```kotlin
+class EmptyCart : Error("EMPTY_CART", 400)     // kod: ^[A-Z][A-Z0-9_]*$, sonra HTTP durumu
+throw EmptyCart()
+```
+
+Eklenti kodlarına önek eklenmez ve eklenti içinde benzersiz olmalıdır. Başarı gövdesi tam olarak döndürdüğünüz haritadır ve üst düzey bir `error` ya da `result` anahtarı içeremez.
+
+### Sayfalar {#pages}
+
+Her liste uç noktası aynı biçimde yanıt verir. İstek `page` (1 tabanlı, varsayılan 1) ve `pageSize` (uç noktaya göre varsayılan, en çok 100) alır; aralık dışı değer `INVALID_FIELDS` ile, son sayfadan sonrası `PAGE_NOT_FOUND` ile reddedilir:
+
+```json
+{ "items": [ ... ], "page": { "number": 2, "size": 20, "totalItems": 57, "totalPages": 3 } }
+```
+
+Diğer üst düzey anahtarlara (`category`, `filters`) izin verilir. Kotlin yardımcıları `com.panomc.platform.model` içindeki `PageRequest` ve `Paging`'dir.
+
+### Bağlantı hedefleri ve yedek sayfalar {#link-targets-and-fallback-pages}
+
+Eklentinizin dışarı gönderdiği bir bağlantı (e-posta, ödeme dönüşü) bir yol değil, bir **hedeftir**; böylece temanın rota yeniden adlandırmalarını izler. Hedefleri `src/main/resources/frontend-targets.json` içinde bildirin; kimliklerin başına ad alanınız eklenir:
+
+```json
+{ "store": "/store", "product": "/store/{slug}", "order": { "path": "/store/order/{id}", "fallback": true } }
+```
+
+Kotlin'de: `frontendUrlMap.url("market.order", mapOf("id" to publicId))`. URL şu sırayla çözülür: yöneticinin override'ı, etkin ön yüzün kendi haritası, varsayılan yolunuza uygulanan temanın rota yapılandırması ve son olarak hedefi `fallback: true` işaretlediyseniz `/_pano/<target>`. `null` "böyle bir sayfa yok" demektir: bağlantıyı atlayın. `fallback: true` bir hedef, bir ön yüz sahiplenene kadar düz yerleşik bir sayfa çizen bir Kotlin `FallbackPage` bean'i ister (`FallbackPage(target, template)` sınıfını genişletir, `@FallbackPageDefinition` ile işaretlenir). `bunx pano-plugin check`, eklentinin hiçbir sayfasıyla eşleşmeyen varsayılan yol için uyarır.
+
+### Webhook'lar
+
+Çekirdek ve eklentiler olayları yöneticinin webhook uç noktalarına tek bir enjekte edilebilir bean ile yayınlar, `WebhookPublisher`:
+
+```kotlin
+if (webhooks.hasListeners(plugin, "order.paid", conn)) {
+    webhooks.publish(plugin, "order.paid", subjectKey = orderId.toString(), data = data, sqlClient = conn)
+}
+```
+
+`event` kaynak olmadan verilir; Pano ad alanınızı başa ekler (`market.order.paid`) ve bir eklenti `core.*` yayınlayamaz. Çağıranın `sqlClient`'ını vermek teslimatı aynı işlemde yazar. İsteğe bağlı `register(plugin, listOf(WebhookEventType("order.paid", sample)))` panel kataloğunu doldurur. Alıcılar `{ id, event, source, createdAt, apiVersion, site, data }` biçiminde imzalı bir JSON zarfı ve `X-Pano-Event`, `X-Pano-Event-Id`, `X-Pano-Delivery`, `X-Pano-Attempt` ile `X-Pano-Signature: t=<unix s>,v1=<hex HMAC-SHA256(secret, "<t>.<body>")>` başlıklarını alır. Başarısız teslimatlar artan gecikmeyle yeniden denenir (varsayılan 8 deneme). Çekirdek olayları: `core.user.registered`, `core.user.deleted`, `core.ticket.created`, `core.ticket.replied`, `core.post.published`.
 
 ## Bilinen ölü yüzeyler (kullanmayın)
 

@@ -8,25 +8,19 @@ Every backend edit needs a rebuild-and-restart before it takes effect — see th
 
 ## A public API endpoint
 
-Expose the shouts to the theme. A public JSON endpoint extends `Api` (file `routes/api/GetShoutsAPI.kt`):
+Expose the shouts to the theme. A public JSON endpoint extends `Api` (file `routes/GetShoutsAPI.kt`):
 
 ```kotlin
-package com.panomc.plugins.shoutbox.routes.api
+package com.panomc.plugins.shoutbox.routes
 
 import com.panomc.platform.annotation.Endpoint
 import com.panomc.platform.model.*
 import com.panomc.plugins.shoutbox.db.dao.ShoutDao
 import io.vertx.ext.web.RoutingContext
-import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
-import io.vertx.json.schema.SchemaRepository
 
 @Endpoint
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
-    override val paths = listOf(Path("/api/shoutbox/list", RouteType.GET))
-
-    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
-        ValidationHandlerBuilder.create(schemaRepository).build()
+    override val paths = listOf(Path("/shouts", RouteType.GET))
 
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
@@ -39,22 +33,22 @@ What is happening:
 
 - `@Endpoint` makes the route register itself the moment the addon loads.
 - `ShoutDao` is injected straight into the constructor, because it lives in **your box** alongside this endpoint (constructor injection — see the [Backend overview](/addon/backend/#how-pano-builds-your-classes-for-you)). The DAO itself is built on the [Database & Migrations](/addon/database/) page.
-- `paths` lists the URL and HTTP method. Choose a base class by who is allowed in: `Api` (public), `LoggedInApi` (any signed-in user), `PanelApi` (admins), `SetupApi` (only during setup).
+- `paths` lists the **relative** path and HTTP method. You never write `/api`, `/panel` or the plugin id: Pano mounts this endpoint at `/api/plugins/pano-plugin-shoutbox/shouts`. Start the path with a resource name (`/shouts`, `/items/:id`), never with a parameter or `_`. Choose a base class by who is allowed in: `Api` (public), `LoggedInApi` (any signed-in user), `PanelApi` (admins), `SetupApi` (only during setup).
 - `getSqlClient()` is a convenience on `Api` that hands you the shared SQL client.
-- **You must override `getValidationHandler` even when there is nothing to validate** — return the empty builder exactly as shown (`ValidationHandlerBuilder.create(schemaRepository).build()`). Don't delete this override; the build needs it. The panel endpoint below shows it doing real work on a request body.
-- Success is `Successful(map)`, which serializes to `{"result":"ok", …your map…}`. To fail, you **throw** a platform `Error` subclass (`NotFound`, `BadRequest`, `NoPermission`, …) or your own; the error code sent to the client is the class name in `UPPER_SNAKE`.
+- **`getValidationHandler` is optional.** An endpoint with nothing to validate declares nothing. The panel endpoint below overrides it to validate a request body.
+- Success is `Successful(map)`, which serializes to exactly your map (no `result` key; a success body may not have a top-level `error` or `result` key). To fail, you **throw** a platform `Error` subclass (`NotFound`, `BadRequest`, `NoPermission`, …) or your own. Every failure is `{"error":{"code":"…"}}`; see [Error codes](/addon/api-reference/#error-codes).
 
 ::: tip Checkpoint: hit your first endpoint
 This is the payoff — a URL of yours that returns your JSON. Rebuild, copy, restart, then open your endpoint in a browser (or `curl` it):
 
 ```
-http://localhost:8088/api/shoutbox/list
+http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
 ```
 
-Port `8088` is Pano's address when you started it with `--dev`; on a default install Pano listens on port `80`, so use `http://localhost/api/shoutbox/list` instead. Either way you should see:
+Port `8088` is Pano's address when you started it with `--dev`; on a default install Pano listens on port `80`, so use `http://localhost/api/plugins/pano-plugin-shoutbox/shouts` instead. Either way you should see:
 
 ```json
-{"result":"ok","shouts":[]}
+{"shouts":[]}
 ```
 
 An **empty** `shouts` list — because nothing has posted a shout yet. You'll post one at the end of this page.
@@ -76,14 +70,14 @@ return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient).take(limit)))
 
 Posting a shout is an admin action, so this endpoint does three things the public one didn't: it **validates the request body**, **checks a permission**, and **writes an activity-log entry**. It's the biggest code block here — as you read it, look for those three jobs in order.
 
-::: tip Panel paths start with `/api/panel/`
-Panel URLs get rewritten once on the way in, which trips everyone up the first time. Read it as a mapping, left to right:
+::: tip Panel endpoints extend `PanelApi` and declare no `/panel`
+A `PanelApi` is mounted under the panel scope by Pano. You declare only the part after it:
 
-| The panel UI calls… | Pano rewrites it to… | So in Kotlin you write… |
-|---|---|---|
-| `POST /panel/api/shoutbox` | `/api/panel/shoutbox` | `Path("/api/panel/shoutbox", RouteType.POST)` |
+| You declare in Kotlin | Pano mounts it at |
+|---|---|
+| `class PanelAddShoutAPI : PanelApi()` with `Path("/shouts", RouteType.POST)` | `POST /api/plugins/pano-plugin-shoutbox/panel/shouts` |
 
-**Rule of thumb:** in Kotlin, always start a panel endpoint's path with `/api/panel/`.
+Panel UI code never writes that URL either: it calls `api.panel.post({ path: '/shouts' })` (see [Panel UI](/addon/panel-ui/)).
 :::
 
 ::: warning Heads up: this file won't compile on its own yet
@@ -106,10 +100,10 @@ import com.panomc.plugins.shoutbox.db.model.Shout
 import com.panomc.plugins.shoutbox.log.CreatedShoutLog
 import com.panomc.plugins.shoutbox.permission.ManageShoutboxPermission
 import io.vertx.ext.web.RoutingContext
+import com.panomc.platform.schema.dsl.Bodies
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.ext.web.validation.RequestPredicate
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Bodies
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.*
 
@@ -118,7 +112,7 @@ class PanelAddShoutAPI(
     private val plugin: ShoutboxPlugin,
     private val shoutDao: ShoutDao
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/shoutbox", RouteType.POST))
+    override val paths = listOf(Path("/shouts", RouteType.POST))
 
     private val authProvider by lazy { plugin.applicationContext.getBean(AuthProvider::class.java) }
     private val databaseManager by lazy { plugin.applicationContext.getBean(DatabaseManager::class.java) }
@@ -167,12 +161,12 @@ Walking through the three new jobs:
 
 Here is the full loop the backend promised — a database table, a public JSON API, a guarded admin endpoint, and an activity-log entry, all working together. You've already seen the empty list; now create a shout and watch it appear.
 
-1. **Before:** open `http://localhost:8088/api/shoutbox/list` (or the port `80` form on a default install). You should still see `{"result":"ok","shouts":[]}`.
-2. **Post a shout:** send `POST /panel/api/shoutbox` with the JSON body `{"message":"Hello Pano!"}` as a logged-in admin. The easiest way is from the panel UI you'll build in [Frontend Development](/addon/frontend/); to do it right now, `curl` that URL through your browser's authenticated session (the endpoint needs your admin session cookie, which is why the panel UI is the simpler route).
-3. **After:** refresh `http://localhost:8088/api/shoutbox/list` — your shout is now in the JSON:
+1. **Before:** open `http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts` (or the port `80` form on a default install). You should still see `{"shouts":[]}`.
+2. **Post a shout:** send `POST /api/plugins/pano-plugin-shoutbox/panel/shouts` with the JSON body `{"message":"Hello Pano!"}` as a logged-in admin. The easiest way is from the panel UI you'll build in [Frontend Development](/addon/frontend/); to do it right now, `curl` that URL through your browser's authenticated session (the endpoint needs your admin session cookie, which is why the panel UI is the simpler route).
+3. **After:** refresh `http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts` — your shout is now in the JSON:
 
 ```json
-{"result":"ok","shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
+{"shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
 ```
 
 4. **Activity feed:** open **Panel → Activity** — you'll see your `CREATED_SHOUT` entry (shown as the raw key until you add the locale string in [Localization](/addon/localization/)).

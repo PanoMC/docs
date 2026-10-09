@@ -63,10 +63,10 @@ A widget needs data, and it needs that data in the **first server response** so 
 ```svelte
 <!-- src/theme/ShoutboxWidget.svelte -->
 <script module>
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export async function load(event) {
-    const res = await ApiUtil.get({ path: '/api/shoutbox/list', request: event });
+    const res = await api.get({ path: '/shouts', request: event });
     return { shouts: res.shouts ?? [] };
   }
 </script>
@@ -87,8 +87,8 @@ This calls the public endpoint you built on the [Backend](/handbook/addon/backen
 - **Always pass `request: event`** so the server-side call carries the visitor's session. Forget it and the fetch runs *logged out* during SSR — data goes missing only on a hard refresh, which is a confusing bug to chase.
 - **`load()` runs on the server *and* the client**, so keep it side-effect-free: only fetch and return data.
 
-::: tip How `ApiUtil` reports errors
-`ApiUtil` never throws on API errors — a failed call resolves to an object with `error` set. Check `res.error` before using the response; that's why the `load()` above falls back to `res.shouts ?? []`.
+::: tip How `api` reports errors
+`api` never throws on API errors — a failed call resolves to `{ error: { code } }`. Check `res.error` before using the response; that's why the `load()` above falls back to `res.shouts ?? []`.
 :::
 
 ::: tip Check
@@ -129,7 +129,7 @@ A few things worth knowing:
 - **`text` is a translation key, not a label.** Until you add it (next page), the sidebar shows the raw key `plugins.pano-plugin-shoutbox.nav.shoutbox`. That's expected here.
 - **Guard against duplicates.** `editNavLinks` re-runs on every page load in the long-lived server, so check `links.some(...)` before adding — and always **return** the array.
 
-Inside `ShoutboxPage.svelte` you build the actual management UI: list the shouts, a form that calls `ApiUtil.post({ path: '/api/panel/shoutbox', body: { message } })` to add one, and a delete button. To confirm an action, show a toast with `showToast` from `@panomc/sdk/toasts`. Full examples are in [Panel UI](/addon/panel-ui/#showing-toasts).
+Inside `ShoutboxPage.svelte` you build the actual management UI: list the shouts, a form that calls `api.panel.post({ path: '/shouts', body: { message } })` to add one, and a delete button. To confirm an action, show a toast with `showToast` from `@panomc/sdk/toasts`. Full examples are in [Panel UI](/addon/panel-ui/#showing-toasts).
 
 ::: tip Check
 Reload the panel. A bullhorn icon appears in the sidebar just under **Posts**, labelled with the raw key (it turns into real text once you add the locale key next page). Click it to open your page at `/shoutbox`. If `permission` isn't met, the page 404s and the link is hidden.
@@ -141,7 +141,7 @@ If you don't need a whole page, you can instead add a component to your addon's 
 
 ## Beware fake APIs
 
-If an AI assistant or an old tutorial hands you a call that isn't on the [Frontend API Reference](/addon/api-reference/), it doesn't exist. Common fakes: `ApiUtil.get('/api/...')` with a plain string (every call takes an options object), a `@panomc/sdk/components/panel` component library (there is none), and `onContextUpdate` (no host ever calls it — delete it if scaffolding added it). The full list is at the [bottom of the Frontend reference](/addon/frontend/#old-and-ai-hallucinated-apis-that-do-not-exist).
+If an AI assistant or an old tutorial hands you a call that isn't on the [Frontend API Reference](/addon/api-reference/), it doesn't exist. Common fakes: `api.get('/shouts')` with a plain string (every call takes an options object), a path that starts with `/api`, a `@panomc/sdk/components/panel` component library (there is none), and `onContextUpdate` (no host ever calls it — delete it if scaffolding added it). The full list is at the [bottom of the Frontend reference](/addon/frontend/#old-and-ai-hallucinated-apis-that-do-not-exist).
 
 ## Where we are
 

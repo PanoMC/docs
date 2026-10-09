@@ -12,19 +12,19 @@ Everything on this page happens in two files inside your theme:
 
 | File | What it is for |
 |---|---|
-| `src/styles/tokens.scss` | A **menu** of every color, font, and radius the engine uses. Uncomment a line and change its value. |
+| `src/styles/tokens.scss` | A **menu** of every color and font variable the engine uses. Uncomment a line and change its value. |
 | `src/styles/style.scss` | Where your own **extra** CSS goes, after the engine's styles. |
 
 ## tokens.scss — the menu of values
 
-When you scaffold a theme, `src/styles/tokens.scss` ships as a **commented-out menu of every variable the engine uses** — colors like `$primary` and `$secondary`, border radius, fonts, and named dark themes. Each line starts with `//`, which means "off". To use one:
+When you scaffold a theme, `src/styles/tokens.scss` ships as a **commented-out menu of every variable the engine uses** — colors like `$primary` and `$secondary`, fonts, and named dark themes. Each line starts with `//`, which means "off". To use one:
 
 1. Find the variable you want in the file.
 2. Remove the `//` at the start of its line (this is called *uncommenting*).
 3. Change the value to what you want.
 4. Save the file and refresh the browser.
 
-Every engine variable is declared with `!default`, which is a fancy way of saying **your value always wins**. You never have to fight the engine.
+Colors and fonts in `tokens.scss` are declared with `!default`, which means **your value wins**. Radius, spacing and shadows are set with the `--pano-*` variables instead (next sections).
 
 ### Example 1 — change the primary color
 
@@ -37,12 +37,18 @@ $primary: #ff5722;
 
 ### Example 2 — change the border radius
 
-Border radius controls how rounded corners are (cards, buttons, inputs). A bigger number is softer and rounder; `0` is fully square:
+Corner radius is not a `tokens.scss` variable. Set the `--pano-radius` family in your own CSS (`src/styles/style.scss`, below the imports); every default view and the engine's own views read it:
 
 ```scss
-// src/styles/tokens.scss
-$radius: 12px;
+// src/styles/style.scss — after the imports
+:root {
+  --pano-radius: 12px;
+  --pano-radius-sm: 8px;
+  --pano-radius-lg: 18px;
+}
 ```
+
+A bigger number is softer; `0` is square. See [The `--pano-*` tokens](#the-pano-tokens) below.
 
 ### Example 3 — change the font
 
@@ -56,6 +62,16 @@ $font-family-base: "Inter", sans-serif;
 ::: tip
 You do **not** have to uncomment every line. Change only the handful of values you care about and leave the rest commented — the engine fills in sensible defaults for everything you don't touch.
 :::
+
+## The `--pano-*` tokens
+
+Besides the SCSS menu, a theme reads **34 CSS variables** named `--pano-*`: colors (`--pano-color-bg`, `--pano-color-text`, `--pano-color-primary`, `--pano-color-border`...), radii (`--pano-radius`, `-sm`, `-lg`, `-pill`), `--pano-border-width`, shadows (`--pano-shadow-sm`, `--pano-shadow`, `--pano-shadow-lg`), fonts (`--pano-font-body`, `--pano-font-heading`, `--pano-font-mono`, `--pano-font-size`...) and `--pano-space`. In a Bootstrap theme they mirror the matching Bootstrap variable, so changing the SCSS color changes both. Plugins style their default views with the same variables, so one set of values re-tints the plugins too:
+
+```css
+:root { --pano-color-primary: #7c3aed; --pano-radius: 0.5rem; }
+```
+
+Each plugin view also carries semantic classes (`market-product-card__title`). Your CSS is not layered, so it beats the plugin's fallback styles: `.market-product-card__title { margin: 1rem }` just works. A theme without Bootstrap is covered in [Views](/theme/views/#themes-without-bootstrap).
 
 ## style.scss — your own extra CSS
 
