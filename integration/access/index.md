@@ -26,7 +26,7 @@ A missing or wrong token answers `403 INVALID_CSRF_TOKEN`. `@panomc/sdk` and the
 
 ## 2. A browser on another address (allowed origins)
 
-A page on `https://play.example.com` that calls Pano on `https://example.com`: add the page's origin in the panel under **Appearance -> Themes -> gear button (Front-end settings) -> Allowed origins** (or `PUT /api/v1/panel/frontend/origins`, 20 at most).
+A page on `https://play.example.com` that calls Pano on `https://example.com`: add the page's origin in the panel under **Appearance -> Themes -> gear button (Site display settings)**: turn on "Allow other websites to access this Pano", which opens "Websites that may access this Pano" (or `PUT /api/v1/panel/frontend/origins`, 20 at most).
 
 - Format `scheme://host[:port]`, no path, no wildcard. `https` unless `localhost` or an IP.
 - It must share the registrable domain of your `website-url`. A different domain is refused (`ORIGIN_DIFFERENT_SITE`): use a front-end key instead.
@@ -36,7 +36,7 @@ A page on `https://play.example.com` that calls Pano on `https://example.com`: a
 
 ## 3. A server (front-end key + session token)
 
-A BFF, a custom front-end or any server that calls Pano for many visitors uses a **front-end key**. Create it in **Appearance -> Themes -> gear button (Front-end settings) -> Keys**. It is shown once, together with two `.env` lines:
+A BFF, a custom front-end or any server that calls Pano for many visitors uses a **front-end key** (in the panel: "Site connection key"). Create it in **Appearance -> Themes -> gear button (Site display settings) -> Site connection keys -> Manage**. It is shown once, together with two `.env` lines:
 
 ```sh
 PANO_API_URL=https://example.com/api
@@ -49,7 +49,7 @@ PANO_FRONTEND_KEY=pfk_...
 | `X-Pano-Client-Ip: 203.0.113.9` | The visitor's address. Believed only with a valid key; otherwise `400 INVALID_CLIENT_IP`. |
 | `Authorization: Bearer <sessionToken>` | The visitor's session, from the login answer. |
 
-Keys work only while the front-end mode is not Theme: in Theme mode a key cannot be created and a request with a stored key answers `403 FRONTEND_ACCESS_DISABLED`. Stored keys work again in Custom app, External or None. Allowed origins work in every mode.
+Keys work only while the front-end mode is not Theme (the "Site connection keys" row is hidden while the choice is "Theme"): in Theme mode a key cannot be created and a request with a stored key answers `403 FRONTEND_ACCESS_DISABLED`. Stored keys work again in `CUSTOM_APP`, `EXTERNAL` or `NONE`. Allowed origins work in every mode.
 
 A key skips the origin check and has its own rate-limit buckets per visitor address. Password, captcha and 2FA rules run unchanged.
 

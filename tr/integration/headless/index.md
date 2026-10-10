@@ -4,7 +4,7 @@
 
 ## İki komut
 
-Pano çalışıyor olmalı (burada `http://localhost:8088`). Önce bir anahtar oluşturun: **Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları) -> Anahtarlar -> Anahtar Oluştur** ve gösterdiği `.env` satırlarını saklayın.
+Pano çalışıyor olmalı (burada `http://localhost:8088`). Önce bir ön yüz anahtarı (panelde: "Site bağlantı anahtarı") oluşturun: **Görünüm -> Temalar -> dişli düğmesi (Site gösterim ayarları) -> Site bağlantı anahtarları -> Yönet -> Anahtar Oluştur** (seçim "Tema" iken bu satır gösterilmez; önce başka bir seçenek seçin) ve gösterdiği `.env` satırlarını saklayın.
 
 ```sh
 bunx @panomc/client-gen new my-site --url http://localhost:8088
@@ -25,16 +25,16 @@ Anahtar yoksa herkese açık sayfalar (yazılar, mağaza) çalışır; giriş ve
 
 ## Ön yüz modları
 
-**Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları) -> Mod** altında seçin:
+**Görünüm -> Temalar -> dişli düğmesi (Site gösterim ayarları)** altında "Ziyaretçiler ne görsün?" bölümünden seçin:
 
-| Mod | Ne çalışır | Ne zaman |
+| Seçenek (mod değeri) | Ne çalışır | Ne zaman |
 |---|---|---|
-| Tema | Pano'nun başlattığı bir tema | Olağan site |
-| Özel uygulama | Pano'nun başlattığı zip'iniz | Kendi siteniz olsun, Pano barındırsın |
-| Harici | Hiçbir şey; Pano `/` isteğini adresinize yönlendirir | Siteniz başka yerde çalışıyor |
-| Yok | Hiçbir şey; yalnızca panel ve API | Yalnızca sunucular ya da tamamen ayrı site |
+| Tema (`THEME`) | Pano'nun başlattığı bir tema | Olağan site |
+| Yüklediğim site (`CUSTOM_APP`) | Pano'nun başlattığı zip'iniz | Kendi siteniz olsun, Pano barındırsın |
+| Başka sunucudaki sitem (`EXTERNAL`) | Hiçbir şey; Pano `/` isteğini adresinize yönlendirir | Siteniz başka yerde çalışıyor |
+| Site yok (`NONE`) | Hiçbir şey; yalnızca panel ve API | Yalnızca sunucular ya da tamamen ayrı site |
 
-Özel uygulama: şablonda `bun run package`, zip'i yükleyin, seçin. Zip'in kökünde `manifest.json` ve `index.js` olmalıdır:
+Yüklediğim site: şablonda `bun run package`, zip'i yükleyin ("Site Yükle (.zip)"), seçin. Zip'in kökünde `manifest.json` ve `index.js` olmalıdır:
 
 ```json
 { "id": "my-site", "type": "custom-app", "title": "My site", "version": "1.0.0", "author": "me" }
@@ -44,7 +44,7 @@ Anahtar yoksa herkese açık sayfalar (yazılar, mağaza) çalışır; giriş ve
 Bun.serve({ port: process.env.PORT, hostname: process.env.HOST, fetch: () => new Response('hello') });
 ```
 
-Pano şunları iletir: `PORT`, `HOST`, `API_URL`, `PANO_API_URL`, `PANO_FRONTEND_KEY`, `PANO_SITE_URL`, `PROTOCOL_HEADER`, `HOST_HEADER`. Harici modda adresi girin (örneğin `http://127.0.0.1:4000`) ve uygulamanızda `ORIGIN` değerini Pano'nun herkese açık adresine ayarlayın.
+Pano şunları iletir: `PORT`, `HOST`, `API_URL`, `PANO_API_URL`, `PANO_FRONTEND_KEY`, `PANO_SITE_URL`, `PROTOCOL_HEADER`, `HOST_HEADER`. Başka sunucudaki sitem seçeneğinde adresi "Sitenizin çalıştığı adres" alanına girin (örneğin `http://127.0.0.1:4000`; diğer alanlar "Ziyaretçilerin gördüğü adres" ve "Sayfa listesi dosyası (isteğe bağlı)") ve uygulamanızda `ORIGIN` değerini Pano'nun herkese açık adresine ayarlayın.
 
 `/panel`, `/api` ve `/_pano` her zaman Pano'da kalır. Geri dönmek güvenlidir: yeni ön yüz başlamazsa öncekisi hizmet vermeye devam eder.
 
@@ -64,7 +64,7 @@ Hedefi siz üstlenene kadar vardırlar.
 
 Pano'nun oluşturduğu her bağlantının bir hedef adı vardır. Çözümleme sırası, ilk bulunan kazanır:
 
-1. **Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları)** altında koyduğunuz geçersiz kılma (`PUT /api/v1/panel/frontend/urls`).
+1. **Görünüm -> Temalar -> dişli düğmesi (Site gösterim ayarları) -> Pano'nun bağlantı verdiği sayfalar -> Yönet** altında koyduğunuz geçersiz kılma (`PUT /api/v1/panel/frontend/urls`).
 2. Ön yüzünüzün manifest veya tanımlayıcısındaki `urls`. `false` "böyle bir sayfa yok" demektir.
 3. Tema modunda, temanın o sayfa için kendi rotası.
 4. Varsa `/_pano/<hedef>` yedek sayfası; yoksa bağlantı bırakılır.
@@ -85,4 +85,4 @@ Başka alan adındaki sunucu tarafı bir ön yüz, oturum başlatan hedefleri (`
 
 ## Ayar formu
 
-Bir ön yüz kendi ayarlarını tanımlayabilir (`fields` içeren `settingsSchema`); panel formu çizer ve `GET /api/v1/frontend/settings` değerleri döner. Alan türleri: `text`, `textarea`, `boolean`, `number`, `select`, `color`, `url`, `image`.
+Bir ön yüz kendi ayarlarını tanımlayabilir (`fields` içeren `settingsSchema`); `GET /api/v1/frontend/settings` değerleri döner. Alan türleri: `text`, `textarea`, `boolean`, `number`, `select`, `color`, `url`, `image`.
