@@ -4,7 +4,7 @@
 
 ## Two commands
 
-Pano must be running (here on `http://localhost:8088`). Create a key first: **Appearance -> Front-end -> Keys -> Create Key**, and keep the `.env` lines it shows.
+Pano must be running (here on `http://localhost:8088`). Create a key first: **Appearance -> Themes -> gear button (Front-end settings) -> Keys -> Create Key**, and keep the `.env` lines it shows.
 
 ```sh
 bunx @panomc/client-gen new my-site --url http://localhost:8088
@@ -25,7 +25,7 @@ The starter is a BFF: every call to Pano is made by its server, the session toke
 
 ## Front-end modes
 
-Choose in **Appearance -> Front-end -> Mode**:
+Choose in **Appearance -> Themes -> gear button (Front-end settings) -> Mode**:
 
 | Mode | What runs | Use when |
 |---|---|---|
@@ -64,7 +64,7 @@ They exist until you claim the target.
 
 Every link Pano builds has a target name. Resolution, first hit wins:
 
-1. An override you set in **Appearance -> Front-end** (`PUT /api/v1/panel/frontend/urls`).
+1. An override you set in **Appearance -> Themes -> gear button (Front-end settings)** (`PUT /api/v1/panel/frontend/urls`).
 2. The `urls` of your front-end's manifest or descriptor. `false` means "no such page".
 3. In theme mode, the theme's own route for that page.
 4. The `/_pano/<target>` fallback page, if there is one; otherwise the link is left out.

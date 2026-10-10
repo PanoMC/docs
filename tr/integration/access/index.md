@@ -26,7 +26,7 @@ Eksik veya yanlış belirteç `403 INVALID_CSRF_TOKEN` döner. `@panomc/sdk` ve 
 
 ## 2. Başka bir adresteki tarayıcı (izinli kaynaklar)
 
-`https://play.example.com` adresindeki bir sayfa `https://example.com` adresindeki Pano'yu çağırıyorsa: sayfanın kaynağını panelde **Görünüm -> Ön Yüz -> İzinli Kaynaklar** altında ekleyin (ya da `PUT /api/v1/panel/frontend/origins`, en fazla 20).
+`https://play.example.com` adresindeki bir sayfa `https://example.com` adresindeki Pano'yu çağırıyorsa: sayfanın kaynağını panelde **Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları) -> İzinli Kaynaklar** altında ekleyin (ya da `PUT /api/v1/panel/frontend/origins`, en fazla 20).
 
 - Biçim `scheme://host[:port]`, yol yok, joker yok. `localhost` veya IP değilse `https`.
 - `website-url` ile aynı kayıtlı alan adını paylaşmalıdır. Farklı alan adı reddedilir (`ORIGIN_DIFFERENT_SITE`): bunun yerine ön yüz anahtarı kullanın.
@@ -36,7 +36,7 @@ Eksik veya yanlış belirteç `403 INVALID_CSRF_TOKEN` döner. `@panomc/sdk` ve 
 
 ## 3. Bir sunucu (ön yüz anahtarı + oturum belirteci)
 
-BFF, özel bir ön yüz ya da Pano'yu çok sayıda ziyaretçi adına çağıran herhangi bir sunucu **ön yüz anahtarı** kullanır. **Görünüm -> Ön Yüz -> Anahtarlar** altında oluşturun. Bir kez gösterilir, iki `.env` satırıyla birlikte:
+BFF, özel bir ön yüz ya da Pano'yu çok sayıda ziyaretçi adına çağıran herhangi bir sunucu **ön yüz anahtarı** kullanır. **Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları) -> Anahtarlar** altında oluşturun. Bir kez gösterilir, iki `.env` satırıyla birlikte:
 
 ```sh
 PANO_API_URL=https://example.com/api
@@ -48,6 +48,8 @@ PANO_FRONTEND_KEY=pfk_...
 | `X-Pano-Frontend-Key: pfk_...` | Sunucunuzu tanıtır. Yanlış anahtar: `401 INVALID_FRONTEND_KEY`. |
 | `X-Pano-Client-Ip: 203.0.113.9` | Ziyaretçinin adresi. Yalnızca geçerli anahtarla dikkate alınır; aksi halde `400 INVALID_CLIENT_IP`. |
 | `Authorization: Bearer <sessionToken>` | Ziyaretçinin oturumu, giriş cevabından. |
+
+Anahtarlar yalnızca ön yüz modu Tema değilken çalışır: Tema modunda anahtar oluşturulamaz ve kayıtlı anahtarla gelen istek `403 FRONTEND_ACCESS_DISABLED` döner. Kayıtlı anahtarlar Özel uygulama, Harici ya da Yok modunda yeniden çalışır. İzinli kaynaklar her modda çalışır.
 
 Anahtar kaynak denetimini atlar ve ziyaretçi adresi başına kendi hız sınırı kovalarına sahiptir. Parola, captcha ve 2FA kuralları aynen çalışır.
 

@@ -4,7 +4,7 @@
 
 ## İki komut
 
-Pano çalışıyor olmalı (burada `http://localhost:8088`). Önce bir anahtar oluşturun: **Görünüm -> Ön Yüz -> Anahtarlar -> Anahtar Oluştur** ve gösterdiği `.env` satırlarını saklayın.
+Pano çalışıyor olmalı (burada `http://localhost:8088`). Önce bir anahtar oluşturun: **Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları) -> Anahtarlar -> Anahtar Oluştur** ve gösterdiği `.env` satırlarını saklayın.
 
 ```sh
 bunx @panomc/client-gen new my-site --url http://localhost:8088
@@ -25,7 +25,7 @@ Anahtar yoksa herkese açık sayfalar (yazılar, mağaza) çalışır; giriş ve
 
 ## Ön yüz modları
 
-**Görünüm -> Ön Yüz -> Mod** altında seçin:
+**Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları) -> Mod** altında seçin:
 
 | Mod | Ne çalışır | Ne zaman |
 |---|---|---|
@@ -64,7 +64,7 @@ Hedefi siz üstlenene kadar vardırlar.
 
 Pano'nun oluşturduğu her bağlantının bir hedef adı vardır. Çözümleme sırası, ilk bulunan kazanır:
 
-1. **Görünüm -> Ön Yüz** altında koyduğunuz geçersiz kılma (`PUT /api/v1/panel/frontend/urls`).
+1. **Görünüm -> Temalar -> dişli düğmesi (Ön yüz ayarları)** altında koyduğunuz geçersiz kılma (`PUT /api/v1/panel/frontend/urls`).
 2. Ön yüzünüzün manifest veya tanımlayıcısındaki `urls`. `false` "böyle bir sayfa yok" demektir.
 3. Tema modunda, temanın o sayfa için kendi rotası.
 4. Varsa `/_pano/<hedef>` yedek sayfası; yoksa bağlantı bırakılır.
