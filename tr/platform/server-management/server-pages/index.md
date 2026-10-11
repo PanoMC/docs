@@ -78,13 +78,13 @@ gizlenir ve klasörün dışındaki hiçbir şeye ulaşılamaz.
 
 ## Yedekler {#backups}
 
-- **Tam** tek bir `.zip` yazar; **Snapshot** yalnızca sonuncusundan bu yana değişeni saklar. **Her
+- **Tam** tek bir `.zip` yazar; **Kayıt Noktası** yalnızca sonuncusundan bu yana değişeni saklar. **Her
   şey**, **Sadece dünyalar** ya da **Özel** yollar seçin; **Hariç tut** için de desenler verin.
 - Çalışan bir sunucu önce diske kaydedilir; böylece yedek tutarlı olur.
 - **Geri yükle**, sunucunun durdurulmuş olmasını ve parolanızı ister. Mevcut dünyalar önce bir
   `pre-restore-…` yedeğine kaydedilir. Yalnızca eklenti varsa geri yükleme bir sonraki açılışta
   gerçekleşir.
-- Varsayılan olarak en yeni 10 tam yedek ve 24 snapshot tutulur. **Sabitlenmiş** yedekler asla
+- Varsayılan olarak en yeni 10 tam yedek ve 24 Kayıt Noktası tutulur. **Sabitlenmiş** yedekler asla
   silinmez.
 
 > Yedekler düğümde (ya da sunucunun yanında) durur. Yönetilen bir sunucuyu ya da düğümünü silmek

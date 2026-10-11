@@ -48,6 +48,7 @@ pano-account {
 ```jsonc
 email {
   enabled = false
+  provider = "SMTP" # "SMTP" (aşağıdaki ayarlar) veya "PANO_MAIL"
   sender = ""      # örn: "Pano <no-reply@domain.com>" - genelde kullanıcı adıyla aynı olmalıdır
   hostname = ""    # örn: "smtp.gmail.com"
   port = 465
@@ -66,7 +67,24 @@ email {
 
 - Kurulum sırasında opsiyoneldir; sonradan **Panel → Ayarlar → Platform** üzerinden yapılandırılabilir.
 - SMTP olmadan, şifre sıfırlama ve doğrulama e-postaları çalışmaz.
+- `provider`: e-postanın nasıl gönderileceği. `SMTP` bu bloktaki ayarları kullanır. `PANO_MAIL`, kurulumun bağlı olduğu Pano hesabının [Pano Mail](#pano-mail) hizmetiyle gönderir; SMTP ayarları kullanılmaz. Varsayılan **SMTP**. Dosyayı düzenlemek yerine **Panel → Ayarlar → Platform**'dan değiştirin.
 - `host-managed`, `host-sender` ve `custom` yalnızca bir **Pano Host** kurulumunda işe yarar; başka yerde dokunmayın.
     - `host-managed`: `true` ise bu blok kurulumun Pano Host e-postasını izler ve her açılışta yeniden yazılır. **Panel → Ayarlar**'da başka e-posta ayarları kaydetmek bunu `false` yapar, böylece ayarlarınız kalır. Varsayılan **true**.
     - `host-sender`: Pano Host e-postasında kurulumun varsayılanı yerine kullanılan gönderen; açılışlar arasında korunur. Boş (`null`) varsayılan demektir.
     - `custom`: kendi SMTP ayarlarınızın bir kopyası (`sender`, `hostname`, `port`, `username`, `password`, `ssl`, `starttls`, `authMethods`); Pano Host e-postası kullanılırken saklanır, böylece onlara geri dönünce hiçbir şey kaybolmaz. Otomatik doldurulur.
+
+### Pano Mail {#pano-mail}
+
+**Pano Mail**, Pano hesabınızla gelen e-posta gönderimidir; kendi e-posta sunucunuza ihtiyacınız kalmaz. Kurulum
+sihirbazının e-posta adımında ya da sonradan **Panel → Ayarlar → Platform**'da **Kendi e-posta sunucum** yerine
+**Pano Mail**'i seçin. Kurulumun Pano hesabınıza bağlı olması gerekir.
+
+- **Ücretsiz paket.** Her hesap için ücretsizdir, aylık ve günlük bir hakkı vardır (panel ikisini de gösterir) ve
+  hiçbir ayar gerekmeden hemen çalışır. Daha büyük paketler Pano web sitesinden seçilebilir.
+- **Gönderici adresi.** Her hesaba bizim verdiğimiz bir alt alan adında bir adres ücretsiz verilir. Adı
+  değiştirilebilir ama kaldırılamaz. Pano web sitesinden kendi alan adınızı da ekleyebilirsiniz; site sizden birkaç
+  DNS kaydı eklemenizi ister. `@` işaretinden önceki kısmı panelden değiştirebilirsiniz.
+- **Kullanım.** Panel bugün ve bu ay ne kadar kullanıldığını ve hakkın ne zaman sıfırlandığını gösterir. Bir
+  limite yaklaştığınızda uyarılırsınız; e-posta, limit sıfırlanana ya da daha büyük bir pakete geçene kadar durur.
+- **Pano web sitesinde.** Hesabınızın **E-posta** sekmesi paketi, tüm Pano'larınızın kullanımını ve son 30 günde
+  gönderilen e-postaların kaydını gösterir.

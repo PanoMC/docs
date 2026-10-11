@@ -127,11 +127,15 @@ You’ll see the **Setup Wizard**, guiding you through five simple steps:
    Configure email sending if you wish.  
    This step is **optional**, and if you decide to skip it — **no worries!**  
    You can always enable or update SMTP settings later inside the **Panel → Settings → Platform** section.  
-   *(However, some features like password recovery may not work until it’s configured.)*
+   *(However, some features like password recovery may not work until it’s configured.)*  
+   No mail server? Choose **Pano Mail** here: sign in with your Pano account and e-mail works right away, free, with no set-up. See [Pano Mail](../configuration/services/#pano-mail).
 
 5. **Account Linking & Admin Creation**
    - If you already have a **Pano Account**, you can link it here by pressing **connect** button — your email and username will auto-fill.
    - Otherwise, create a new **admin account** (don’t forget your password — it’s required for login!).
+   - With a linked account you can tick **Back up daily with free Pano Backup** to have daily backups from the first day. See [Backups](../backups/).
+
+> Moving from another Pano? The **Transfer** button of the wizard offers **Restore from a backup file**: choose a `.panoarc` file and Pano restores that site. See [Backups](../backups/#download).
 
 To finish the setup, click **Finish**.  
 Pano will finalize the installation and automatically redirect you to your new **admin panel**.

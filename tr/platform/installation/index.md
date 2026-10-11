@@ -127,12 +127,16 @@ Ekranda sizi beş basit adımdan geçiren **Kurulum Sihirbazı** görünecektir:
    E-posta gönderimi için SMTP ayarlarını yapabilirsiniz.  
    Bu adım **isteğe bağlıdır** ve atlamak isterseniz **endişelenmeyin!**  
    Daha sonra **Panel → Ayarlar → Platform** bölümünden SMTP ayarlarını yeniden etkinleştirebilir veya güncelleyebilirsiniz.  
-   *(Ancak yapılandırılmazsa “şifremi unuttum” gibi bazı özellikler çalışmayabilir.)*
+   *(Ancak yapılandırılmazsa “şifremi unuttum” gibi bazı özellikler çalışmayabilir.)*  
+   E-posta sunucunuz yok mu? Burada **Pano Mail**'i seçin: Pano hesabınızla giriş yapın, e-posta ayar gerekmeden, ücretsiz ve hemen çalışır. Bkz. [Pano Mail](../configuration/services/#pano-mail).
 
 5. **Hesap Bağlama ve Yönetici Oluşturma**
     - Zaten bir **Pano Hesabınız** varsa, **Bağlan (Connect)** düğmesine tıklayarak hesabınızı bağlayabilirsiniz — e-posta ve kullanıcı adınız otomatik doldurulur.
     - Eğer hesabınız yoksa, yeni bir **yönetici (admin) hesabı** oluşturun.  
       (Şifrenizi unutmayın, panele giriş için gereklidir.)
+    - Hesap bağlıysa **Ücretsiz Pano Backup ile günlük yedek al** kutusunu işaretleyerek ilk günden günlük yedek alabilirsiniz. Bkz. [Yedekler](../backups/).
+
+> Başka bir Pano'dan mı taşınıyorsunuz? Sihirbazdaki **Transfer Et** düğmesi **Yedek dosyasından geri yükle** seçeneğini sunar: bir `.panoarc` dosyası seçin, Pano o siteyi geri yükler. Bkz. [Yedekler](../backups/#download).
 
 Kurulumu tamamlamak için **Tamamla (Finish)** butonuna basın.  
 Pano kurulumu sonlandıracak ve otomatik olarak yeni **yönetici panelinize** yönlendirecektir.

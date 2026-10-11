@@ -48,6 +48,7 @@ pano-account {
 ```jsonc
 email {
   enabled = false
+  provider = "SMTP" # "SMTP" (the settings below) or "PANO_MAIL"
   sender = ""      # e.g., "Pano <no-reply@domain.com>" - mostly must be same with username
   hostname = ""    # e.g., "smtp.gmail.com"
   port = 465
@@ -66,7 +67,24 @@ email {
 
 - Optional during setup; configurable later via **Panel → Settings → Platform**.
 - Without SMTP, password recovery and verification emails will not work.
+- `provider`: how mail is sent. `SMTP` uses the settings in this block. `PANO_MAIL` sends through the [Pano Mail](#pano-mail) of the Pano account this installation is connected to, and the SMTP settings are not used. Default **SMTP**. Switch it in **Panel → Settings → Platform** instead of editing the file.
 - `host-managed`, `host-sender` and `custom` only matter on a **Pano Host** instance; leave them alone elsewhere.
     - `host-managed`: `true` means this block follows the instance's Pano Host mail and is rewritten on every boot. Saving other mail settings in **Panel → Settings** sets it to `false`, so they stay. Default **true**.
     - `host-sender`: the sender used with Pano Host mail instead of the instance's default, kept across boots. Empty (`null`) means the default.
     - `custom`: a copy of your own SMTP settings (`sender`, `hostname`, `port`, `username`, `password`, `ssl`, `starttls`, `authMethods`), kept while Pano Host mail is in use so switching back to them loses nothing. Filled in automatically.
+
+### Pano Mail {#pano-mail}
+
+**Pano Mail** is e-mail sending that comes with your Pano account, so you do not need a mail server of
+your own. Pick **Pano Mail** instead of **Own mail server** in the e-mail step of the setup wizard, or later in
+**Panel → Settings → Platform**. The installation must be connected to your Pano account.
+
+- **Free plan.** Free for every account, with a monthly and a daily allowance (the panel shows both), and it works
+  right away with no set-up. Bigger plans can be chosen on the Pano website.
+- **Sender address.** Every account gets one free address on a subdomain we give you. It can be renamed but not
+  removed. You can also add your own domain on the Pano website, which asks you to add a few DNS records. The part
+  before the `@` can be changed in the panel.
+- **Usage.** The panel shows what was used today and this month, and when the allowance resets. You are warned when you get
+  close to a limit, and e-mail pauses until it resets or you choose a bigger plan.
+- **On the Pano website.** The **E-mail** tab of your account shows the plan, the usage of all your Panos and a log of the
+  e-mails sent in the last 30 days.

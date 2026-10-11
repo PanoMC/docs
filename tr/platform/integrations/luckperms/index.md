@@ -53,7 +53,7 @@ Etkinleştirildiğinde, Pano MC Eklentisi LuckPerms'i otomatik olarak tespit ede
 
 ### Pano'dan Oyuna (Gelen)
 Pano Panelinin **İzinler** bölümünde değişiklikleri kaydettiğinizde:
-1. Pano, Pano MC Eklentisine bir anlık görüntü (snapshot) güncellemesi gönderir.
+1. Pano, Pano MC Eklentisine bir Kayıt Noktası güncellemesi gönderir.
 2. Eklenti bu değişiklikleri LuckPerms'e anında uygular.
 3. Gruplar ve Trackler güncellenir ve nodlar senkronize edilir.
 
@@ -62,7 +62,7 @@ Pano Panelinin **İzinler** bölümünde değişiklikleri kaydettiğinizde:
 Oyun içinde bir izin değişikliği gerçekleştiğinde (örneğin `/lp user ... permission set ...` kullanarak):
 1. LuckPerms bir olay (event) tetikler.
 2. Pano MC Eklentisi bu olayı yakalar ve toplu değişiklikleri işlemek için kısa bir bekleme süresi (debounce) bekler.
-3. Eklenti, mevcut izinler durumunuzun yeni bir anlık görüntüsünü Pano'ya gönderir.
+3. Eklenti, mevcut izinler durumunuzun yeni bir Kayıt Noktasını Pano'ya gönderir.
 
 ## Güvenlik ve Çakışma Yönetimi
 
