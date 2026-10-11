@@ -53,7 +53,7 @@ Restoring replaces what is on the Pano now, so use it with care.
 ## Deleting and downloading {#download}
 
 - **Delete** removes a backup from Pano Backup for good. Other backups stay as they are.
-- A copy can be **downloaded** from the **Pano Backup** page of your account on the Pano website. It shows
+- A copy can be **downloaded** from the panel (the row's menu) or from the **Pano Backup** page of your account on the Pano website. That page shows
   one list of all your backups, with the Pano each one belongs to, and lets you download or delete them.
   A snapshot is packed for you and comes as a single **`.panoarc`** file.
 - A `.panoarc` file is the same single-file backup a full archive uses. Keep it anywhere you like, and

@@ -54,7 +54,7 @@ Geri yükleme Pano'daki mevcut veriyi değiştirir, dikkatli kullanın.
 ## Silme ve indirme {#download}
 
 - **Sil**, bir yedeği Pano Backup'tan kalıcı olarak kaldırır. Diğer yedekler olduğu gibi kalır.
-- Bir kopya, Pano web sitesindeki hesabınızın **Pano Backup** sayfasından **indirilebilir**. Bu sayfa tüm
+- Bir kopya panelden (satırın menüsünden) ya da Pano web sitesindeki hesabınızın **Pano Backup** sayfasından **indirilebilir**. Bu sayfa tüm
   yedeklerinizi, her birinin hangi Pano'ya ait olduğuyla birlikte tek bir listede gösterir; buradan indirebilir
   ya da silebilirsiniz. Bir Kayıt Noktası sizin için paketlenir ve tek bir **`.panoarc`** dosyası olarak gelir.
 - `.panoarc` dosyası, tam arşivin kullandığı tek dosyalık yedekle aynıdır. İstediğiniz yerde saklayın;
