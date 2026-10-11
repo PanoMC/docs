@@ -48,20 +48,36 @@ Yedekler sayfasında bir yedeğin yanındaki **Geri Yükle**'ye basın. Pano sı
 4. veritabanını, ayarları, eklentileri, temaları ve yüklenen dosyaları yedektekilerle değiştirir,
 5. yeniden başlar. Bir şey ters giderse güvenlik yedeği geri getirilir.
 
-Hesabınızın tamamlanmış her Kayıt Noktası, başka bir Pano'nuzda alınmış olsa bile, bu şekilde geri yüklenebilir.
-Geri yükleme Pano'daki mevcut veriyi değiştirir, dikkatli kullanın.
+Geri yükleme Pano'daki mevcut veriyi değiştirir, dikkatli kullanın. Yedekler sayfası yalnızca **bu** Pano'nun
+yedeklerini listeler. Başka bir Pano'nuzda alınmış bir yedeği geri yüklemek için onu web sitesinden indirin
+(aşağıya bakın) ve **Dosyadan geri yükle**'yi kullanın.
 
 ## Silme ve indirme {#download}
 
 - **Sil**, bir yedeği Pano Backup'tan kalıcı olarak kaldırır. Diğer yedekler olduğu gibi kalır.
-- Bir kopya panelden (satırın menüsünden) ya da Pano web sitesindeki hesabınızın **Pano Backup** sayfasından **indirilebilir**. Bu sayfa tüm
-  yedeklerinizi, her birinin hangi Pano'ya ait olduğuyla birlikte tek bir listede gösterir; buradan indirebilir
-  ya da silebilirsiniz. Bir Kayıt Noktası sizin için paketlenir ve tek bir **`.panoarc`** dosyası olarak gelir.
+- Bir kopya panelden (satırın menüsünden) ya da Pano web sitesindeki hesabınızın **Pano Backup** sayfasından **indirilebilir**.
+  Panel yalnızca bu Pano'nun yedeklerini düz bir listede gösterir. Web sitesi hesabınızın tüm listesini,
+  her birinin hangi Pano'ya ait olduğuyla birlikte gösterir; buradan indirebilir ya da silebilirsiniz. Bir Kayıt Noktası sizin için paketlenir ve tek bir **`.panoarc`** dosyası olarak gelir.
 - `.panoarc` dosyası, tam arşivin kullandığı tek dosyalık yedekle aynıdır. İstediğiniz yerde saklayın;
   Yedekler sayfasındaki **Dosyadan geri yükle** ile ya da yeni bir Pano'nun kurulum sihirbazındaki
   **Yedek dosyasından geri yükle** ile geri yükleyin.
 
 Tarayıcınız büyük bir yedeği kaydedemiyorsa Pano'nun panelinden geri yükleyin.
+
+## Pano Host'a taşıma {#transfer}
+
+Bu Pano'yu [Pano Host](https://panomc.com/host) hesabınızdaki bir örneğe taşıyabilirsiniz. Web sitesinde
+onaylanacak bir şey yoktur.
+
+1. Yedekler sayfasında **Pano Host'a Aktar** düğmesine basın.
+2. Örneği seçin. Pencere, bu Pano'nun yaklaşık boyutunu ve örneğin ne kadarını alabileceğini gösterir.
+   Henüz örneğiniz yoksa **Yeni bir örnek oluştur** Pano web sitesini açar.
+3. **Taşımayı başlat**'a basın. Hesabın sahibine e-postayla 6 haneli bir kod gönderilir. Kod 10 dakika geçerlidir.
+4. Kodu girin. Pano kendini yükler ve örnek bundan otomatik olarak geri yüklenir.
+
+Örneğin mevcut içeriği **değiştirilir**; önce onun bir güvenlik yedeği alınır. Bu Pano değişmeden çalışmaya
+devam eder. İş kartı adımı, ilerlemeyi ve hızı gösterir; taşıma bittiğinde ya da başarısız olduğunda hesabın
+sahibine bildirim gider.
 
 ## Kendi sunucunuzdaki yedekler {#local}
 

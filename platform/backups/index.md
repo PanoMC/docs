@@ -47,20 +47,38 @@ On the Backups page, press **Restore** next to a backup. Pano then:
 4. replaces the database, settings, plugins, themes and uploaded files with the backup,
 5. restarts. If anything fails, the safety backup is put back.
 
-Any finished snapshot of your account can be restored this way, also one made by another of your Panos.
-Restoring replaces what is on the Pano now, so use it with care.
+Restoring replaces what is on the Pano now, so use it with care. The Backups page lists only the backups
+of **this** Pano. To restore one made by another of your Panos, download it from the website (see below)
+and use **Restore from file**.
 
 ## Deleting and downloading {#download}
 
 - **Delete** removes a backup from Pano Backup for good. Other backups stay as they are.
-- A copy can be **downloaded** from the panel (the row's menu) or from the **Pano Backup** page of your account on the Pano website. That page shows
-  one list of all your backups, with the Pano each one belongs to, and lets you download or delete them.
+- A copy can be **downloaded** from the panel (the row's menu) or from the **Pano Backup** page of your account on the Pano website.
+  The panel shows a plain list of this Pano's backups only. The website shows the whole list of your account,
+  with the Pano each one belongs to, and lets you download or delete them.
   A snapshot is packed for you and comes as a single **`.panoarc`** file.
 - A `.panoarc` file is the same single-file backup a full archive uses. Keep it anywhere you like, and
   restore it with **Restore from file** on the Backups page, or with **Restore from a backup file** in
   the setup wizard of a fresh Pano.
 
 If your browser cannot save a large backup, restore it from the panel of the Pano instead.
+
+## Moving to Pano Host {#transfer}
+
+You can move this Pano to an instance on your [Pano Host](https://panomc.com/host) account. Nothing needs
+to be confirmed on the website.
+
+1. On the Backups page, press the **Transfer to Pano Host** button.
+2. Pick the instance. The window shows about how big this Pano is and how much the instance can take.
+   **Create a new instance** opens the Pano website if you have none yet.
+3. Press **Start transfer**. A 6-digit code is sent by e-mail to the owner of the account. It is valid for
+   10 minutes.
+4. Enter the code. Pano uploads itself and the instance is restored from it automatically.
+
+The instance's current content is **replaced**; a safety backup of it is taken first. This Pano keeps
+running unchanged. The job card shows the step, the progress and the speed, and the account owner gets a
+notification when the transfer has finished or failed.
 
 ## Backups on your own server {#local}
 
