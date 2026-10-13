@@ -13,9 +13,9 @@ Premium is currently limited to accounts with **panel access** on panomc.com —
 ::: tip TL;DR — going premium is three small changes
 Most of this page is background. The actual work is tiny:
 
-1. **Add one build flag** (or one CI environment variable) so your jar is built with a license key — [Step 1](#step-1-embed-the-license-key-at-build-time).
-2. **Keep the boilerplate's existing license check** — two short methods that a fresh `pano-boilerplate-plugin` already has — [Step 2](#step-2-add-the-runtime-license-check).
-3. **Publish as a paid resource** — pick *paid* pricing and set `useGitHubLink: false` — [Step 3](#step-3-publish-as-a-paid-resource).
+1. **Add one build flag** (or one CI environment variable) so your jar is built with a license key — [Step 1](#step-1-—-embed-the-license-key-at-build-time).
+2. **Keep the boilerplate's existing license check** — two short methods that a fresh `pano-boilerplate-plugin` already has — [Step 2](#step-2-—-add-the-runtime-license-check).
+3. **Publish as a paid resource** — pick *paid* pricing and set `useGitHubLink: false` — [Step 3](#step-3-—-publish-as-a-paid-resource).
 
 Then [test it yourself](#test-it-yourself). Everything under [How it works under the hood](#how-it-works-under-the-hood) is optional reading.
 :::
@@ -174,7 +174,7 @@ There is no Pano-side licensing configuration for the operator to get wrong — 
 
 Before you charge anyone, run the whole loop against your own account. You always pass the purchase check for your own resource, so this is the intended way to verify a premium addon end to end:
 
-1. **Publish a version** through your normal release flow to a pre-release channel (for example your `dev`/alpha channel). Publishing is what records the jar's SHA-256 hash on the Marketplace — without a recorded hash there is nothing for the license to bind to.
+1. **Publish a version** through your normal release flow to a pre-release channel (the boilerplate's is `dev`). Publishing is what records the jar's SHA-256 hash on the Marketplace — without a recorded hash there is nothing for the license to bind to.
 2. **Get that exact jar onto a local Pano.** Either build the same version with the matching license server — `./gradlew build -PlicenseServer=dev` for the dev channel — or download the published jar. It must be byte-for-byte the version whose hash was recorded in step 1.
 3. **Connect your panomc.com author account** to your local Pano in the panel settings (the same "connect account" action a real buyer uses).
 4. **Start the addon.**

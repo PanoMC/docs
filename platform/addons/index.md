@@ -85,14 +85,14 @@ There are **two ways** to install addons:
 
 ### 2. From the Pano Store
 
-1. In the same **Install Addon** modal, click **Browse Store**.
+1. In the same **Install Addon** modal, click **Install From Pano Store**.
 2. Find an addon you’d like to use — free or paid.
 3. Click **Install**.
 4. Once installation finishes, it will automatically be available in your addons list.
 
 You can explore new addons, purchase premium ones, or update existing ones — all directly from the **Pano Store**.
 
-> Marketplace requires a connected [Pano Account](./advanced/connect-pano-account.md).
+> Marketplace requires a connected [Pano Account](../configuration/services/).
 >
 > ⚠️ Any not verified by Pano addon might be unsafe, use at your own risk!
 
@@ -166,13 +166,13 @@ Example file structure for Pano and addons:
 ├── config.conf
 ├── plugins/
 │    ├── disabled.txt (optional)
-│    ├── pano-announcements-plugin/
-│    │     └── plugin.conf
-│    ├── pano-auth-integrations-plugin/
-│    │     └── plugin.conf
-│    ├── pano-announcements-plugin.jar
-│    ├── pano-auth-integrations-plugin.jar
-│    └── pano-feedback-plugin.jar
+│    ├── pano-plugin-announcement/
+│    │     └── config.conf
+│    ├── pano-plugin-social-login/
+│    │     └── config.conf
+│    ├── pano-plugin-announcement-1.1.0.jar
+│    ├── pano-plugin-social-login-1.1.0.jar
+│    └── pano-plugin-faq-1.1.0.jar
 ├── themes/
 └── file-uploads/
 ```
@@ -182,7 +182,7 @@ Example file structure for Pano and addons:
 | Action                      | Location                                        | Recommended Method                   |
 |-----------------------------|-------------------------------------------------|--------------------------------------|
 | **Install Addon (local)**   | `Panel → Addons → Install Addon`                | Drag & drop or file picker           |
-| **Install Addon (store)**   | `Panel → Addons → Install Addon → Browse Store` | Click install                        |
+| **Install Addon (store)**   | `Panel → Addons → Install Addon → Install From Pano Store` | Click install                        |
 | **Enable / Disable**        | `Panel → Addons`                                | Toggle button                        |
 | **Delete Addon**            | `Panel → Addons`                                | Delete with confirmation             |
 | **Change Plugin Directory** | JVM option                                      | `-Dpf4j.pluginsDir=/path/to/plugins` |

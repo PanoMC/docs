@@ -19,7 +19,7 @@ curl -s http://localhost:8088/api/v1/openapi.json -o pano-openapi.json
 Получите документ плагина market:
 
 ```sh
-curl -s http://localhost:8088/api/plugins/pano-plugin-market/_/openapi.json -o market-openapi.json
+curl -s http://localhost:8088/api/v1/plugins/pano-plugin-market/_/openapi.json -o market-openapi.json
 ```
 
 Плагинам ничего дополнительного не нужно: Pano строит документ из эндпоинтов плагина, в том числе для плагинов с закрытым кодом. У установленных, но остановленных плагинов документа нет.
@@ -29,7 +29,7 @@ curl -s http://localhost:8088/api/plugins/pano-plugin-market/_/openapi.json -o m
 - `servers[0].url` это префикс: `/api/v1` для ядра, `/api/plugins/<pluginId>` для плагина. Пути операций идут после него.
 - `operationId` это имя класса эндпоинта без `API`, например `GetPosts`. [Типизированный клиент](../client/) называет функции по нему.
 - `parameters` и `requestBody` это JSON Schema, взятая из собственной валидации эндпоинта.
-- `responses` перечисляет тело успеха и конверт ошибки. Общие коды ошибок (`NOT_LOGGED_IN`, `NO_PERMISSION`, `INVALID_CSRF_TOKEN`, `TOO_MANY_REQUESTS`, `MAINTENANCE_MODE_ENABLED`) общие.
+- `responses` перечисляет тело успеха и конверт ошибки. Общие коды ошибок (`NOT_LOGGED_IN`, `NO_PERMISSION`, `INVALID_CSRF_TOKEN`, `RATE_LIMIT_EXCEEDED`, `MAINTENANCE_MODE_ENABLED`) общие.
 - `deprecated: true` значит, что замена существует; `x-pano-removal` это самая ранняя дата удаления.
 - `x-pano-stability` равен `public` или `internal`. Обещание из [Основ API](../api-basics/) несут только публичные операции.
 - `x-pano-undocumented: true` значит, что автор не дал описания: путь и входные данные настоящие, ответ произвольный.

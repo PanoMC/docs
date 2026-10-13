@@ -126,6 +126,8 @@ abstract class ShoutDao : Dao<Shout>(Shout::class.java) {
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
     override val paths = listOf(Path("/shouts", RouteType.GET))
 
+    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler? = null
+
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
         return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient)))
@@ -135,7 +137,7 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint` заставляет маршрут зарегистрироваться сам в тот миг, когда аддон загружается — вызова регистрации нет.
 - Базовый класс выбирает, кому разрешён вход: `Api` (публичный), `LoggedInApi` (авторизованные), `PanelApi` (администраторы), `SetupApi` (только установка).
-- Путь **относительный**: Pano отдаёт этот эндпоинт по `/api/plugins/pano-plugin-shoutbox/shouts`. `getValidationHandler` необязателен; если проверять нечего, его не пишут.
+- Путь **относительный**: Pano отдаёт этот эндпоинт по `/api/plugins/pano-plugin-shoutbox/shouts`. Если проверять нечего, `getValidationHandler` возвращает `null`; версия Pano, с которой компилируется каркас, требует этот override, в более новых он необязателен.
 - `Successful(map)` сериализуется ровно в вашу map. Ошибки имеют вид `{"error":{"code":"…"}}`.
 
 ::: tip Контрольная точка: обратитесь к своему первому эндпоинту
@@ -166,7 +168,7 @@ class ManageShoutboxPermission : PanelPermission("fa-bullhorn")
 `@PermissionDefinition` регистрирует его автоматически; строка — это иконка Font Awesome, показываемая в панели. **Узел права доступа**, который вы будете проверять в других местах, выводится из имени класса по правилу → `pano.plugin.pano-plugin-shoutbox.manage.shoutbox`. Этот узел вы никогда не пишете в Kotlin — достаточно передать `ManageShoutboxPermission()` в `requirePermission` — но вы **будете** повторять эту точную строку в коде фронтенда, так что запомните её.
 
 ::: tip Контрольная точка: увидьте право доступа
-После пересборки и перезапуска откройте **Панель → Роли** и отредактируйте роль — должно появиться новое право доступа с иконкой **рупора**. Один сюрприз: **администраторы обходят проверки прав доступа**, так что, чтобы на самом деле увидеть отказ `NO_PERMISSION`, вы должны тестировать с ролью не-администратора, которой это право не выдано.
+После пересборки и перезапуска откройте **Панель → Разрешения** и отредактируйте роль — должно появиться новое право доступа с иконкой **рупора**. Один сюрприз: **администраторы обходят проверки прав доступа**, так что, чтобы на самом деле увидеть отказ `NO_PERMISSION`, вы должны тестировать с ролью не-администратора, которой это право не выдано.
 :::
 
 ## Публикация выкрика (эндпоинт панели)

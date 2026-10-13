@@ -31,7 +31,7 @@ mail server. Later changes to them are ignored; change the settings in the panel
 | `PANO_DB_NAME`, `PANO_DB_USER`, `PANO_DB_PASSWORD` | Database and its user |
 | `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP server |
 | `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | SMTP login |
-| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Sender address, STARTTLS on or off |
+| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Sender address; STARTTLS mode `DISABLED`, `OPTIONAL` or `REQUIRED` (default: chosen from the port) |
 | `PANO_HTTP_PORT` | Port Pano listens on inside the container (8088) |
 | `PANO_JVM_ARGS` | Java options, space separated (`-XX:MaxRAMPercentage=75`) |
 
@@ -47,7 +47,8 @@ docker run -d --name pano \
   ghcr.io/panomc/pano:latest
 ```
 
-Keep passwords out of shell history: use `--env-file` or your orchestrator's secrets.
+Keep passwords out of shell history: use `--env-file` or your orchestrator's secrets. The
+[one-command installer](../../installation/installer/) sets the same variables in its `pano.env`.
 
 ### Pano Host variables
 
@@ -55,7 +56,7 @@ Pano Host sets a few more. You do not need them for your own installs.
 
 | Variable | Purpose |
 | --- | --- |
-| `PANO_HOSTED` | `pano-host` marks the instance as managed by Pano Host. Informational: the panel shows "managed by Pano Host" and quota notices, nothing is locked |
+| `PANO_HOSTED` | `pano-host` marks the instance as managed by Pano Host: the panel shows "managed by Pano Host" and quota notices. The variables above are then applied on **every** start, and the port and SSL settings in the panel are ignored |
 | `PANO_HOST_WORKLOAD_ID` | The instance's id at Pano Host |
 | `PANO_HOST_INSTANCE_SECRET` | Lets the instance redeem panel sign-ins from panomc.com and read its notices |
 | `PANO_HOST_API_URL` | Pano Host API address |

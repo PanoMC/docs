@@ -2,15 +2,10 @@
 
 ## Example Project
 
-Check out our example integration plugin repository:
+There is no separate example repository. The Pano MC Plugin's own messages are the reference; they use the same classes as your plugin:
 
-- [Example Integration Plugin](https://github.com/PanoMC/example-integration-plugin) (Reference implementation)
-
-This repository demonstrates:
-- Setting up Pano MC Plugin API dependency
-- Creating custom requests and handlers
-- Hooking into third-party plugins
-- Best practices and patterns
+- [Requests](https://github.com/PanoMC/pano-mc-plugin/tree/alpha/Core/src/main/kotlin/com/panomc/plugins/pano/core/platform/request) (for example `GetPlayerInfoRequest`)
+- [Responses](https://github.com/PanoMC/pano-mc-plugin/tree/alpha/Core/src/main/kotlin/com/panomc/plugins/pano/core/platform/message/response) (for example `GetPlayerInfoMessage`)
 ## Testing Your Integration
 
 ### Local Testing
@@ -31,6 +26,6 @@ Enable debug logging in your plugin:
 
 ```kotlin
 if (config.getBoolean("debug", false)) {
-    logger.info("[Debug] Request sent: ${request.getRequestType()}")
+    logger.info("[Debug] Request sent: ${request::class.simpleName} (${request.eventId})")
 }
 ```

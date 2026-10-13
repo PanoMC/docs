@@ -10,7 +10,7 @@ Bu sayfada göreceğiniz birkaç terim:
 
 - **PF4J** (Plugin Framework for Java) — Pano çalışırken eklenti jar'larını bulan ve yükleyen bir kütüphane. Onu asla kendiniz çağırmazsınız; yalnızca belirli meta verilerin var olmasına ihtiyaç duyar.
 - **JAR** — Java'nın paketlenmiş çıktısı, ki gerçekte yalnızca bir zip dosyasıdır. Eklentinizi derlediğinizde bir `.jar` elde edersiniz.
-- **`MANIFEST.MF`** — o jar'ın *içinde* (`META-INF/` altında) bulunan, PF4J'nin okuduğu meta veriyi tutan düz metin bir dosya.
+- **`MANIFEST.MF`** — o jar'ın *içinde* (`META-INF/` altında) bulunan, Pano'nun okuduğu meta veriyi tutan düz metin bir dosya.
 
 `MANIFEST.MF`'i elle **düzenlemezsiniz**. Bunun yerine her şeyi bir properties dosyasında ayarlarsınız ve derleme değerlerinizi sizin için manifest'e kopyalar.
 
@@ -54,10 +54,11 @@ Yazdırılan satırlar arasında `id`, `name` ve `main-class`'ınızı görmelis
 
 ### Ne üretilir
 
-Yukarıdaki `gradle.properties` verildiğinde, derleme `META-INF/MANIFEST.MF`'e şunun gibi satırlar yazar (öznitelik adları PF4J'den gelir; değerler doğrudan properties'inizden gelir):
+Yukarıdaki `gradle.properties` verildiğinde, derleme `META-INF/MANIFEST.MF`'e şunun gibi satırlar yazar (öznitelik adları Pano'nun okuduğu adlardır; değerler doğrudan properties'inizden, `api-level` ise karşısına derlediğiniz Pano'dan gelir):
 
 ```
 id: pano-plugin-announcement
+api-level: 1
 name: Announcements
 description: Create, edit and manage your Minecraft server announcements!
 pano-version: local-build
@@ -83,13 +84,15 @@ Dosyanın tüm amacı budur: **`gradle.properties` girer, `MANIFEST.MF` çıkar.
 *   `pluginLicense`: **(İsteğe bağlı)** Eklentinin lisansı (örn. `MIT`, `Apache-2.0`).
 *   `pluginSourceUrl`: **(İsteğe bağlı)** Eklentinin kaynak koduna URL.
 *   `pluginDependencies`: **(İsteğe bağlı)** Eklentinizin ihtiyaç duyduğu diğer Pano eklentileri, virgülle ayrılmış — örn. `pluginDependencies=other-plugin, some-plugin?`. Tam söz dizimi için aşağıdaki [Bağımlılıklar](#bagımlılıklar)'a bakın.
-*   `pluginRequires`: **(İsteğe bağlı)** Eklentinizin üzerinde çalışmasına *izin verilen* Pano sürümleri, `>=1.0.0` gibi bir sürüm aralığı olarak yazılır. Boş (varsayılan) herhangi bir sürüm anlamına gelir. Yalnızca eklentiniz belirli bir Pano sürümünde eklenen bir özelliğe dayanıyorsa ayarlayın, örn. `pluginRequires=>=1.2.0`. (Bu, manifest `requires` özniteliğine eşlenir.)
+*   `pluginRequires`: **(İsteğe bağlı)** `>=1.0.0` gibi bir sürüm aralığı; manifest `requires` özniteliğine yazılır. Pano bugün bunu kendi sürümüyle karşılaştırmaz, bu yüzden boş bırakın; eklentinizin yüklenip yüklenmeyeceğini API seviyesi belirler (sonraki satır).
+*   `apiLevel`: Eklentinizin ihtiyaç duyduğu Pano API seviyesi; manifest'e `api-level` olarak yazılır. İskelet `apiLevel=1` yazar; satır yoksa derleme seviyeyi karşısına derlediği Pano'dan alır. `api-level` içermeyen bir jar reddedilir ("needs API level 0"), bu yüzden satırı silmeyin.
+*   `pluginFreemium`: **(İsteğe bağlı)** `true`, eklentiyi freemium olarak işaretler (manifest `freemium`). Bkz. [Freemium](/tr/addon/freemium/).
 
 ::: tip `pluginPanoVersion` vs `pluginRequires`
 Bu ikisi benzer görünür ama farklı işler yapar:
 
 - **`pluginPanoVersion`** yalnızca hangi Pano sürümüne karşı derlediğinizi *kaydeder*. Bilgilendiricidir.
-- **`pluginRequires`** *uygulanır*: bir aralık ayarlarsanız, Pano eklentinizi bunun dışındaki herhangi bir Pano sürümünde yüklemeyi reddeder.
+- **`pluginRequires`** de manifest'e yazılır, ama Pano bugün onu **uygulamaz**. Uygulanan şey **API seviyesidir**: Pano, `api-level` değeri desteklediği aralığın dışında olan bir eklentiyi reddeder.
 :::
 
 ::: tip `pluginId`'niz her yerde kullanılır — onu dikkatle seçin
@@ -169,7 +172,7 @@ Herhangi bir karakterin kaçışını bulmak için, onu bir Unicode sitesinde ar
 
 `gradle.properties` dosyası yalnızca bir kolaylık katmanıdır. Manifestinizi kendiniz yapılandırmayı tercih ediyorsanız veya dinamik değerlere ihtiyacınız varsa, `build.gradle.kts` içindeki **`shadowJar`** görevini düzenleyebilirsiniz. (`shadowJar`, eklentinizi artı kütüphanelerini Pano'nun yüklediği tek `.jar`'a paketleyen derleme adımıdır.)
 
-İşte Pano Boilerplate'in properties'i manifest'e nasıl eşlediği. Her `val … by project` satırı eşleşen değeri `gradle.properties`'ten çeker; `manifest { }` bloğu sonra onu PF4J'nin beklediği öznitelik adı altında `MANIFEST.MF`'e yazar:
+İşte Pano Boilerplate'in properties'i manifest'e nasıl eşlediği. Her `val … by project` satırı eşleşen değeri `gradle.properties`'ten çeker; `manifest { }` bloğu sonra onu Pano'nun beklediği öznitelik adı altında `MANIFEST.MF`'e yazar:
 
 ```kotlin
 shadowJar {
@@ -183,9 +186,12 @@ shadowJar {
     val pluginSourceUrl: String? by project
     val pluginDependencies: String? by project
     val pluginRequires: String? by project
+    val pluginFreemium: String? by project
 
     manifest {
         attributes["id"] = pluginId
+        // panoApiLevel: `apiLevel` of gradle.properties, else the level of the Pano you compile against
+        panoApiLevel?.let { attributes["api-level"] = it }
         attributes["name"] = pluginName
         pluginDescription?.let { attributes["description"] = it }
         attributes["pano-version"] = pluginPanoVersion
@@ -196,12 +202,13 @@ shadowJar {
         pluginSourceUrl?.let { attributes["source-url"] = it }
         pluginDependencies?.let { attributes["dependencies"] = it }
         pluginRequires?.let { attributes["requires"] = it }
+        pluginFreemium?.let { attributes["freemium"] = it }
     }
 }
 ```
 
 ::: warning Öznitelik anahtarlarını yeniden adlandırmayın
-Özellikleri serbestçe ekleyebilirsiniz, ama mevcut anahtarları (`id`, `name`, `main-class`, `pano-version` vb.) yeniden adlandırmayın. PF4J onları bu tam adlarla arar, bu yüzden yeniden adlandırılmış bir anahtar eklentinizin yüklenmesini sessizce durdurur. Referans olarak, PF4J'nin kendisi yalnızca `id`, `main-class` ve `version`'ı *gerektirir*; geri kalan her şey isteğe bağlıdır ve yalnızca ayarladığınızda manifest'e yazılır.
+Özellikleri serbestçe ekleyebilirsiniz, ama mevcut anahtarları (`id`, `name`, `main-class`, `pano-version` vb.) yeniden adlandırmayın. Pano onları bu tam adlarla okur, bu yüzden yeniden adlandırılmış bir anahtar eklentinizin yüklenmesini durdurur. `description`, `license`, `source-url`, `dependencies`, `requires` ve `freemium` isteğe bağlıdır ve yalnızca ayarladığınızda yazılır; diğerleri bulunmak zorundadır.
 :::
 
 Pano, tüm eklenti yüklemesini ve yönetimini işlemek için arka planda **PF4J** kullanır. Standart geliştirme için onunla asla doğrudan etkileşime girmezsiniz, ama daha derin teknik ayrıntıları istiyorsanız [PF4J dokümantasyonuna](https://pf4j.org/) başvurabilirsiniz.

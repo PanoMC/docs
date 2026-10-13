@@ -18,12 +18,12 @@ Pano bu komutları dinler ve eylemleri web sitesi veritabanınızla senkronize e
 
 Entegrasyon sınırlamaları nedeniyle, aşağıdaki AuthMe komutları ve özellikleri **desteklenmez**:
 
-- `/unregister` — Kayıt silme Pano'nun paneli veya web sitesi üzerinden yapılmalıdır
-- `/authme unregister <oyuncu>` — Yukarıdakiyle aynı
-- `/email` — E-posta yönetimi Pano tarafından yapılır
-- `/totp` — İki faktörlü kimlik doğrulama desteklenmez
+- `/unregister` — Engellenir. Kayıt silme Pano'nun paneli veya web sitesi üzerinden yapılmalıdır
+- `/authme unregister <oyuncu>` — Konsoldan engellenir; oyun içinde `authme.admin.unregister` izni gerekir
+- `/email` — Senkronize edilmez: e-posta yönetimi Pano tarafından yapılır
+- `/totp` — Senkronize edilmez: AuthMe'nin iki faktörlü kimlik doğrulaması desteklenmez
 
-Bir oyuncu desteklenmeyen bir komutu kullanmaya çalışırsa, bunun yerine web sitesini kullanması bildirilir.
+Engellenen bir komut **This command is unsupported by Pano!** yanıtını verir. Pano `/email` ve `/totp` komutlarını engellemez; bunları kendiniz kapatın (aşağıya bakın).
 
 > **Önerilen:** Karışıklığı önlemek ve sorunsuz bir deneyim sağlamak için, bir izin eklentisi veya AuthMe'nin kendi komut yapılandırması kullanarak **bu desteklenmeyen komutlara erişimi devre dışı bırakmanız önerilir**. Bu şekilde oyuncular yalnızca Pano uyumlu özelliklere erişebilir.
 
@@ -50,11 +50,10 @@ Daha da iyi bir kullanıcı deneyimi ve gelişmiş güvenlik için, **oyun içi 
 settings:
   registration:
     enabled: false  # Oyun içi kaydı devre dışı bırak
-  
-restrictions:
-  allowCommands:
-    - /login
-    # /register izin verilen komutlardan kaldırıldı
+  restrictions:
+    allowCommands:
+      - /login
+      # /register izin verilen komutlardan kaldırıldı
 ```
 
 Ardından oyuncuları web sitenize yönlendiren bir kick veya katılım mesajı yapılandırın: `"Lütfen https://sunucunuz.com/register adresinden kaydolun"`
@@ -64,7 +63,7 @@ Karmaşık yapılandırma ve manuel senkronizasyon gerektiren geleneksel web scr
 
 | Özellik | Geleneksel Scriptler | Pano |
 |---------|---------------------|------|
-| **Kurulum Karmaşıklığı** | Yüksek — manuel veritabanı kurulumu, yapılandırma düzenleme ve PHP scriptleri gerektirir | Düşük — sadece onay kutusunu etkinleştirin |
+| **Kurulum Karmaşıklığı** | Yüksek — manuel veritabanı kurulumu, yapılandırma düzenleme ve PHP scriptleri gerektirir | Düşük — varsayılan olarak açık |
 | **Senkronizasyon** | Manuel veya cron tabanlı | WebSocket üzerinden gerçek zamanlı |
 | **Şifre Hash'leme** | Genellikle uyumsuz veya güvensiz | Yerel CUSTOM hash desteği |
 | **Komut Desteği** | Sınırlı veya yok | Tam komut ve etkinlik desteği |

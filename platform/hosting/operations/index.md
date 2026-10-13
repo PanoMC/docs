@@ -4,7 +4,7 @@ Day-to-day work once instances run: updates, backups, crashes and logs.
 
 > [!NOTE]
 > Container mode and the `.panoarc` archive format ship with the container images from Pano
-> **1.0.0-alpha.520** on. See [Hosting Pano Instances for Others](../).
+> **1.0.0-alpha.522** on. See [Hosting Pano Instances for Others](../).
 
 ## Updates and rollback {#updates-and-rollback}
 

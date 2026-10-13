@@ -41,7 +41,7 @@ Open `src/views/HomeView.svelte`. It starts with a comment header listing **ever
     data.posts       array — posts of the current page
     data.postCount   number — total number of posts
     data.page        number — current page number
-    data.totalPage   number — total page count for pagination
+    data.totalPages  number — total page count for pagination
     themeSettings    object — theme settings from context
     onPageClick      function(data, page) — pagination handler
 -->

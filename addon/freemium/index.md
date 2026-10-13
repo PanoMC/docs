@@ -51,7 +51,7 @@ override suspend fun onStart() {
 `activeTier()` returns the owned package id (or `null`) if you want it for a log line or a status page. Prefer `hasTier` for actual gating.
 
 ::: warning Buying does not unlock instantly
-Your addon asks about packages while it starts, and a purchase made later is not pushed to the server. Until something re-checks, the feature stays locked. That is what the **refresh** button on the addon's panel page is for — see [In the panel](#in-the-panel). Answers come from a cached snapshot, so `hasTier` never blocks your code.
+Your addon asks about packages while it starts, and a purchase made later is not pushed to the server. Until something re-checks, the feature stays locked. That is what the **refresh** button on the addon's panel page is for — see [In the panel](#in-the-panel). Answers come from a cached snapshot, so `hasTier` never blocks your code — and the very first call after a start answers "not owned" while the first fetch runs in the background. Check where the feature is used, not once in `onStart`.
 :::
 
 Both methods only work on an addon that declared `pluginFreemium=true`; calling them from a normal addon throws, so a wrong-model mistake surfaces immediately instead of silently returning `false`.

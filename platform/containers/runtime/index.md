@@ -38,7 +38,7 @@ Going back to an older tag installs the older jar, but the **database is not dow
 
 ## Never use `-bg` {#never-use-bg}
 
-[`-bg`](../../installation/#background-mode-bg) makes Pano respawn itself as a detached process and
+[`-bg`](../../installation/manual/#background-mode-bg) makes Pano respawn itself as a detached process and
 exit. In a container that exit ends the container. The images never pass `-bg`; do not add it.
 
 ## The runtime image (advanced) {#runtime-image}
@@ -60,8 +60,8 @@ Nothing is seeded: you change the Pano version by replacing the jar and `.pano-j
 ## Java version {#java-version}
 
 Pano targets **Java 11**, so Java 11 is its minimum and the full image uses it. Pick a newer
-`runtime-jre<N>` when a plugin you use needs it. [Managed servers](../../server-management/managed-servers/)
-on the local `pano-node` need Java 17 or newer.
+`runtime-jre<N>` when a plugin you use needs it. The local `pano-node` for
+[managed servers](../../server-management/managed-servers/) runs on the same Java, so Java 11 is enough for it too.
 
 The images use a **glibc** base (Eclipse Temurin on Ubuntu). Some of Pano's native libraries, such as
 the Argon2 password hashing, only ship glibc builds; on a musl image like **Alpine**, logging in

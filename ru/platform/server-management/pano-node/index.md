@@ -11,7 +11,7 @@
 каждому [выпуску Pano](https://github.com/PanoMC/Pano/releases). Нужна **Java 11 или новее**.
 
 ```bash
-curl -fsSL https://panel.example.com/api/node/pano-node.jar -o pano-node.jar
+curl -fsSL https://panel.example.com/api/v1/node/pano-node.jar -o pano-node.jar
 
 # Первый запуск: сопряжение по коду из Узлы → Добавить узел → Вручную
 java -jar pano-node.jar --pano https://panel.example.com --code 123456 --data ./node-data
@@ -84,7 +84,7 @@ Pano Agent передаёт Pano сервер, который у вас уже �
 
 ```bash
 cd /home/mc/survival
-curl -fLo pano-agent.jar 'https://panel.example.com/api/node/pano-agent.jar'
+curl -fLo pano-agent.jar 'https://panel.example.com/api/v1/node/pano-agent.jar'
 
 # Остановите сервер и один раз выполните команду из окна (код срабатывает один раз и действует 1 минуту)
 java -jar pano-agent.jar --pano 'https://panel.example.com' --code k7m2x9qa4tj3n8wp

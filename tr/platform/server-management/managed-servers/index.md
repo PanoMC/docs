@@ -19,7 +19,7 @@ yanındaki **düğüm simgesinden** yönetilir ve **Düğümleri Yönet** izni g
 Elle komutu şuna benzer (kod her 30 saniyede bir yenilenir):
 
 ```bash
-curl -fsSL https://panel.example.com/api/node/install.sh | sh -s -- --pano 'https://panel.example.com' --code '123456'
+curl -fsSL https://panel.example.com/api/v1/node/install.sh | sh -s -- --pano 'https://panel.example.com' --code '123456'
 ```
 
 Yalnızca kendi kurduğunuz düğümleri kabul edin. Bir düğüm site adresinize ulaşamıyorsa (NAT, bir SSH
@@ -34,10 +34,11 @@ siler.**
 **Sunucu ekle → Yeni sunucu oluştur** (**Sunucu Oluştur** izni gerekir) sizi **Kaynak → Düğüm →
 Yazılım → Ayarlar → Özet** adımlarından geçirir.
 
-- **Yazılım:** Paper (önerilen), Purpur, Folia, Spigot, Fabric, Vanilla ve proxy'ler: Velocity
-  (önerilen), Waterfall ve BungeeCord. **Spigot** düğümde BuildTools ile derlenir — bir sürümün ilk
-  derlemesi yaklaşık on dakika sürer, sonrakiler onu yeniden kullanır. Derleme bir JDK ister; makinede
-  yoksa düğüm bir tane indirir.
+- **Yazılım:** Paper (önerilen), Purpur, Folia, Spigot, Fabric, Forge, NeoForge, Vanilla ve
+  proxy'ler: Velocity, Waterfall (artık desteklenmiyor) ve BungeeCord. **Spigot** düğümde BuildTools
+  ile derlenir — bir sürümün ilk derlemesi yaklaşık on dakika sürer, sonrakiler onu yeniden kullanır.
+  Derleme bir JDK ister; makinede yoksa düğüm bir tane indirir. **Forge** ve **NeoForge** düğümde
+  kendi kurulum programlarıyla kurulur ve bunlara Pano eklentisi yüklenmez.
 - **Ayarlar:** ad, bellek, port (boş = `25565-25600` aralığından boş bir port), Java sürümü, JVM
   argümanları, **Pano ile başlat**, **Çökünce yeniden başlat**, **Beyaz liste** (varsayılan olarak
   kapalı; içe aktarmalarda ve proxy'lerde yok) ve Minecraft EULA.

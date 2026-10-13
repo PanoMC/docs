@@ -19,7 +19,7 @@ This is a simple, informational consent notice. There is **no reject option, no 
 The plugin has no dedicated menu entry. Its settings appear as a **Cookies Settings** card on the plugin's own detail page.
 
 1. Enable the plugin in the **Pano Admin Panel**.
-2. Go to **Plugins/Addons → Cookies**.
+2. Go to **Panel → Addons → Cookies**.
 3. Adjust the message, design, position, and colors on the **Cookies Settings** card.
 4. Press **Save** — the button stays disabled until you change something, and a toast confirms the result.
 

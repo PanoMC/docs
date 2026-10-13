@@ -26,7 +26,7 @@ Bu sistemin ne yapabileceği ve ne yapamayacağı konusunda kendinize karşı d�
 
 ## Adım 1: Lisans anahtarını derleme zamanında gömün
 
-Premium derleme, genel doğrulama anahtarını jar'ınıza koyan birkaç ekstra girdi kabul eder. Bunlar **derlerken** geçirdiğiniz seçeneklerdir — komut satırında veya otomatik derlemenizde ortam değişkenleri olarak — deponuzdaki herhangi bir dosyaya yazdığınız bir şey **değil** (bkz. [Manifest Yapılandırması → Premium derleme properties'i](/tr/addon/manifest/#premium-derleme-propertiesi)).
+Premium derleme, genel doğrulama anahtarını jar'ınıza koyan birkaç ekstra girdi kabul eder. Bunlar **derlerken** geçirdiğiniz seçeneklerdir — komut satırında veya otomatik derlemenizde ortam değişkenleri olarak — deponuzdaki herhangi bir dosyaya yazdığınız bir şey **değil** (bkz. [Manifest Yapılandırması → Premium derleme properties'i](/tr/addon/manifest/#premium-derleme-properties-i)).
 
 Bunların **hiçbirini** geçirmezseniz, eklentiniz normal bir **ücretsiz** jar olarak derlenir ve çalışma-zamanı kontrolü hiçbir şey yapmaz (bir "no-op") — böylece aynı kaynak, kod değişikliği olmadan ücretsiz veya premium gönderilebilir.
 
@@ -173,7 +173,7 @@ Operatörün yanlış yapabileceği Pano tarafı bir lisanslama yapılandırmas�
 
 Kimseden ücret almadan önce, tüm döngüyü kendi hesabınıza karşı çalıştırın. Kendi kaynağınız için satın alma kontrolünü her zaman geçersiniz, bu yüzden bu, bir premium eklentiyi baştan sona doğrulamanın amaçlanan yoludur:
 
-1. **Bir sürüm yayınlayın** — normal yayın akışınız aracılığıyla bir ön-yayın kanalına (örneğin `dev`/alfa kanalınıza). Yayınlama, jar'ın SHA-256 hash'ini Pazar Yeri'ne kaydeden şeydir — kaydedilmiş bir hash olmadan lisansın bağlanacağı bir şey yoktur.
+1. **Bir sürüm yayınlayın** — normal yayın akışınız aracılığıyla bir ön-yayın kanalına (boilerplate'te bu `dev` kanalıdır). Yayınlama, jar'ın SHA-256 hash'ini Pazar Yeri'ne kaydeden şeydir — kaydedilmiş bir hash olmadan lisansın bağlanacağı bir şey yoktur.
 2. **O tam jar'ı yerel bir Pano'ya alın.** Ya aynı sürümü eşleşen lisans sunucusuyla derleyin — dev kanalı için `./gradlew build -PlicenseServer=dev` — ya da yayınlanan jar'ı indirin. Adım 1'de hash'i kaydedilen sürümle bayt-bayt aynı olmalıdır.
 3. **panomc.com yazar hesabınızı** yerel Pano'nuza panel ayarlarında **bağlayın** (gerçek bir alıcının kullandığı aynı "hesabı bağla" eylemi).
 4. **Eklentiyi başlatın.**
@@ -241,6 +241,6 @@ Ama bu sayfanın en üstündeki dürüstlük uyarısını aklınızda tutun: bu 
 ## Sırada ne var
 
 - **[Derleme ve Yayınlama](/tr/addon/publishing/)** — yayın derlemesi, sürümleme ve bu sayfanın üzerine inşa ettiği tam Pazar Yeri yayınlama akışı.
-- **[Manifest Yapılandırması](/tr/addon/manifest/#premium-derleme-propertiesi)** — `gradle.properties`'in geri kalanı bağlamında premium derleme properties'i.
+- **[Manifest Yapılandırması](/tr/addon/manifest/#premium-derleme-properties-i)** — `gradle.properties`'in geri kalanı bağlamında premium derleme properties'i.
 - **[Backend Geliştirme](/tr/addon/backend/)** — `PanoPlugin` sınıfınızın, endpoint'lerinizin ve `onStart` yaşam döngüsünün yaşadığı yer.
-- Temalar benzer bir tüm-zip parmak izi şeması kullanır — bkz. [premium temalar](/tr/theme/publishing/#koruma-duz-kelimelerle-nasıl-calısır).
+- Temalar benzer bir tüm-zip parmak izi şeması kullanır — bkz. [premium temalar](/tr/theme/publishing/#koruma-nasıl-calısır-sade-anlatımla).

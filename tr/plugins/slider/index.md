@@ -18,7 +18,7 @@ Slider'ın davranışı, ayarlar panelinden küresel olarak yapılandırılabili
 
 ### Görsel Kontroller
 - **Göstergeler ve Kontroller:** Navigasyon noktalarının (göstergeler) ve önceki/sonraki oklarının görünürlüğünü ayarlayın.
-- **Başlık Stilleri:** `SOLID` (Katı), `GLASS` (Cam) veya `GRADIENT` (Gradyan) başlık arka planlarından birini seçin.
+- **Başlık Stilleri:** `NONE` (Yok), `SOLID` (Katı), `GLASS` (Cam) veya `GRADIENT` (Gradyan) başlık arka planlarından birini seçin.
 - **Şeffaflık ve Bulanıklık:** Başlık opaklığını ve arka plan bulanıklığını (Cam efekti için) ayarlayın.
 - **Tipografi:** Başlıklar ve alt başlıklar için özel renkler belirleyin ve uygun SEO başlık etiketini (`H1`–`H6`) seçin.
 

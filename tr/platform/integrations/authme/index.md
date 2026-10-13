@@ -2,7 +2,7 @@
 
 **AuthMe** ve **AuthMeReloaded** aynı eklentidir — her iki isim de Minecraft topluluğunda birbirinin yerine kullanılır. **AuthMeReloaded**, orijinal AuthMe eklentisinin gelişmiş bir fork'udur ve Minecraft sunucuları için **önerilen kimlik doğrulama yönetim çözümüdür**.
 
-> **Not:** Bu entegrasyon yalnızca **Spigot** ve fork'ları (Paper, Folia, Purpur, vb.) için kullanılabilir. Bungeecord veya Velocity gibi proxy sunucular için kullanılamaz.
+> **Not:** Bu entegrasyon yalnızca **Spigot** ve fork'ları (Paper, Folia, Purpur, vb.) için kullanılabilir. AuthMe'nin kendisi BungeeCord veya Velocity gibi proxy sunucularda çalışmaz; Velocity'de aynı **Kimlik Doğrulama Entegrasyonu** anahtarı bunun yerine LimboAuth'un `pano-limbo-auth` fork'uyla çalışır.
 
 ## AuthMeReloaded Nedir?
 
@@ -17,7 +17,6 @@ AuthMeReloaded entegrasyonu etkinleştirildiğinde, Pano şunları sağlar:
 - **Şifre Yönetimi** — Web sitesinden şifre değiştirme
 - **Yönetici Kontrolleri** — Yöneticiler panel'den oyuncu şifrelerini sıfırlayabilir
 - **Otomatik Senkronizasyon** — Oyuncu verileri oyun ve web arasında senkronize kalır
-- **Eklenti Komut Desteği** — Pano'dan belirli AuthMe komutlarını çalıştırma
 - **Sıfır Dokunma Otomatik Yapılandırma** — Pano, manuel yapılandırma gerektirmeden AuthMe ayarlarını otomatik olarak düzenler
 ## Gereksinimler
 
@@ -44,20 +43,22 @@ AuthMeReloaded'ı Minecraft sunucunuza indirin ve kurun:
 Henüz yapmadıysanız, **Pano MC Eklentisi**ni Minecraft sunucunuza kurun ve Pano örneğinize bağlayın:
 
 1. Pano MC Eklentisini Minecraft sunucunuza kurun
-2. Panel'de **Sunucular** → **+** butonuna tıklayın
+2. Panel'de kenar çubuğunun üstündeki **Sunucular** → **Sunucu ekle** → **Pano eklentisiyle bağla** yolunu izleyin
 3. Modal'da gösterilen bağlantı adımlarını takip edin
 
-Detaylı talimatlar için [Kurulum Rehberi](../../installation/)'ne bakın.
+Detaylı talimatlar için [Sunucu bağlama](../../server-management/#linking-a-server) bölümüne bakın.
 
 > Bu dokümantasyon, Pano MC Eklentisi'nin kurulu ve bağlı olduğunu varsayar.
 
-### Adım 3: Auth Entegrasyonunun Panel'de Etkin Olduğunu Doğrulayın
+### Adım 3: Auth Entegrasyonunun Panel'de Etkin Olduğunu Doğrulayın {#step-3-verify-auth-integration-is-enabled-in-panel}
 
 1. **Pano Yönetici Paneli**nize giriş yapın
-2. **Panel → Sunucu Ayarları → Oyun Entegrasyonu**'na gidin
-3. **Auth Entegrasyonu** onay kutusunu bulun
-4. **Etkin olduğunu doğrulayın** (varsayılan olarak etkindir)
-5. Devre dışıysa, etkinleştirin ve ayarlarınızı kaydedin
+2. Sunucuyu seçin ve **Ayarlar → Oyun Entegrasyonu** sekmesini açın (ayarlar sunucu başınadır)
+3. **Kimlik Doğrulama Entegrasyonu** bölümünü bulun. Burada şunları ayarlayabilirsiniz:
+   - **Kimlik Doğrulama Entegrasyonu (varsayılan olarak etkin):** Entegrasyonun ana anahtarı.
+   - **E-Mail Doğrulama Gerekli (varsayılan olarak etkin):** Etkinse oyuncuların sunucuya girebilmesi için e-posta adreslerini doğrulamış olması gerekir. Yalnızca e-posta doğrulaması platform genelinde açıkken çalışır (`auth.require-email-verification`, **Ayarlar → Platform**).
+   - **Kayıt Sonrası At (varsayılan olarak etkin):** Etkinse oyuncular oyun içi kayıttan hemen sonra sunucudan atılır; böylece giriş yapmadan önce e-postalarını doğrularlar.
+4. **Tercihlerinizi doğrulayın** ve kaydedin.
 
 > **Not:** Auth Entegrasyonu **varsayılan olarak etkindir**. Etkinleştirildiğinde ve AuthMeReloaded sunucunuzda tespit edildiğinde, Pano otomatik olarak bağlanacaktır. Sadece aktif olduğunu doğrulamanız gerekir.
 
@@ -72,7 +73,7 @@ Pano MC Eklentisi, AuthMeReloaded'ın sunucunuzda kurulu olup olmadığını oto
 
 ### 2. AuthMe Yapılandırmasını Değiştirir (Sıfır Dokunma)
 
-Pano, **sıfır dokunma yapılandırma yaklaşımı** kullanır — herhangi bir manuel müdahale gerektirmeden uyumluluğu sağlamak için belirli AuthMe yapılandırma değerlerini otomatik olarak düzenler. **Herhangi bir değişiklik yapmadan önce, Pano** `config.yml` dosyanızın bir **yedeğini oluşturur** ve bunu **Pano eklenti klasörüne** (`plugins/Pano/`) **`authme-backup.yml`** adıyla kaydeder.
+Pano, **sıfır dokunma yapılandırma yaklaşımı** kullanır — herhangi bir manuel müdahale gerektirmeden uyumluluğu sağlamak için belirli AuthMe yapılandırma değerlerini otomatik olarak düzenler. **Herhangi bir değişiklik yapmadan önce, Pano** değiştireceği ayarların **önceki değerlerini** **Pano eklenti klasörüne** (`plugins/Pano/`) **`authme-backup.yml`** adıyla kaydeder ve entegrasyon kapatıldığında ya da sunucunun bağlantısı kesildiğinde bunları geri yükler.
 
 Aşağıdaki ayarlar değiştirilir:
 
@@ -90,7 +91,7 @@ Aşağıdaki ayarlar değiştirilir:
 
 Entegrasyon aktifken, Pano şunları yönetir:
 
-- **Oyuncu Kaydı** — Yeni oyuncular web siteniz üzerinden kaydolur
+- **Oyuncu Kaydı** — Yeni oyuncular web sitenizden ya da oyun içinde `/register` ile kaydolur; ikisi de Pano hesabını oluşturur
 - **Oyuncu Girişi** — Kimlik doğrulama Pano tarafından yönetilir ve AuthMe ile senkronize edilir
 - **Şifre Değişiklikleri** — Oyuncular web sitesinden şifrelerini değiştirebilir
 - **Şifre Kurtarma** — Unutulan şifreler e-posta ile sıfırlanabilir (SMTP yapılandırılmışsa)

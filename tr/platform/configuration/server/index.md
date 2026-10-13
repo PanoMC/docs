@@ -12,7 +12,7 @@ server {
   ssl-cert = null # Ham sertifika içeriği (MANUAL ise)
   ssl-key = null  # Ham özel anahtar içeriği (MANUAL ise)
   ui-max-memory-mb = 200 # Spawn edilen her UI runtime'ı için maksimum MB; 0 kapatır
-  trusted-proxies = [] # e.g. ["127.0.0.1", "10.0.0.5"] — proxies allowed to set X-Forwarded-For
+  trusted-proxies = [] # örn. ["203.0.113.7", "203.0.113.0/24", "cloudflare"] — X-Forwarded-For ayarlamasına izin verilen vekiller
 }
 ```
 
@@ -25,11 +25,11 @@ server {
     - `MANUAL`: Kendi sertifikanızı ve anahtar dize bilgilerinizi doğrudan `ssl-cert` ve `ssl-key` üzerinden sağlamanıza olanak tanır.
 - `redirect-https`: `true` olarak ayarlanırsa, tüm HTTP trafiği otomatik olarak HTTPS'ye yönlendirilir.
 - `ui-max-memory-mb`: Spawn edilen **her** UI runtime'ı (setup-ui, panel-ui, aktif tema) için bellek tavanı (MB); Pano aşan UI'ı yeniden başlatır. Varsayılan **200**, `0` kapatır. Bkz. [Bellek ve Limitler](../memory/).
-- `trusted-proxies`: `X-Forwarded-For` başlığını ayarlamasına izin verilen ters vekil (reverse proxy) IP adresleri. **Varsayılan olarak boştur**; bu durumda başlık yok sayılır ve her istek doğrudan bağlantı sayılır. Pano bir Nginx, Apache veya Cloudflare arkasındaysa doldurun; aksi halde ziyaretçiyi adresine göre tanıyan özellikler — örneğin [bakım modu](../../maintenance/) giriş yasakları — ziyaretçi yerine vekili görür.
+- `trusted-proxies`: `X-Forwarded-For` başlığını ayarlamasına izin verilen ters vekiller (reverse proxy) — tek tek IP adresleri, CIDR aralıkları ya da Cloudflare'in yayımladığı aralıklar için `"cloudflare"` sözcüğü. **Varsayılan olarak boştur.** Aynı makinedeki ya da özel ağdaki bir vekile (loopback, `10.x`, `192.168.x`, Docker köprüsü) listede olmasa da güvenilir; herkese açık bir vekil ya da Cloudflare ise listelenmelidir, yoksa her ziyaretçi vekil gibi görünür. [Bakım modu](../../maintenance/) daha katıdır: giriş yasakları ve hız sınırı başlığa **yalnızca** burada listelenen adreslerden geldiğinde güvenir; bu yüzden herhangi bir ters vekilin arkasındaysanız — yerel bir Nginx olsa bile — onu listeleyin.
 - **Gelişmiş:** Karmaşık kurulumlar için hala bir **reverse proxy** (Nginx, Apache) veya Cloudflare kullanabilirsiniz.
 ## Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma
 
-**pano-mc-plugin** üzerinden bağlanan her Minecraft sunucusu, `GET /api/server/connection` adresine uzun
+**pano-mc-plugin** üzerinden bağlanan her Minecraft sunucusu, `GET /api/v1/server/connection` adresine uzun
 ömürlü bir WebSocket bağlantısı tutar. Pano bir ters vekil (reverse proxy) arkasındaysa (Nginx, Cloudflare,
 bulut yük dengeleyici), boşta kalan bir WebSocket *vekilin kendi* boşta kalma zaman aşımı tarafından
 kapatılır — Nginx'in `proxy_read_timeout` değeri varsayılan olarak **60 saniyedir** — bu, Pano veya
@@ -78,7 +78,7 @@ bağlı her Minecraft sunucusunun adresini gerçek adresi yerine vekilin kendi I
 sayfanın yukarısındaki `trusted-proxies` rehberliğini sessizce bozar:
 
 ```nginx
-location /api/server/connection {
+location /api/v1/server/connection {
     # 8080'i kendi server.http-port değerinizle değiştirin (config.conf) — varsayılan olsa
     # bile burada 80 KULLANMAYIN: bu kurulumda Nginx'in kendisi 80 portunu dinliyor, bu yüzden
     # 127.0.0.1:80'e proxy yapmak Pano'ya değil, Nginx'in kendisine geri döner.
@@ -137,11 +137,11 @@ console-history-limit = 50
 file-uploads-folder = "file-uploads"
 
 file-paths = {
-  favicon {
+  faviconFile {
     path = "uploads/favicon.png"
     hash = "<sha256-hash>"
   }
-  websiteLogo {
+  websiteLogoFile {
     path = "uploads/logo.png"
     hash = "<sha256-hash>"
   }
@@ -154,7 +154,7 @@ file-paths = {
 - Her giriş, şunları içeren bir **FileInfo** nesnesidir:
     - `path`: Dosyanın göreli yolu.
     - `hash`: Pano tarafından dosya bütünlüğünü doğrulamak için kullanılan SHA-256 karması.
-- Yalnızca iki giriş desteklenir: `favicon` ve `websiteLogo`.
+- Yalnızca iki giriş desteklenir: `faviconFile` ve `websiteLogoFile`.
 - Bu alanlar **Pano tarafından otomatik olarak yönetilir** — manuel değişiklikler güncellemelerde veya ayar değişikliklerinde üzerine yazılır.
 ## Pano Servis URL’leri (Değiştirmeyin)
 

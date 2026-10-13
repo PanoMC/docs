@@ -22,7 +22,7 @@ Bu dosyayı yükleyen ve kaydeden `PluginConfigManager`, giriş sınıfınızın
 :::
 
 ::: tip Kontrol noktası: üretilen yapılandırmayı açın
-Eklentiniz bir kez yüklendikten sonra (yeniden derle → kopyala → yeniden başlat), `plugins/pano-plugin-shoutbox/config.conf`'u açın. İki anahtarınızı varsayılan değerleriyle görmelisiniz: `enabled`, `true`'ya ve `maxShouts`, `5`'e ayarlı.
+Eklentiniz bir kez yüklendikten sonra (yeniden derle → yeniden başlat), `plugins/pano-plugin-shoutbox/config.conf`'u açın. İki anahtarınızı varsayılan değerleriyle görmelisiniz: `enabled`, `true`'ya ve `maxShouts`, `5`'e ayarlı.
 :::
 
 ## Bir uç noktadan yapılandırma okuma (ve neden bir kurucudan değil)

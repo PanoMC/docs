@@ -42,7 +42,7 @@
 ## Предварительные требования
 
 - **Премиум-лицензия.** Premium Login — это платный плагин: он проверяет лицензию panomc.com при запуске и не запустится без неё.
-- **Приложение Microsoft Azure.** Зарегистрируйте приложение в Azure Portal (тип «personal Microsoft accounts»), предоставьте **Client ID** и **Client Secret** и задайте redirect URI на `https://yoursite.com/api/premium-login/microsoft/callback`. Отправьте приложение в Microsoft на верификацию, чтобы открыть функцию для широкой публики.
+- **Приложение Microsoft Azure.** Зарегистрируйте приложение в Azure Portal (тип «personal Microsoft accounts»), предоставьте **Client ID** и **Client Secret** и задайте redirect URI на `https://yoursite.com/api/plugins/pano-plugin-premium-login/microsoft/callback`. Отправьте приложение в Microsoft на верификацию, чтобы открыть функцию для широкой публики.
 - **Синхронизация на стороне сервера** требует **Pano MC plugin** (подключённый к вашему сайту) и **FastLogin**, установленный на вашем сервере Spigot/Bungee/Velocity (FastLogin подразумевает ProtocolLib на Spigot).
 - **Настроенная почтовая система** для писем о конфликте имён пользователей и завершённая настройка сайта до инициализации плагина.
 

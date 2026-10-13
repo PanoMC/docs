@@ -14,7 +14,7 @@ The **Staff Page** plugin lets you showcase your server's team on your website. 
 
 ## Managing Your Staff
 
-A **Staffs** link (users-cog icon) appears in the panel sidebar, right after **Players**. It opens the **Staff Management** page, where you can:
+A **Staffs** link (users-cog icon) appears in the panel sidebar, right after **Users**. It opens the **Staff Management** page, where you can:
 
 - See your total staff count.
 - **Add Staff** through a modal, or **edit** / **delete** any member from the table.

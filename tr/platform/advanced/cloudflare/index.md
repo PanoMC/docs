@@ -20,7 +20,7 @@ Flexible modunda:
 - Cloudflare ⇄ Pano arası **80**'inci port üzerinden düz HTTP'dir.
 
 > [!WARNING]
-> Flexible modu, Cloudflare ile sunucunuz arasındaki trafiğin **şifrelenmediği** anlamına gelir. Sunucunuz herkese açık bir ağdaysa ve hassas veri işliyorsa, bunun yerine origin'de TLS sonlandırması yapın (örneğin Let's Encrypt sertifikalı bir Nginx ya da Caddy reverse proxy ile) ve **Full (strict)** modunu kullanın. Bkz. [Üretim Kurulumu](../../configuration/production/).
+> Flexible modu, Cloudflare ile sunucunuz arasındaki trafiğin **şifrelenmediği** anlamına gelir. Sunucunuz herkese açık bir ağdaysa ve hassas veri işliyorsa, bunun yerine origin'de TLS sonlandırması yapın — Pano'nun kendi [`ssl-mode`](../../configuration/server/) ayarıyla ya da Let's Encrypt sertifikalı bir Nginx ya da Caddy reverse proxy ile — ve **Full (strict)** modunu kullanın. Bkz. [Üretim Kurulumu](../../configuration/production/).
 
 ## `website-url` değerini `https://` ile yapılandırın
 
@@ -33,6 +33,21 @@ website-url = "https://alanadiniz.com"
 ```
 
 Değişikliği kaydedin ve **Pano'yu yeniden başlatın**.
+
+## Pano'ya Cloudflare'in bir vekil olduğunu bildirin
+
+Bunu yapmazsanız her ziyaretçi Pano'ya bir Cloudflare adresinden ulaşır; adrese göre çalışan her şey — hız sınırları,
+[bakım modu](../../maintenance/) giriş yasakları, günlüklerdeki adresler — ziyaretçi yerine Cloudflare'i görür.
+`trusted-proxies` listesine `cloudflare` sözcüğünü ekleyin; bu sözcük Cloudflare'in yayımladığı adres aralıklarını
+karşılar:
+
+```jsonc
+server {
+  trusted-proxies = ["cloudflare"]
+}
+```
+
+Kabul edilen diğer değerler için bkz. [`trusted-proxies`](../../configuration/server/).
 
 ## Önerilen Cloudflare ayarları
 
@@ -56,7 +71,7 @@ Ayarları uyguladıktan sonra:
 
 Gerçek uçtan uca şifreleme gerekiyorsa (kullanıcı verisi işleyen üretim kurulumları için önerilir) Flexible kullanmayın. Bunun yerine:
 
-1. Pano'nun önüne geçerli bir TLS sertifikalı (Let's Encrypt iş görür) bir reverse proxy (Nginx, Caddy, Traefik) yerleştirin.
+1. Pano'nun kendi HTTPS'ini açın ([`ssl-mode`](../../configuration/server/)) ya da Pano'nun önüne geçerli bir TLS sertifikalı (Let's Encrypt iş görür) bir reverse proxy (Nginx, Caddy, Traefik) yerleştirin.
 2. Cloudflare şifreleme modunu **Full (strict)** olarak ayarlayın.
 3. `config.conf` içinde `website-url = "https://..."` değerini koruyun.
 

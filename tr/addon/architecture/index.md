@@ -110,10 +110,13 @@ Daha önce Minecraft eklentileri yazdıysanız, burada **`plugin.yml` olmadığ�
 Derlenen jar'ınızı yine bir zip olarak açın ve `META-INF/MANIFEST.MF`'i bir metin editöründe okuyun — içinde listelenmiş eklentinizin id'sini ve ana sınıfını görmelisiniz.
 :::
 
-Pano jar'ınızı yüklediğinde, PF4J manifestte adlandırılan ana sınıfı bulur, onu örnekler ve yaşam döngüsü kancalarınızı **sırayla** çağırır:
+Pano jar'ınızı yüklediğinde, PF4J manifestte adlandırılan ana sınıfı bulur, onu örnekler ve yaşam döngüsü kancalarınızı çağırır. Hangilerinin çalışacağı eklentiye ne olduğuna bağlıdır:
 
 ```text
-jar load → onCreate() → onEnable() → onStart() → … running … → onStop() → onDisable() → onUninstall()
+server boot:    jar load → onCreate() → onStart() → … running … → onStop()
+panel Enable:   onEnable() → onStart()
+panel Disable:  onStop() → onDisable()
+panel Delete:   onUninstall() → onStop()
 ```
 
 - Tüm kancalar `suspend` fonksiyonlarıdır (`suspend`, Kotlin'in asenkron işaretçisidir — pratikte Pano'nun veritabanı ve ağ fonksiyonlarını doğrudan bu kancaların içinde çağırabileceğiniz anlamına gelir) ve hepsi varsayılan olarak hiçbir şey yapmaz — yalnızca ihtiyacınız olanları geçersiz kılarsınız.
@@ -121,7 +124,7 @@ jar load → onCreate() → onEnable() → onStart() → … running … → onS
 - `onUninstall()`, yalnızca site sahibi eklentiyi panelde **sildiğinde** çağrılır — yalnızca devre dışı bıraktığında değil. `pano-plugin-shoutbox`'ın `shout` tablosunu veritabanından burada sileceği yer burasıdır.
 
 ::: tip Kendiniz görün
-`onStart()` içine bir `logger.info(...)` satırı koyun, yeniden derleyin ve eklentiyi yeniden yükleyin — satır Pano'nun konsolunda görünür. Yaşam döngüsünün gerçekten tetiklendiğini izlemenin en basit yolu budur.
+`onStart()` içine bir `logger.info(...)` satırı koyun, yeniden derleyin ve Pano'yu yeniden başlatın — satır Pano'nun konsolunda görünür. Yaşam döngüsünün gerçekten tetiklendiğini izlemenin en basit yolu budur.
 :::
 
 ### Sınıflarınız otomatik olarak bulunur

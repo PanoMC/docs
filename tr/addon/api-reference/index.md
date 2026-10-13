@@ -86,7 +86,7 @@ Aşağıdaki her tablo, o iskeleti gözünüzde canlandırdığınızda okumak d
 
 | Dışa aktarım | Amaç |
 |---|---|
-| `viewComponent(importer)` | **Kural: bir bileşeni herhangi bir `register` çağrısına verdiğinizde her zaman `viewComponent(() => import('./X.svelte'))` yazın** — asla çıplak `() => import(...)` ve asla bileşenin kendisini değil. (Host için doğru paylaşılan-çalışma-zamanı `mount`/`hydrate`/`unmount`'unu ekler; sarmalayıcının zorunlu olmasının nedeni o altyapıdır.) |
+| `viewComponent(importer)` | **Kural: bir bileşeni herhangi bir `register` çağrısına verdiğinizde her zaman `viewComponent(() => import('./X.svelte'))` yazın** — asla çıplak `() => import(...)` ve asla bileşenin kendisini değil. Bu, panel biçimidir; temada kayıt bunun yerine bir view adı verir (`view: '<ns>:<Ad>'`). (Host için doğru paylaşılan-çalışma-zamanı `mount`/`hydrate`/`unmount`'unu ekler; sarmalayıcının zorunlu olmasının nedeni o altyapıdır.) |
 | `getPanoContext()` | Mevcut Pano host bağlamını döndürür. Bir `PanoPlugin` metodu olmayan koddan ham host bağlamına ihtiyacınız olmadıkça bunu görmezden gelebilirsiniz (düz bir metodun bunun yerine `this.context`'i vardır) — nadiren gerekir. |
 
 ::: warning `onContextUpdate` çağrılmaz
@@ -108,7 +108,8 @@ Bunları kendi tam sayfalarınızı kaydetmek için kullanın — tema (`/…`) 
 | Seçenek | Tür | Anlamı |
 |---|---|---|
 | `path` | string | Rota (aşağıdaki yol biçimlerine bakın). |
-| `component` | `viewComponent(...)` | Sayfa bileşeni. |
+| `component` | `viewComponent(...)` | **Panel.** Sayfa bileşeni. |
+| `view` | string | **Tema.** `component` yerine, eklentinizin bir view'ının kimliği (`shoutbox:ShoutboxPage`). Site tarafında `view` olmadan `component` ile kaydedilen öğe hata verilerek atılır. |
 | `systemLayout` | string | Sayfanızı host'un yerleşik düzenlerinden birine sarın (adlar aşağıda listelenmiş). Normal bir sayfa için `MainLayout` kullanın; diğer adlar belirli host bölümlerine karşılık gelir (örn. `ProfileLayout`, `SettingsLayout`). |
 | `layout` | `viewComponent(...)` | Yerleşik bir tane yerine kendi düzen bileşeninizi kullanın. |
 | `resetLayout` | boolean | Host başlığı, kenar çubuğu veya alt bilgisi **olmadan** render et — bileşeniniz tüm sayfayı alır. ("Chrome", o çevreleyen host arayüzü için genel kelimedir.) |
@@ -136,7 +137,7 @@ Bir sayfa modülü ayrıca **`load(event)` dışa aktarabilir** (üstteki "üç 
 **`systemLayout` adları — panel:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `AuthShell`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerDetailLayout`, `ServerSettingsLayout`, `ServersLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
 
 ::: tip Kontrol noktası — sayfam kaydoldu mu?
-Bir `pano.ui.page.register({ path: '/your-path', component })` çağrısından sonra, eklentinizi yeniden derleyin ve siteyi yeniden yükleyin. `/your-path`'i ziyaret etmek artık bileşeninizi göstermeli. Orada bir şey yok mu? `component`'in `viewComponent(() => import('./X.svelte'))` içine sarıldığını ve `register`'ın `onLoad()` içinde çalıştığını kontrol edin.
+Panel dalındaki bir `pano.ui.page.register({ path: '/your-path', component })` çağrısından sonra, eklentinizi yeniden derleyin ve paneli yeniden yükleyin. `/panel/your-path`'i ziyaret etmek artık bileşeninizi göstermeli. (Site tarafında `component` yerine `view: '<ns>:<Ad>'` verin ve `/your-path`'i ziyaret edin.) Orada bir şey yok mu? `component`'in `viewComponent(() => import('./X.svelte'))` içine sarıldığını ve `register`'ın `onLoad()` içinde çalıştığını kontrol edin.
 :::
 
 ## 3. Kancalar — `pano.ui.hook` (tema + panel)
@@ -154,7 +155,8 @@ Bir **kanca**, bir host sayfasındaki adlandırılmış bir deliktir: o kancanı
 | Seçenek | Tür | Anlamı |
 |---|---|---|
 | `name` | string | Kanca adı (aşağıdaki tablolar). |
-| `component` | `viewComponent(...)` | Yerleştirilecek bileşen. |
+| `component` | `viewComponent(...)` | **Panel.** Yerleştirilecek bileşen. |
+| `view` | string | **Tema.** `component` yerine, eklentinizin bir view'ının kimliği (`shoutbox:ShoutboxPage`). Site tarafında `view` olmadan `component` ile kaydedilen öğe hata verilerek atılır. |
 | `permission` | string | Yalnızca bu izin düğümüne sahip kullanıcılar için render et. |
 | `skipLoad` | boolean | Sayfa yüklemesi sırasında bileşenin `load()`'unu çalıştırma. Kancanız yerleştiğinde kendi verisini getirdiğinde bunu kullanın, böylece bir sayfa-yükleme çalıştırması boşa gitmez veya başarısız olmaz. |
 | `invisible` | boolean | Kaydet ama gizli başla. |
@@ -237,7 +239,7 @@ Yukarıdaki `post`, `playerData`, `addon`, `player` ve `category` prop'ları, o 
 :::
 
 ::: tip Kontrol noktası — kancam render etti mi?
-`pano.ui.hook.register({ name: 'theme:top', component })`'ten sonra, yeniden derleyin ve temalı bir sayfayı yeniden yükleyin. Bileşeniniz o kancanın yerinde görünmeli. Değilse, yukarıdaki tablolardan gerçek bir kanca adı kullandığınızı ve bileşeni `viewComponent(...)` içine sardığınızı onaylayın.
+`pano.ui.hook.register({ name: 'theme:top', view: 'shoutbox:ShoutboxWidget' })`'ten sonra, yeniden derleyin ve temalı bir sayfayı yeniden yükleyin. View'ınız o kancanın yerinde görünmeli. Değilse, yukarıdaki tablolardan gerçek bir kanca adı kullandığınızı ve view kimliğinin var olduğunu (panelde: bileşeni `viewComponent(...)` içine sardığınızı) onaylayın.
 :::
 
 ## 4. View slotları — `pano.ui.view` (tema + panel)
@@ -260,7 +262,7 @@ Bir **view slotu**, eklenti bileşenlerinin **önceliğe göre sıralı bir list
 
 | Çağrı | Amaç |
 |---|---|
-| `pano.ui.view.register({ viewId, id, component, priority })` | `viewId` slotuna bir bileşen ekle. `priority` varsayılan `10`'dur; aynı `id`'yi yeniden kaydetmek onu değiştirir. |
+| `pano.ui.view.register({ viewId, id, view, priority })` | `viewId` slotuna bir view ekle (panelde: `view` yerine `component`). `priority` varsayılan `10`'dur; aynı `id`'yi yeniden kaydetmek onu değiştirir. |
 | `pano.ui.view.hide(viewId, id)` | Bir öğeyi kaldırmadan gizle. |
 | `pano.ui.view.show(viewId, id)` | Onu tekrar göster. |
 | `pano.ui.view.move(viewId, id, priority)` | Bir öğenin önceliğini değiştir. |
@@ -270,7 +272,7 @@ Bir **view slotu**, eklenti bileşenlerinin **önceliğe göre sıralı bir list
 
 `pano.ui.sidebar.*`, aynı metotlarla aynı kayıt defterinin bir **takma adıdır**, tek fark kap anahtarının `viewId` yerine `sidebarId` olmasıdır (ve `onLoad`, `theme:sidebar:<id>:load`'ı tetikler).
 
-**Slot öğesi şekli:** `{ id, component, priority, props? }`. Yüksek `priority` önce render eder. Öğe başına **`permission` alanı yoktur** — slot öğeleri izin-filtrelenmez. Birini kısıtlamak için, izni **bileşeninizin içinde** kontrol edin — `import { hasPermission } from '@panomc/sdk/utils/auth'` — ve başarısız olursa hiçbir şey render etmeyin. (Kancalar ve gezinme bağlantıları bir `permission` seçeneğini *destekler*.)
+**Slot öğesi şekli:** `{ id, view, priority, props? }` (panelde `view` yerine `component`). Yüksek `priority` önce render eder. Öğe başına **`permission` alanı yoktur** — slot öğeleri izin-filtrelenmez. Birini kısıtlamak için, izni **bileşeninizin içinde** kontrol edin — `import { hasPermission } from '@panomc/sdk/utils/auth'` — ve başarısız olursa hiçbir şey render etmeyin. (Kancalar ve gezinme bağlantıları bir `permission` seçeneğini *destekler*.)
 
 ### Tema slot ID'leri
 
@@ -445,18 +447,21 @@ Bu, dondurulmuş **`@panomc/sdk`** içe aktarma yüzeyidir — her belirteç kar
 | Belirteç | Dışa aktarımlar |
 |---|---|
 | `@panomc/sdk` | `PanoPlugin`, `viewComponent`, `getPanoContext` |
-| `@panomc/sdk/utils/api` | `ApiUtil` (varsayılan), `NETWORK_ERROR`, `networkErrorBody`, `buildQueryParams` |
+| `@panomc/sdk/utils/api` | `ApiUtil` (varsayılan), `NETWORK_ERROR`, `networkErrorBody`, `buildQueryParams`, `createPluginApi` |
 | `@panomc/sdk/utils/auth` | `hasPermission(permission, user)` |
 | `@panomc/sdk/utils/tooltip` | `tooltip` (aynı zamanda varsayılan) |
 | `@panomc/sdk/utils/text` | `copy` |
 | `@panomc/sdk/utils/language` | `_`, `languageLoading`, `currentLanguage`, `Languages`, `init`, `getAcceptedLanguage`, `loadLanguage`, `changeLanguage`, `getLanguageByLocale` |
 | `@panomc/sdk/utils/component` | `viewComponent` |
 | `@panomc/sdk/toasts` | `showToast`, `limitTitle` |
-| `@panomc/sdk/components/theme` | `PlayerHead`, `NoContent`, `Date`, `Toast`, `PageTitle`, `PageActions`, `Pagination` |
+| `@panomc/sdk/components/theme` | `PlayerHead`, `NoContent`, `Date`, `Toast`, `PageTitle`, `PageActions`, `Pagination`, `PluginBlock`, `PluginSlot` |
 | `@panomc/sdk/components/panel` | `NoContent`, `Editor`, `DragAndDropZone`, `Date`, `Toast`, `PageLoading`, `PageActions`, `PageLoader`, `PageNavItem`, `PageNav`, `Pagination`, `CardFilters`, `CardFiltersItem`, `CardHeader`, `SearchInput` |
 | `@panomc/sdk/variables` | `API_URL`, `UI_URL`, `PANEL_URL`, `SETUP_URL`, `PANO_WEBSITE_URL`, `PANO_WEBSITE_API_URL`, `PRERELEASE`, `COOKIE_PREFIX`, `CSRF_TOKEN_COOKIE_NAME`, `JWT_COOKIE_NAME`, `CSRF_HEADER`, `updateApiUrl`, `updatePanoWebsiteUrl`, `updatePanoWebsiteApiUrl` |
 | `@panomc/sdk/svelte` | `page`, `base`, `navigating`, `browser`, `goto`, `invalidate`, `invalidateAll`, `error`, `redirect` |
 | `@panomc/sdk/internal` | `setPanoContext`, `getPanoContext` |
+| `@panomc/sdk/utils/route` | `route` |
+| `@panomc/sdk/controllers` | `plugin`, `useController`, `reactive` |
+| `@panomc/sdk/views` | `createViewProxy` |
 
 `viewComponent` iki kez görünür — `@panomc/sdk`'da ve `@panomc/sdk/utils/component`'te. **Aynı fonksiyondur**; her ikisinden de içe aktarın (`@panomc/sdk` olağan yoldur).
 
@@ -539,7 +544,7 @@ Derlemeniz bu içe aktarmaları kasten eklentinizin JS'ine **paketlemez** — on
 
 İzin verilen çıplak belirteçler tam olarak şunlardır:
 
-- §9 tablosundaki her `@panomc/sdk` belirteci.
+- §9 tablosundaki her `@panomc/sdk` belirteci ve derlemenizin kendisinin çözdüğü `@panomc/sdk/plugin-api` (§11).
 - Svelte: `svelte`, `svelte/store`, `svelte/transition`, `svelte/easing`, `svelte/motion`, `svelte/animate`, `svelte/legacy`, `svelte/events`, `svelte/attachments`, `svelte/reactivity`, `svelte/reactivity/window` ve `svelte-i18n`.
 - **Sabit** bir Svelte iç öğesi kümesi *(ileri düzey — derleyici bu içe aktarmaları sizin için derlenen kodunuza yayar; onları asla elle yazmazsınız)*: `svelte/internal`, `svelte/internal/client`, `svelte/internal/disclose-version`, `svelte/internal/flags/legacy`, `svelte/internal/flags/async` ve `svelte/internal/flags/tracing`. Bu tam bir listedir, bir `svelte/internal/*` joker karakteri **değil**; başka herhangi bir `svelte/internal/...` alt yolu çözülmez.
 
@@ -557,8 +562,8 @@ Bir Kotlin uç noktası yolunu **kapsamına göre göreli** bildirir ve Pano ön
 
 | Sınıf | Bildirilen | Sunulduğu yer |
 |---|---|---|
-| `Api`, `LoggedInApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/hello` |
-| `PanelApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/panel/hello` |
+| `Api`, `LoggedInApi` | `Path("/hello", RouteType.GET)` | `/api/plugins/<pluginId>/hello` |
+| `PanelApi` | `Path("/hello", RouteType.GET)` | `/api/plugins/<pluginId>/panel/hello` |
 | çekirdek (sizin değil) | `/posts` | `/api/v1/posts` |
 
 Bildirilen bir yolun `/api` veya `/panel` ile başlaması, boş olması ya da parametreyle veya `_` ile başlaması (`/:id`) eklentinizi sınıfı ve çözümü adlandıran bir iletiyle başlangıçta durdurur. Her yanıt `Pano-Api-Level` başlığını taşır.

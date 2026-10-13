@@ -90,7 +90,7 @@ Eklentileri yüklemenin **iki yolu** vardır:
 
 ### 2. Pano Mağazasından
 
-1. Aynı **Eklenti Yükle** penceresinde **Mağazaya Göz At** sekmesine tıklayın.
+1. Aynı **Eklenti Yükle** penceresinde **Pano Mağazası'ndan Kur**’a tıklayın.
 2. Kullanmak istediğiniz eklentiyi bulun — ücretsiz veya ücretli olabilir.
 3. **Yükle** butonuna tıklayın.
 4. Kurulum tamamlandığında, eklentiniz otomatik olarak etkin olacaktır.
@@ -98,7 +98,7 @@ Eklentileri yüklemenin **iki yolu** vardır:
 Yeni eklentileri keşfedebilir, premium olanları satın alabilir veya mevcutları güncelleyebilirsiniz — hepsi doğrudan
 **Pano Mağazası** üzerinden.
 
-> Marketplace özelliği için bağlı bir [Pano Hesabı](./advanced/connect-pano-account.md) gereklidir.
+> Marketplace özelliği için bağlı bir [Pano Hesabı](../configuration/services/) gereklidir.
 >
 > ⚠️ Pano tarafından doğrulanmamış herhangi bir eklenti riskli olabilir, **kendi sorumluluğunuzda kullanın!**
 
@@ -171,13 +171,13 @@ Pano ve eklentiler için örnek dosya yapısı:
 ├── config.conf
 ├── plugins/
 │    ├── disabled.txt (opsiyonel)
-│    ├── pano-announcements-plugin/
-│    │     └── plugin.conf
-│    ├── pano-auth-integrations-plugin/
-│    │     └── plugin.conf
-│    ├── pano-announcements-plugin.jar
-│    ├── pano-auth-integrations-plugin.jar
-│    └── pano-feedback-plugin.jar
+│    ├── pano-plugin-announcement/
+│    │     └── config.conf
+│    ├── pano-plugin-social-login/
+│    │     └── config.conf
+│    ├── pano-plugin-announcement-1.1.0.jar
+│    ├── pano-plugin-social-login-1.1.0.jar
+│    └── pano-plugin-faq-1.1.0.jar
 ├── themes/
 └── file-uploads/
 ```
@@ -187,7 +187,7 @@ Pano ve eklentiler için örnek dosya yapısı:
 | İşlem                         | Konum                                         | Önerilen Yöntem                      |
 |-------------------------------|-----------------------------------------------|--------------------------------------|
 | **Eklenti Yükle (yerel)**     | `Panel → Eklentiler → Eklenti Yükle`          | Sürükle & bırak veya dosya seçici    |
-| **Eklenti Yükle (mağaza)**    | `Panel → Eklentiler → Eklenti Yükle → Mağaza` | Yükle butonu                         |
+| **Eklenti Yükle (mağaza)**    | `Panel → Eklentiler → Eklenti Yükle → Pano Mağazası'ndan Kur` | Yükle butonu                         |
 | **Etkinleştir / Devre Dışı**  | `Panel → Eklentiler`                          | Anahtarı değiştir                    |
 | **Eklenti Sil**               | `Panel → Eklentiler`                          | Onay ile silme işlemi                |
 | **Eklenti Dizinini Değiştir** | JVM parametresi                               | `-Dpf4j.pluginsDir=/path/to/plugins` |

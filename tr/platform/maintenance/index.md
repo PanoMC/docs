@@ -76,8 +76,9 @@ sayfasını formsuz, yalnızca bir uyarıyla görür. Başarılı giriş sayacı
   engelleme panel etkinlik günlüğüne yazılır.
 
 > ⚠️ Ters vekil (reverse proxy) arkasındaysanız `server.trusted-proxies` ayarını doldurun — bkz.
-> [sunucu yapılandırması](../configuration/server/). Boş bırakılırsa Pano `X-Forwarded-For` başlığını tamamen yok sayar
-> ve her istek vekilden geliyormuş gibi görünür; tek bir ziyaretçinin hataları herkesi engeller.
+> [sunucu yapılandırması](../configuration/server/). Bakım girişi `X-Forwarded-For` başlığına yalnızca orada listelenen
+> vekillerden güvenir; boş bırakılırsa her istek vekilden geliyormuş gibi görünür ve tek bir ziyaretçinin hataları
+> herkesi engeller.
 
 ## Sayfayı düzenleme
 

@@ -10,7 +10,7 @@ Download it from your own Pano, so the version always matches — it is also att
 [Pano release](https://github.com/PanoMC/Pano/releases). It needs **Java 11 or newer**.
 
 ```bash
-curl -fsSL https://panel.example.com/api/node/pano-node.jar -o pano-node.jar
+curl -fsSL https://panel.example.com/api/v1/node/pano-node.jar -o pano-node.jar
 
 # First start: pair with the code from Nodes → Add node → Manual
 java -jar pano-node.jar --pano https://panel.example.com --code 123456 --data ./node-data
@@ -81,7 +81,7 @@ in your terminal, and lets Pano manage the rest. Nothing is moved.
 
 ```bash
 cd /home/mc/survival
-curl -fLo pano-agent.jar 'https://panel.example.com/api/node/pano-agent.jar'
+curl -fLo pano-agent.jar 'https://panel.example.com/api/v1/node/pano-agent.jar'
 
 # Stop the server, then run the dialog's command once (the code works once, for 1 minute)
 java -jar pano-agent.jar --pano 'https://panel.example.com' --code k7m2x9qa4tj3n8wp

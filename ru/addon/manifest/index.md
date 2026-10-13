@@ -10,7 +10,7 @@
 
 - **PF4J** (Plugin Framework for Java) — библиотека, которая находит и загружает jar-файлы плагинов, пока Pano работает. Вы никогда не вызываете её сами; ей просто нужно, чтобы существовали определённые метаданные.
 - **JAR** — упакованный вывод Java, который на самом деле просто zip-файл. При сборке дополнения вы получаете один `.jar`.
-- **`MANIFEST.MF`** — обычный текстовый файл *внутри* этого jar (под `META-INF/`), содержащий метаданные, которые читает PF4J.
+- **`MANIFEST.MF`** — обычный текстовый файл *внутри* этого jar (под `META-INF/`), содержащий метаданные, которые читает Pano.
 
 Вы **не** редактируете `MANIFEST.MF` вручную. Вместо этого вы задаёте всё в properties-файле, а сборка копирует ваши значения в манифест за вас.
 
@@ -54,10 +54,11 @@ unzip -p build/libs/*.jar META-INF/MANIFEST.MF
 
 ### Что генерируется
 
-При заданном `gradle.properties` выше сборка записывает в `META-INF/MANIFEST.MF` строки вроде этих (имена атрибутов приходят от PF4J; значения — прямо из ваших properties):
+При заданном `gradle.properties` выше сборка записывает в `META-INF/MANIFEST.MF` строки вроде этих (имена атрибутов — те, что читает Pano; значения — прямо из ваших properties, а `api-level` — из Pano, под который вы собираете):
 
 ```
 id: pano-plugin-announcement
+api-level: 1
 name: Announcements
 description: Create, edit and manage your Minecraft server announcements!
 pano-version: local-build
@@ -83,13 +84,15 @@ source-url: https://github.com/panomc/pano-plugin-announcement
 *   `pluginLicense`: **(Необязательно)** Лицензия плагина (например, `MIT`, `Apache-2.0`).
 *   `pluginSourceUrl`: **(Необязательно)** URL исходного кода плагина.
 *   `pluginDependencies`: **(Необязательно)** Другие плагины Pano, которые нужны вашему дополнению, разделённые запятыми — например `pluginDependencies=other-plugin, some-plugin?`. Полный синтаксис смотрите в разделе [Зависимости](#зависимости) ниже.
-*   `pluginRequires`: **(Необязательно)** На каких версиях Pano вашему дополнению *разрешено* работать, записывается как диапазон версий вроде `>=1.0.0`. Пусто (по умолчанию) означает любую версию. Задавайте это, только если ваше дополнение полагается на возможность, добавленную в конкретном релизе Pano, например `pluginRequires=>=1.2.0`. (Это соответствует атрибуту манифеста `requires`.)
+*   `pluginRequires`: **(Необязательно)** Диапазон версий вроде `>=1.0.0`, записывается в атрибут манифеста `requires`. Сейчас Pano не сверяет его со своей версией, поэтому оставьте его пустым; загрузится ли дополнение, решает его уровень API (следующая строка).
+*   `apiLevel`: Уровень API Pano, который нужен вашему дополнению; записывается в манифест как `api-level`. Заготовка пишет `apiLevel=1`; без этой строки сборка берёт уровень из Pano, под который она компилируется. Jar без `api-level` отклоняется («needs API level 0»), поэтому не удаляйте строку.
+*   `pluginFreemium`: **(Необязательно)** `true` помечает дополнение как freemium (атрибут манифеста `freemium`). См. [Freemium](/ru/addon/freemium/).
 
 ::: tip `pluginPanoVersion` против `pluginRequires`
 Эти два звучат похоже, но делают разную работу:
 
 - **`pluginPanoVersion`** просто *записывает*, под какую версию Pano вы собирали. Это информационно.
-- **`pluginRequires`** *принуждается*: если вы задаёте диапазон, Pano отказывается загружать ваше дополнение на любой версии Pano вне его.
+- **`pluginRequires`** тоже записывается в манифест, но сейчас Pano его **не проверяет**. Проверяется **уровень API**: Pano отклоняет дополнение, чей `api-level` вне поддерживаемого им диапазона.
 :::
 
 ::: tip Ваш `pluginId` используется повсюду — выбирайте его тщательно
@@ -169,7 +172,7 @@ pluginDescription=Manage your server \u2014 fast and simple.
 
 Файл `gradle.properties` — это просто слой удобства. Если вы предпочитаете настраивать манифест сами или вам нужны динамические значения, вы можете отредактировать задачу **`shadowJar`** в `build.gradle.kts`. (`shadowJar` — это шаг сборки, который упаковывает ваше дополнение плюс его библиотеки в единый `.jar`, который загружает Pano.)
 
-Вот как Pano Boilerplate сопоставляет свойства с манифестом. Каждая строка `val … by project` вытягивает соответствующее значение из `gradle.properties`; блок `manifest { }` затем записывает его в `MANIFEST.MF` под именем атрибута, которого ожидает PF4J:
+Вот как Pano Boilerplate сопоставляет свойства с манифестом. Каждая строка `val … by project` вытягивает соответствующее значение из `gradle.properties`; блок `manifest { }` затем записывает его в `MANIFEST.MF` под именем атрибута, которого ожидает Pano:
 
 ```kotlin
 shadowJar {
@@ -183,9 +186,12 @@ shadowJar {
     val pluginSourceUrl: String? by project
     val pluginDependencies: String? by project
     val pluginRequires: String? by project
+    val pluginFreemium: String? by project
 
     manifest {
         attributes["id"] = pluginId
+        // panoApiLevel: `apiLevel` of gradle.properties, else the level of the Pano you compile against
+        panoApiLevel?.let { attributes["api-level"] = it }
         attributes["name"] = pluginName
         pluginDescription?.let { attributes["description"] = it }
         attributes["pano-version"] = pluginPanoVersion
@@ -196,12 +202,13 @@ shadowJar {
         pluginSourceUrl?.let { attributes["source-url"] = it }
         pluginDependencies?.let { attributes["dependencies"] = it }
         pluginRequires?.let { attributes["requires"] = it }
+        pluginFreemium?.let { attributes["freemium"] = it }
     }
 }
 ```
 
 ::: warning Не переименовывайте ключи атрибутов
-Вы можете свободно добавлять атрибуты, но **не** переименовывайте существующие ключи (`id`, `name`, `main-class`, `pano-version` и так далее). PF4J ищет их по этим точным именам, так что переименованный ключ незаметно перестаёт загружать ваше дополнение. Для справки: сам PF4J *требует* только `id`, `main-class` и `version`; всё остальное необязательно и записывается в манифест только когда вы это задаёте.
+Вы можете свободно добавлять атрибуты, но **не** переименовывайте существующие ключи (`id`, `name`, `main-class`, `pano-version` и так далее). Pano читает их по этим точным именам, так что с переименованным ключом ваше дополнение перестанет загружаться. `description`, `license`, `source-url`, `dependencies`, `requires` и `freemium` необязательны и записываются, только когда вы их задаёте; остальные должны присутствовать.
 :::
 
 Pano использует **PF4J** в фоне для обработки всей загрузки плагинов и управления ими. Вы никогда не взаимодействуете с ним напрямую в стандартной разработке, но если хотите более глубокие технические детали, можете обратиться к [документации PF4J](https://pf4j.org/).

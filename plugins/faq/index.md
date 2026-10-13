@@ -30,5 +30,5 @@ This plugin is open source and licensed under **GPLv3**. You can access the sour
 
 ## Setup
 1. Enable the plugin in the **Pano Admin Panel**.
-2. Navigate to **Panel → Plugins → FAQ**.
+2. Navigate to **Panel → FAQ** (added to the sidebar right after **Tickets**). The display settings (own page or support page, search, question limit) are on **Panel → Addons → FAQ**.
 3. Start by creating a category, then add your first question and answer!

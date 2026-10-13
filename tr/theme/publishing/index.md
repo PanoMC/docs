@@ -36,7 +36,13 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev, master]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -54,7 +60,7 @@ Dosyanın tamamı bu kadar. Push yaptığınızda paylaşılan workflow:
 3. Deterministik `.zip`'i paketler.
 4. Bir GitHub sürümü oluşturur ve o `.zip`'i otomatik olarak ekler.
 
-`my-theme` yerine `manifest.json` içindeki temanızın `id` değerini yazın.
+`my-theme` yerine `manifest.json` içindeki temanızın `id` değerini yazın. Dal adlarını değiştirmeyin: `master` kararlı sürüm, `dev` ön sürümdür ve yalnızca `master` dalından yapılan derleme production lisans sunucusunu kullanır. `permissions` bloğu zorunludur, çünkü paylaşılan workflow sizin workflow'unuzun verdiğinden fazla yetki alamaz. Workflow semantic-release çalıştırır; bu yüzden depoda iki dalı da listeleyen bir `.releaserc.json` de bulunmalıdır. Eklenen dosyanın adı `my-theme-v<sürüm>.zip` olur.
 
 ::: tip
 `GITHUB_TOKEN`, GitHub Actions tarafından otomatik olarak sağlanır — oluşturmanıza gerek yoktur. Yalnızca gösterildiği gibi iletin.
@@ -89,7 +95,7 @@ Daha iyi yol, bunu **`semantic-release-pano`** ile otomatikleştirmektir; böyle
 ```json
 ["semantic-release-pano", {
   "resourceId": "YOUR-RESOURCE-UUID",
-  "file": "my-theme-${version}.zip",
+  "file": "my-theme-v${version}.zip",
   "panoVersion": "1.0.0",
   "useGitHubLink": true,
   "repositoryUrl": "https://github.com/YourName/my-theme.git"

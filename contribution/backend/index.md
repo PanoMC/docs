@@ -6,16 +6,17 @@ Throughout our documentation and code, the project may be referred to as **Pano 
 
 ## Repository Applications
 
-The main [**Pano Core**](https://github.com/PanoMC/Pano) repository actually contains two distinct applications:
+The main [**Pano Core**](https://github.com/PanoMC/Pano) repository actually contains three distinct applications:
 
 1. **Pano Core**: The main platform that handles all web and server management logic.
 2. **Updater**: A secondary application responsible for updating the core platform. It is compiled alongside Pano and embedded into the final `.jar` file. It only runs during the update process.
+3. **pano-node** (the `Node` module): The daemon that runs managed Minecraft servers. It is a separate process and is also embedded into the final `.jar` file.
 
 ## Tech Stack
 - **Language**: Kotlin
 - **Framework**: Vert.x (Event-driven, non-blocking)
 - **Dependency Injection**: Spring DI
-- **Database**: A current MariaDB/MySQL (MariaDB 10.6+ / MySQL 8+)
+- **Database**: MariaDB / MySQL 5.5+
 
 ## Architecture
 The backend is designed to be modular and resilient. It supports a plugin system where features can be added or removed dynamically.
@@ -62,7 +63,7 @@ After running Pano for the first time, we strongly recommend closing the applica
 :::
 
 1. **Clone the Core**: `https://github.com/PanoMC/Pano`
-2. **Setup Environment**: Ensure you have JDK 17+ (tests run on JDK 21) and a current MariaDB/MySQL instance.
+2. **Setup Environment**: Gradle itself needs JDK 17+. The code compiles with a Java 11 toolchain and tests run on JDK 21, so have JDK 11 and JDK 21 installed too. You also need a MariaDB/MySQL instance.
 3. **Build**: Use `./gradlew build` to compile the project.
 4. **Run**: Run the generated JAR or use `./gradlew run -Pnogui` for development (runs via Gradle without creating a JAR).
 

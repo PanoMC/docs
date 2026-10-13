@@ -12,23 +12,23 @@ The Ban Management integration bridges the gap between your website's moderation
 - **Temporary & Permanent Bans** — Support for both timed suspensions and lifetime bans.
 - **Dynamic Kick Messages** — Automatically generates localized kick messages with reasons and expiry times.
 - **Platform-Wide Synchronization** — A ban applied in Pano affects all servers connected to that Pano instance.
-- **Easy Management** — View, search, and revoke bans from a single, modern interface.
+- **Easy Management** — Ban and unban from a player's page; the **Players** page has a **Banned** filter.
 
 ## Requirements
 
 1. **Pano MC Plugin** installed and connected to your Pano instance.
-2. **Ban Integration** enabled in your Pano settings.
+2. **Ban Integration** enabled for that server (it is by default).
 
 ## Setup Guide
 
-### Step 1: Enable Integration
+### Step 1: Check the Integration
 1. Log in to your **Pano Admin Panel**.
-2. Navigate to **Panel → Server Settings → Game Integration**.
-3. Enable the **Ban Integration** toggle.
-4. Click **Save**.
+2. Select the server, then open its **Settings → Game Integration** (the settings are per server).
+3. Make sure the **Ban Integration** toggle is on — it is by default.
+4. Click **Save** if you changed it.
 
 ### Step 2: Configure Ban Messages
-Ban messages are pulled from your Pano platform's translation files. You can customize them in the **Translations** section of your panel:
+Ban messages are pulled from your Pano platform's translation files. You can customize them in the **Translations** section of your panel, under the **MC Plugin** type:
 - `auth.ban-kick-temporary`: Message shown for timed bans.
 - `auth.ban-kick-permanent`: Message shown for permanent bans.
 
@@ -38,7 +38,10 @@ Ban messages are pulled from your Pano platform's translation files. You can cus
 2. **Check Status:** The plugin sends a real-time request to the Pano platform to check the player's status.
 3. **Enforcement:**
    - If the player is **not banned**, they are allowed to join normally.
-   - If the player is **banned**, the plugin calculates the remaining time (if any) and kicks the player with the designated reason.
+   - If the player is **banned**, the plugin kicks the player with the reason and, for a timed ban, the date it ends.
+4. **Already online:** a player who is banned while playing is kicked at once.
+
+If the server cannot reach Pano at that moment, the player is let in.
 
 ## Need Help?
 If you encounter issues or have feedback:

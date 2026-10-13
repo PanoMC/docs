@@ -126,6 +126,8 @@ Gerçek kurulumlar eski şekle sahip olduktan sonra orijinal `CREATE TABLE`'ı d
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
     override val paths = listOf(Path("/shouts", RouteType.GET))
 
+    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler? = null
+
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
         return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient)))
@@ -135,7 +137,7 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint`, eklenti yüklendiği an route'un kendini kaydetmesini sağlar — bir kayıt çağrısı yoktur.
 - Temel sınıf, kimin girebileceğini seçer: `Api` (herkese açık), `LoggedInApi` (giriş yapmış), `PanelApi` (yöneticiler), `SetupApi` (yalnızca kurulum).
-- Yol **görelidir**: Pano bu uç noktayı `/api/plugins/pano-plugin-shoutbox/shouts` adresinde sunar. `getValidationHandler` isteğe bağlıdır; doğrulanacak bir şey yoksa yazılmaz.
+- Yol **görelidir**: Pano bu uç noktayı `/api/plugins/pano-plugin-shoutbox/shouts` adresinde sunar. Doğrulanacak bir şey yoksa `getValidationHandler` `null` döndürür; iskeletin derlendiği Pano sürümü bu override'ı zorunlu tutar, daha yeni sürümlerde isteğe bağlıdır.
 - `Successful(map)` tam olarak haritanıza serileştirilir. Hatalar `{"error":{"code":"…"}}` biçimindedir.
 
 ::: tip Kontrol noktası: ilk uç noktanıza ulaşın
@@ -166,7 +168,7 @@ class ManageShoutboxPermission : PanelPermission("fa-bullhorn")
 `@PermissionDefinition` onu otomatik olarak kaydeder; dize, panelde gösterilen Font Awesome simgesidir. Başka yerde kontrol edeceğiniz **izin düğümü**, sınıf adından bir kurala göre türetilir → `pano.plugin.pano-plugin-shoutbox.manage.shoutbox`. O düğümü Kotlin'de asla yazmazsınız — `requirePermission`'a `ManageShoutboxPermission()` geçirmek yeterlidir — ama frontend kodunuzda o tam dizeyi **tekrarlayacaksınız**, o yüzden onu hatırlayın.
 
 ::: tip Kontrol noktası: izni görün
-Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Roller**'i açın ve bir rolü düzenleyin — **bullhorn** (megafon) simgeli yeni bir izin görünmeli. Bir sürpriz: **yöneticiler izin kontrollerini atlar**, dolayısıyla bir `NO_PERMISSION` reddini gerçekten görmek için, o izin verilmemiş yönetici-olmayan bir rolle test etmelisiniz.
+Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Yetkiler**'i açın ve bir rolü düzenleyin — **bullhorn** (megafon) simgeli yeni bir izin görünmeli. Bir sürpriz: **yöneticiler izin kontrollerini atlar**, dolayısıyla bir `NO_PERMISSION` reddini gerçekten görmek için, o izin verilmemiş yönetici-olmayan bir rolle test etmelisiniz.
 :::
 
 ## Bir shout yayınlama (panel uç noktası)

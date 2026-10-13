@@ -86,7 +86,7 @@ Two functions come from `@panomc/sdk` alongside the base class:
 
 | Export | Purpose |
 |---|---|
-| `viewComponent(importer)` | **Rule: always write `viewComponent(() => import('./X.svelte'))` when you hand a component to any `register` call** — never the bare `() => import(...)` and never the component itself. (It attaches the correct shared-runtime `mount`/`hydrate`/`unmount` for the host; that plumbing is why the wrapper is mandatory.) |
+| `viewComponent(importer)` | **Rule: always write `viewComponent(() => import('./X.svelte'))` when you hand a component to any `register` call** — never the bare `() => import(...)` and never the component itself. This is the panel form; in the theme a registration names a view instead (`view: '<ns>:<Name>'`). (It attaches the correct shared-runtime `mount`/`hydrate`/`unmount` for the host; that plumbing is why the wrapper is mandatory.) |
 | `getPanoContext()` | Returns the current Pano host context. You can ignore this unless you need the raw host context from code that isn't a `PanoPlugin` method (a plain method has `this.context` instead) — rarely needed. |
 
 ::: warning `onContextUpdate` is not called
@@ -108,7 +108,8 @@ Use these to register whole pages of your own — under the theme (`/…`) or th
 | Option | Type | Meaning |
 |---|---|---|
 | `path` | string | The route (see path forms below). |
-| `component` | `viewComponent(...)` | The page component. |
+| `component` | `viewComponent(...)` | **Panel.** The page component. |
+| `view` | string | **Theme.** The id of a view of your plugin (`shoutbox:ShoutboxPage`), instead of `component`. On the site an item with `component` and no `view` is dropped with an error. |
 | `systemLayout` | string | Wrap your page in one of the host's built-in layouts (names listed below). Use `MainLayout` for a normal page; the other names match specific host sections (e.g. `ProfileLayout`, `SettingsLayout`). |
 | `layout` | `viewComponent(...)` | Use your own layout component instead of a built-in one. |
 | `resetLayout` | boolean | Render with **no** host header, sidebar, or footer — your component gets the whole page. ("Chrome" is the general word for that surrounding host UI.) |
@@ -136,7 +137,7 @@ A page module may also **export `load(event)`** (see the "three kinds of `load()
 **`systemLayout` names — panel:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `AuthShell`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerDetailLayout`, `ServerSettingsLayout`, `ServersLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
 
 ::: tip Checkpoint — did my page register?
-After a `pano.ui.page.register({ path: '/your-path', component })` call, rebuild your addon and reload the site. Visiting `/your-path` should now show your component. Nothing there? Check that `component` is wrapped in `viewComponent(() => import('./X.svelte'))` and that `register` ran inside `onLoad()`.
+After a `pano.ui.page.register({ path: '/your-path', component })` call in the panel branch, rebuild your addon and reload the panel. Visiting `/panel/your-path` should now show your component. (On the site, pass `view: '<ns>:<Name>'` instead of `component` and visit `/your-path`.) Nothing there? Check that `component` is wrapped in `viewComponent(() => import('./X.svelte'))` and that `register` ran inside `onLoad()`.
 :::
 
 ## 3. Hooks — `pano.ui.hook` (theme + panel)
@@ -154,7 +155,8 @@ A **hook** is a named hole in a host page: anything you register under that hook
 | Option | Type | Meaning |
 |---|---|---|
 | `name` | string | The hook name (tables below). |
-| `component` | `viewComponent(...)` | The component to mount. |
+| `component` | `viewComponent(...)` | **Panel.** The component to mount. |
+| `view` | string | **Theme.** The id of a view of your plugin (`shoutbox:ShoutboxPage`), instead of `component`. On the site an item with `component` and no `view` is dropped with an error. |
 | `permission` | string | Only render for users holding this permission node. |
 | `skipLoad` | boolean | Do not run the component's `load()` during page load. Use this when your hook fetches its own data on mount, so a page-load run would be wasted or would fail. |
 | `invisible` | boolean | Register but start hidden. |
@@ -237,7 +239,7 @@ The `post`, `playerData`, `addon`, `player`, and `category` props above are the 
 :::
 
 ::: tip Checkpoint — did my hook render?
-After `pano.ui.hook.register({ name: 'theme:top', component })`, rebuild and reload a themed page. Your component should appear at that hook's spot. If not, confirm you used a real hook name from the tables above and wrapped the component in `viewComponent(...)`.
+After `pano.ui.hook.register({ name: 'theme:top', view: 'shoutbox:ShoutboxWidget' })`, rebuild and reload a themed page. Your view should appear at that hook's spot. If not, confirm you used a real hook name from the tables above and that the view id exists (in the panel: that the component is wrapped in `viewComponent(...)`).
 :::
 
 ## 4. View slots — `pano.ui.view` (theme + panel)
@@ -260,7 +262,7 @@ A **view slot** is a named container that renders a **priority-ordered list** of
 
 | Call | Purpose |
 |---|---|
-| `pano.ui.view.register({ viewId, id, component, priority })` | Add a component to slot `viewId`. `priority` defaults to `10`; re-registering the same `id` replaces it. |
+| `pano.ui.view.register({ viewId, id, view, priority })` | Add a view to slot `viewId` (in the panel: `component` instead of `view`). `priority` defaults to `10`; re-registering the same `id` replaces it. |
 | `pano.ui.view.hide(viewId, id)` | Hide an item without removing it. |
 | `pano.ui.view.show(viewId, id)` | Un-hide it. |
 | `pano.ui.view.move(viewId, id, priority)` | Change an item's priority. |
@@ -270,7 +272,7 @@ A **view slot** is a named container that renders a **priority-ordered list** of
 
 `pano.ui.sidebar.*` is an **alias** of the same registry with the same methods, except the container key is `sidebarId` instead of `viewId` (and `onLoad` fires `theme:sidebar:<id>:load`).
 
-**Slot item shape:** `{ id, component, priority, props? }`. Higher `priority` renders first. There is **no** per-item `permission` field — slot items are not permission-filtered. To restrict one, check the permission **inside your component** — `import { hasPermission } from '@panomc/sdk/utils/auth'` — and render nothing if it fails. (Hooks and nav links *do* support a `permission` option.)
+**Slot item shape:** `{ id, view, priority, props? }` (`component` instead of `view` in the panel). Higher `priority` renders first. There is **no** per-item `permission` field — slot items are not permission-filtered. To restrict one, check the permission **inside your component** — `import { hasPermission } from '@panomc/sdk/utils/auth'` — and render nothing if it fails. (Hooks and nav links *do* support a `permission` option.)
 
 ### Theme slot IDs
 
@@ -445,18 +447,21 @@ This is the frozen **`@panomc/sdk`** import surface — each specifier maps to a
 | Specifier | Exports |
 |---|---|
 | `@panomc/sdk` | `PanoPlugin`, `viewComponent`, `getPanoContext` |
-| `@panomc/sdk/utils/api` | `ApiUtil` (default), `NETWORK_ERROR`, `networkErrorBody`, `buildQueryParams` |
+| `@panomc/sdk/utils/api` | `ApiUtil` (default), `NETWORK_ERROR`, `networkErrorBody`, `buildQueryParams`, `createPluginApi` |
 | `@panomc/sdk/utils/auth` | `hasPermission(permission, user)` |
 | `@panomc/sdk/utils/tooltip` | `tooltip` (also default) |
 | `@panomc/sdk/utils/text` | `copy` |
 | `@panomc/sdk/utils/language` | `_`, `languageLoading`, `currentLanguage`, `Languages`, `init`, `getAcceptedLanguage`, `loadLanguage`, `changeLanguage`, `getLanguageByLocale` |
 | `@panomc/sdk/utils/component` | `viewComponent` |
 | `@panomc/sdk/toasts` | `showToast`, `limitTitle` |
-| `@panomc/sdk/components/theme` | `PlayerHead`, `NoContent`, `Date`, `Toast`, `PageTitle`, `PageActions`, `Pagination` |
+| `@panomc/sdk/components/theme` | `PlayerHead`, `NoContent`, `Date`, `Toast`, `PageTitle`, `PageActions`, `Pagination`, `PluginBlock`, `PluginSlot` |
 | `@panomc/sdk/components/panel` | `NoContent`, `Editor`, `DragAndDropZone`, `Date`, `Toast`, `PageLoading`, `PageActions`, `PageLoader`, `PageNavItem`, `PageNav`, `Pagination`, `CardFilters`, `CardFiltersItem`, `CardHeader`, `SearchInput` |
 | `@panomc/sdk/variables` | `API_URL`, `UI_URL`, `PANEL_URL`, `SETUP_URL`, `PANO_WEBSITE_URL`, `PANO_WEBSITE_API_URL`, `PRERELEASE`, `COOKIE_PREFIX`, `CSRF_TOKEN_COOKIE_NAME`, `JWT_COOKIE_NAME`, `CSRF_HEADER`, `updateApiUrl`, `updatePanoWebsiteUrl`, `updatePanoWebsiteApiUrl` |
 | `@panomc/sdk/svelte` | `page`, `base`, `navigating`, `browser`, `goto`, `invalidate`, `invalidateAll`, `error`, `redirect` |
 | `@panomc/sdk/internal` | `setPanoContext`, `getPanoContext` |
+| `@panomc/sdk/utils/route` | `route` |
+| `@panomc/sdk/controllers` | `plugin`, `useController`, `reactive` |
+| `@panomc/sdk/views` | `createViewProxy` |
 
 `viewComponent` appears twice — in `@panomc/sdk` and `@panomc/sdk/utils/component`. It's the **same function**; import from either (`@panomc/sdk` is the usual path).
 
@@ -539,7 +544,7 @@ Your build deliberately does **not** bundle these imports into your addon's JS �
 
 Allowed bare specifiers are exactly:
 
-- Every `@panomc/sdk` specifier in the §9 table.
+- Every `@panomc/sdk` specifier in the §9 table, plus `@panomc/sdk/plugin-api` (§11), which your build resolves itself.
 - Svelte: `svelte`, `svelte/store`, `svelte/transition`, `svelte/easing`, `svelte/motion`, `svelte/animate`, `svelte/legacy`, `svelte/events`, `svelte/attachments`, `svelte/reactivity`, `svelte/reactivity/window`, and `svelte-i18n`.
 - A **fixed** set of Svelte internals *(advanced — the compiler emits these imports into your built code for you; you never write them by hand)*: `svelte/internal`, `svelte/internal/client`, `svelte/internal/disclose-version`, `svelte/internal/flags/legacy`, `svelte/internal/flags/async`, and `svelte/internal/flags/tracing`. This is an exact list, **not** a `svelte/internal/*` wildcard; any other `svelte/internal/...` subpath does not resolve.
 
@@ -557,8 +562,8 @@ A Kotlin endpoint declares a path **relative to its scope** and Pano adds the pr
 
 | Class | Declared | Served at |
 |---|---|---|
-| `Api`, `LoggedInApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/hello` |
-| `PanelApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/panel/hello` |
+| `Api`, `LoggedInApi` | `Path("/hello", RouteType.GET)` | `/api/plugins/<pluginId>/hello` |
+| `PanelApi` | `Path("/hello", RouteType.GET)` | `/api/plugins/<pluginId>/panel/hello` |
 | core (not yours) | `/posts` | `/api/v1/posts` |
 
 Starting a declared path with `/api` or `/panel`, leaving it empty, or putting a parameter or `_` first (`/:id`) stops your plugin at startup with a message that names the class and the fix. Every response carries `Pano-Api-Level`.

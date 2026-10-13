@@ -1,12 +1,15 @@
 # Install with Docker
 
-Docker is an alternative to the [`.jar` install](../installation/): one image holds Java, Pano and
+Docker is an alternative to the [installer](../installation/installer/) and the [`.jar` install](../installation/manual/): one image holds Java, Pano and
 everything Pano needs to run. [Pano Host](https://panomc.com/host) runs every Pano Instance the same way.
 [Configuration](configuration/) covers environment variables and the `/data` volume; [Runtime](runtime/)
 covers upgrades, the runtime image, Java and memory.
 
+The quickest way is the installer's [Docker mode](../installation/installer/#docker): `curl -fsSL https://panomc.com/install | bash -s -- --docker`
+writes the Compose file below (plus a memory limit) with its `.env` and starts it. This page does the same by hand.
+
 > [!NOTE]
-> The images are published from Pano **1.0.0-alpha.520** on. Older releases only ship the `.jar`.
+> The images are published from Pano **1.0.0-alpha.522** on. Older releases only ship the `.jar`.
 
 ## The image
 
@@ -16,7 +19,7 @@ All tags live in one public package, `ghcr.io/panomc/pano`, built for **amd64** 
 | --- | --- |
 | `latest` | The newest stable release. Until 1.0.0 ships: the newest beta (or alpha while no beta image exists) |
 | `beta`, `alpha` | The newest release of that prerelease channel |
-| `<version>`, e.g. `1.0.0-alpha.520` | Exactly that release, never moves |
+| `<version>`, e.g. `1.0.0-alpha.522` | Exactly that release, never moves |
 | `runtime-jre<N>` | Java `N` and the launcher, **no** Pano. See [The runtime image](runtime/#runtime-image) |
 
 The image runs Pano as a non-root user on Java 11. Pano still needs a **MySQL or MariaDB** database;
@@ -82,7 +85,7 @@ both examples below start MariaDB next to it.
 
    Add `PANO_PORT=80` to `.env` to serve Pano on port 80, and `PANO_TAG=beta` (or a version) to pick a tag.
 
-3. Open `http://<your-server-ip>:8088/` and follow the [Setup Wizard](../installation/#setup-wizard-step-by-step).
+3. Open `http://<your-server-ip>:8088/` and follow the [Setup Wizard](../installation/setup/).
    The database step is already filled in from the environment; leave the password empty to keep `PANO_DB_PASSWORD`.
 
 ## docker run {#docker-run}

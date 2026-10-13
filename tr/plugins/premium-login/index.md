@@ -42,7 +42,7 @@ Her ikisi de panel rollerine atanabilir ve panel kontrolleri bunlarla denetlenir
 ## Ön Koşullar
 
 - **Bir premium lisans.** Premium Login ücretli bir eklentidir: başlangıçta bir panomc.com lisansını doğrular ve biri olmadan başlamaz.
-- **Bir Microsoft Azure uygulaması.** Azure Portal'da bir uygulama kaydedin (kişisel Microsoft hesapları türü), **Client ID** ve **Client Secret**'ı sağlayın ve yönlendirme URI'sini `https://yoursite.com/api/premium-login/microsoft/callback` olarak ayarlayın. Özelliği genel kullanıma açmak için uygulamayı Microsoft'a doğrulama için gönderin.
+- **Bir Microsoft Azure uygulaması.** Azure Portal'da bir uygulama kaydedin (kişisel Microsoft hesapları türü), **Client ID** ve **Client Secret**'ı sağlayın ve yönlendirme URI'sini `https://yoursite.com/api/plugins/pano-plugin-premium-login/microsoft/callback` olarak ayarlayın. Özelliği genel kullanıma açmak için uygulamayı Microsoft'a doğrulama için gönderin.
 - **Sunucu tarafı senkronizasyon**, Spigot/Bungee/Velocity sunucunuzda kurulu **Pano MC eklentisini** (web sitenize bağlı) ve **FastLogin**'i gerektirir (FastLogin, Spigot'ta ProtocolLib'i ima eder).
 - Kullanıcı-adı-çakışması e-postaları için **yapılandırılmış bir posta sistemi** ve eklenti başlatılmadan önce tamamlanmış bir site kurulumu.
 

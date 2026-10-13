@@ -2,15 +2,10 @@
 
 ## Örnek Proje
 
-Örnek entegrasyon eklentisi repository'mize göz atın:
+Ayrı bir örnek repository yoktur. Referans, Pano MC Eklentisi'nin kendi mesajlarıdır; eklentinizle aynı sınıfları kullanırlar:
 
-- [Örnek Entegrasyon Eklentisi](https://github.com/PanoMC/example-integration-plugin) (Referans implementasyon)
-
-Bu repository şunları gösterir:
-- Pano MC Eklentisi API dependency kurulumu
-- Özel istek ve handler'lar oluşturma
-- Üçüncü taraf eklentilere bağlanma
-- En iyi uygulamalar ve desenler
+- [İstekler](https://github.com/PanoMC/pano-mc-plugin/tree/alpha/Core/src/main/kotlin/com/panomc/plugins/pano/core/platform/request) (örneğin `GetPlayerInfoRequest`)
+- [Yanıtlar](https://github.com/PanoMC/pano-mc-plugin/tree/alpha/Core/src/main/kotlin/com/panomc/plugins/pano/core/platform/message/response) (örneğin `GetPlayerInfoMessage`)
 ## Entegrasyonunuzu Test Etme
 
 ### Yerel Test
@@ -31,6 +26,6 @@ Eklentinizde hata ayıklama günlüğünü etkinleştirin:
 
 ```kotlin
 if (config.getBoolean("debug", false)) {
-    logger.info("[Debug] İstek gönderildi: ${request.getRequestType()}")
+    logger.info("[Debug] İstek gönderildi: ${request::class.simpleName} (${request.eventId})")
 }
 ```

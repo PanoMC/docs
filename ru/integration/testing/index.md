@@ -2,15 +2,10 @@
 
 ## Пример проекта
 
-Ознакомьтесь с нашим репозиторием примера плагина интеграции:
+Отдельного репозитория с примером нет. Образцом служат собственные сообщения Pano MC Plugin; они используют те же классы, что и ваш плагин:
 
-- [Пример плагина интеграции](https://github.com/PanoMC/example-integration-plugin) (Эталонная реализация)
-
-Этот репозиторий демонстрирует:
-- Настройку зависимости Pano MC Plugin API.
-- Создание пользовательских запросов и обработчиков.
-- Подключение к сторонним плагинам.
-- Лучшие практики и паттерны.
+- [Запросы](https://github.com/PanoMC/pano-mc-plugin/tree/alpha/Core/src/main/kotlin/com/panomc/plugins/pano/core/platform/request) (например, `GetPlayerInfoRequest`)
+- [Ответы](https://github.com/PanoMC/pano-mc-plugin/tree/alpha/Core/src/main/kotlin/com/panomc/plugins/pano/core/platform/message/response) (например, `GetPlayerInfoMessage`)
 ## Тестирование вашей интеграции
 
 ### Локальное тестирование
@@ -31,6 +26,6 @@
 
 ```kotlin
 if (config.getBoolean("debug", false)) {
-    logger.info("[Debug] Запрос отправлен: ${request.getRequestType()}")
+    logger.info("[Debug] Запрос отправлен: ${request::class.simpleName} (${request.eventId})")
 }
 ```

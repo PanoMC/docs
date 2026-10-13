@@ -5,7 +5,7 @@
 ## İletişim (WebSocket)
 İletişim, gerçek zamanlı performans için WebSocket üzerinden yürütülür. Güvenliği sağlamak için hibrit bir şifreleme yöntemi kullanıyoruz:
 - **RSA**: İlk anahtar değişimi için kullanılır.
-- **AES-256**: Sonraki tüm mesajların şifrelenmesi için kullanılır.
+- **AES-256-GCM**: Sonraki tüm mesajların şifrelenmesi için kullanılır.
 
 ## Desteklenen Platformlar
 Çok çeşitli Minecraft sunucu platformlarını destekliyoruz:
@@ -22,7 +22,7 @@ Minecraft eklentisi (veya çekirdek platform) için çeviri eklemek, değiştirm
 `Pano/src/main/resources/locales`
 
 ## Geliştirme
-Eklenti deposu, ortak mantığın bir `core` modülünde paylaşıldığı, platforma özgü uygulamaların ise kendi modüllerinde bulunduğu modüler bir yapı kullanır.
+Eklenti deposu, ortak mantığın `Core` modülünde paylaşıldığı, platforma özgü uygulamaların ise kendi modüllerinde bulunduğu modüler bir yapı kullanır.
 
 ### Branching Politikası
 Pano Core projesinde olduğu gibi, bu proje de üç aşamalı bir yayın döngüsü izler.

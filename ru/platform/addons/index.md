@@ -82,14 +82,14 @@ java -Dpf4j.pluginsDir=/path/to/custom/plugins -jar Pano-<version>.jar
 
 ### 2. Из Pano Store
 
-1. В том же окне **Install Addon** нажмите **Browse Store**.
+1. В том же окне **Установить аддон** нажмите **Установить из Pano Store**.
 2. Найдите аддон, который хотите использовать — бесплатный или платный.
 3. Нажмите **Install**.
 4. После завершения установки он автоматически станет доступен в вашем списке аддонов.
 
 Вы можете изучать новые аддоны, покупать премиум-версии или обновлять существующие — всё это напрямую в **Pano Store**.
 
-> Для использования Маркетплейса требуется привязанный [аккаунт Pano](./advanced/connect-pano-account.md).
+> Для использования Маркетплейса требуется привязанный [аккаунт Pano](../configuration/services/).
 >
 > ⚠️ Любой аддон, не проверенный Pano, может быть небезопасен, используйте его на свой страх и риск!
 
@@ -160,13 +160,13 @@ java -Dpf4j.pluginsDir=/path/to/custom/plugins -jar Pano-<version>.jar
 ├── config.conf
 ├── plugins/
 │    ├── disabled.txt (необязательно)
-│    ├── pano-announcements-plugin/
-│    │     └── plugin.conf
-│    ├── pano-auth-integrations-plugin/
-│    │     └── plugin.conf
-│    ├── pano-announcements-plugin.jar
-│    ├── pano-auth-integrations-plugin.jar
-│    └── pano-feedback-plugin.jar
+│    ├── pano-plugin-announcement/
+│    │     └── config.conf
+│    ├── pano-plugin-social-login/
+│    │     └── config.conf
+│    ├── pano-plugin-announcement-1.1.0.jar
+│    ├── pano-plugin-social-login-1.1.0.jar
+│    └── pano-plugin-faq-1.1.0.jar
 ├── themes/
 └── file-uploads/
 ```
@@ -176,7 +176,7 @@ java -Dpf4j.pluginsDir=/path/to/custom/plugins -jar Pano-<version>.jar
 | Действие                      | Расположение                                    | Рекомендуемый метод                  |
 |-------------------------------|-------------------------------------------------|--------------------------------------|
 | **Установка (локально)**      | `Панель → Аддоны → Установить аддон`            | Перетаскивание или выбор файла       |
-| **Установка (магазин)**       | `Панель → Аддоны → Установить аддон → Browse Store` | Нажать install                       |
+| **Установка (магазин)**       | `Панель → Аддоны → Установить аддон → Установить из Pano Store` | Нажать install                       |
 | **Включить / Выключить**      | `Панель → Аддоны`                               | Переключатель                        |
 | **Удалить аддон**             | `Панель → Аддоны`                               | Удаление с подтверждением            |
 | **Сменить папку плагинов**    | Опция JVM                                       | `-Dpf4j.pluginsDir=/путь/к/папке`    |

@@ -10,7 +10,7 @@ A few terms you will see on this page:
 
 - **PF4J** (Plugin Framework for Java) — a library that finds and loads plugin jars while Pano is running. You never call it yourself; it just needs certain metadata to exist.
 - **JAR** — Java's packaged output, which is really just a zip file. When you build your addon you get one `.jar`.
-- **`MANIFEST.MF`** — a plain-text file *inside* that jar (under `META-INF/`) that holds the metadata PF4J reads.
+- **`MANIFEST.MF`** — a plain-text file *inside* that jar (under `META-INF/`) that holds the metadata Pano reads.
 
 You do **not** edit `MANIFEST.MF` by hand. Instead you set everything in a properties file, and the build copies your values into the manifest for you.
 
@@ -54,10 +54,11 @@ You should see your `id`, `name`, and `main-class` among the lines printed.
 
 ### What gets generated
 
-Given the `gradle.properties` above, the build writes lines like these into `META-INF/MANIFEST.MF` (the attribute names come from PF4J; the values come straight from your properties):
+Given the `gradle.properties` above, the build writes lines like these into `META-INF/MANIFEST.MF` (the attribute names are the ones Pano reads; the values come straight from your properties, `api-level` from the Pano you build against):
 
 ```
 id: pano-plugin-announcement
+api-level: 1
 name: Announcements
 description: Create, edit and manage your Minecraft server announcements!
 pano-version: local-build
@@ -83,13 +84,15 @@ Now the values, line by line. **(Required)** means the Pano build fails without 
 *   `pluginLicense`: **(Optional)** License of the plugin (e.g., `MIT`, `Apache-2.0`).
 *   `pluginSourceUrl`: **(Optional)** URL to the plugin's source code.
 *   `pluginDependencies`: **(Optional)** Other Pano plugins your addon needs, separated by commas — e.g. `pluginDependencies=other-plugin, some-plugin?`. See [Dependencies](#dependencies) below for the full syntax.
-*   `pluginRequires`: **(Optional)** Which Pano versions your addon is *allowed* to run on, written as a version range like `>=1.0.0`. Empty (the default) means any version. Set it only if your addon relies on a feature added in a specific Pano release, e.g. `pluginRequires=>=1.2.0`. (This maps to the manifest `requires` attribute.)
+*   `pluginRequires`: **(Optional)** A version range like `>=1.0.0`, written to the manifest `requires` attribute. Pano does not check it against its own version today, so leave it empty; what decides whether your addon loads is its API level (next line).
+*   `apiLevel`: The Pano API level your addon needs, written to the manifest as `api-level`. The scaffold writes `apiLevel=1`; without the line the build takes the level from the Pano it compiles against. A jar with no `api-level` is refused ("needs API level 0"), so do not remove it.
+*   `pluginFreemium`: **(Optional)** `true` marks a freemium addon (manifest `freemium`). See [Freemium](/addon/freemium/).
 
 ::: tip `pluginPanoVersion` vs `pluginRequires`
 These two sound alike but do different jobs:
 
 - **`pluginPanoVersion`** just *records* which Pano version you built against. It is informational.
-- **`pluginRequires`** is *enforced*: if you set a range, Pano refuses to load your addon on any Pano version outside it.
+- **`pluginRequires`** is written to the manifest too, but Pano does **not** enforce it today. What is enforced is the **API level**: Pano refuses an addon whose `api-level` is outside the range it supports.
 :::
 
 ::: tip Your `pluginId` is used everywhere — choose it carefully
@@ -169,7 +172,7 @@ To find the escape for any character, look it up on a Unicode site (search e.g. 
 
 The `gradle.properties` file is just a convenience layer. If you prefer to configure your manifest yourself or need dynamic values, you can edit the **`shadowJar`** task in `build.gradle.kts`. (`shadowJar` is the build step that packages your addon plus its libraries into the single `.jar` Pano loads.)
 
-Here is how the Pano Boilerplate maps properties to the manifest. Each `val … by project` line pulls the matching value out of `gradle.properties`; the `manifest { }` block then writes it into `MANIFEST.MF` under the attribute name PF4J expects:
+Here is how the Pano Boilerplate maps properties to the manifest. Each `val … by project` line pulls the matching value out of `gradle.properties`; the `manifest { }` block then writes it into `MANIFEST.MF` under the attribute name Pano expects:
 
 ```kotlin
 shadowJar {
@@ -183,9 +186,12 @@ shadowJar {
     val pluginSourceUrl: String? by project
     val pluginDependencies: String? by project
     val pluginRequires: String? by project
+    val pluginFreemium: String? by project
 
     manifest {
         attributes["id"] = pluginId
+        // panoApiLevel: `apiLevel` of gradle.properties, else the level of the Pano you compile against
+        panoApiLevel?.let { attributes["api-level"] = it }
         attributes["name"] = pluginName
         pluginDescription?.let { attributes["description"] = it }
         attributes["pano-version"] = pluginPanoVersion
@@ -196,12 +202,13 @@ shadowJar {
         pluginSourceUrl?.let { attributes["source-url"] = it }
         pluginDependencies?.let { attributes["dependencies"] = it }
         pluginRequires?.let { attributes["requires"] = it }
+        pluginFreemium?.let { attributes["freemium"] = it }
     }
 }
 ```
 
 ::: warning Don't rename the attribute keys
-You can add attributes freely, but do **not** rename the existing keys (`id`, `name`, `main-class`, `pano-version`, and so on). PF4J looks them up by these exact names, so a renamed key silently stops your addon from loading. For reference, PF4J itself only *requires* `id`, `main-class`, and `version`; everything else is optional and is written to the manifest only when you set it.
+You can add attributes freely, but do **not** rename the existing keys (`id`, `name`, `main-class`, `pano-version`, and so on). Pano reads them by these exact names, so a renamed key stops your addon from loading. `description`, `license`, `source-url`, `dependencies`, `requires` and `freemium` are optional and written only when you set them; the others must be present.
 :::
 
 Pano uses **PF4J** in the background to handle all plugin loading and management. You never interact with it directly for standard development, but if you want the deeper technical details you can consult the [PF4J documentation](https://pf4j.org/).

@@ -10,13 +10,13 @@ The **Bans** plugin adds a professional and transparent banned players list to y
 - **Detailed Info:** Display ban reasons, durations, expiry dates, and the administrator who issued the ban.
 
 ### 2. Customization
-- **Display Options:** Toggle the visibility of avatars, ban reasons, banners, and more via the configuration.
+- **Display Options:** Toggle the visibility of avatars, ban reasons, who issued the ban, duration, expiry, the total count and the search box.
 - **Layouts:** Choose between different view layouts (e.g., Grid or List).
-- **Avatar Sizes:** Customize the size of player avatars displayed in the list.
+- **Avatar Sizes:** Show player avatars at 16, 32 or 64 px.
 
 ### 3. Integration
-- **Minecraft Backend:** Syncs directly with your server's ban management system to ensure accurate information.
-- **Real-time Updates:** Reflects the latest ban data automatically.
+- **Pano's Own Bans:** The list shows the users banned on your Pano website from the panel. It does not read the ban list of a Minecraft ban plugin.
+- **History:** Optionally list past bans as well, not only the active ones.
 
 ## Required Permission
 To configure settings for the bans list, users must have the following permission:
@@ -28,5 +28,5 @@ This plugin is open source and licensed under **GPLv3**. You can access the sour
 
 ## Setup
 1. Enable the plugin in the **Pano Admin Panel**.
-2. Navigate to **Panel → Plugins → Bans → Settings** to configure the display settings.
+2. Navigate to **Panel → Addons → Bans** to configure the display settings.
 3. The ban list will be available on your website at the `/bans` route (depending on your theme).

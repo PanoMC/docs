@@ -41,7 +41,7 @@ bunx @panomc/theme-core eject-view HomeView
     data.posts       array — posts of the current page
     data.postCount   number — total number of posts
     data.page        number — current page number
-    data.totalPage   number — total page count for pagination
+    data.totalPages  number — total page count for pagination
     themeSettings    object — theme settings from context
     onPageClick      function(data, page) — pagination handler
 -->
@@ -97,7 +97,7 @@ bun run check
 Зелёный `check` означает, что ваше представление всё ещё соблюдает свой контракт. Если он жалуется на отсутствующую точку монтирования, верните её на место и запустите снова.
 
 ::: tip Добавление новых настроек для владельца сайта
-Если ваша переработка добавляет опцию, которой владелец сайта должен управлять из панели (скажем, произвольный заголовок героя), она должна быть объявлена под `settingsSchema` в `theme.config.js`, иначе ввод не сохранится. Справочник [Изменение дизайна страниц](/ru/theme/views/#custom-theme-settings) показывает точную форму.
+Если ваша переработка добавляет опцию, которой владелец сайта должен управлять из панели (скажем, произвольный заголовок героя), она должна быть объявлена под `settingsSchema` в `theme.config.js`, иначе ввод не сохранится. Справочник [Изменение дизайна страниц](/ru/theme/views/#собственные-настроики-темы) показывает точную форму.
 :::
 
 Главная страница Ember теперь имеет свою собственную форму. Давайте заставим её слова говорить на каждом языке.

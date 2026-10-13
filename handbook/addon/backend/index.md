@@ -126,6 +126,8 @@ Now expose the shouts to the theme. A public endpoint extends `Api`, and `ShoutD
 class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
     override val paths = listOf(Path("/shouts", RouteType.GET))
 
+    override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler? = null
+
     override suspend fun handle(context: RoutingContext): Result {
         val sqlClient = getSqlClient()
         return Successful(mapOf("shouts" to shoutDao.getAll(sqlClient)))
@@ -135,7 +137,7 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 
 - `@Endpoint` makes the route register itself the instant the addon loads — there's no registration call.
 - The base class picks who's allowed in: `Api` (public), `LoggedInApi` (signed-in), `PanelApi` (admins), `SetupApi` (setup only).
-- The path is **relative**: Pano serves this endpoint at `/api/plugins/pano-plugin-shoutbox/shouts`. `getValidationHandler` is optional and left out when there is nothing to validate.
+- The path is **relative**: Pano serves this endpoint at `/api/plugins/pano-plugin-shoutbox/shouts`. `getValidationHandler` returns `null` when there is nothing to validate; the Pano version the scaffold compiles against requires the override, newer ones make it optional.
 - `Successful(map)` serializes to exactly your map. Failures are `{"error":{"code":"…"}}`.
 
 ::: tip Checkpoint: hit your first endpoint
@@ -166,7 +168,7 @@ class ManageShoutboxPermission : PanelPermission("fa-bullhorn")
 `@PermissionDefinition` registers it automatically; the string is the Font Awesome icon shown in the panel. The **permission node** you'll check elsewhere is derived from the class name by rule → `pano.plugin.pano-plugin-shoutbox.manage.shoutbox`. You never type that node in Kotlin — passing `ManageShoutboxPermission()` to `requirePermission` is enough — but you **will** repeat the exact string in your frontend code, so remember it.
 
 ::: tip Checkpoint: see the permission
-After a rebuild and restart, open **Panel → Roles** and edit a role — a new permission with a **bullhorn** icon should appear. One surprise: **admins bypass permission checks**, so to actually see a `NO_PERMISSION` rejection you must test with a non-admin role that hasn't been granted it.
+After a rebuild and restart, open **Panel → Permissions** and edit a role — a new permission with a **bullhorn** icon should appear. One surprise: **admins bypass permission checks**, so to actually see a `NO_PERMISSION` rejection you must test with a non-admin role that hasn't been granted it.
 :::
 
 ## Posting a shout (the panel endpoint)

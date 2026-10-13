@@ -8,14 +8,14 @@ Pano iki ayrı web sitesi çalıştırır: **tema** (ziyaretçilerin `siteniz.co
 
 Bu sayfalar boyunca kullanacağımız örnek **Shoutbox**'tır: ana sayfanın üstünde son "shout"lardan oluşan küçük bir bileşen, artı yöneticilerin onları yönettiği bir panel. Bu sayfa `main.js`'i bağlar; iki konu sayfası — [Tema Arayüzü](/tr/addon/theme-ui/) ve [Panel Arayüzü](/tr/addon/panel-ui/) — gerçek ekranları oluşturur ([Sonraki adım](#sonraki-adım)'a bakın).
 
-> Bir yapay zeka asistanı veya eski bir eğitim size bu sayfalarda veya [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir API verirse, o var değildir. Yaygın sahte veya kaldırılmış çağrılar bu [sayfanın altında](#var-olmayan-ai-tarafından-uydurulan-apiler) listelenmiştir.
+> Bir yapay zeka asistanı veya eski bir eğitim size bu sayfalarda veya [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir API verirse, o var değildir. Yaygın sahte veya kaldırılmış çağrılar bu [sayfanın altında](#var-olmayan-ai-tarafından-uydurulan-api-ler) listelenmiştir.
 
 ::: tip Svelte'te yeni misiniz?
 Eklenti arayüzleri, Pano temalarıyla aynı şekilde Svelte'te yazılır. Onu hiç kullanmadıysanız, etkileşimli [Svelte eğitimi](https://svelte.dev/tutorial) bir eklenti arayüzünün ihtiyaç duyduğu her şeyi kapsar.
 :::
 
 ::: tip Başlamadan önce
-Eklentinizi **pano-boilerplate-plugin** şablonundan iskele olarak oluşturmuş ve [Backend Geliştirme](/tr/addon/backend/)'yi tamamlamış olmalısınız. `src/main.js` dosyası boilerplate'te zaten var — onu oluşturmayacak, *düzenleyeceksiniz*. Dev döngüsünü `bun run dev` ile başlatın ve tüm süre boyunca çalışır bırakın; bu sayfalardaki her değişiklik sıcak yeniden yüklenir, böylece onu hemen görebilirsiniz. (Bitmiş eklentiyi bir yayına dönüştürmek [Derleme ve Yayınlama](/tr/addon/publishing/)'da kapsanır.)
+Eklentinizi `bunx @panomc/plugin-kit new` ile iskele olarak oluşturmuş olmalısınız ([Başlangıç](/tr/addon/getting-started/)). İskelede `src/main.js` yoktur (yalnızca view'ları olan bir eklentinin buna ihtiyacı olmaz) — onu bu sayfada *oluşturacaksınız*. Dev döngüsünü `bun run dev` ile başlatın ve tüm süre boyunca çalışır bırakın; bu sayfalardaki her değişiklik sıcak yeniden yüklenir, böylece onu hemen görebilirsiniz. (Bitmiş eklentiyi bir yayına dönüştürmek [Derleme ve Yayınlama](/tr/addon/publishing/)'da kapsanır.)
 :::
 
 ## View'lar: sayfa veya widget başına bir dosya
@@ -56,7 +56,7 @@ Bir eklentinin site arayüzü **adlandırılmış view'lardan** oluşur. Bir vie
 
 Derlemenin zorunlu kıldığı kurallar (her biri dosya, satır ve çözümle): bir view yalnızca `svelte*`, `svelte-i18n`, `@panomc/sdk*`, diğer view'ları ve yardımcıları import eder; `setContext` veya `getContext` çağırmaz; yinelenen dosya adı olmaz; kendi ad alanınızın dışında slot kimliği olmaz.
 
-**Stil.** Bir eklentinin varsayılan view'ları vanilla görünümüyle çizilir ve vanilla hiçbirini ezmez; görünümünüz kendi view'larınızda durur. Anlamlı sınıflara yazın (`shoutbox-latest__title`), gerekirse bir `<style>` bloğu kullanın. `style-block-scope` kuralı, her seçici `shoutbox-...` sınıfıyla başlamıyorsa, `:global` varsa ya da keyframes ve özel özellikler `shoutbox-...` diye adlanmamışsa derlemeyi durdurur. Tema değerlerini `var(--pano-*)` ile okuyun. Diğer temalar view'larınızı kendi yollarıyla yeniden biçimlendirir.
+**Stil.** Bir eklentinin varsayılan view'ları vanilla görünümüyle çizilir ve vanilla hiçbirini ezmez; görünümünüz kendi view'larınızda durur. Anlamlı sınıflara yazın (`shoutbox-latest__title`), gerekirse bir `<style>` bloğu kullanın. `bunx pano-plugin check --styles badge`, her seçici `shoutbox-...` sınıfıyla başlamıyorsa, `:global` varsa ya da keyframes ve özel özellikler `shoutbox-...` diye adlanmamışsa hata verir (`style-block-scope` kuralı). Tema değerlerini `var(--pano-*)` ile okuyun. Diğer temalar view'larınızı kendi yollarıyla yeniden biçimlendirir.
 
 **Yalnızca SDK 2.** `panoSdk 2` olmadan derlenen eklenti atlanır. `view` olmadan `component` ile kaydedilen öğe hata verilerek düşürülür; dosyada `export const view` veya `view: 'shoutbox:Ad'` kullanın.
 
@@ -126,7 +126,7 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
 - **Sınıf `default` dışa aktarım olmalıdır.** Pano tam olarak bir tane arar.
 - **`this.pano` tüm API'nizdir.** Pano onu `onLoad()` çalışmadan önce sizin için ayarlar — `onLoad()` içinde yalnızca `pano.isPanel`'i okur ve `pano.ui.*`'ı kullanırsınız.
 - **`pluginId`, eklentinizin ID'siyle tam olarak eşleşmelidir** — [Backend Geliştirme](/tr/addon/backend/)'den / plugin manifestonuzdan. Çeviriler ve panel detay-sayfası kancası ona göre anahtarlanır, bu yüzden bir uyumsuzluk onları sessizce bozar.
-- **Her bileşeni `viewComponent(() => import('./File.svelte'))` içine sarın.** Bu isteğe bağlı değildir. Bir `register` çağrısına verdiğiniz her bileşen — kancalar, sayfalar, view slotları — bu şekilde sarılmalıdır. Sade sözlerle: bu, Pano'ya dosyanın kendisi yerine dosyanızı yüklemek için bir *tarif* verir, böylece Pano onu sayfanın kendi Svelte kopyasıyla doğru anda yükleyebilir. Ayrıntılara ihtiyacınız yok — meraklıysanız [Mimari](/tr/addon/architecture/)'ye bakın.
+- **Her panel bileşenini `viewComponent(() => import('./File.svelte'))` içine sarın.** Bu isteğe bağlı değildir. Panelde bir `register` çağrısına verdiğiniz her bileşen — kancalar, sayfalar, view slotları — bu şekilde sarılmalıdır. (Site tarafında sarılacak bir şey yoktur: kayıt bir view adı verir, `view: 'shoutbox:Ad'`.) Sade sözlerle: bu, Pano'ya dosyanın kendisi yerine dosyanızı yüklemek için bir *tarif* verir, böylece Pano onu sayfanın kendi Svelte kopyasıyla doğru anda yükleyebilir. Ayrıntılara ihtiyacınız yok — meraklıysanız [Mimari](/tr/addon/architecture/)'ye bakın.
 - **Paylaşılan durumu `main.js`'te tutun.** `main.js`'in üst düzeyinde bildirdiğiniz değişkenler (yukarıdaki `_` deposu gibi) tam olarak bir kez var olur ve tüm bileşenleriniz tarafından paylaşılır. Derleme bunu yalnızca `main.js` için garanti eder, bu yüzden paylaşılan durum için başka dosyalara güvenmeyin. (Mekaniği [Mimari](/tr/addon/architecture/)'dedir.)
 - **`onUnload()` eklentiniz devre dışı bırakıldığında çalışır.** Şimdilik boş bırakın; çoğu eklentinin ona hiç ihtiyacı olmaz.
 
@@ -142,7 +142,7 @@ Bu iskelet tek başına ekranda henüz hiçbir şey çizmez — yalnızca eklent
 
 ## Bileşenlerinizde metni çevirme
 
-Tema geliştirmenin aksine, **eklenti bileşenlerinize otomatik olarak bir çeviri yardımcısı enjekte edilmez** — `_`'yi kendi `main.js`'inizden içe aktarmalısınız. O `_`, iskeletten korkutucu satırdır:
+Tema geliştirmenin aksine, **eklenti bileşenlerinize otomatik olarak bir çeviri yardımcısı enjekte edilmez** — panel bileşenleri `_`'yi kendi `main.js`'inizden içe aktarır. (Bir site view'ı `main.js`'i içe aktaramaz, derleme `src/theme/` dışındaki dosyayı reddeder; orada aynı depoyu `@panomc/sdk/controllers`'tan `const _ = plugin('shoutbox')._;` ile alın.) O `_`, iskeletten korkutucu satırdır:
 
 ```js
 export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
@@ -168,7 +168,7 @@ O anahtarı [Çeviriler](/tr/addon/localization/)'de gerçekten ekleyene kadar, 
 
 Bir AI aracı, eski bir eğitim veya iskele bunlardan herhangi birini önerirse, onu görmezden gelin — hiçbiri var değil. Yalnızca bu sayfalarda ve [Arayüz API Referansı](/tr/addon/api-reference/)'nda olanı kullanın.
 
-- **`pano.ui.page.register({ name, view, scopes })`** — gerçek `page.register`, `{ path, component, permission, ... }` alır (bkz. [Panel Arayüzü](/tr/addon/panel-ui/)). `name`/`view`/`scopes` biçimi yoktur.
+- **`pano.ui.page.register({ name, view, scopes })`** — gerçek `page.register`, panelde `{ path, component, permission, ... }` (bkz. [Panel Arayüzü](/tr/addon/panel-ui/)), site tarafında `{ path, view: 'shoutbox:Ad', ... }` alır. `name`/`scopes` biçimi yoktur; `view` de bir nesne değil, bir view kimliğidir.
 - **`import { Button, Card } from '@panomc/sdk/components/panel'`** — SDK'da böyle bir bileşen kütüphanesi yoktur.
 - **`onContextUpdate`** — eski boilerplate bu metodu tanımlar, ama **hiçbir host onu çağırmaz**. İskele oluşturulan `main.js`'iniz `onContextUpdate` içeriyorsa, onu silin.
 - **Düz bir dizeyle `api.get('/shouts')`** ya da `/api` ile başlayan bir yol — her çağrı, göreli bir yol içeren bir seçenekler nesnesi alır, örn. `api.get({ path: '/shouts' })`.

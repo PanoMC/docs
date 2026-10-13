@@ -24,7 +24,7 @@ Once the plugin is enabled, logged-in users find a **Profile Avatar Settings** s
 
 ## Admin settings
 
-- **Plugin settings:** open **Panel → Plugins → Avatar**. The **Avatar Settings** card lets you set the **Max Upload Size** (in MB), the **Allowed Image Types** (PNG / JPEG / GIF), and the **Allowed Avatar Sources** (Minotar / Gravatar / Custom Upload).
+- **Plugin settings:** open **Panel → Addons → Avatar**. The **Avatar Settings** card lets you set the **Max Upload Size** (in MB), the **Allowed Image Types** (PNG / JPEG / GIF), and the **Allowed Avatar Sources** (Minotar / Gravatar / Custom Upload).
 - **Editing a player's avatar:** open a player's detail page and use the **Profile Avatar** row in the edit modal to change or remove their picture.
 
 ## Required Permissions
@@ -44,6 +44,6 @@ This plugin is open source and licensed under the **MIT License**. You can acces
 ## Setup
 
 1. Enable the plugin in the **Pano Admin Panel**.
-2. Navigate to **Panel → Plugins → Avatar**.
+2. Navigate to **Panel → Addons → Avatar**.
 3. Configure your **Avatar Settings** (allowed sources, image types and max upload size).
 4. Users can now choose their avatar from their account **Settings** page!

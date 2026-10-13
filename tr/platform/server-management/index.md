@@ -32,8 +32,8 @@ başlatın ya da düğümü yeniden çevrimiçi yapın.
 
 1. Platformunuza uygun [Pano MC Plugin](https://github.com/PanoMC/pano-mc-plugin/releases) jar
    dosyasını sunucunun `plugins/` (ya da `mods/`) klasörüne koyun ve sunucuyu yeniden başlatın.
-2. Panelde üst çubuktaki **sunucu seçiciyi** açın → **Sunucu ekle** → **Pano eklentisiyle bağla**,
-   ardından gösterdiği komutu sunucu konsolunda çalıştırın:
+2. Panelde kenar çubuğunun üstündeki **Sunucular** düğmesine (sunucu seçici) basın → **Sunucu ekle** →
+   **Pano eklentisiyle bağla**, ardından gösterdiği komutu sunucu konsolunda çalıştırın:
 
    ```
    /pano connect <platform-address> <platform-code>
@@ -60,15 +60,18 @@ Pano'ya devreden **Pano Agent ile bağla** — bkz. [Pano Agent](pano-node/#pano
 | OP, oyun modu | Var | Var | — | Var |
 | Eklentiyi oyun içinde açma / kapatma | Var | Var | — | — |
 
-Vanilla'nın eklentisi olmadığından yalnızca yönetilen sunucu olarak çalışır; konsol ve güç düğümden
-gelir. Fabric modu Minecraft 26.1 veya üstünü ister. Forge ve NeoForge henüz katalogda değil. Eklentinin **protokol 2** konuşması gerekir: daha eski
-bir eklenti yine bağlanır, ama siz onu güncelleyene kadar sayfaları kapalı kalır.
+Vanilla, Forge ve NeoForge'un Pano eklentisi olmadığından bunlar yalnızca yönetilen sunucu olarak
+çalışır; konsol ve güç düğümden gelir. Fabric modu Minecraft 26.1 veya üstünü ister. Eklentinin
+**protokol 3** konuşması gerekir: daha eski bir eklenti bu Pano'ya hiç ulaşamaz ve jar değiştirilene
+kadar sunucusunda **Pano eklentisi bu Pano'ya ulaşamayacak kadar eski** uyarısı görünür — yönetilen
+sunucuda jar'ı düğüm değiştirir, bağlı sunucuda siz elle değiştirirsiniz.
 
 ## Panelde yol bulma {#finding-your-way}
 
 - Panel kenar çubuğundaki **Sunucu**, seçili sunucunun sayfalarını listeler — bkz.
   [Sunucu Sayfaları](server-pages/).
-- Üst çubuktaki **sunucu seçici** sunucuyu değiştirir, arama yapar ve **Sunucu ekle**'yi sunar.
+- **Sunucu seçici** — kenar çubuğunun üstündeki **Sunucular** düğmesi — sunucuyu değiştirir, arama
+  yapar ve **Sunucu ekle**'yi sunar.
   Kırmızı **!**, çöken ya da eklentisi, düğümü veya Pano Agent'ı bu Pano için eski kalan sunucuyu
   işaretler.
 - Yanındaki **düğüm simgesi** Düğümler sayfasını açar (**Düğümleri Yönet** izni gerekir).

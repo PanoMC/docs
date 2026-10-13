@@ -5,7 +5,7 @@ Shoutbox's widget, its permission, and its nav link all show hard-coded English 
 Full reference: [Localization](/addon/localization/).
 
 ::: tip Do I even have to?
-Yes, at least a little. You *can* hard-code English in your Svelte components — but two kinds of text have nowhere else to live: **permission titles** (the panel's Permissions page) and **activity-log lines** (the Activity page) can *only* come from locale files. So even an English-only addon needs an `en-US.json`.
+Yes, at least a little. You *can* hard-code English in your Svelte components — but two kinds of text have nowhere else to live: **permission titles** (the panel's Permissions page) and **activity-log lines** (the Logs page) can *only* come from locale files. So even an English-only addon needs an `en-US.json`.
 :::
 
 ## Step 1 — set up your locale files
@@ -29,9 +29,12 @@ If a key is missing for the visitor's language, Pano falls back to `en-US.json`.
 
 Pano serves every key you write under `plugins.<pluginId>.<key>`. For Shoutbox that prefix is `plugins.pano-plugin-shoutbox.`. **You never write that prefix** — in your JSON the keys stay short (`widget.title`), and Pano adds the prefix automatically. This is what keeps your keys from colliding with the core platform's or another addon's.
 
-The one place the prefix is actually written is a small helper the boilerplate already ships in `main.js`:
+The one place the prefix is actually written is a small helper. The scaffold does not ship it — add it to your `src/main.js` (`pluginId` is the constant already defined there):
 
 ```js
+import { derived } from 'svelte/store';
+import { _ as i18n } from '@panomc/sdk/utils/language';
+
 export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
 ```
 
@@ -55,11 +58,15 @@ Put your UI text in `en-US.json`, nested however you like. Nested objects become
 
 ## Step 4 — use the keys in a component
 
-Import the `_` helper from your `main.js` and read it with a `$` prefix:
+A panel component imports the `_` helper from your `main.js`. A site view under `src/theme/views/` may not import `main.js` (a view imports only Svelte, `@panomc/sdk` and its own helpers), so the widget declares the same helper itself. Either way, read it with a `$` prefix:
 
 ```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script>
-  import { _ } from '../main.js';
+  import { derived } from 'svelte/store';
+  import { _ as i18n } from '@panomc/sdk/utils/language';
+
+  const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.pano-plugin-shoutbox.${key}`, options));
 </script>
 
 <h2>{$_('widget.title')}</h2>
@@ -68,7 +75,7 @@ Import the `_` helper from your `main.js` and read it with a `$` prefix:
 `{$_('widget.title')}` looks up `plugins.pano-plugin-shoutbox.widget.title` for you. To fill a placeholder, pass values as a second argument: `$_('welcome-message', { values: { username: 'Ada' } })`.
 
 ::: tip Fix the `../` for your file's depth
-`import { _ } from '../main.js'` assumes your component sits exactly one folder below `main.js`. In a more deeply nested route, add more `../` (like `../../main.js`), or the import 404s.
+In a panel component, `import { _ } from '../main.js'` assumes the file sits exactly one folder below `main.js`. In a more deeply nested folder, add more `../` (like `../../main.js`), or the import 404s.
 :::
 
 ::: tip Checkpoint: live reload proves itself
@@ -77,7 +84,7 @@ With Development Mode on and `bun run dev` running, the widget now renders **Lat
 
 ## Step 5 — translate your permission and activity log
 
-These two sections don't come from your components — Pano reads them directly to fill the panel's Permissions and Activity pages. **Both sit at the root** of the file, alongside your custom keys.
+These two sections don't come from your components — Pano reads them directly to fill the panel's Permissions and Logs pages. **Both sit at the root** of the file, alongside your custom keys.
 
 The key names are *derived* from your Kotlin class names, so you don't choose them:
 
@@ -98,10 +105,10 @@ The key names are *derived* from your Kotlin class names, so you don't choose th
 }
 ```
 
-The `{username}` and `{target}` placeholders are filled from the log's `details` payload (built in the Kotlin class). HTML like `<b>` works **only** in activity-log lines — the Activity page renders those as HTML; ordinary keys shown with `{$_(...)}` escape it.
+The `{username}` and `{target}` placeholders are filled from the log's `details` payload (built in the Kotlin class). HTML like `<b>` works **only** in activity-log lines — the Logs page renders those as HTML; ordinary keys shown with `{$_(...)}` escape it.
 
 ::: tip Checkpoint
-Open **Panel → Permissions** — your entry now reads **Manage Shoutbox** instead of the raw `MANAGE_SHOUTBOX`. Post a shout, then open **Panel → Activity** — the sentence appears with the username in bold.
+Open **Panel → Permissions** — your entry now reads **Manage Shoutbox** instead of the raw `MANAGE_SHOUTBOX`. Post a shout, then open **Panel → Logs** — the sentence appears with the username in bold.
 :::
 
 ## Step 6 — add another language

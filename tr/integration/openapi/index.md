@@ -19,7 +19,7 @@ curl -s http://localhost:8088/api/v1/openapi.json -o pano-openapi.json
 Market eklentisinin belgesini alın:
 
 ```sh
-curl -s http://localhost:8088/api/plugins/pano-plugin-market/_/openapi.json -o market-openapi.json
+curl -s http://localhost:8088/api/v1/plugins/pano-plugin-market/_/openapi.json -o market-openapi.json
 ```
 
 Eklentilerin fazladan bir şey yapması gerekmez: Pano belgeyi eklentinin uç noktalarından üretir, kapalı kaynaklı eklentiler dahil. Kurulu ama durdurulmuş eklentilerin belgesi yoktur.
@@ -29,7 +29,7 @@ Eklentilerin fazladan bir şey yapması gerekmez: Pano belgeyi eklentinin uç no
 - `servers[0].url` ön ektir: çekirdek için `/api/v1`, eklenti için `/api/plugins/<pluginId>`. İşlem yolları bunun ardından gelir.
 - `operationId`, uç nokta sınıf adının `API` olmayan halidir, örneğin `GetPosts`. [Tipli istemci](../client/) fonksiyonlarını buna göre adlandırır.
 - `parameters` ve `requestBody`, uç noktanın kendi doğrulamasından alınan JSON Schema'dır.
-- `responses` başarı gövdesini ve hata zarfını listeler. Ortak hata kodları (`NOT_LOGGED_IN`, `NO_PERMISSION`, `INVALID_CSRF_TOKEN`, `TOO_MANY_REQUESTS`, `MAINTENANCE_MODE_ENABLED`) paylaşılır.
+- `responses` başarı gövdesini ve hata zarfını listeler. Ortak hata kodları (`NOT_LOGGED_IN`, `NO_PERMISSION`, `INVALID_CSRF_TOKEN`, `RATE_LIMIT_EXCEEDED`, `MAINTENANCE_MODE_ENABLED`) paylaşılır.
 - `deprecated: true` bir yerine geçenin olduğunu söyler; `x-pano-removal` en erken kaldırma tarihidir.
 - `x-pano-stability` değeri `public` veya `internal`dır. Yalnızca genel işlemler [API Temelleri](../api-basics/) sayfasındaki sözü taşır.
 - `x-pano-undocumented: true`, yazarın açıklama vermediği anlamına gelir: yol ve girdiler gerçektir, cevap serbest biçimlidir.

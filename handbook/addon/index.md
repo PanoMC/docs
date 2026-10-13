@@ -43,11 +43,11 @@ Everything here assumes Pano is running **on the same machine you'll write code 
 
 | You need | What it is |
 |---|---|
-| **A JDK, version 11 or newer** | Runs the Gradle build. Any Java 11+ works — the build fetches the exact internal Java it needs on its own. Verify with `java -version`. |
+| **A JDK, version 17 or newer** | Runs the Gradle build. Any Java 17+ works — the build fetches the Java 11 toolchain it compiles with on its own. Verify with `java -version`. |
 | **Bun** | Installs and builds the UI, and runs the dev watcher. Get it from [bun.sh](https://bun.sh). Verify with `bun --version`. |
 | **Git** | Downloads the template. Verify with `git --version`. |
 | **A running Pano** | Your addon talks to a live Pano while you work. If you don't have one yet, follow [Installation](/platform/installation/) first — and turn **Development Mode on** (we'll do that on the next page). |
-| **A code editor** | Anything works, but for Kotlin a full IDE saves pain — [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/) is free and ships with the template's project files. |
+| **A code editor** | Anything works, but for Kotlin a full IDE saves pain — [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/) is free and opens the template's Gradle project directly. |
 
 You do **not** need to be an expert. A little Kotlin and a little Svelte help, but every step here is copy-paste-able. If you want a gentle intro, the [Svelte tutorial](https://svelte.dev/tutorial) is excellent and free.
 

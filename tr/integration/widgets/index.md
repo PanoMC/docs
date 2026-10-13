@@ -28,7 +28,7 @@ Widget'lar bir shadow root içinde durur ve varsayılan görünümü Pano'nun ta
 pano-market-goal { --pano-color-primary: #28a; }
 ```
 
-Paleti betikte ya da bir öğede ayarlayın: `data-palette="dark"` (varsayılan `light`). Metin dili betikteki `data-locale` değerini, yoksa sitenin dilini izler.
+Paleti betikte `data-palette="dark"` ile (varsayılan `light`), tek bir öğede ise `data-bs-theme="dark"` ile ayarlayın. Metin dili betikteki `data-locale` değerini, yoksa sitenin dilini izler.
 
 Daha derin değişiklikler için her widget parçası `part` ile açılır:
 
@@ -54,9 +54,9 @@ Olaylar kabarır ve shadow sınırını geçer:
 
 | Olay | Ne zaman | Ayrıntı |
 |---|---|---|
-| `pano:ready` | Veri yüklendi, widget gösterildi | yok |
+| `pano:ready` | Veri yüklendi, widget gösterildi | `{ tag }` |
 | `pano:error` | Yükleme başarısız | `{ code }` |
-| `pano:toast` | Widget bir mesaj göstermek istiyor | metin, varyant |
+| `pano:toast` | Widget bir mesaj göstermek istiyor | `{ key, message, variant, values }` |
 | `pano:navigate` | Widget bir sayfaya gitmek istiyor | `{ url }` |
 
 `pano:toast` ve `pano:navigate`, `preventDefault()` ile iptal edilebilir; böylece sayfanız ilgilenir:

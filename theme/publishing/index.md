@@ -36,7 +36,13 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev, master]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -54,7 +60,7 @@ That is the whole file. When you push, the shared workflow:
 3. Packages the deterministic `.zip`.
 4. Creates a GitHub release and attaches that `.zip` automatically.
 
-Replace `my-theme` with your theme's `id` from `manifest.json`.
+Replace `my-theme` with your theme's `id` from `manifest.json`. Keep the branch names: `master` is the stable release and `dev` the pre-release, and only a build from `master` uses the production license server. The `permissions` block is required, because the shared workflow cannot get more rights than your workflow grants. The workflow runs semantic-release, so the repository also needs a `.releaserc.json` that lists both branches; the attached file is named `my-theme-v<version>.zip`.
 
 ::: tip
 `GITHUB_TOKEN` is provided automatically by GitHub Actions — you do not need to create it. Just pass it through as shown.
@@ -89,7 +95,7 @@ The better way is to automate it with **`semantic-release-pano`**, so every push
 ```json
 ["semantic-release-pano", {
   "resourceId": "YOUR-RESOURCE-UUID",
-  "file": "my-theme-${version}.zip",
+  "file": "my-theme-v${version}.zip",
   "panoVersion": "1.0.0",
   "useGitHubLink": true,
   "repositoryUrl": "https://github.com/YourName/my-theme.git"

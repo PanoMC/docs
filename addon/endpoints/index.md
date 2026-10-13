@@ -39,7 +39,7 @@ What is happening:
 - Success is `Successful(map)`, which serializes to exactly your map (no `result` key; a success body may not have a top-level `error` or `result` key). To fail, you **throw** a platform `Error` subclass (`NotFound`, `BadRequest`, `NoPermission`, …) or your own. Every failure is `{"error":{"code":"…"}}`; see [Error codes](/addon/api-reference/#error-codes).
 
 ::: tip Checkpoint: hit your first endpoint
-This is the payoff — a URL of yours that returns your JSON. Rebuild, copy, restart, then open your endpoint in a browser (or `curl` it):
+This is the payoff — a URL of yours that returns your JSON. Rebuild, restart, then open your endpoint in a browser (or `curl` it):
 
 ```
 http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
@@ -169,7 +169,7 @@ Here is the full loop the backend promised — a database table, a public JSON A
 {"shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
 ```
 
-4. **Activity feed:** open **Panel → Activity** — you'll see your `CREATED_SHOUT` entry (shown as the raw key until you add the locale string in [Localization](/addon/localization/)).
+4. **Activity feed:** open **Panel → Logs** (the *Activity Logs* page) — you'll see your `CREATED_SHOUT` entry (shown as the raw key until you add the locale string in [Localization](/addon/localization/)).
 
 If all four steps line up, the backend half of Shoutbox is done.
 
@@ -179,10 +179,10 @@ The failures the backend pages warn about, in one place — symptom, cause, fix:
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Addon not listed in **Panel → Addons** | jar wasn't copied into `plugins/`, or Pano wasn't restarted | rebuild, `cp` the jar into the instance's `plugins/`, and **restart** Pano |
+| Addon not listed in **Panel → Addons** | the jar isn't in `plugins/`, or Pano wasn't restarted | rebuild (the build copies the jar into `plugins/`) and **restart** Pano |
 | Your event listener never fires (setup gate never runs) | you imported Spring's `@EventListener` instead of Pano's | use `com.panomc.platform.api.annotation.EventListener` (see [Events](/addon/events/)) |
 | Crash: `NoSuchBeanDefinitionException` | you took `PluginConfigManager` (or another bean registered in `onStart`) as a constructor parameter | fetch it at request time with `plugin.pluginBeanContext.getBean(...)` instead (see [Configuration](/addon/configuration/)) |
-| Request rejected with `NO_PERMISSION` | the (non-admin) role calling the panel endpoint hasn't been granted the permission | grant it in **Panel → Roles**, or test as an admin (admins bypass the check — see [Permissions](/addon/permissions/)) |
+| Request rejected with `NO_PERMISSION` | the (non-admin) role calling the panel endpoint hasn't been granted the permission | grant it in **Panel → Permissions**, or test as an admin (admins bypass the check — see [Permissions](/addon/permissions/)) |
 | A Kotlin edit seems ignored | you disabled/enabled the addon instead of restarting | Kotlin isn't hot — rebuild and **restart** Pano |
 
 ## Where to next

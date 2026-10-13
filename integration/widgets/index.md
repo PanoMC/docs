@@ -28,7 +28,7 @@ Widgets sit in a shadow root and bring a default look from Pano's design tokens.
 pano-market-goal { --pano-color-primary: #28a; }
 ```
 
-Set the palette on the script or on an element: `data-palette="dark"` (default `light`). The text language follows `data-locale` on the script, else the site's.
+Set the palette on the script with `data-palette="dark"` (default `light`), or on one element with `data-bs-theme="dark"`. The text language follows `data-locale` on the script, else the site's.
 
 For deeper changes, every widget part is exposed with `part`:
 
@@ -54,9 +54,9 @@ Events bubble and cross the shadow boundary:
 
 | Event | When | Detail |
 |---|---|---|
-| `pano:ready` | Data loaded, widget shown | none |
+| `pano:ready` | Data loaded, widget shown | `{ tag }` |
 | `pano:error` | Loading failed | `{ code }` |
-| `pano:toast` | The widget wants a message shown | text, variant |
+| `pano:toast` | The widget wants a message shown | `{ key, message, variant, values }` |
 | `pano:navigate` | The widget wants to go to a page | `{ url }` |
 
 `pano:toast` and `pano:navigate` can be cancelled with `preventDefault()` so your page handles them:

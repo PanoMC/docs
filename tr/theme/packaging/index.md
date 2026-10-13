@@ -4,7 +4,7 @@ Temanızın görünümünden memnun olduğunuzda, onu bir Pano sunucusunun kurab
 
 ## Geliştirme derlemesi ve production derlemesi
 
-Çalışırken `bun run dev` komutunu çalıştırırsınız. Bu **geliştirme derlemesidir**: hızlıdır, bir dosyayı kaydettiğiniz anda güncellenir ve tasarım yaparken ihtiyacınız olmayan yavaş adımları atlar. Yalnızca kendi bilgisayarınızda, sizin gözleriniz için tasarlanmıştır.
+Çalışırken `bun run dev:ui` komutunu çalıştırırsınız. Bu **geliştirme derlemesidir**: hızlıdır, bir dosyayı kaydettiğiniz anda güncellenir ve tasarım yaparken ihtiyacınız olmayan yavaş adımları atlar. Yalnızca kendi bilgisayarınızda, sizin gözleriniz için tasarlanmıştır.
 
 Yayınlamaya hazır olduğunuzda bir **production derlemesi** oluşturursunuz. Bu, cilalanmış sürümdür: her şey optimize edilir, küçük paketlenir ve gerçek bir sunucuda çalışmaya hazır hale getirilir. Gerçek bir Pano sitesini ziyaret edenler her zaman bir production derlemesi görür.
 
@@ -98,7 +98,7 @@ Aynı kodu iki kez derlemek size **bayt bayt aynı** sonucu verir. Premium temal
 bun run package
 ```
 
-Bu komut bir **`.zip`** dosyası üretir — bir Pano sunucusunun panel üzerinden doğrudan kurabileceği, kendi kendine yeten bir paket. O tek dosya, temanızın tamamıdır.
+Bu komut bir **`.zip`** dosyası üretir — bir Pano sunucusunun panel üzerinden doğrudan kurabileceği, kendi kendine yeten bir paket. O tek dosya, temanızın tamamıdır. `package` önce denetimi katı modda (uyarılar da hata sayılır) yeniden çalıştırır ve denetim geçmeden hiçbir şey paketlemez.
 
 ## Kendi sunucunuza kurma ve test etme
 
@@ -106,7 +106,7 @@ Temanızı paylaşmadan önce, uçtan uca çalıştığından emin olmak için k
 
 1. Tarayıcınızda Pano panelinizi açın ve yönetici olarak giriş yapın.
 2. **Görünüm → Temalar** bölümüne gidin.
-3. **Kur** (veya **Tema Yükle**) seçeneğini seçin ve az önce derlediğiniz `.zip` dosyasını yükleyin.
+3. **Tema Yükle**'ye tıklayın ve az önce derlediğiniz `.zip` dosyasını yükleyin.
 4. Temanızı etkinleştirin ve canlı görmek için siteyi açın.
 
 ::: tip

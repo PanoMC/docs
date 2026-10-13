@@ -5,7 +5,7 @@ Pano'nun frontend'i birkaç SvelteKit projesine bölünmüştür. Bağımsız ol
 ::: info ÖN KOŞUL: ÇALIŞAN BACKEND
 Frontend geliştirmeye başlamadan önce, **mutlaka** çalışan bir Pano backend'ine sahip olmalısınız.
 - **Sadece Frontend Geliştirme**: En son Pano `.jar` dosyasını [Releases](https://github.com/PanoMC/Pano/releases) sayfamızdan indirin.
-- **Full-Stack Geliştirme**: Eğer backend tarafında da değişiklik yapacaksanız, lütfen kaynak koddan çalıştırmak için [Backend Geliştirme](./backend) kılavuzunu izleyin.
+- **Full-Stack Geliştirme**: Eğer backend tarafında da değişiklik yapacaksanız, lütfen kaynak koddan çalıştırmak için [Backend Geliştirme](../backend/) kılavuzunu izleyin.
 :::
 
 ## Teknoloji Yığını
@@ -32,10 +32,10 @@ Frontend bileşenleri geliştirirken, bunların **SSR uyumlu** olduğundan emin 
 - **vanilla-theme**: Pano ile birlikte gelen, yerleşik referans (sistem) temasıdır. Bir başlangıç şablonu **değildir** — yeni temalar `bunx @panomc/theme-core new` ile oluşturulur.
 
 ## Klonlama ve Alt Modüller (Submodules)
-Temalarımız ve **panel-ui**, [**theme-core tema çekirdeğini**](https://github.com/PanoMC/sdk) bir `theme-core` git alt modülü olarak taşır (bu depo hem `@panomc/theme-core` hem de `@panomc/sdk` paketlerini yayınlar). **setup-ui** ve **website** ise alt modüle ihtiyaç duymaz — `@panomc/sdk`'yı doğrudan npm üzerinden kullanırlar.
+Temalarımız, **panel-ui** ve **setup-ui**, [**theme-core tema çekirdeğini**](https://github.com/PanoMC/sdk) bir `theme-core` git alt modülü olarak taşır (bu depo hem `@panomc/theme-core` hem de `@panomc/sdk` paketlerini yayınlar). **website** ise alt modüle ihtiyaç duymaz — `@panomc/sdk`'yı doğrudan npm üzerinden kullanır.
 
 ### Tavsiye Edilen Klonlama Yöntemi
-Alt modülü taşıyan projelerde (temalar, panel-ui), tema çekirdeği da almak için `--recursive` bayrağını kullanın:
+Alt modülü taşıyan projelerde (temalar, panel-ui, setup-ui), tema çekirdeği da almak için `--recursive` bayrağını kullanın:
 ```bash
 git clone https://github.com/PanoMC/panel-ui.git --recursive
 ```
@@ -46,7 +46,7 @@ Eğer `--recursive` bayrağını kullanmadıysanız, alt modülü manuel olarak 
 git submodule update --init
 ```
 
-Tema depoları büyük ölçüde **üretilir (generated)**: rotalar, köprüler (bridges) ve dil dosyaları `theme-core sync` tarafından oluşturulur, dolayısıyla bir tema geliştiricisi yalnızca `theme.config.js`, `tokens.scss`, `src/views/` ve `lang-overrides/` dosyalarını düzenler. Başlamak için [Tema Geliştirme Kılavuzu](/theme/getting-started)'na bakın.
+Tema depoları büyük ölçüde **üretilir (generated)**: rotalar, köprüler (bridges) ve dil dosyaları `theme-core sync` tarafından oluşturulur, dolayısıyla bir tema geliştiricisi yalnızca `theme.config.js`, `src/styles/tokens.scss`, `src/views/` ve `lang-overrides/` dosyalarını düzenler. Başlamak için [Tema Geliştirme Kılavuzu](/tr/theme/getting-started/)'na bakın.
 
 ## Geliştirme Kılavuzu
 Depoyu ve alt modülleri klonladıktan sonra şu adımları izleyin:
@@ -81,7 +81,7 @@ Her arayüz belirli bir port üzerinde çalışır. **Bu portları değiştirmey
 ## Paketleme Süreci
 1. Her UI projesi derlenir ve bir `.zip` dosyası halinde sıkıştırılır.
 2. Pano derleme işlemi sırasında bu ZIP'ler indirilir ve nihai JAR'a gömülür.
-3. Çalışma zamanında Pano bunları `ui/` dizinine çıkarır ve Bun kullanarak bir mikro servis olarak sunar.
+3. Çalışma zamanında Pano bunları JAR'ın yanına (`setup-ui/`, `panel-ui/` ve `themes/`) çıkarır ve Bun kullanarak bir mikro servis olarak sunar.
 
 ## UI Eklenti Sistemi
 Panel'e veya Temalara özellik ekleyen eklentiler oluşturabilirsiniz.
@@ -91,7 +91,7 @@ Panel'e veya Temalara özellik ekleyen eklentiler oluşturabilirsiniz.
 ### UI Eklentileri Geliştirme
 UI değişikliklerini hızlıca test etmek için:
 1. Eklenti dosyalarınızı Pano kurulumunuzun `plugins/` dizinine yerleştirin.
-2. `Panel -> Ayarlar` kısmından **Dev Mode**'u etkinleştirin.
+2. `Panel -> Ayarlar` kısmından **Geliştirici Modu**'nu etkinleştirin.
 3. Değişiklikleri anında görmek için `bun dev` komutunu kullanın.
 
 ---

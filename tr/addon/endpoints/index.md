@@ -32,14 +32,14 @@ class GetShoutsAPI(private val shoutDao: ShoutDao) : Api() {
 Ne oluyor:
 
 - `@Endpoint`, rotanın eklenti yüklendiği an kendini kaydetmesini sağlar — hiçbir yerde bir kayıt çağrısı yoktur.
-- `ShoutDao` doğrudan kurucuya enjekte edilir, çünkü bu uç noktayla birlikte **sizin kutunuzda** yaşar (kurucu enjeksiyonu — bkz. [Backend genel bakışı](/tr/addon/backend/#pano-sınıflarınızı-sizin-icin-nasıl-olusturur)). DAO'nun kendisi [Veritabanı ve Migrasyonlar](/tr/addon/database/) sayfasında inşa edilir.
+- `ShoutDao` doğrudan kurucuya enjekte edilir, çünkü bu uç noktayla birlikte **sizin kutunuzda** yaşar (kurucu enjeksiyonu — bkz. [Backend genel bakışı](/tr/addon/backend/#pano-sınıflarınızı-sizin-icin-nasıl-insa-eder)). DAO'nun kendisi [Veritabanı ve Migrasyonlar](/tr/addon/database/) sayfasında inşa edilir.
 - `paths`, **göreli** yolu ve HTTP metodunu listeler. `/api`, `/panel` ya da eklenti kimliğini asla yazmazsınız: Pano bu uç noktayı `/api/plugins/pano-plugin-shoutbox/shouts` adresine bağlar. Yolu bir kaynak adıyla başlatın (`/shouts`, `/items/:id`); parametreyle ya da `_` ile değil.
 - `getSqlClient()`, `Api` üzerinde paylaşılan SQL istemcisini size veren bir kolaylıktır.
 - **`getValidationHandler` isteğe bağlıdır.** Doğrulanacak bir şey yoksa hiçbir şey bildirmeyin. Aşağıdaki panel uç noktası, istek gövdesini doğrulamak için onu geçersiz kılar.
 - Başarı `Successful(map)`'tir ve tam olarak haritanıza serileştirilir (`result` anahtarı yoktur). Başarısız olmak için bir platform `Error` alt sınıfını (`NotFound`, `BadRequest`, `NoPermission`, …) veya kendinizinkini **fırlatırsınız**. Her hata `{"error":{"code":"…"}}` biçimindedir; bkz. [Hata kodları](/tr/addon/api-reference/#error-codes).
 
 ::: tip Kontrol noktası: ilk uç noktanıza vurun
-Ödül budur — JSON'unuzu döndüren size ait bir URL. Yeniden derleyin, kopyalayın, yeniden başlatın, sonra uç noktanızı bir tarayıcıda açın (veya `curl` ile isteyin):
+Ödül budur — JSON'unuzu döndüren size ait bir URL. Yeniden derleyin, yeniden başlatın, sonra uç noktanızı bir tarayıcıda açın (veya `curl` ile isteyin):
 
 ```
 http://localhost:8088/api/plugins/pano-plugin-shoutbox/shouts
@@ -169,7 +169,7 @@ class PanelAddShoutAPI(
 {"shouts":[{"id":1,"message":"Hello Pano!","username":"<you>","date":1700000000000}]}
 ```
 
-4. **Etkinlik akışı:** **Panel → Etkinlik**'i açın — `CREATED_SHOUT` girdinizi göreceksiniz ([Çeviriler](/tr/addon/localization/) sayfasında yerelleştirme dizesini ekleyene kadar ham anahtar olarak gösterilir).
+4. **Etkinlik akışı:** **Panel → Kayıtlar**'ı (*Aktivite Kayıtları* sayfası) açın — `CREATED_SHOUT` girdinizi göreceksiniz ([Çeviriler](/tr/addon/localization/) sayfasında yerelleştirme dizesini ekleyene kadar ham anahtar olarak gösterilir).
 
 Dört adım da uyuşuyorsa, Shoutbox'ın backend yarısı bitti.
 
@@ -179,10 +179,10 @@ Backend sayfalarının uyardığı hatalar, tek bir yerde — belirti, neden, ç
 
 | Belirti | Olası neden | Çözüm |
 |---|---|---|
-| Eklenti **Panel → Eklentiler**'de listelenmemiş | jar `plugins/` içine kopyalanmamış veya Pano yeniden başlatılmamış | yeniden derleyin, jar'ı örneğin `plugins/`'ine `cp` edin ve Pano'yu **yeniden başlatın** |
+| Eklenti **Panel → Eklentiler**'de listelenmemiş | jar `plugins/` içinde değil veya Pano yeniden başlatılmamış | yeniden derleyin (derleme jar'ı `plugins/` içine kopyalar) ve Pano'yu **yeniden başlatın** |
 | Etkinlik dinleyiciniz hiç tetiklenmiyor (kurulum kapısı hiç çalışmıyor) | Pano'nunki yerine Spring'in `@EventListener`'ını içe aktardınız | `com.panomc.platform.api.annotation.EventListener` kullanın (bkz. [Olaylar (Events)](/tr/addon/events/)) |
 | Çökme: `NoSuchBeanDefinitionException` | `PluginConfigManager`'ı (veya `onStart`'ta kaydedilen başka bir bean'i) bir kurucu parametresi olarak aldınız | onu bunun yerine istek anında `plugin.pluginBeanContext.getBean(...)` ile getirin (bkz. [Yapılandırma](/tr/addon/configuration/)) |
-| İstek `NO_PERMISSION` ile reddedildi | panel uç noktasını çağıran (yönetici-olmayan) role izin verilmemiş | onu **Panel → Roller**'de verin veya bir yönetici olarak test edin (yöneticiler kontrolü atlar — bkz. [İzinler](/tr/addon/permissions/)) |
+| İstek `NO_PERMISSION` ile reddedildi | panel uç noktasını çağıran (yönetici-olmayan) role izin verilmemiş | onu **Panel → Yetkiler**'de verin veya bir yönetici olarak test edin (yöneticiler kontrolü atlar — bkz. [İzinler](/tr/addon/permissions/)) |
 | Bir Kotlin düzenlemesi yok sayılıyor gibi | yeniden başlatmak yerine eklentiyi devre dışı bırakıp/etkinleştirdiniz | Kotlin sıcak değildir — yeniden derleyin ve Pano'yu **yeniden başlatın** |
 
 ## Sırada ne var

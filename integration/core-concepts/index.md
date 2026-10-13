@@ -2,255 +2,98 @@
 
 ## Core API Concepts
 
+The classes live in the `Core` module of the Pano MC Plugin, package `com.panomc.plugins.pano.core.platform`. Every message is JSON with an `event` name and an `eventId`, encrypted with AES-256-GCM.
+
 ### 1. PlatformRequest
 
-To send a request to Pano's web platform, extend the `PlatformRequest` abstract class:
+A message from the Minecraft server to Pano is a class that extends `PlatformRequest`:
 
 ```kotlin
-abstract class PlatformRequest {
-    abstract fun getRequestType(): String
-    abstract fun getData(): Map<String, Any>
+package com.panomc.plugins.pano.core.platform
+
+abstract class PlatformRequest(val eventId: UUID = UUID.randomUUID()) {
+    open fun encode(): String
 }
 ```
 
-::: code-group
+There is nothing to override. The event name is the class name without `Request`, in upper snake case (`MyPlayerJoinRequest` becomes `MY_PLAYER_JOIN`), and every public property becomes a JSON field:
 
-```kotlin [Kotlin]
-import com.panomc.plugin.api.PlatformRequest
+```kotlin
+import com.panomc.plugins.pano.core.platform.PlatformRequest
 
-class MyCustomRequest(
-    private val playerName: String,
-    private val data: String
-) : PlatformRequest() {
-
-    override fun getRequestType(): String = "my_custom_request"
-
-    override fun getData(): Map<String, Any> {
-        return mapOf(
-            "player" to playerName,
-            "data" to data,
-            "timestamp" to System.currentTimeMillis()
-        )
-    }
-}
+// Sent as {"event":"MY_PLAYER_JOIN","eventId":"...","player":"Steve","uuid":"..."}
+class MyPlayerJoinRequest(
+    val player: String,
+    val uuid: String
+) : PlatformRequest()
 ```
 
-```java [Java]
-import com.panomc.plugin.api.PlatformRequest;
-import java.util.HashMap;
-import java.util.Map;
-
-public class MyCustomRequest extends PlatformRequest {
-    private final String playerName;
-    private final String data;
-
-    public MyCustomRequest(String playerName, String data) {
-        this.playerName = playerName;
-        this.data = data;
-    }
-
-    @Override
-    public String getRequestType() {
-        return "my_custom_request";
-    }
-
-    @Override
-    public Map<String, Object> getData() {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("player", playerName);
-        dataMap.put("data", data);
-        dataMap.put("timestamp", System.currentTimeMillis());
-        return dataMap;
-    }
-}
-```
-
-:::
+Send it with `platformManager.sendMessage(request)` when you expect no answer.
 
 ### 2. PlatformMessageResponse
 
-If you expect a response from Pano, extend the `PlatformMessageResponse` interface:
+If you expect an answer from Pano, describe it with a class that implements `PlatformMessageResponse`:
 
 ```kotlin
-interface PlatformMessageResponse {
-    fun onResponse(response: Map<String, Any>)
-    fun onError(error: String)
-}
+package com.panomc.plugins.pano.core.platform
+
+interface PlatformMessageResponse : PlatformMessage
 ```
 
-::: code-group
+The class name without `Message`, in upper snake case, must be the event name of the request (`MyPlayerStatsMessage` answers `MY_PLAYER_STATS`). Pano fills it with Gson, so give every property a default value.
 
-```kotlin [Kotlin]
-import com.panomc.plugin.api.PlatformMessageResponse
+```kotlin
+import com.panomc.plugins.pano.core.platform.PlatformMessageResponse
+import com.panomc.plugins.pano.core.platform.PlatformRequest
 
-class MyRequestWithResponse(
-    private val playerName: String
-) : PlatformRequest(), PlatformMessageResponse {
+class MyPlayerStatsRequest(val uuid: String) : PlatformRequest()
 
-    override fun getRequestType(): String = "player_data_request"
+// Answers the event MY_PLAYER_STATS
+data class MyPlayerStatsMessage(
+    val kills: Int = 0,
+    val deaths: Int = 0
+) : PlatformMessageResponse
 
-    override fun getData(): Map<String, Any> {
-        return mapOf("player" to playerName)
-    }
-
-    override fun onResponse(response: Map<String, Any>) {
-        // Handle successful response
-        val points = response["points"] as? Int ?: 0
-        println("Player $playerName has $points points")
-    }
-
-    override fun onError(error: String) {
-        // Handle error
-        println("Error: $error")
-    }
-}
+suspend fun fetchStats(platformManager: PlatformManager, uuid: String): MyPlayerStatsMessage =
+    platformManager.sendMessageAwaitResponse<MyPlayerStatsMessage>(
+        MyPlayerStatsRequest(uuid),
+        MyPlayerStatsMessage::class.java,
+        10_000
+    )
 ```
 
-```java [Java]
-import com.panomc.plugin.api.PlatformRequest;
-import com.panomc.plugin.api.PlatformMessageResponse;
-import java.util.HashMap;
-import java.util.Map;
-
-public class MyRequestWithResponse extends PlatformRequest implements PlatformMessageResponse {
-    private final String playerName;
-
-    public MyRequestWithResponse(String playerName) {
-        this.playerName = playerName;
-    }
-
-    @Override
-    public String getRequestType() {
-        return "player_data_request";
-    }
-
-    @Override
-    public Map<String, Object> getData() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("player", playerName);
-        return data;
-    }
-
-    @Override
-    public void onResponse(Map<String, Object> response) {
-        // Handle successful response
-        Integer points = (Integer) response.getOrDefault("points", 0);
-        System.out.println("Player " + playerName + " has " + points + " points");
-    }
-
-    @Override
-    public void onError(String error) {
-        // Handle error
-        System.out.println("Error: " + error);
-    }
-}
-```
-
-:::
+`sendMessageAwaitResponse` is a `suspend` function. It throws when the server is not connected to Pano, when the answer has another type, or when no answer arrives in time (15 seconds by default).
 
 ### 3. PlatformMessageHandler
 
-To receive and handle messages from Pano's web platform, extend `PlatformMessageHandler<R : PlatformMessage>`:
+A message that Pano pushes on its own is handled by a `PlatformMessageHandler<R : PlatformMessage>`:
 
 ```kotlin
+package com.panomc.plugins.pano.core.platform
+
 abstract class PlatformMessageHandler<R : PlatformMessage> {
-    abstract fun handle(message: R)
-    abstract fun getMessageType(): String
+    abstract suspend fun handle(response: R)
+    fun getHandlerName(): String
 }
 ```
 
-::: code-group
+The handler name is the class name without `Handler`, in upper snake case.
 
-```kotlin [Kotlin]
-import com.panomc.plugin.api.PlatformMessageHandler
-import com.panomc.plugin.api.PlatformMessage
-import com.panomc.plugin.api.PlatformManager
-
-// Define your message structure
-data class PlayerRewardMessage(
-    val playerName: String,
-    val reward: String,
-    val amount: Int
-) : PlatformMessage
-
-// Create a handler
-class PlayerRewardHandler : PlatformMessageHandler<PlayerRewardMessage>() {
-
-    override fun getMessageType(): String = "player_reward"
-
-    override fun handle(message: PlayerRewardMessage) {
-        val player = Bukkit.getPlayer(message.playerName)
-        if (player != null) {
-            // Give reward to player
-            when (message.reward) {
-                "coins" -> giveCoins(player, message.amount)
-                "items" -> giveItems(player, message.amount)
-            }
-            player.sendMessage("You received ${message.amount} ${message.reward}!")
+```kotlin
+// From the Pano MC Plugin itself: handles the message POWER
+class PowerHandler(
+    private val pluginMain: PanoPluginMain,
+    private val logger: Logger
+) : PlatformMessageHandler<PowerMessage>() {
+    override suspend fun handle(response: PowerMessage) {
+        when (response.action?.trim()?.uppercase()) {
+            "STOP" -> pluginMain.shutdown()
+            "RESTART" -> pluginMain.restart()
         }
     }
 }
-
-// Register the handler
-fun registerHandlers(platformManager: PlatformManager) {
-    platformManager.registerMessageHandler(PlayerRewardHandler())
-}
 ```
 
-```java [Java]
-import com.panomc.plugin.api.PlatformMessageHandler;
-import com.panomc.plugin.api.PlatformMessage;
-import com.panomc.plugin.api.PlatformManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-// Define your message structure
-public class PlayerRewardMessage implements PlatformMessage {
-    private final String playerName;
-    private final String reward;
-    private final int amount;
-
-    public PlayerRewardMessage(String playerName, String reward, int amount) {
-        this.playerName = playerName;
-        this.reward = reward;
-        this.amount = amount;
-    }
-
-    public String getPlayerName() { return playerName; }
-    public String getReward() { return reward; }
-    public int getAmount() { return amount; }
-}
-
-// Create a handler
-public class PlayerRewardHandler extends PlatformMessageHandler<PlayerRewardMessage> {
-
-    @Override
-    public String getMessageType() {
-        return "player_reward";
-    }
-
-    @Override
-    public void handle(PlayerRewardMessage message) {
-        Player player = Bukkit.getPlayer(message.getPlayerName());
-        if (player != null) {
-            // Give reward to player
-            switch (message.getReward()) {
-                case "coins":
-                    giveCoins(player, message.getAmount());
-                    break;
-                case "items":
-                    giveItems(player, message.getAmount());
-                    break;
-            }
-            player.sendMessage("You received " + message.getAmount() + " " + message.getReward() + "!");
-        }
-    }
-}
-
-// Register the handler
-public void registerHandlers(PlatformManager platformManager) {
-    platformManager.registerMessageHandler(new PlayerRewardHandler());
-}
-```
-
+::: warning
+The handlers are a fixed list inside the Pano MC Plugin; another plugin cannot register its own. To get something from Pano, send a request and await the answer (for example on a timer), as the examples in [Creating a Plugin](../creating-plugin/) do.
 :::

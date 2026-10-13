@@ -19,7 +19,7 @@ opened on it. Nodes are managed from the **node icon** next to the server switch
 The Manual command looks like this (the code rotates every 30 seconds):
 
 ```bash
-curl -fsSL https://panel.example.com/api/node/install.sh | sh -s -- --pano 'https://panel.example.com' --code '123456'
+curl -fsSL https://panel.example.com/api/v1/node/install.sh | sh -s -- --pano 'https://panel.example.com' --code '123456'
 ```
 
 Accept only nodes you set up yourself. When a node cannot reach your website URL (NAT, an SSH
@@ -33,10 +33,11 @@ keep running. **Removing a node deletes every server and backup on it.**
 **Add server → Create a new server** (needs **Create Servers**) walks through **Source → Node →
 Software → Settings → Review**.
 
-- **Software:** Paper (recommended), Purpur, Folia, Spigot, Fabric, Vanilla, and the proxies Velocity
-  (recommended), Waterfall and BungeeCord. **Spigot** is compiled on the node with BuildTools — the
-  first build of a version takes about ten minutes, later ones reuse it. The build needs a JDK; the
-  node downloads one when the host has none.
+- **Software:** Paper (recommended), Purpur, Folia, Spigot, Fabric, Forge, NeoForge, Vanilla, and the
+  proxies Velocity, Waterfall (deprecated) and BungeeCord. **Spigot** is compiled on the node with
+  BuildTools — the first build of a version takes about ten minutes, later ones reuse it. The build
+  needs a JDK; the node downloads one when the host has none. **Forge** and **NeoForge** are set up
+  by their own installer on the node and get no Pano plugin.
 - **Settings:** name, memory, port (empty = a free one from `25565-25600`), Java version, JVM
   arguments, **Start with Pano**, **Restart after a crash**, **Whitelist** (off by default; not for
   imports or proxies) and the Minecraft EULA.

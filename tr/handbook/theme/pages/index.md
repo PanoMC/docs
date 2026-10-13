@@ -41,7 +41,7 @@ Artık serbestçe düzenleyebileceğiniz, çalışan bir `src/views/HomeView.sve
     data.posts       array — posts of the current page
     data.postCount   number — total number of posts
     data.page        number — current page number
-    data.totalPage   number — total page count for pagination
+    data.totalPages  number — total page count for pagination
     themeSettings    object — theme settings from context
     onPageClick      function(data, page) — pagination handler
 -->
@@ -97,7 +97,7 @@ bun run check
 Yeşil bir `check`, görünümünüzün hâlâ sözleşmesine sadık kaldığı anlamına gelir. Eksik bir bağlama noktasından şikayet ederse, geri koyun ve tekrar çalıştırın.
 
 ::: tip Site sahibi için yeni ayarlar ekleme
-Yeniden tasarımınız site sahibinin panelden kontrol etmesi gereken bir seçenek eklerse (diyelim özel bir hero başlığı), bu `theme.config.js` içinde `settingsSchema` altında bildirilmelidir, yoksa girdi kaydedilmez. [Sayfa Tasarımlarını Değiştirme](/tr/theme/views/#custom-theme-settings) referansı tam şeklini gösterir.
+Yeniden tasarımınız site sahibinin panelden kontrol etmesi gereken bir seçenek eklerse (diyelim özel bir hero başlığı), bu `theme.config.js` içinde `settingsSchema` altında bildirilmelidir, yoksa girdi kaydedilmez. [Sayfa Tasarımlarını Değiştirme](/tr/theme/views/#ozel-tema-ayarları) referansı tam şeklini gösterir.
 :::
 
 Ember'ın ana sayfası artık kendi şekline sahip. Sözcüklerinin her dili konuşmasını sağlayalım.

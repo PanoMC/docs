@@ -40,7 +40,7 @@ Ziyaretçinin dili için bir anahtar eksikse, Pano `en-US.json`'a geri döner. A
 
 Platform, yazdığınız her anahtarı `plugins.<pluginId>.<key>` altında sunar. Örnek eklentimiz **Shoutbox** için (`pluginId`'si `pano-plugin-shoutbox`'tır — eklentiyi iskele olarak oluşturduğunuzda `gradle.properties`'te ayarladığınız değer, bkz. [Başlangıç](/tr/addon/getting-started/)), `widget.title` adlı bir anahtar arama zamanında `plugins.pano-plugin-shoutbox.widget.title` olur.
 
-O uzun öneki asla yazmazsınız — ne JSON dosyalarınızda ne de bileşenlerinizde. JSON'unuzun içinde anahtarlar **öneksiz** kalır (`widget.title`) ve Pano `plugins.<pluginId>.` kısmını otomatik ekler. Önekin gerçekten göründüğü *tek* yer, `main.js`'teki küçük bir yardımcıdır (aşağıda gösterilmiştir) ve boilerplate onu zaten içerir. Bu otomatik önekleme, anahtarlarınızın çekirdek platformunkiyle veya başka bir eklentininkiyle asla çakışmamasını sağlayan şeydir.
+O uzun öneki asla yazmazsınız — ne JSON dosyalarınızda ne de bileşenlerinizde. JSON'unuzun içinde anahtarlar **öneksiz** kalır (`widget.title`) ve Pano `plugins.<pluginId>.` kısmını otomatik ekler. Önekin gerçekten göründüğü *tek* yer, `main.js`'teki küçük bir yardımcıdır (aşağıda gösterilmiştir); onu [Frontend Geliştirme](/tr/addon/frontend/)'de eklersiniz. Bu otomatik önekleme, anahtarlarınızın çekirdek platformunkiyle veya başka bir eklentininkiyle asla çakışmamasını sağlayan şeydir.
 
 ## İlk anahtarınızı tanımlayın
 
@@ -62,7 +62,7 @@ O uzun öneki asla yazmazsınız — ne JSON dosyalarınızda ne de bileşenleri
 
 ## Anahtarı bir bileşende gösterin (Svelte)
 
-Bir bileşende bir çeviri göstermek için, `_` yardımcısını eklentinizin `main.js`'inden içe aktarın — boilerplate onu zaten gönderir:
+Bir bileşende bir çeviri göstermek için, `_` yardımcısını eklentinizin `main.js`'inden içe aktarın (onu [Frontend Geliştirme](/tr/addon/frontend/)'de eklersiniz; `src/theme/views/` altındaki bir site view'ı `main.js`'i içe aktaramaz, aynı depoyu `@panomc/sdk/controllers`'tan `const _ = plugin('shoutbox')._;` ile alır):
 
 ```svelte
 <script>
@@ -100,7 +100,7 @@ Bu **Welcome back, Ada!**'yı render eder. `values` altındaki adlar dizedeki `{
 
 ### `_` yardımcısı nasıl çalışır (acele ediyorsanız bunu atlayın)
 
-`_`'yi kullanmak için bu parçacığı anlamanıza **gerek yok** — boilerplate'in `main.js`'i onu zaten içerir, bu yüzden yalnızca orada olduğunu onaylayın. Ama işte burada:
+`_`'yi kullanmak için bu parçacığı anlamanıza **gerek yok** — bu, [Frontend Geliştirme](/tr/addon/frontend/)'de `main.js`'e koyduğunuz satırdır, bu yüzden yalnızca orada olduğunu onaylayın. Ama işte burada:
 
 ```js
 // src/main.js
@@ -111,7 +111,7 @@ export const pluginId = 'pano-plugin-shoutbox';
 export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
 ```
 
-Bir *depo*, Svelte'in reaktif değer kutusudur; `derived`, "bağlı olduğum şey değiştiğinde yeniden hesapla" anlamına gelir — böylece ziyaretçi dili değiştirdiğinde, sayfadaki her `$_(...)` kendiliğinden güncellenir. `@panomc/sdk` boilerplate tarafından paketlenir (bkz. [Frontend Geliştirme](/tr/addon/frontend/)). Onu olduğu gibi kopyalayın. Daha önceki `plugins.<pluginId>.` önekinin gerçekten yazıldığı tek yer burasıdır.
+Bir *depo*, Svelte'in reaktif değer kutusudur; `derived`, "bağlı olduğum şey değiştiğinde yeniden hesapla" anlamına gelir — böylece ziyaretçi dili değiştirdiğinde, sayfadaki her `$_(...)` kendiliğinden güncellenir. `@panomc/sdk` eklentinize paketlenmez, çalışma zamanında host tarafından sağlanır (bkz. [Frontend Geliştirme](/tr/addon/frontend/)). Onu olduğu gibi kopyalayın. Daha önceki `plugins.<pluginId>.` önekinin gerçekten yazıldığı tek yer burasıdır.
 
 ::: tip Ad alanınızın dışındaki anahtarlara ulaşma
 Eklentinizin ad alanı altında *olmayan* bir anahtara ihtiyacınız varsa, svelte-i18n'in kendi deposunu içe aktarın — `import { _ } from '@panomc/sdk/utils/language'` — ve **tam yolu** kendiniz geçirin (örneğin `$_('plugins.pano-plugin-shoutbox.widget.title')`). `main.js`'inizdeki `_`, yalnızca önek eklenmiş bu aynı depodur.

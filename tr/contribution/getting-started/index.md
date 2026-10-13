@@ -16,7 +16,7 @@ Pano, her biri belirli bir amaca hizmet eden birkaç depodan oluşur:
 
 ## Versiyon Türleri (Release Types)
 
-Dallarımızda (branches) üç aşamalı bir yayın döngüsü izliyoruz:
+Pano (Core) ve `pano-mc-plugin`, her biri kendi dalından (branch) çıkan üç aşamalı bir yayın döngüsü izler:
 
 | Tür | Dal (Branch) | Stabilite | Açıklama |
 |------|--------|-----------|-------------|
@@ -28,7 +28,7 @@ Dallarımızda (branches) üç aşamalı bir yayın döngüsü izliyoruz:
 
 Pano, performans ve esneklik sağlamak için modern teknolojilerle oluşturulmuştur:
 
-- **Backend**: Kotlin, Vert.x, Spring DI, JVM 17+ hedefli (testler JDK 21 üzerinde çalışır).
+- **Backend**: Kotlin, Vert.x, Spring DI, Java 11 hedefli (JAR, JRE 11+ üzerinde çalışır; derlemek için Gradle JDK 17+ ister, testler JDK 21 üzerinde çalışır).
 - **Frontend**: SvelteKit, Bootstrap 5, SASS.
 - **Çalışma Zamanı**: Frontend servislerimizi çalıştırmak için [Bun](https://bun.sh) kullanılır.
 - **Paketleme**: Projeler ZIP dosyaları halinde paketlenir ve tek bir çalıştırılabilir JAR dosyasına gömülür.
@@ -39,7 +39,7 @@ Kod tabanının kalitesini korumak için lütfen şu kurallara uyun:
 
 - **Branching Politikası**: 
   - **Pano (Core)**: Aktif geliştirme dalı `alpha`'dır. Tüm Pull Request'ler `alpha` dalına açılmalıdır.
-  - **UI Projeleri**: Bu projelerde genellikle iki dal bulunur ancak varsayılan geliştirme dalı `dev`'dir. PR'larınızı lütfen `dev` dalına hedefleyin.
+  - **UI Projeleri**: Bu projelerde iki dal bulunur: `dev` (ön sürümler, varsayılan geliştirme dalı) ve `master` (kararlı). PR'larınızı lütfen `dev` dalına hedefleyin.
 - **Conventional Commits**: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standartlarını takip ediyoruz. Tüm commit mesajları için bu zorunludur.
 - **Semantic Versioning & Release**: Pano, **Semantic Versioning (SemVer)** ve **Semantic Release** kullanır. Commit mesajları, changelog'ların otomatik oluşturulması ve versiyon numarasının belirlenmesi için kritik öneme sahiptir.
 - **Otomatik Dağıtım**: Sürekli entegrasyon ve otomatik dağıtım için **GitHub Actions** kullanıyoruz.
@@ -66,4 +66,4 @@ Pano geleneksel bir web scripti değildir. Tek bir JAR dosyası olarak çalışa
 
 ---
 
-Dalmaya hazır mısınız? [Backend](./backend) ve [Frontend](./frontend) için özel geliştirme kılavuzlarına göz atın.
+Dalmaya hazır mısınız? [Backend](../backend/) ve [Frontend](../frontend/) için özel geliştirme kılavuzlarına göz atın.

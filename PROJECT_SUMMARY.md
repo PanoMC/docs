@@ -25,7 +25,7 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 
 - **Dependency Injection:** Spring DI
 
-- **Runtime:** JVM 17+ (testler JDK 21 üzerinde çalışır)
+- **Runtime:** Java 11 hedefli (JAR, JRE 11+ üzerinde çalışır; derlemek için Gradle JDK 17+ ister, testler JDK 21 üzerinde çalışır)
 
 - **Database:** MariaDB / MySQL (güncel sürümler)
 
@@ -57,7 +57,7 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 
 - **İletişim:** WebSocket protokolü (MC Plugin ↔ Backend)
 
-- **Güvenlik:** End-to-end encryption (RSA + AES-256 hybrid)
+- **Güvenlik:** End-to-end encryption (RSA + AES-256-GCM hybrid)
 
 - **Multi-Server:** Birden fazla Minecraft sunucusu bağlantısı
 
@@ -102,6 +102,8 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 | **Beta** | `beta` | Orta | Pre-release, daha stabil |
 
 | **Release** | `main` | Yüksek | Production-ready, en stabil versiyon |
+
+Bu üç dal Pano (Core) ve `pano-mc-plugin` içindir. UI projeleri (`panel-ui`, `setup-ui`, `vanilla-theme`) iki dal kullanır: `dev` (ön sürüm) ve `master` (kararlı).
 
 ---
 
@@ -193,9 +195,9 @@ tek bir JAR dosyası ile çalıştırılabilen, CMS benzeri özelliklere sahip k
 
 - **URL:**
 
-&nbsp;- Dev: `https://dev.panomc.com` (şu anki aktif)
+&nbsp;- Dev: `https://dev.panomc.com`
 
-&nbsp;- Production: `https://panomc.com` (yakında)
+&nbsp;- Production: `https://panomc.com`
 
 - Documentation, website'in `bun run build` süreci sırasında documentation submodule'ünden otomatik olarak derlenir ve site ile birlikte yayınlanır.
 
@@ -334,7 +336,7 @@ UI tarafında eklenti geliştirirken hızlıca test etmek için aşağıdaki ad�
 3.  Sayfayı yenileyerek değişiklikleri anında görebilirsiniz.
 
 > [!IMPORTANT]
-> Geliştirdiğiniz UI eklentisinin çalışabilmesi için **Panel -> Ayarlar -> Dev Mode** seçeneğinin aktif olması gerekmektedir.
+> Geliştirdiğiniz UI eklentisinin çalışabilmesi için **Panel -> Ayarlar -> Geliştirici Modu** seçeneğinin aktif olması gerekmektedir.
 
 ---
 
@@ -346,8 +348,8 @@ Pano ekosistemi için geliştirilen resmi SDK, `PanoMC/sdk` motor (engine) works
 - **`@panomc/sdk`:** Host (Pano) ile eklentiler/temalar arasındaki köprü (kararlı facade).
 - **Sürümleme:** Her iki paket **tek ortak sürümü** paylaşır (güncel hat: `1.0.0-dev.x`).
 - **Tüketim (Consumption):**
-  - **Bizim UI'larımız** (temalar, `panel-ui`): motoru bir `theme-core` **git submodule** olarak taşır.
-  - **Diğerleri** (`setup-ui`, `website` ve harici eklenti/tema yazarları): `@panomc/sdk`'yı doğrudan **npm** üzerinden kullanır.
+  - **Bizim UI'larımız** (temalar, `panel-ui`, `setup-ui`): motoru bir `theme-core` **git submodule** olarak taşır.
+  - **Diğerleri** (`website` ve harici eklenti/tema yazarları): `@panomc/sdk`'yı doğrudan **npm** üzerinden kullanır.
   - Artık hiçbir projede `src/pano-sdk` submodule dizini yoktur.
 - **Amacı:** Host (Pano) ile pluginler arasında bir köprü görevi görür. Eklentilere API erişimi ve hazır component'ler (Component Provider) sağlar.
 - **Yetenekler:**
@@ -361,8 +363,8 @@ Pano ekosistemi için geliştirilen resmi SDK, `PanoMC/sdk` motor (engine) works
   - **UI Bildirimleri:** `pano.utils.toast` ve `pano.utils.tooltip`.
   - **Yaşam Döngüsü:** `onLoad(pano)` ve `onUnload()` hook'ları.
 - **Entegrasyon Yapısı:**
-  - **Bizim UI'larımız (Host):** Temalar ve `panel-ui`, motoru `theme-core` **git submodule** olarak taşır ve projeyle birlikte derler. Bu projeler motoru bir **Host** olarak kullanır.
-  - **npm tüketicileri (Client):** `setup-ui`, `website` ve harici eklenti/tema yazarları `@panomc/sdk`'yı npm paketi olarak projeye dahil eder ve SDK'yı bir **Client** gibi kullanır.
+  - **Bizim UI'larımız (Host):** Temalar, `panel-ui` ve `setup-ui`, motoru `theme-core` **git submodule** olarak taşır ve projeyle birlikte derler. Bu projeler motoru bir **Host** olarak kullanır.
+  - **npm tüketicileri (Client):** `website` ve harici eklenti/tema yazarları `@panomc/sdk`'yı npm paketi olarak projeye dahil eder ve SDK'yı bir **Client** gibi kullanır.
 
 ---
 
@@ -443,7 +445,7 @@ Website üzerinde "resource" paylaşımı bu iki türü kapsar.
 
 ## 🔗 Kaynaklar
 
-- **Production URL:** https://panomc.com (yakında)
+- **Production URL:** https://panomc.com
 
 - **Dev URL:** https://dev.panomc.com
 

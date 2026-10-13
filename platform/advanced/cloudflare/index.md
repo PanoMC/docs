@@ -20,7 +20,7 @@ With Flexible mode:
 - Cloudflare ⇄ Pano is plain HTTP on port **80**.
 
 > [!WARNING]
-> Flexible mode means traffic between Cloudflare and your server is **not** encrypted. If your server is on a public network and handles sensitive data, prefer terminating TLS on the origin (via a reverse proxy like Nginx or Caddy with a Let's Encrypt certificate) and use **Full (strict)** instead. See [Production Setup](../../configuration/production/).
+> Flexible mode means traffic between Cloudflare and your server is **not** encrypted. If your server is on a public network and handles sensitive data, prefer terminating TLS on the origin — with Pano's own [`ssl-mode`](../../configuration/server/), or a reverse proxy like Nginx or Caddy with a Let's Encrypt certificate — and use **Full (strict)** instead. See [Production Setup](../../configuration/production/).
 
 ## Configure `website-url` with `https://`
 
@@ -33,6 +33,20 @@ website-url = "https://yourdomain.com"
 ```
 
 Save and **restart Pano** after changing this value.
+
+## Tell Pano that Cloudflare is a proxy
+
+Without this, every visitor reaches Pano from a Cloudflare address, so anything that works per address — rate limits,
+[maintenance mode](../../maintenance/) login bans, the addresses in logs — sees Cloudflare instead of the visitor. Add
+the word `cloudflare` to `trusted-proxies`; it stands for Cloudflare's published address ranges:
+
+```jsonc
+server {
+  trusted-proxies = ["cloudflare"]
+}
+```
+
+See [`trusted-proxies`](../../configuration/server/) for the other accepted values.
 
 ## Recommended Cloudflare settings
 
@@ -56,7 +70,7 @@ After applying the settings:
 
 If you need true end-to-end encryption (recommended for production deployments handling user data), don't use Flexible. Instead:
 
-1. Put a reverse proxy (Nginx, Caddy, Traefik) in front of Pano with a valid TLS certificate (Let's Encrypt works well).
+1. Turn on HTTPS in Pano itself ([`ssl-mode`](../../configuration/server/)), or put a reverse proxy (Nginx, Caddy, Traefik) in front of Pano with a valid TLS certificate (Let's Encrypt works well).
 2. Set Cloudflare's encryption mode to **Full (strict)**.
 3. Keep `website-url = "https://..."` in `config.conf`.
 

@@ -20,7 +20,7 @@
 - Cloudflare ⇄ Pano — обычный HTTP на порту **80**.
 
 > [!WARNING]
-> Режим Flexible означает, что трафик между Cloudflare и вашим сервером **не шифруется**. Если сервер находится в публичной сети и обрабатывает чувствительные данные, предпочтительнее терминировать TLS на источнике (например, через reverse proxy Nginx или Caddy с сертификатом Let's Encrypt) и использовать **Full (strict)**. См. [Production-настройку](../../configuration/production/).
+> Режим Flexible означает, что трафик между Cloudflare и вашим сервером **не шифруется**. Если сервер находится в публичной сети и обрабатывает чувствительные данные, предпочтительнее терминировать TLS на источнике — собственным [`ssl-mode`](../../configuration/server/) Pano либо через reverse proxy Nginx или Caddy с сертификатом Let's Encrypt — и использовать **Full (strict)**. См. [Production-настройку](../../configuration/production/).
 
 ## Настройте `website-url` с `https://`
 
@@ -33,6 +33,20 @@ website-url = "https://vashdomen.com"
 ```
 
 Сохраните изменения и **перезапустите Pano**.
+
+## Сообщите Pano, что Cloudflare — это прокси
+
+Без этого каждый посетитель приходит в Pano с адреса Cloudflare, и всё, что работает по адресам — ограничения частоты,
+блокировки входа [режима обслуживания](../../maintenance/), адреса в логах — видит Cloudflare вместо посетителя.
+Добавьте в `trusted-proxies` слово `cloudflare`: оно означает опубликованные диапазоны адресов Cloudflare:
+
+```jsonc
+server {
+  trusted-proxies = ["cloudflare"]
+}
+```
+
+Другие допустимые значения см. в описании [`trusted-proxies`](../../configuration/server/).
 
 ## Рекомендуемые настройки Cloudflare
 
@@ -56,7 +70,7 @@ website-url = "https://vashdomen.com"
 
 Если требуется настоящее сквозное шифрование (рекомендуется для боевых окружений, обрабатывающих пользовательские данные), не используйте Flexible. Вместо этого:
 
-1. Поставьте перед Pano reverse proxy (Nginx, Caddy, Traefik) с действительным TLS-сертификатом (Let's Encrypt подойдёт).
+1. Включите HTTPS в самом Pano ([`ssl-mode`](../../configuration/server/)) или поставьте перед Pano reverse proxy (Nginx, Caddy, Traefik) с действительным TLS-сертификатом (Let's Encrypt подойдёт).
 2. Установите режим шифрования Cloudflare в **Full (strict)**.
 3. Оставьте `website-url = "https://..."` в `config.conf`.
 

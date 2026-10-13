@@ -42,6 +42,9 @@ locale = "en-US"
 # Web sitenizin genel URL'si (e-postalar, çerezler vb. için gereklidir)
 website-url = "http://yourdomain.com"
 
+# Başka bir alan adına gelen istekleri website-url adresine yönlendir (varsayılan: true)
+website-url-redirect = true
+
 # Bu kurulumun nasıl kullanıldığı: "WEBSITE", "SERVERS" veya "BOTH" (varsayılan: "BOTH")
 usage-mode = "BOTH"
 
@@ -72,6 +75,7 @@ keywords = []
 - `development-mode`: varsayılan olarak **false**’dur; yalnızca hata ayıklama için **true** yapın.
 - `locale`: kısa kodlar kullanın, örneğin `en-US` veya `tr` (diller panelden eklenebilir).
 - `website-url`: web sitenizin temel URL'si. Bu, sistem e-postaları oluşturmak, oturum çerezlerini yönetmek ve diğer platform özellikleri için **zorunludur**.
+- `website-url-redirect`: `true` iken (varsayılan), Pano'yu başka bir alan adıyla açan ziyaretçi `website-url` adresine yönlendirilir.
 - `usage-mode`: bu kurulumun nasıl kullanıldığını belirler. Kurulum sihirbazının ilk ekranında seçilir ve istediğiniz zaman **Panel → Ayarlar → Platform → Tercihler** bölümünden (üç seçilebilir kutu) değiştirilebilir.
   - `"WEBSITE"`: yalnızca web sitesi — klasik Pano deneyimi. Sunucu yönetimi sayfalarıyla ve API'leriyle birlikte kapatılır. Pano MC Plugin ile Minecraft sunucusu bağlamak çalışmaya devam eder, zaten eşleşmiş düğümler de sunucularını çalıştırmayı sürdürür.
   - `"SERVERS"`: yalnızca Minecraft sunucu yönetimi — asıl ürün paneldir. **Yazılar**, **Talepler** ve **Görünüm** (temalar) sayfalarıyla ve API'leriyle birlikte kapatılır; herkese açık tüm adresler `/panel` adresine yönlendirilir. Geri geçince yeniden başlatmaya gerek kalmadan geri gelirler; mevcut yazılar ve talepler korunur.

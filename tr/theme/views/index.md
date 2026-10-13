@@ -11,7 +11,7 @@ Pano'daki her sayfa iki parçadan oluşur:
 
 İkisi ayrı olduğu için, **herhangi bir sayfanın mantığına dokunmadan görünümünün sahipliğini alabilirsiniz**. Veri yine gelir, eklentiler yine çalışır, girişler yine gerçekleşir — siz yalnızca sunumu yeniden stillendirirsiniz.
 
-Devralabileceğiniz **26 view** vardır; her sayfa türü için bir tane (ana sayfa, giriş, kayıt, profil vb.).
+Devralabileceğiniz **57 çekirdek view** vardır: her sayfa türü için bir tane olmak üzere 26 sayfa ve düzen view'ı (ana sayfa, giriş, kayıt, profil vb.) ve 31 küçük parça (gezinme çubuğu, üst bilgi, alt bilgi, yazı kartı, kenar çubukları vb.); buna yüklü eklentilerin sunduğu view'lar da eklenir.
 
 ## Adım 1 — nelerin mevcut olduğunu görün
 
@@ -49,7 +49,7 @@ Eject edilen her view, **her prop'u** belgeleyen bir yorum başlığıyla başla
     data.posts       array — mevcut sayfanın gönderileri
     data.postCount   number — toplam gönderi sayısı
     data.page        number — mevcut sayfa numarası
-    data.totalPage   number — sayfalama için toplam sayfa sayısı
+    data.totalPages  number — sayfalama için toplam sayfa sayısı
     themeSettings    object — context'ten gelen tema ayarları
     onPageClick      function(data, page) — sayfalama işleyicisi
 -->
@@ -72,7 +72,7 @@ Hadi gerçekten yapalım. `eject-view HomeView` sonrasında `src/views/HomeView.
   {#if data.postCount > 0}
     <Pagination
       page={data.page}
-      totalPage={data.totalPage}
+      totalPages={data.totalPages}
       on:pageLinkClick={(event) => onPageClick(data, event.detail.page)} />
   {/if}
 </div>
@@ -144,7 +144,7 @@ Kaydedin, yenileyin → aynı gönderiler, tamamen farklı bir düzen ve her pik
   {/if}
 ```
 
-Artık afiş panelden kapatılabilir — anahtarı düzgün kaydedilecek şekilde nasıl tanımlayacağınız için aşağıdaki [Özel tema ayarları](#özel-tema-ayarları) bölümüne bakın.
+Artık afiş panelden kapatılabilir — anahtarı düzgün kaydedilecek şekilde nasıl tanımlayacağınız için aşağıdaki [Özel tema ayarları](#ozel-tema-ayarları) bölümüne bakın.
 
 ### Döngünün tamamı bu
 
@@ -352,4 +352,4 @@ Unutmayın: asla boş bir sayfadan başlamazsınız. Eject edilen her view, ger�
 
 ## Sırada ne var?
 
-Temanız istediğiniz gibi göründüğünde, [Başlangıç](../getting-started) rehberi derleme, sözleşme kontrolü, paketleme ve gönderme işlemlerini kapsar.
+Temanız istediğiniz gibi göründüğünde, [Derleme ve Paketleme](../packaging) denetimi, derlemeyi ve paketlemeyi; [Yayınlama ve Premium](../publishing) ise yayınlamayı anlatır.

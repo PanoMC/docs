@@ -3,7 +3,7 @@
 Instance'lar çalıştıktan sonraki günlük işler: güncellemeler, yedekler, çökmeler ve loglar.
 
 > [!NOTE]
-> Konteyner modu ve `.panoarc` arşiv biçimi, Pano **1.0.0-alpha.520** sürümünden itibaren konteyner
+> Konteyner modu ve `.panoarc` arşiv biçimi, Pano **1.0.0-alpha.522** sürümünden itibaren konteyner
 > imajlarıyla gelir. Bkz. [Başkaları için Pano Instance Barındırma](../).
 
 ## Güncelleme ve geri alma {#updates-and-rollback}

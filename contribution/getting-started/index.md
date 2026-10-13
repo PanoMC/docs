@@ -16,7 +16,7 @@ Pano is composed of several repositories, each serving a specific purpose:
 
 ## Release Types
 
-We maintain three stages of releases across our branches:
+Pano (Core) and `pano-mc-plugin` ship three release stages, each from its own branch:
 
 | Type | Branch | Stability | Description |
 |------|--------|-----------|-------------|
@@ -28,7 +28,7 @@ We maintain three stages of releases across our branches:
 
 Pano is built using modern technologies to ensure performance and flexibility:
 
-- **Backend**: Kotlin, Vert.x, Spring DI, targeting JVM 17+ (tests run on JDK 21).
+- **Backend**: Kotlin, Vert.x, Spring DI, targeting Java 11 (the JAR runs on JRE 11+; building needs JDK 17+ for Gradle, and tests run on JDK 21).
 - **Frontend**: SvelteKit, Bootstrap 5, SASS.
 - **Runtime**: [Bun](https://bun.sh) is used for running our frontend services.
 - **Packaging**: Projects are packaged into ZIP files and embedded into a single executable JAR file.
@@ -39,7 +39,7 @@ To maintain a high-quality codebase, please follow these guidelines:
 
 - **Branching Policy**: 
   - **Pano (Core)**: The active development branch is `alpha`. All Pull Requests should be opened against the `alpha` branch.
-  - **UI Projects**: These projects typically have two branches, but `dev` is the default branch for active development. Please target the `dev` branch for your PRs.
+  - **UI Projects**: These projects have two branches: `dev` (pre-releases, the default branch for active development) and `master` (stable). Please target the `dev` branch for your PRs.
 - **Conventional Commits**: We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This is strictly required for all commit messages.
 - **Semantic Versioning & Release**: Pano uses **Semantic Versioning (SemVer)** and **Semantic Release**. Commit messages are used to automatically generate changelogs and determine version numbers.
 - **Auto Deployment**: We use **GitHub Actions** for continuous integration and automatic deployment.
@@ -66,4 +66,4 @@ Pano is not a traditional web script. It's a self-contained platform that runs a
 
 ---
 
-Ready to dive in? Check out the specific development guides for [Backend](./backend) and [Frontend](./frontend).
+Ready to dive in? Check out the specific development guides for [Backend](../backend/) and [Frontend](../frontend/).

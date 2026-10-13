@@ -21,9 +21,9 @@ Pano's LuckPerms integration synchronizes your server's **Groups**, **Tracks**, 
 
 ## Requirements
 
-1. **LuckPerms** (v5.0+) installed on your Minecraft server (Spigot, Paper, Folia, etc.).
+1. **LuckPerms** (v5.0+) installed on your Minecraft server (Spigot, Paper, Folia, BungeeCord, Velocity or Fabric).
 2. **Pano MC Plugin** installed and connected to your Pano instance.
-3. **Permission Integration** enabled in your Pano settings.
+3. **Permission Integration** enabled for that server (it is by default).
 
 ## Setup Guide
 
@@ -31,23 +31,23 @@ Pano's LuckPerms integration synchronizes your server's **Groups**, **Tracks**, 
 Ensure LuckPerms is installed and working on your Minecraft server.
 - [Download LuckPerms →](https://luckperms.net/download)
 
-### Step 2: Enable Integration
+### Step 2: Check the Integration
 1. Log in to your **Pano Admin Panel**.
-2. Navigate to **Panel → Server Settings → Game Integration**.
-3. Enable the **Permission Integration** toggle.
-4. Click **Save**.
+2. Select the server, then open its **Settings → Game Integration** (the settings are per server).
+3. Make sure the **Permission Integration** toggle is on — it is by default.
+4. Click **Save** if you changed it.
 
 ### Step 3: Wait for Synchronization
 Once enabled, the Pano MC Plugin will automatically detect LuckPerms. 
-- It will perform an initial sync to pull your existing LuckPerms data into Pano.
-- It will then hook into the LuckPerms Event Bus to listen for future changes.
+- It hooks into the LuckPerms Event Bus to listen for changes.
+- It then applies Pano's permission data to LuckPerms; changes made in LuckPerms afterwards are pushed to Pano.
 
 ## Pano-Exclusive Permissions
 
 > [!IMPORTANT]
-> When you add a permission node via the Pano Panel, it automatically includes a **`pano: true`** context. This indicates that the permission node is specific to the Pano platform and is **not reflected in-game**.
+> When you add a permission node via the Pano Panel, it automatically includes a **`pano: true`** context. This indicates that the permission node is specific to the Pano platform. It is stored in LuckPerms with the `pano=true` context, which never applies in game, so it has **no effect in-game**.
 >
-> This feature allows you to manage web-only permissions (such as panel access levels or specific website features) without cluttering your Minecraft server's internal permissions or causing conflicts in-game.
+> This feature allows you to manage web-only permissions (such as panel access levels or specific website features) without causing conflicts in-game.
 
 ## How Synchronization Works
 
@@ -69,7 +69,6 @@ When a permission change occurs in-game (e.g., using `/lp user ... permission se
 Pano is designed to coexist with manual LuckPerms usage:
 - **Managed Markers:** Pano adds a `meta.pano-managed.true` node to entities it manages.
 - **Wipe Protection:** When syncing, Pano carefully identifies which groups and tracks it should manage to avoid accidentally deleting your manually created server data.
-- **Verification:** Pano verifies every node's hash to ensure data integrity during transfers.
 
 ## Troubleshooting
 
@@ -80,7 +79,7 @@ Pano is designed to coexist with manual LuckPerms usage:
 
 ### Sync Delay
 - Pano uses a short debounce period (approx. 1.5 seconds) for outbound syncs to prevent network flooding during bulk operations.
-- If changes aren't appearing, check if the **Pano MC Plugin** is connected (Panel → Servers).
+- If changes aren't appearing, check if the **Pano MC Plugin** is connected (the server's **Overview** page, or `/pano status` in game).
 
 ## Need Help?
 If you encounter issues or have feedback:

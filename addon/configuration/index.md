@@ -22,7 +22,7 @@ The `PluginConfigManager` that loads and saves this file is created and register
 :::
 
 ::: tip Checkpoint: open the generated config
-After your addon has loaded once (rebuild → copy → restart), open `plugins/pano-plugin-shoutbox/config.conf`. You should see your two keys with their default values: `enabled` set to `true` and `maxShouts` set to `5`.
+After your addon has loaded once (rebuild → restart), open `plugins/pano-plugin-shoutbox/config.conf`. You should see your two keys with their default values: `enabled` set to `true` and `maxShouts` set to `5`.
 :::
 
 ## Reading config from an endpoint (and why not from a constructor)

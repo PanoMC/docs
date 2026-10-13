@@ -2,66 +2,96 @@
 
 ## Расширение бэкенда Pano (рекомендуется)
 
-Для полноценной интеграции **настоятельно рекомендуется** также создать **плагин Pano** (на стороне бэкенда), который будет обрабатывать ваши пользовательские запросы и сообщения.
+Запрос, который отправляет ваш плагин Minecraft, ничего не делает, пока что-то в Pano его не обработает. Создайте **плагин Pano** (на стороне бэкенда) с одним серверным событием на каждый запрос.
 
 ### Структура плагина Pano
 
-Создайте плагин в бэкенде Pano для обработки вашей логики интеграции:
+Серверное событие наследует `ServerEvent<Request, Response>`. Имя события — это имя класса без `Event` в верхнем snake case, то есть `MyPlayerStatsEvent` обрабатывает `MY_PLAYER_STATS`. Имя ответа — это имя класса без `EventResponse`. Pano заполняет запрос через Gson: задайте каждому свойству значение по умолчанию.
 
 ```kotlin
-// В вашем плагине Pano (бэкенд)
+// In your Pano plugin (backend)
+import com.panomc.platform.api.PanoPlugin
+import com.panomc.platform.db.model.Server
+import com.panomc.platform.server.ServerEvent
+import com.panomc.platform.server.ServerEventRequest
+import com.panomc.platform.server.ServerEventResponse
+import com.panomc.platform.server.ServerManager
+
+// MY_PLAYER_JOIN: no answer
+class MyPlayerJoinEventRequest(
+    val player: String = "",
+    val uuid: String = ""
+) : ServerEventRequest()
+
+class MyPlayerJoinEvent : ServerEvent<MyPlayerJoinEventRequest, ServerEventResponse>() {
+    override suspend fun handle(request: MyPlayerJoinEventRequest, server: Server): ServerEventResponse? {
+        // Store in database, trigger events, etc.
+        return null
+    }
+}
+
+// MY_PLAYER_STATS: answered
+class MyPlayerStatsEventRequest(val uuid: String = "") : ServerEventRequest()
+
+data class MyPlayerStatsEventResponse(
+    val kills: Int = 0,
+    val deaths: Int = 0
+) : ServerEventResponse()
+
+class MyPlayerStatsEvent : ServerEvent<MyPlayerStatsEventRequest, MyPlayerStatsEventResponse>() {
+    override suspend fun handle(request: MyPlayerStatsEventRequest, server: Server): MyPlayerStatsEventResponse {
+        // Load the stats of request.uuid from your own tables
+        return MyPlayerStatsEventResponse(kills = 12, deaths = 3)
+    }
+}
+
 class MyIntegrationPanoPlugin : PanoPlugin() {
+    private val events = listOf<ServerEvent<*, *>>(MyPlayerJoinEvent(), MyPlayerStatsEvent())
 
-    override fun onEnable() {
-        // Регистрация обработчиков запросов
-        registerRequestHandler("player_join") { data, connection ->
-            handlePlayerJoin(data, connection)
-        }
+    override suspend fun onStart() {
+        val serverManager = applicationContext.getBean(ServerManager::class.java)
 
-        registerRequestHandler("player_stats") { data, connection ->
-            handlePlayerStatsRequest(data, connection)
+        events.forEach {
+            serverManager.unregisterEvent(it)
+            serverManager.registerEvent(it)
         }
     }
 
-    private fun handlePlayerJoin(data: Map<String, Any>, connection: Connection) {
-        val playerName = data["player"] as String
-        val uuid = data["uuid"] as String
-        
-        // Сохранение в БД, вызов событий и т.д.
-        database.updatePlayerLastJoin(uuid)
-        
-        // Опциональная отправка ответа
-        connection.sendResponse("success", mapOf("message" to "Вход зафиксирован"))
-    }
+    override suspend fun onStop() {
+        val serverManager = applicationContext.getBean(ServerManager::class.java)
 
-    private fun handlePlayerStatsRequest(data: Map<String, Any>, connection: Connection) {
-        val uuid = data["uuid"] as String
-        val stats = database.getPlayerStats(uuid)
-        
-        // Отправка статистики обратно в MC плагин
-        connection.sendResponse("player_stats_response", stats)
+        events.forEach { serverManager.unregisterEvent(it) }
     }
 }
 ```
 
+Верните `null`, если отвечать нечего. `server` — это сервер Minecraft, отправивший запрос; соединение аутентифицировано, поэтому ему можно доверять.
+
 ### Отправка сообщений из Pano в Minecraft
 
-Из вашего плагина Pano вы можете отправлять сообщения на подключенные серверы Minecraft:
+`ServerManager.sendMessage` отправляет сообщение одному подключённому серверу:
 
 ```kotlin
-// Отправка награды игроку
-platformManager.sendMessage("player_reward", mapOf(
-    "playerName" to "Steve",
-    "reward" to "coins",
-    "amount" to 100
-))
+import com.panomc.platform.server.PlatformMessage
+
+// Sent as the message PLAYER_REWARD
+data class PlayerRewardMessage(
+    val playerName: String,
+    val reward: String,
+    val amount: Int
+) : PlatformMessage
+
+// false when the server is not connected
+val sent: Boolean = serverManager.sendMessage(serverId, PlayerRewardMessage("Steve", "coins", 100))
 ```
 
-Это сообщение будет получено вашим `PlayerRewardHandler` на сервере Minecraft.
+::: warning
+Pano MC Plugin передаёт такое сообщение только своим встроенным обработчикам, поэтому другой плагин Minecraft никогда не увидит `PLAYER_REWARD`. Чтобы доставить что-то вашему плагину, пусть он спрашивает сам: отправляйте запрос с сервера (например, раз в несколько секунд) и возвращайте в ответе то, что ожидает доставки.
+:::
 ## Лучшие практики безопасности
 
 1. **Проверяйте все данные** — никогда не доверяйте входящим данным без валидации.
-2. **Используйте шифрование Pano** — вся связь автоматически шифруется через WebSocket.
+2. **Используйте шифрование Pano** — сообщения в соединении с сервером автоматически шифруются AES-256-GCM.
 3. **Проверяйте права доступа** — убедитесь в наличии прав у пользователя перед выполнением действий.
 4. **Очищайте ввод** — предотвращайте инъекционные атаки.
 5. **Ограничение частоты (Rate Limiting)** — внедряйте ограничения для частых операций.

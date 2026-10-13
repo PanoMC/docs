@@ -19,11 +19,11 @@ Every step is copy and paste. A little **HTML**, **CSS**, **JavaScript** and **S
 ## The quick-start
 
 ```sh
-bunx @panomc/theme-core new my-theme     # asks four questions, then installs
+bunx @panomc/theme-core new              # asks four questions, then installs
 cd my-theme && bun run dev:ui            # prints one panel field to set, once
 ```
 
-Then, in the panel, switch **Platform Settings → Development Mode** on and fill **Appearance → Front-end → Theme dev server** with the address the command printed (`http://localhost:3000`). Save, and open your Pano address. Your theme is running.
+Then, in the panel, open **Settings → Platform**, switch **Developer Mode** on and fill the **Theme Dev Server** field that appears under it with the address the command printed (`http://localhost:3000`). Save, and open your Pano address. Your theme is running.
 
 That is all: **three steps** (scaffold, dev, one panel field). You edit no Pano config file and you do not restart Pano, so the panel stays available while you work.
 
@@ -41,7 +41,7 @@ A theme always runs behind Pano. Open your Pano address (for example `http://loc
 
 ## What the panel field does
 
-While the **Theme dev server** field is set, the front-end mode is `THEME` and Development Mode is on: Pano does not start its own theme process and proxies the site to your dev server. The panel, setup and plugin UIs run as usual. Clear the field and Pano goes back to the installed theme.
+While the **Theme Dev Server** field is set, the front-end mode is `THEME` and Developer Mode is on: Pano does not start its own theme process and proxies the site to your dev server. The panel, setup and plugin UIs run as usual. Clear the field and Pano goes back to the installed theme.
 
 ## Your first change
 

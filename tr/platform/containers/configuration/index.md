@@ -32,7 +32,7 @@ Hepsi isteğe bağlıdır.
 | `PANO_DB_NAME`, `PANO_DB_USER`, `PANO_DB_PASSWORD` | Veritabanı ve kullanıcısı |
 | `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP sunucusu |
 | `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | SMTP girişi |
-| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Gönderen adresi, STARTTLS açık ya da kapalı |
+| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Gönderen adresi; STARTTLS modu `DISABLED`, `OPTIONAL` veya `REQUIRED` (varsayılan: porta göre seçilir) |
 | `PANO_HTTP_PORT` | Pano'nun konteyner içinde dinlediği port (8088) |
 | `PANO_JVM_ARGS` | Boşlukla ayrılmış Java seçenekleri (`-XX:MaxRAMPercentage=75`) |
 
@@ -49,6 +49,7 @@ docker run -d --name pano \
 ```
 
 Şifreleri kabuk geçmişinde bırakmayın: `--env-file` ya da orkestratörünüzün secret yönetimini kullanın.
+[Tek komutla kurulum](../../installation/installer/) aynı değişkenleri kendi `pano.env` dosyasına yazar.
 
 ### Pano Host değişkenleri {#pano-host-variables}
 
@@ -56,7 +57,7 @@ Pano Host birkaç değişken daha ayarlar. Kendi kurulumlarınız için bunlara 
 
 | Değişken | Amacı |
 | --- | --- |
-| `PANO_HOSTED` | `pano-host`, instance'ı Pano Host tarafından yönetilen olarak işaretler. Yalnızca bilgi amaçlıdır: panel "Pano Host tarafından yönetiliyor" ve kota bildirimlerini gösterir, hiçbir şey kilitlenmez |
+| `PANO_HOSTED` | `pano-host`, instance'ı Pano Host tarafından yönetilen olarak işaretler: panel "Pano Host tarafından yönetiliyor" ve kota bildirimlerini gösterir. Bu durumda yukarıdaki değişkenler **her** açılışta uygulanır ve paneldeki port ile SSL ayarları dikkate alınmaz |
 | `PANO_HOST_WORKLOAD_ID` | Instance'ın Pano Host'taki kimliği |
 | `PANO_HOST_INSTANCE_SECRET` | Instance'ın panomc.com'dan gelen panel girişlerini doğrulamasını ve bildirimlerini okumasını sağlar |
 | `PANO_HOST_API_URL` | Pano Host API adresi |

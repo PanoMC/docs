@@ -42,7 +42,7 @@ Both are grantable to panel roles, and the panel controls are gated on them.
 ## Prerequisites
 
 - **A premium license.** Premium Login is a paid plugin: it verifies a panomc.com license at startup and will not start without one.
-- **A Microsoft Azure app.** Register an application in the Azure Portal (personal Microsoft accounts type), supply the **Client ID** and **Client Secret**, and set the redirect URI to `https://yoursite.com/api/premium-login/microsoft/callback`. Submit the app to Microsoft for verification to open the feature to the general public.
+- **A Microsoft Azure app.** Register an application in the Azure Portal (personal Microsoft accounts type), supply the **Client ID** and **Client Secret**, and set the redirect URI to `https://yoursite.com/api/plugins/pano-plugin-premium-login/microsoft/callback`. Submit the app to Microsoft for verification to open the feature to the general public.
 - **Server-side sync** requires the **Pano MC plugin** (connected to your website) and **FastLogin** installed on your Spigot/Bungee/Velocity server (FastLogin implies ProtocolLib on Spigot).
 - **A configured mail system** for the username-conflict emails, and a completed site setup before the plugin initializes.
 

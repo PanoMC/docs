@@ -12,23 +12,23 @@ Ban Yönetimi entegrasyonu, web sitenizin moderasyon araçları ile Minecraft su
 - **Süreli ve Kalıcı Banlar** — Hem süreli uzaklaştırmalar hem de ömür boyu yasaklamalar için destek.
 - **Dinamik Kick Mesajları** — Sebepler ve sona erme süreleri ile otomatik olarak yerelleştirilmiş kick mesajları oluşturur.
 - **Platform Geneli Senkronizasyon** — Pano'da uygulanan bir ban, o Pano örneğine bağlı tüm sunucuları etkiler.
-- **Kolay Yönetim** — Tek bir modern arayüzden banları görüntüleyin, arayın ve iptal edin.
+- **Kolay Yönetim** — Oyuncunun sayfasından banlayın ve banı kaldırın; **Oyuncular** sayfasında **Yasaklı** filtresi vardır.
 
 ## Gereksinimler
 
 1. **Pano MC Eklentisi** kurulu ve Pano örneğinize bağlı olmalıdır.
-2. Pano ayarlarınızda **Ban Entegrasyonu** etkin olmalıdır.
+2. O sunucu için **Yasaklama Entegrasyonu** etkin olmalıdır (varsayılan olarak etkindir).
 
 ## Kurulum Rehberi
 
-### Adım 1: Entegrasyonu Etkinleştirin
+### Adım 1: Entegrasyonu Kontrol Edin
 1. **Pano Yönetici Panelinize** giriş yapın.
-2. **Panel → Sunucu Ayarları → Oyun Entegrasyonu** bölümüne gidin.
-3. **Ban Entegrasyonu** anahtarını etkinleştirin.
-4. **Kaydet**'e tıklayın.
+2. Sunucuyu seçin ve **Ayarlar → Oyun Entegrasyonu** sekmesini açın (ayarlar sunucu başınadır).
+3. **Yasaklama Entegrasyonu** anahtarının açık olduğundan emin olun — varsayılan olarak açıktır.
+4. Değiştirdiyseniz **Kaydet**'e tıklayın.
 
 ### Adım 2: Ban Mesajlarını Yapılandırın
-Ban mesajları, Pano platformunuzun çeviri dosyalarından alınır. Bunları panelinizin **Çeviriler** bölümünden özelleştirebilirsiniz:
+Ban mesajları, Pano platformunuzun çeviri dosyalarından alınır. Bunları panelinizin **Çeviriler** bölümünde, **MC Eklentisi** türü altında özelleştirebilirsiniz:
 - `auth.ban-kick-temporary`: Süreli banlar için gösterilen mesaj.
 - `auth.ban-kick-permanent`: Kalıcı banlar için gösterilen mesaj.
 
@@ -38,7 +38,10 @@ Ban mesajları, Pano platformunuzun çeviri dosyalarından alınır. Bunları pa
 2. **Durum Kontrolü:** Eklenti, oyuncunun durumunu kontrol etmek için Pano platformuna gerçek zamanlı bir istek gönderir.
 3. **Uygulama:**
    - Eğer oyuncu **yasaklı değilse**, normal şekilde katılmasına izin verilir.
-   - Eğer oyuncu **yasaklıysa**, eklenti kalan süreyi (varsa) hesaplar ve oyuncuyu belirlenen sebeple sunucudan atar.
+   - Eğer oyuncu **yasaklıysa**, eklenti oyuncuyu sebeple ve süreli banlarda bitiş tarihiyle birlikte sunucudan atar.
+4. **Zaten çevrimiçiyse:** oynarken banlanan oyuncu hemen sunucudan atılır.
+
+Sunucu o anda Pano'ya ulaşamıyorsa oyuncunun girişine izin verilir.
 
 ## Yardıma mı İhtiyacınız Var?
 Sorunlarla karşılaşırsanız veya geri bildiriminiz varsa:

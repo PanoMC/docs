@@ -10,8 +10,8 @@ Bu eklenti erken aşama bir iskelettir. Bugün yalnızca tek bir **yalnızca-gö
 
 Şu anda eklentiyi etkinleştirdikten sonra elde ettikleriniz:
 
-- Panel kenar çubuğunda bir **Whitelist** öğesi (scroll simgesi, **Oyuncular**'ın hemen üstünde yer alır).
-- **Panel → Whitelist** adresinde, tek bir **Genel Bakış** sekmesi olan tek bir sayfa.
+- Panel kenar çubuğunda bir **Beyaz Liste** öğesi (scroll simgesi, **Kullanıcılar**'ın hemen üstünde yer alır).
+- **Panel → Beyaz Liste** adresinde, tek bir **Genel Bakış** sekmesi olan tek bir sayfa.
 - Erişim modlarının yatay bir zaman çizelgesini gösteren bir **Modes** kartı. Bu şu anda sabit kodlanmış iki demo girişini — **Closed Beta** (etkin değil) → **Open Beta** (*Active* olarak işaretli) — statik bir diyagram olarak görüntüler. Henüz mod oluşturmanın, düzenlemenin veya etkinleştirmenin bir yolu yoktur.
 
 Eklentinin bu aşamadaki kapsamı bu kadardır: bir kenar çubuğu bağlantısı ve statik bir taklit diyagram.
@@ -42,5 +42,5 @@ Bu eklenti açık kaynaklıdır ve **MIT Lisansı** ile lisanslanmıştır. Kayn
 ## Kurulum
 
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
-2. **Panel → Whitelist**'e gidin.
+2. **Panel → Beyaz Liste**'ye gidin.
 3. Mevcut (demo) erişim modlarını görmek için **Genel Bakış** sekmesini açın.

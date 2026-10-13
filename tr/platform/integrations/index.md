@@ -10,14 +10,14 @@ Tüm oyun entegrasyonları, **Pano MC Eklentisi**nin kurulu ve Pano örneğinize
 
 - **Uçtan Uca Şifreleme** — RSA + AES-256 hibrit şifreleme kullanarak güvenli WebSocket iletişimi
 - **Gerçek Zamanlı Senkronizasyon** — Oyun ve web arasında anlık oyuncu verisi senkronizasyonu
-- **Çoklu Platform Desteği** — Spigot, Paper, Folia, Bungeecord ve Velocity ile çalışır
+- **Çoklu Platform Desteği** — Spigot, Paper, Folia, BungeeCord, Velocity ve Fabric (Minecraft 26.1+) ile çalışır
 - **Eklenti Hook'ları** — Desteklenen eklentileri (AuthMe, izinler, vb.) otomatik olarak tespit eder ve bağlanır
 - **Etkinlik Sistemi** — Oyun içi etkinlikleri dinler ve Pano'ya gönderir
 - **Otomatik Yapılandırma** — Uyumluluk için eklenti ayarlarını otomatik olarak düzenler
 
 > ⚠️ **Önemli:** Tüm entegrasyonlar ve en son özelliklerle uyumluluk için her zaman **Pano MC Eklentisi**nin **en son sürümünü** kullanın.
 
-[→ Pano MC Eklentisini İndir](https://github.com/PanoMC/pano-mc-plugin/releases) | [→ Kurulum Rehberi](../installation/)
+[→ Pano MC Eklentisini İndir](https://github.com/PanoMC/pano-mc-plugin/releases) | [→ Sunucu bağlama](../server-management/#linking-a-server)
 
 ## Mevcut Entegrasyonlar
 
@@ -27,13 +27,19 @@ Tüm oyun entegrasyonları, **Pano MC Eklentisi**nin kurulu ve Pano örneğinize
 - [**LuckPerms**](./luckperms/) — Minecraft'ın en gelişmiş izin sistemiyle tam entegrasyon
 - [**Ban Yönetimi**](./ban-management/) — Oyun ve web arasında gerçek zamanlı, senkronize ban yönetimi
 
+| Entegrasyon | Spigot · Paper · Folia | BungeeCord | Velocity | Fabric |
+| --- | --- | --- | --- | --- |
+| AuthMeReloaded | Var | — | — | — |
+| LuckPerms | Var | Var | Var | Var |
+| Ban Yönetimi | Var | Var | Var | Var |
+
 ## Entegrasyonlar Nasıl Çalışır?
 
 Pano'nun entegrasyonları desteklenen eklentilerle **sorunsuz** bir şekilde çalışacak şekilde tasarlanmıştır:
 
-1. Desteklenen eklentiyi Minecraft sunucunuza kurun (Spigot/Paper/Folia)
-2. Minecraft sunucunuzu [Pano MC Eklentisi](../installation/) kullanarak Pano'ya bağlayın (panel'deki **Sunucular** sekmesi → **+** butonu üzerinden)
-3. Entegrasyonun **Panel → Sunucu Ayarları → Oyun Entegrasyonu**'ndan etkin olduğunu doğrulayın (çoğu entegrasyon varsayılan olarak etkindir)
+1. Desteklenen eklentiyi Minecraft sunucunuza kurun
+2. Minecraft sunucunuzu [Pano MC Eklentisi](../server-management/#linking-a-server) kullanarak Pano'ya bağlayın (panel kenar çubuğunun üstündeki **Sunucular** → **Sunucu ekle** → **Pano eklentisiyle bağla**)
+3. Entegrasyonun o sunucunun **Ayarlar → Oyun Entegrasyonu** sekmesinde etkin olduğunu doğrulayın (ayar sunucu başınadır; tüm entegrasyonlar varsayılan olarak etkindir)
 4. Bu kadar! Pano otomatik olarak eklentiyi tespit edip bağlanacaktır
 
 ## Entegrasyon Özellikleri
@@ -42,7 +48,6 @@ Bir entegrasyon aktif olduğunda, Pano şunları yapabilir:
 
 - Oyuncu verilerini oyun ve web arasında senkronize eder
 - Kimlik doğrulama akışlarını yönetir (giriş, kayıt, şifre yönetimi)
-- Panel'den eklenti komutlarını çalıştırır
 - Eklenti etkinliklerini dinler ve buna göre tepki verir
 - Optimal uyumluluk için eklenti ayarlarını otomatik olarak yapılandırır
 

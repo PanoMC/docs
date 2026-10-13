@@ -44,6 +44,9 @@ locale = "en-US"
 # The public URL of your website (required for emails, cookies, etc.)
 website-url = "http://yourdomain.com"
 
+# Redirect requests that arrive on another host to website-url (default: true)
+website-url-redirect = true
+
 # How this installation is used: "WEBSITE", "SERVERS" or "BOTH" (default: "BOTH")
 usage-mode = "BOTH"
 
@@ -74,6 +77,7 @@ keywords = []
 - `development-mode`: default is **false** for performance and security; set **true** only for debugging.
 - `locale`: use short codes like `en-US` or `tr` (languages can be added in the panel).
 - `website-url`: the base URL of your website. This is **mandatory** for generating system emails, managing session cookies, and other platform features.
+- `website-url-redirect`: when `true` (the default), a visitor who opens Pano on another host name is redirected to `website-url`.
 - `usage-mode`: how this installation is used. It is picked on the first screen of the setup wizard and can be changed any time in **Panel → Settings → Platform → Preferences** (three selectable boxes).
   - `"WEBSITE"`: website only — the classic Pano experience. Server management is turned off, pages and APIs alike. Linking a Minecraft server through the Pano MC Plugin still works, and nodes that are already paired keep their servers running.
   - `"SERVERS"`: Minecraft server management only — the panel is the product. **Posts**, **Tickets** and **View** (themes) are turned off, pages and APIs alike, and every public address redirects to `/panel`. Switching back brings them back without a restart; existing posts and tickets are kept.

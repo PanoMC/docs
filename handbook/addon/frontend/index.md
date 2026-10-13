@@ -16,9 +16,14 @@ Every change below shows up on a browser refresh (F5), as long as Development Mo
 
 ## The entry point: `src/main.js`
 
-Everything starts in `main.js`, which the boilerplate already has. It exports one default class extending `PanoPlugin`. Pano runs its `onLoad()` **twice** — once in the theme (the public site) and once in the panel (the admin dashboard). You tell them apart with `pano.isPanel`:
+Code registrations live in `src/main.js`. The scaffold does not create this file — add it yourself. It exports one default class extending `PanoPlugin`. Pano runs its `onLoad()` **twice** — once in the theme (the public site) and once in the panel (the admin dashboard). You tell them apart with `pano.isPanel`:
 
 ```js
+import { PanoPlugin } from '@panomc/sdk';
+import { viewComponent } from '@panomc/sdk/utils/component';
+
+const pluginId = 'pano-plugin-shoutbox';
+
 export default class ShoutboxUiPlugin extends PanoPlugin {
   onLoad() {
     const { pano } = this;
@@ -26,7 +31,7 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
     if (pano.isPanel) {
       // panel registrations go here
     } else {
-      // theme registrations go here
+      // conditional theme registrations go here (views register themselves)
     }
   }
 }
@@ -43,27 +48,31 @@ Your bundle does not ship Svelte, `svelte-i18n`, or `@panomc/sdk` — the host p
 
 ## Step 1 — mount the widget on the home page
 
-The theme exposes named **hooks** — spots where addons can inject a component. To put Shoutbox at the top of the home page, register a component for the `page:home:top` hook, in the `else` (theme) branch:
+The theme exposes named **hooks** — spots where addons can inject a component. On the site side you write no registration code: a component is a **view**, a `.svelte` file under `src/theme/views/` that names its own place in its `<script module>` block. To put Shoutbox at the top of the home page, create the view and name the `page:home:top` hook:
 
-```js
-pano.ui.hook.register({
-  name: 'page:home:top',
-  component: viewComponent(() => import('./theme/ShoutboxWidget.svelte')),
-});
+```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
+<script module>
+  export const view = { hook: 'page:home:top' };
+</script>
+
+<div class="shoutbox"></div>
 ```
 
 ::: tip Check
-Open the site's home page. You should see the widget's container at the very top (inspect it with devtools). It'll be empty until the next step — that's expected. If it's missing entirely, check the browser console and confirm you registered in the `else` branch with the right `pluginId`.
+Open the site's home page. You should see the widget's container at the very top (inspect it with devtools). It'll be empty until the next step — that's expected. If it's missing entirely, check the browser console and confirm the file sits in `src/theme/views/` and `bun run dev` is running.
 :::
 
 ## Step 2 — give the widget its data with `load()`
 
-A widget needs data, and it needs that data in the **first server response** so visitors and search engines see the shouts immediately. A hook component does this by exporting a `load(event)` from its **module script** — the `<script module>` block. Pano runs `load()` while the page is prepared and hands what you return to the component as props:
+A widget needs data, and it needs that data in the **first server response** so visitors and search engines see the shouts immediately. A view does this by exporting a `load(event)` from its **module script** — the `<script module>` block. Pano runs `load()` while the page is prepared and hands what you return to the component as props:
 
 ```svelte
-<!-- src/theme/ShoutboxWidget.svelte -->
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script module>
   import { api } from '@panomc/sdk/plugin-api';
+
+  export const view = { hook: 'page:home:top' };
 
   export async function load(event) {
     const res = await api.get({ path: '/shouts', request: event });
@@ -72,7 +81,7 @@ A widget needs data, and it needs that data in the **first server response** so 
 </script>
 
 <script>
-  export let shouts = [];
+  let { shouts = [] } = $props();
 </script>
 
 <div class="shoutbox">
@@ -141,7 +150,7 @@ If you don't need a whole page, you can instead add a component to your addon's 
 
 ## Beware fake APIs
 
-If an AI assistant or an old tutorial hands you a call that isn't on the [Frontend API Reference](/addon/api-reference/), it doesn't exist. Common fakes: `api.get('/shouts')` with a plain string (every call takes an options object), a path that starts with `/api`, a `@panomc/sdk/components/panel` component library (there is none), and `onContextUpdate` (no host ever calls it — delete it if scaffolding added it). The full list is at the [bottom of the Frontend reference](/addon/frontend/#old-and-ai-hallucinated-apis-that-do-not-exist).
+If an AI assistant or an old tutorial hands you a call that isn't on the [Frontend API Reference](/addon/api-reference/), it doesn't exist. Common fakes: `api.get('/shouts')` with a plain string (every call takes an options object), a path that starts with `/api`, `Button` or `Card` imported from `@panomc/sdk/components/panel` (that module has no such generic components), and `onContextUpdate` (no host ever calls it — delete it if scaffolding added it). The full list is at the [bottom of the Frontend reference](/addon/frontend/#old-and-ai-hallucinated-apis-that-do-not-exist).
 
 ## Where we are
 

@@ -5,7 +5,7 @@ Shoutbox'ın widget'ı, izni ve gezinme bağlantısı şu anda hepsi sabit-kodla
 Tam referans: [Çeviriler](/tr/addon/localization/).
 
 ::: tip Gerçekten yapmak zorunda mıyım?
-Evet, en azından biraz. Svelte bileşenlerinize İngilizce'yi sabit-kodlayabilirsiniz — ama iki tür metnin başka yaşayacak yeri yoktur: **izin başlıkları** (panelin İzinler sayfası) ve **etkinlik günlüğü satırları** (Etkinlik sayfası) *yalnızca* yerel ayar dosyalarından gelebilir. Yani yalnızca-İngilizce bir eklentinin bile bir `en-US.json`'a ihtiyacı vardır.
+Evet, en azından biraz. Svelte bileşenlerinize İngilizce'yi sabit-kodlayabilirsiniz — ama iki tür metnin başka yaşayacak yeri yoktur: **izin başlıkları** (panelin Yetkiler sayfası) ve **etkinlik günlüğü satırları** (Kayıtlar sayfası) *yalnızca* yerel ayar dosyalarından gelebilir. Yani yalnızca-İngilizce bir eklentinin bile bir `en-US.json`'a ihtiyacı vardır.
 :::
 
 ## Adım 1 — yerel ayar dosyalarınızı kurun
@@ -29,9 +29,12 @@ Ziyaretçinin dili için bir anahtar eksikse, Pano `en-US.json`'a geri düşer. 
 
 Pano, yazdığınız her anahtarı `plugins.<pluginId>.<key>` altında sunar. Shoutbox için o önek `plugins.pano-plugin-shoutbox.`'tır. **O öneki asla yazmazsınız** — JSON'unuzda anahtarlar kısa kalır (`widget.title`) ve Pano öneki otomatik olarak ekler. Anahtarlarınızın çekirdek platformunkiyle veya başka bir eklentininkiyle çakışmasını önleyen şey budur.
 
-Önekin gerçekten yazıldığı tek yer, boilerplate'in `main.js`'te zaten getirdiği küçük bir yardımcıdır:
+Önekin gerçekten yazıldığı tek yer küçük bir yardımcıdır. İskelet onu getirmez — `src/main.js` dosyanıza ekleyin (`pluginId`, orada zaten tanımlı olan sabittir):
 
 ```js
+import { derived } from 'svelte/store';
+import { _ as i18n } from '@panomc/sdk/utils/language';
+
 export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
 ```
 
@@ -55,11 +58,15 @@ Arayüz metninizi `en-US.json`'a koyun, istediğiniz gibi iç içe. İç içe ne
 
 ## Adım 4 — anahtarları bir bileşende kullanın
 
-`_` yardımcısını `main.js`'inizden içe aktarın ve onu bir `$` önekiyle okuyun:
+Bir panel bileşeni `_` yardımcısını `main.js`'inizden içe aktarır. `src/theme/views/` altındaki bir site görünümü ise `main.js`'i içe aktaramaz (bir görünüm yalnızca Svelte'i, `@panomc/sdk`'yı ve kendi yardımcılarını içe aktarır), bu yüzden widget aynı yardımcıyı kendi içinde tanımlar. Her iki durumda da onu bir `$` önekiyle okuyun:
 
 ```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script>
-  import { _ } from '../main.js';
+  import { derived } from 'svelte/store';
+  import { _ as i18n } from '@panomc/sdk/utils/language';
+
+  const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.pano-plugin-shoutbox.${key}`, options));
 </script>
 
 <h2>{$_('widget.title')}</h2>
@@ -68,7 +75,7 @@ Arayüz metninizi `en-US.json`'a koyun, istediğiniz gibi iç içe. İç içe ne
 `{$_('widget.title')}`, sizin için `plugins.pano-plugin-shoutbox.widget.title`'ı arar. Bir yer tutucuyu doldurmak için, değerleri ikinci bir argüman olarak geçin: `$_('welcome-message', { values: { username: 'Ada' } })`.
 
 ::: tip `../`'yi dosyanızın derinliğine göre düzeltin
-`import { _ } from '../main.js'`, bileşeninizin tam olarak `main.js`'in bir klasör altında oturduğunu varsayar. Daha derin iç içe bir route'ta, daha fazla `../` ekleyin (`../../main.js` gibi), yoksa içe aktarma 404 verir.
+Bir panel bileşeninde `import { _ } from '../main.js'`, dosyanın tam olarak `main.js`'in bir klasör altında oturduğunu varsayar. Daha derin iç içe bir klasörde, daha fazla `../` ekleyin (`../../main.js` gibi), yoksa içe aktarma 404 verir.
 :::
 
 ::: tip Kontrol noktası: canlı yeniden yükleme kendini kanıtlar
@@ -77,7 +84,7 @@ Geliştirme Modu açık ve `bun run dev` çalışırken, widget artık **Latest 
 
 ## Adım 5 — izninizi ve etkinlik günlüğünüzü çevirin
 
-Bu iki bölüm bileşenlerinizden gelmez — Pano onları, panelin İzinler ve Etkinlik sayfalarını doldurmak için doğrudan okur. **Her ikisi de dosyanın kökünde oturur**, özel anahtarlarınızın yanında.
+Bu iki bölüm bileşenlerinizden gelmez — Pano onları, panelin Yetkiler ve Kayıtlar sayfalarını doldurmak için doğrudan okur. **Her ikisi de dosyanın kökünde oturur**, özel anahtarlarınızın yanında.
 
 Anahtar adları Kotlin sınıf adlarınızdan *türetilir*, dolayısıyla onları siz seçmezsiniz:
 
@@ -98,10 +105,10 @@ Anahtar adları Kotlin sınıf adlarınızdan *türetilir*, dolayısıyla onlar�
 }
 ```
 
-`{username}` ve `{target}` yer tutucuları, günlüğün `details` yükünden doldurulur (Kotlin sınıfında oluşturulur). `<b>` gibi HTML, **yalnızca** etkinlik günlüğü satırlarında çalışır — Etkinlik sayfası bunları HTML olarak işler; `{$_(...)}` ile gösterilen sıradan anahtarlar onu kaçış-karakterlerle işler.
+`{username}` ve `{target}` yer tutucuları, günlüğün `details` yükünden doldurulur (Kotlin sınıfında oluşturulur). `<b>` gibi HTML, **yalnızca** etkinlik günlüğü satırlarında çalışır — Kayıtlar sayfası bunları HTML olarak işler; `{$_(...)}` ile gösterilen sıradan anahtarlar onu kaçış-karakterlerle işler.
 
 ::: tip Kontrol noktası
-**Panel → İzinler**'i açın — girdiniz artık ham `MANAGE_SHOUTBOX` yerine **Manage Shoutbox** okuyor. Bir shout yayınlayın, sonra **Panel → Etkinlik**'i açın — cümle, kullanıcı adı kalın olarak görünür.
+**Panel → Yetkiler**'i açın — girdiniz artık ham `MANAGE_SHOUTBOX` yerine **Manage Shoutbox** okuyor. Bir shout yayınlayın, sonra **Panel → Kayıtlar**'ı açın — cümle, kullanıcı adı kalın olarak görünür.
 :::
 
 ## Adım 6 — başka bir dil ekleyin

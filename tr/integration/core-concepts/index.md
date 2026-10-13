@@ -2,255 +2,98 @@
 
 ## Temel API Kavramları
 
+Sınıflar Pano MC Eklentisi'nin `Core` modülünde, `com.panomc.plugins.pano.core.platform` paketinde bulunur. Her mesaj, bir `event` adı ve bir `eventId` taşıyan, AES-256-GCM ile şifrelenmiş JSON'dur.
+
 ### 1. PlatformRequest
 
-Pano'nun web platformuna istek göndermek için `PlatformRequest` abstract class'ını extend edin:
+Minecraft sunucusundan Pano'ya giden bir mesaj, `PlatformRequest` sınıfını genişleten bir sınıftır:
 
 ```kotlin
-abstract class PlatformRequest {
-    abstract fun getRequestType(): String
-    abstract fun getData(): Map<String, Any>
+package com.panomc.plugins.pano.core.platform
+
+abstract class PlatformRequest(val eventId: UUID = UUID.randomUUID()) {
+    open fun encode(): String
 }
 ```
 
-::: code-group
+Override edilecek bir şey yoktur. Olay adı, sınıf adının `Request` çıkarılmış ve büyük harfli snake case'e çevrilmiş halidir (`MyPlayerJoinRequest`, `MY_PLAYER_JOIN` olur); her public property bir JSON alanı olur:
 
-```kotlin [Kotlin]
-import com.panomc.plugin.api.PlatformRequest
+```kotlin
+import com.panomc.plugins.pano.core.platform.PlatformRequest
 
-class MyCustomRequest(
-    private val playerName: String,
-    private val data: String
-) : PlatformRequest() {
-
-    override fun getRequestType(): String = "my_custom_request"
-
-    override fun getData(): Map<String, Any> {
-        return mapOf(
-            "player" to playerName,
-            "data" to data,
-            "timestamp" to System.currentTimeMillis()
-        )
-    }
-}
+// Sent as {"event":"MY_PLAYER_JOIN","eventId":"...","player":"Steve","uuid":"..."}
+class MyPlayerJoinRequest(
+    val player: String,
+    val uuid: String
+) : PlatformRequest()
 ```
 
-```java [Java]
-import com.panomc.plugin.api.PlatformRequest;
-import java.util.HashMap;
-import java.util.Map;
-
-public class MyCustomRequest extends PlatformRequest {
-    private final String playerName;
-    private final String data;
-
-    public MyCustomRequest(String playerName, String data) {
-        this.playerName = playerName;
-        this.data = data;
-    }
-
-    @Override
-    public String getRequestType() {
-        return "my_custom_request";
-    }
-
-    @Override
-    public Map<String, Object> getData() {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("player", playerName);
-        dataMap.put("data", data);
-        dataMap.put("timestamp", System.currentTimeMillis());
-        return dataMap;
-    }
-}
-```
-
-:::
+Yanıt beklemiyorsanız `platformManager.sendMessage(request)` ile gönderin.
 
 ### 2. PlatformMessageResponse
 
-Pano'dan yanıt bekliyorsanız, `PlatformMessageResponse` interface'ini extend edin:
+Pano'dan bir yanıt bekliyorsanız, onu `PlatformMessageResponse` arayüzünü uygulayan bir sınıfla tanımlayın:
 
 ```kotlin
-interface PlatformMessageResponse {
-    fun onResponse(response: Map<String, Any>)
-    fun onError(error: String)
-}
+package com.panomc.plugins.pano.core.platform
+
+interface PlatformMessageResponse : PlatformMessage
 ```
 
-::: code-group
+Sınıf adının `Message` çıkarılmış, büyük harfli snake case hali isteğin olay adı olmalıdır (`MyPlayerStatsMessage`, `MY_PLAYER_STATS` olayını yanıtlar). Pano bu sınıfı Gson ile doldurur; bu yüzden her property'ye varsayılan bir değer verin.
 
-```kotlin [Kotlin]
-import com.panomc.plugin.api.PlatformMessageResponse
+```kotlin
+import com.panomc.plugins.pano.core.platform.PlatformMessageResponse
+import com.panomc.plugins.pano.core.platform.PlatformRequest
 
-class MyRequestWithResponse(
-    private val playerName: String
-) : PlatformRequest(), PlatformMessageResponse {
+class MyPlayerStatsRequest(val uuid: String) : PlatformRequest()
 
-    override fun getRequestType(): String = "player_data_request"
+// Answers the event MY_PLAYER_STATS
+data class MyPlayerStatsMessage(
+    val kills: Int = 0,
+    val deaths: Int = 0
+) : PlatformMessageResponse
 
-    override fun getData(): Map<String, Any> {
-        return mapOf("player" to playerName)
-    }
-
-    override fun onResponse(response: Map<String, Any>) {
-        // Başarılı yanıtı işle
-        val points = response["points"] as? Int ?: 0
-        println("Oyuncu $playerName $points puana sahip")
-    }
-
-    override fun onError(error: String) {
-        // Hatayı işle
-        println("Hata: $error")
-    }
-}
+suspend fun fetchStats(platformManager: PlatformManager, uuid: String): MyPlayerStatsMessage =
+    platformManager.sendMessageAwaitResponse<MyPlayerStatsMessage>(
+        MyPlayerStatsRequest(uuid),
+        MyPlayerStatsMessage::class.java,
+        10_000
+    )
 ```
 
-```java [Java]
-import com.panomc.plugin.api.PlatformRequest;
-import com.panomc.plugin.api.PlatformMessageResponse;
-import java.util.HashMap;
-import java.util.Map;
-
-public class MyRequestWithResponse extends PlatformRequest implements PlatformMessageResponse {
-    private final String playerName;
-
-    public MyRequestWithResponse(String playerName) {
-        this.playerName = playerName;
-    }
-
-    @Override
-    public String getRequestType() {
-        return "player_data_request";
-    }
-
-    @Override
-    public Map<String, Object> getData() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("player", playerName);
-        return data;
-    }
-
-    @Override
-    public void onResponse(Map<String, Object> response) {
-        // Başarılı yanıtı işle
-        Integer points = (Integer) response.getOrDefault("points", 0);
-        System.out.println("Oyuncu " + playerName + " " + points + " puana sahip");
-    }
-
-    @Override
-    public void onError(String error) {
-        // Hatayı işle
-        System.out.println("Hata: " + error);
-    }
-}
-```
-
-:::
+`sendMessageAwaitResponse` bir `suspend` fonksiyondur. Sunucu Pano'ya bağlı değilse, yanıt başka bir türdeyse veya yanıt zamanında gelmezse (varsayılan 15 saniye) hata fırlatır.
 
 ### 3. PlatformMessageHandler
 
-Pano'nun web platformundan mesaj almak ve işlemek için `PlatformMessageHandler<R : PlatformMessage>` sınıfını extend edin:
+Pano'nun kendiliğinden gönderdiği bir mesajı bir `PlatformMessageHandler<R : PlatformMessage>` işler:
 
 ```kotlin
+package com.panomc.plugins.pano.core.platform
+
 abstract class PlatformMessageHandler<R : PlatformMessage> {
-    abstract fun handle(message: R)
-    abstract fun getMessageType(): String
+    abstract suspend fun handle(response: R)
+    fun getHandlerName(): String
 }
 ```
 
-::: code-group
+İşleyici adı, sınıf adının `Handler` çıkarılmış, büyük harfli snake case halidir.
 
-```kotlin [Kotlin]
-import com.panomc.plugin.api.PlatformMessageHandler
-import com.panomc.plugin.api.PlatformMessage
-import com.panomc.plugin.api.PlatformManager
-
-// Mesaj yapınızı tanımlayın
-data class PlayerRewardMessage(
-    val playerName: String,
-    val reward: String,
-    val amount: Int
-) : PlatformMessage
-
-// Handler oluşturun
-class PlayerRewardHandler : PlatformMessageHandler<PlayerRewardMessage>() {
-
-    override fun getMessageType(): String = "player_reward"
-
-    override fun handle(message: PlayerRewardMessage) {
-        val player = Bukkit.getPlayer(message.playerName)
-        if (player != null) {
-            // Oyuncuya ödül ver
-            when (message.reward) {
-                "coins" -> giveCoins(player, message.amount)
-                "items" -> giveItems(player, message.amount)
-            }
-            player.sendMessage("${message.amount} ${message.reward} aldın!")
+```kotlin
+// From the Pano MC Plugin itself: handles the message POWER
+class PowerHandler(
+    private val pluginMain: PanoPluginMain,
+    private val logger: Logger
+) : PlatformMessageHandler<PowerMessage>() {
+    override suspend fun handle(response: PowerMessage) {
+        when (response.action?.trim()?.uppercase()) {
+            "STOP" -> pluginMain.shutdown()
+            "RESTART" -> pluginMain.restart()
         }
     }
 }
-
-// Handler'ı kaydet
-fun registerHandlers(platformManager: PlatformManager) {
-    platformManager.registerMessageHandler(PlayerRewardHandler())
-}
 ```
 
-```java [Java]
-import com.panomc.plugin.api.PlatformMessageHandler;
-import com.panomc.plugin.api.PlatformMessage;
-import com.panomc.plugin.api.PlatformManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-// Mesaj yapınızı tanımlayın
-public class PlayerRewardMessage implements PlatformMessage {
-    private final String playerName;
-    private final String reward;
-    private final int amount;
-
-    public PlayerRewardMessage(String playerName, String reward, int amount) {
-        this.playerName = playerName;
-        this.reward = reward;
-        this.amount = amount;
-    }
-
-    public String getPlayerName() { return playerName; }
-    public String getReward() { return reward; }
-    public int getAmount() { return amount; }
-}
-
-// Handler oluşturun
-public class PlayerRewardHandler extends PlatformMessageHandler<PlayerRewardMessage> {
-
-    @Override
-    public String getMessageType() {
-        return "player_reward";
-    }
-
-    @Override
-    public void handle(PlayerRewardMessage message) {
-        Player player = Bukkit.getPlayer(message.getPlayerName());
-        if (player != null) {
-            // Oyuncuya ödül ver
-            switch (message.getReward()) {
-                case "coins":
-                    giveCoins(player, message.getAmount());
-                    break;
-                case "items":
-                    giveItems(player, message.getAmount());
-                    break;
-            }
-            player.sendMessage(message.getAmount() + " " + message.getReward() + " aldın!");
-        }
-    }
-}
-
-// Handler'ı kaydet
-public void registerHandlers(PlatformManager platformManager) {
-    platformManager.registerMessageHandler(new PlayerRewardHandler());
-}
-```
-
+::: warning
+İşleyiciler Pano MC Eklentisi'nin içindeki sabit bir listedir; başka bir eklenti kendi işleyicisini kaydedemez. Pano'dan bir şey almak için bir istek gönderin ve yanıtını bekleyin (örneğin bir zamanlayıcıyla); [Eklenti Oluşturma](../creating-plugin/) sayfasındaki örnekler böyle yapar.
 :::

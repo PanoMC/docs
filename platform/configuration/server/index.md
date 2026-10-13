@@ -12,7 +12,7 @@ server {
   ssl-cert = null # Raw certificate content (if MANUAL)
   ssl-key = null  # Raw private key content (if MANUAL)
   ui-max-memory-mb = 200 # Max MB per spawned UI runtime (setup-ui, panel-ui, theme); 0 disables
-  trusted-proxies = [] # e.g. ["127.0.0.1", "10.0.0.5"] — proxies allowed to set X-Forwarded-For
+  trusted-proxies = [] # e.g. ["203.0.113.7", "203.0.113.0/24", "cloudflare"] — proxies allowed to set X-Forwarded-For
 }
 ```
 
@@ -25,12 +25,12 @@ server {
     - `MANUAL`: Allows you to provide your own certificate and key strings directly via `ssl-cert` and `ssl-key`.
 - `redirect-https`: If set to `true`, all HTTP traffic will be automatically redirected to HTTPS.
 - `ui-max-memory-mb`: Memory ceiling (MB) for **each** spawned UI runtime (setup-ui, panel-ui, active theme); Pano restarts a UI that exceeds it. Default **200**, `0` disables. See [Memory & Limits](../memory/).
-- `trusted-proxies`: IP addresses of reverse proxies allowed to set `X-Forwarded-For`. **Empty by default**, which means the header is ignored and every request is treated as a direct connection. Fill it in when Pano sits behind Nginx, Apache or Cloudflare, otherwise features that identify a visitor by address — such as [maintenance mode](../../maintenance/) login bans — see the proxy instead of the visitor.
+- `trusted-proxies`: the reverse proxies allowed to set `X-Forwarded-For` — single IP addresses, CIDR ranges, or the word `"cloudflare"` for Cloudflare's published ranges. **Empty by default.** A proxy on the same machine or a private network (loopback, `10.x`, `192.168.x`, a Docker bridge) is believed without being listed; a public proxy or Cloudflare must be listed, or every visitor looks like the proxy. [Maintenance mode](../../maintenance/) is stricter: its login bans and rate limit believe the header **only** from the addresses listed here, so behind any reverse proxy — a local Nginx too — list it.
 - **Advanced:** For complex setups, you can still use a **reverse proxy** (Nginx, Apache) or Cloudflare.
 ## Reverse Proxy WebSocket Keepalive
 
 Every Minecraft server connected through **pano-mc-plugin** holds a long-lived WebSocket to
-`GET /api/server/connection`. Behind a reverse proxy (Nginx, Cloudflare, a cloud load balancer), an idle
+`GET /api/v1/server/connection`. Behind a reverse proxy (Nginx, Cloudflare, a cloud load balancer), an idle
 WebSocket gets closed by the *proxy's* idle timeout — Nginx's `proxy_read_timeout` defaults to
 **60 seconds** — long before Pano or the plugin would ever give up on it. The plugin's reconnect logic
 hides the symptom by reconnecting automatically, but every reconnect re-runs the full RSA/AES key
@@ -75,7 +75,7 @@ server's address as the proxy's own IP, quietly breaking the `trusted-proxies` g
 page:
 
 ```nginx
-location /api/server/connection {
+location /api/v1/server/connection {
     # Replace 8080 with your own server.http-port from config.conf — do NOT reuse 80 here even
     # though that's the default: in this exact setup Nginx itself is listening on 80, so proxying
     # back to 127.0.0.1:80 loops back into Nginx instead of reaching Pano.
@@ -133,11 +133,11 @@ console-history-limit = 50
 file-uploads-folder = "file-uploads"
 
 file-paths = {
-  favicon {
+  faviconFile {
     path = "uploads/favicon.png"
     hash = "<sha256-hash>"
   }
-  websiteLogo {
+  websiteLogoFile {
     path = "uploads/logo.png"
     hash = "<sha256-hash>"
   }
@@ -150,7 +150,7 @@ file-paths = {
 - Each entry is a **FileInfo** object containing:
     - `path`: Relative path to the file.
     - `hash`: SHA-256 hash used by Pano to verify file integrity.
-- Only supports two entries: `favicon` and `websiteLogo`.
+- Only supports two entries: `faviconFile` and `websiteLogoFile`.
 - These fields are **automatically managed by Pano** — manual edits are overwritten on updates or settings changes.
 ## Pano Service URLs (Do Not Modify)
 

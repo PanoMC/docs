@@ -28,7 +28,7 @@ curl http://localhost:8088/api/v1/widgets/index.json
 pano-market-goal { --pano-color-primary: #28a; }
 ```
 
-Палитру задайте на скрипте или на элементе: `data-palette="dark"` (по умолчанию `light`). Язык текста берётся из `data-locale` скрипта, иначе из сайта.
+Палитру задайте на скрипте через `data-palette="dark"` (по умолчанию `light`) или на отдельном элементе через `data-bs-theme="dark"`. Язык текста берётся из `data-locale` скрипта, иначе из сайта.
 
 Для более глубоких изменений каждая часть виджета открыта через `part`:
 
@@ -54,9 +54,9 @@ document.querySelector('pano-market-goal').someSetting = 'value';
 
 | Событие | Когда | Детали |
 |---|---|---|
-| `pano:ready` | Данные загружены, виджет показан | нет |
+| `pano:ready` | Данные загружены, виджет показан | `{ tag }` |
 | `pano:error` | Загрузка не удалась | `{ code }` |
-| `pano:toast` | Виджет хочет показать сообщение | текст, вариант |
+| `pano:toast` | Виджет хочет показать сообщение | `{ key, message, variant, values }` |
 | `pano:navigate` | Виджет хочет перейти на страницу | `{ url }` |
 
 `pano:toast` и `pano:navigate` можно отменить через `preventDefault()`, чтобы ими занялась ваша страница:

@@ -40,7 +40,7 @@ If a key is missing for the visitor's language, Pano falls back to `en-US.json`.
 
 The platform serves every key you write under `plugins.<pluginId>.<key>`. For our example addon **Shoutbox** (its `pluginId` is `pano-plugin-shoutbox` — the value you set in `gradle.properties` when you scaffolded the addon, see [Getting Started](/addon/getting-started/)), a key called `widget.title` becomes `plugins.pano-plugin-shoutbox.widget.title` at lookup time.
 
-You never write that long prefix — not in your JSON files and not in your components. Inside your JSON the keys stay **unprefixed** (`widget.title`), and Pano adds the `plugins.<pluginId>.` part automatically. The *one* place the prefix actually appears is a small helper in `main.js` (shown below), and the boilerplate already contains it. This automatic prefixing is what keeps your keys from ever colliding with the core platform's or another addon's.
+You never write that long prefix — not in your JSON files and not in your components. Inside your JSON the keys stay **unprefixed** (`widget.title`), and Pano adds the `plugins.<pluginId>.` part automatically. The *one* place the prefix actually appears is a small helper in `main.js` (shown below), which you add in [Frontend Development](/addon/frontend/). This automatic prefixing is what keeps your keys from ever colliding with the core platform's or another addon's.
 
 ## Define your first key
 
@@ -62,7 +62,7 @@ Custom keys are the ordinary key–value pairs your UI shows. Put them in `en-US
 
 ## Show the key in a component (Svelte)
 
-To show a translation in a component, import the `_` helper from your addon's `main.js` — the boilerplate already ships it:
+To show a translation in a component, import the `_` helper from your addon's `main.js` (you add it in [Frontend Development](/addon/frontend/); a site view under `src/theme/views/` cannot import `main.js` and takes the same store with `const _ = plugin('shoutbox')._;` from `@panomc/sdk/controllers`):
 
 ```svelte
 <script>
@@ -100,7 +100,7 @@ Don't invent two keys and an `if`. svelte-i18n understands ICU message syntax, s
 
 ### How the `_` helper works (skip this if you're in a hurry)
 
-You do **not** need to understand this snippet to use `_` — the boilerplate's `main.js` already contains it, so just confirm it is there. But here it is:
+You do **not** need to understand this snippet to use `_` — it is the line you put in `main.js` in [Frontend Development](/addon/frontend/), so just confirm it is there. But here it is:
 
 ```js
 // src/main.js
@@ -111,7 +111,7 @@ export const pluginId = 'pano-plugin-shoutbox';
 export const _ = derived(i18n, ($t) => (key, options) => $t(`plugins.${pluginId}.${key}`, options));
 ```
 
-A *store* is Svelte's reactive value box; `derived` means "recompute whenever the thing I depend on changes" — so when the visitor switches language, every `$_(...)` on the page updates by itself. `@panomc/sdk` is bundled by the boilerplate (see [Frontend Development](/addon/frontend/)). Copy it as-is. This is the one place the `plugins.<pluginId>.` prefix from earlier is actually written.
+A *store* is Svelte's reactive value box; `derived` means "recompute whenever the thing I depend on changes" — so when the visitor switches language, every `$_(...)` on the page updates by itself. `@panomc/sdk` is provided by the host at runtime, not bundled into your addon (see [Frontend Development](/addon/frontend/)). Copy it as-is. This is the one place the `plugins.<pluginId>.` prefix from earlier is actually written.
 
 ::: tip Reaching keys outside your namespace
 If you need a key that is *not* under your addon's namespace, import svelte-i18n's own store — `import { _ } from '@panomc/sdk/utils/language'` — and pass the **full path** yourself (for example `$_('plugins.pano-plugin-shoutbox.widget.title')`). The `_` in your `main.js` is just this same store with the prefix added.

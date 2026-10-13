@@ -81,7 +81,13 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
+    branches: [master, dev]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -92,7 +98,7 @@ jobs:
       TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-`GITHUB_TOKEN`, GitHub Actions tarafından otomatik olarak sağlanır — yalnızca iletin. Sürümler **[Conventional Commits](https://www.conventionalcommits.org/)** commit'lerinizden gelir (`feat:`, `fix:`, `chore:`), bu yüzden `version`'ı asla elle yükseltmezsiniz.
+`GITHUB_TOKEN`, GitHub Actions tarafından otomatik olarak sağlanır — yalnızca iletin. `permissions` bloğu gereklidir, çünkü paylaşılan workflow, çağıranın verdiğinden fazla yetki alamaz. Kararlı dal `master`'dır: paylaşılan workflow `master`'ı üretim lisans sunucusuna, diğer tüm dalları geliştirme sunucusuna karşı derler. Sürümler **[Conventional Commits](https://www.conventionalcommits.org/)** commit'lerinizden gelir (`feat:`, `fix:`, `chore:`), bu yüzden `version`'ı asla elle yükseltmezsiniz.
 
 ## Adım 5 — Marketplace'te yayınlayın
 
@@ -114,12 +120,12 @@ Kaynak oluşturulduğunda bir **resource ID** (bir UUID) alır. Sonradan **Profi
 **`semantic-release-pano` ile yüklemeleri otomatikleştirin:**
 
 1. panomc.com'da **Profile → Security → API tokens** altında bir **API token** oluşturun ve GitHub deponuza `PANO_TOKEN` adlı bir gizli anahtar (secret) olarak ekleyin (**Settings → Secrets → Actions**).
-2. `.releaserc.json` içinde `semantic-release-pano`'yu kaynak kimliğinize yönlendirin:
+2. `.releaserc.json` içinde `semantic-release-pano`'yu kaynak kimliğinize yönlendirin (paylaşılan workflow sürüm dosyasını `ember-v<version>.zip` olarak adlandırır):
 
 ```json
-["semantic-release-pano", {
+["@PanoMC/semantic-release-pano", {
   "resourceId": "YOUR-RESOURCE-UUID",
-  "file": "ember-${version}.zip",
+  "file": "ember-v${version}.zip",
   "panoVersion": "1.0.0",
   "useGitHubLink": true,
   "repositoryUrl": "https://github.com/YourName/ember.git"

@@ -70,7 +70,7 @@ curl "http://localhost:8088/api/v1/posts?page=2&pageSize=20"
 
 ## Hız sınırları
 
-Çağrılar ziyaretçi adresi başına sınırlanır. Sınırlanan çağrılar `429 TOO_MANY_REQUESTS` ile `X-RateLimit-Limit`, `X-RateLimit-Remaining` ve `Retry-After` başlıklarını döner. Çok sayıda ziyaretçiye hizmet veren bir ön yüz, kendi kovalarını almak için bir [ön yüz anahtarı](../access/) kullanır.
+Çağrılar ziyaretçi adresi başına sınırlanır. Sınırlanan çağrılar `429 RATE_LIMIT_EXCEEDED` ile `X-RateLimit-Limit`, `X-RateLimit-Remaining` ve `Retry-After` başlıklarını döner. Çok sayıda ziyaretçiye hizmet veren bir ön yüz, kendi kovalarını almak için bir [ön yüz anahtarı](../access/) kullanır.
 
 ## Sonraki
 

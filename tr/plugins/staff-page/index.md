@@ -14,7 +14,7 @@
 
 ## Yetkililerinizi Yönetme
 
-Panel kenar çubuğunda, **Oyuncular**'ın hemen ardından bir **Staffs** bağlantısı (users-cog simgesi) görünür. Bu, **Yetkili Yönetimi** sayfasını açar; burada şunları yapabilirsiniz:
+Panel kenar çubuğunda, **Kullanıcılar**'ın hemen ardından bir **Ekip** bağlantısı (users-cog simgesi) görünür. Bu, **Yetkili Yönetimi** sayfasını açar; burada şunları yapabilirsiniz:
 
 - Toplam yetkili sayınızı görün.
 - Bir pencere aracılığıyla **Yetkili Ekle**yin ya da tablodan herhangi bir üyeyi **düzenleyin** / **silin**.
@@ -50,6 +50,6 @@ Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak kodu
 ## Kurulum
 
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
-2. **Panel → Staffs**'ı açın ve ekip üyelerinizi ekleyin.
+2. **Panel → Ekip**'i açın ve ekip üyelerinizi ekleyin.
 3. Bir görüntüleme konumu ve görünüm modu seçmek için eklentinin **detay sayfası → Ayarlar**'ını açın.
 4. Yetkililerinizi görmek için sitenizi ziyaret edin (varsayılan olarak Card modunda `/staff`)!

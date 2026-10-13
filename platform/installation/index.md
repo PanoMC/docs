@@ -1,214 +1,70 @@
 # Installing Pano
 
-Follow this guide to set up **Pano** and get it running on your Minecraft server in just a few minutes.
+Follow this guide to set up **Pano** and get it running in just a few minutes.
 
-## Requirements
+## Quick start {#quick-start}
 
-Before installing Pano, make sure your environment meets the following requirements:
+The [one-command installer](installer/) is the recommended way. It installs Pano, its own Java, a
+service and the `pano` command:
 
-1. **Java (JVM 11+)**
-   - Pano runs on Java 11 or higher.
-   - [Managed servers](../server-management/managed-servers/) on the local `pano-node` need Java 17 or higher.
-   - Running Pano in Docker? See [Install with Docker](../containers/).
-   - Make sure the **JDK** or **JRE** is installed and accessible via your command line.
-   - [→ Download Java](https://www.oracle.com/java/technologies/javase-downloads.html)
+::: code-group
+
+```bash [Linux / macOS]
+curl -fsSL https://panomc.com/install | bash
+```
+
+```powershell [Windows]
+powershell -c "irm https://panomc.com/install.ps1 | iex"
+```
+
+:::
+
+Add `--mariadb` (Windows: `-MariaDB`) and it also installs a database for Pano. Then open
+`http://localhost:8088` and follow the [Setup Wizard](setup/).
+
+## Choosing a method {#methods}
+
+| Method | Good for | You bring |
+| --- | --- | --- |
+| [One-command installer](installer/) (recommended) | Most servers and your own computer | Nothing; MariaDB is optional (`--mariadb`) |
+| [Docker](../containers/) | Servers that already run Docker | Docker with the compose plugin |
+| [Manual `.jar`](manual/) | Full control, or a panel that only runs a `.jar` | Java 11+, a database, your own start script |
+
+Do not want to run a server at all? [Pano Host](https://panomc.com/host) runs Pano for you.
+
+All three end at the same place: the [Setup Wizard](setup/) in your browser.
+
+## Requirements {#requirements}
+
+1. **Java 11 or newer**
+   - Only for the manual `.jar`: the installer downloads its own Java and the Docker image contains one.
+   - The local `pano-node` for [managed servers](../server-management/managed-servers/) runs on the
+     same Java, so it needs nothing extra.
 
 2. **MySQL 5.5+ or MariaDB**
    - A MySQL or MariaDB database is required to store your data.
+   - The installer creates one with `--mariadb`; Docker Compose starts one next to Pano.
    - Default table prefix: `pano_` (you can change it during setup).
-   - [→ MySQL Installation Guide](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/)
 
-3. **Internet Connection**
-   - An active internet connection is **required during the setup process**, as Pano downloads initial resources and dependencies.
+3. **Internet connection**
+   - Required during the setup, as Pano downloads its interface and dependencies on the first start.
 
-4. **Port 80 (HTTP) Open**
-   - Make sure TCP port **80** is accessible if you’re installing on a remote server.
-   - **Optional:** If you configure SSL after installation, port **443 (HTTPS)** must also be open.
+4. **An open port**
+   - The installer and Docker serve Pano on port **8088**, the manual `.jar` on port **80**.
+   - **Optional:** if you configure SSL after installation, port **443 (HTTPS)** must also be open.
 
-## Downloading Pano
+5. **Operating system**
+   - The installer runs on Linux, macOS and Windows. The `.jar` runs wherever Java does.
 
-You can get the latest version of Pano from the official website:
+## After installation {#after-installation}
 
-- [Download Latest Version →](https://panomc.com/download)
-- For older releases, visit [GitHub Releases](https://github.com/PanoMC/Pano/releases)
-- **Alternative: Docker.** One image with Java and Pano, started with Docker Compose next to MariaDB. See [Install with Docker](../containers/).
+- Finish the [Setup Wizard](setup/) and [connect your Minecraft server](setup/#connect-minecraft).
+- Adjust the configuration file if needed: [Configuration Guide →](../configuration/).
 
-Pano is distributed as a **`.jar`** file — just like **Spigot** or **Paper**.  
-After downloading, save the file somewhere convenient (for example, in a dedicated folder like `/pano`).
-
-> [!NOTE]
-> When you first run Pano, it will extract necessary files, create directories (like `plugins/` and `themes/`), and download required dependencies or runtimes. It is highly recommended to run it in its own dedicated folder.
-
-## Running Pano
-
-To start Pano, open your terminal (or command prompt) and run:
-
-```bash
-java -jar Pano-<version>.jar
-```
-
-If a desktop environment is available, **Pano will automatically launch its GUI**.  
-Otherwise, it will continue in console mode.
-
-### GUI Behavior
-
-- **Double-clicking** the `.jar` file will attempt to launch the GUI automatically.
-- Use the **`-nogui`** flag if you prefer running Pano in console mode:
-
-```bash
-  java -jar Pano-<version>.jar -nogui
-```
-
-- The built-in GUI includes a minimal console for **Pano-specific commands only**.
-
-If the GUI cannot start (for example, in a headless environment), the console will continue automatically.
-
-### Background Mode (`-bg`)
-
-If you launch Pano from a terminal or SSH session, closing that session will normally kill the platform. Use the **`-bg`** flag to detach Pano from the launching terminal so it keeps running on its own:
-
-```bash
-java -jar Pano-<version>.jar -bg
-```
-
-When you pass `-bg`, the launcher process re-spawns itself as a detached child and exits. Standard output and standard error of the detached process are discarded — check the `logs/` folder for runtime logs.
-
-`-bg` is **independent** of `-nogui`:
-
-| Flags | GUI | Detached from terminal |
-| --- | --- | --- |
-| _(none)_ | Yes | No |
-| `-nogui` | No | No |
-| `-bg` | Yes | Yes |
-| `-bg -nogui` | No | Yes |
-
-> [!TIP]
-> When you launch a platform update or restart from the panel and the platform is currently **terminal-attached**, the confirmation modal offers a "Restart in background mode" toggle. Enabling it ensures the new process is detached from your terminal — useful if you want to close the SSH session right after.
-
-> [!NOTE]
-> A process started with `-bg` has no interactive stdin, so the JLine console reader is skipped. Type commands through the panel UI or, if `-nogui` was not passed, through the built-in GUI console.
-
-## Setup Wizard (Step-by-Step)
-
-![](/img/installer-view.png)
-
-Once Pano starts, open your browser and navigate to:
-
-```
-http://<your-server-ip>/
-```
-
-> Make sure port **80** is open and not used by another application.
-
-> [!IMPORTANT]
-> **Using Cloudflare?** Pano serves plain HTTP on port 80 by default, so Cloudflare must be set to **SSL/TLS mode: Flexible** — otherwise you'll hit redirect loops or `521`/`525` errors when opening your domain. See the dedicated [Cloudflare guide →](../advanced/cloudflare/) before continuing.
-
-You’ll see the **Setup Wizard**, guiding you through five simple steps:
-
-1. **Language Selection & Usage Mode**  
-   Choose your preferred language, then answer **"How will you use Pano?"** on the same screen:
-   - **Website** — a public website only (the classic Pano experience).
-   - **Server management** — Minecraft server management only: the panel is the product, **Posts**, **Tickets** and **View** (themes) are turned off, and the public pages redirect to `/panel`.
-   - **Both** — website + server management. Recommended, and preselected.
-
-   Nothing is locked in here — you can change it later in **Panel → Settings → Platform → Preferences**. It is stored as the [`usage-mode`](../configuration/#general-settings) key in `config.conf`.  
-   <small>*(By proceeding, you agree to Pano's Terms & Conditions and Privacy Policy.)*</small>
-
-2. **Website Configuration**  
-   Set up your website details (site name, URL, etc.).  
-   In **Server management** mode this step asks for a **panel name** instead of a website name, and the description field is hidden.
-
-3. **Database Setup**  
-   Enter your **MySQL** or **MariaDB** credentials.  
-   Default table prefix: `pano_` (you can change it if needed).  
-   > **Portable DB Option:** On **Windows (x64 or ARM64)** systems, you'll see an option to use a **Portable Database**. Selecting this will cause Pano to automatically download, configure, and manage a portable MariaDB instance for you.
-
-4. **SMTP Settings (Optional)**  
-   Configure email sending if you wish.  
-   This step is **optional**, and if you decide to skip it — **no worries!**  
-   You can always enable or update SMTP settings later inside the **Panel → Settings → Platform** section.  
-   *(However, some features like password recovery may not work until it’s configured.)*  
-   No mail server? Choose **Pano Mail** here: sign in with your Pano account and e-mail works right away, free, with no set-up. See [Pano Mail](../configuration/services/#pano-mail).
-
-5. **Account Linking & Admin Creation**
-   - If you already have a **Pano Account**, you can link it here by pressing **connect** button — your email and username will auto-fill.
-   - Otherwise, create a new **admin account** (don’t forget your password — it’s required for login!).
-   - With a linked account you can tick **Back up daily with free Pano Backup** to have daily backups from the first day. See [Backups](../backups/).
-
-> Moving from another Pano? The **Transfer** button of the wizard offers **Restore from a backup file**: choose a `.panoarc` file and Pano restores that site. See [Backups](../backups/#download).
-
-To finish the setup, click **Finish**.  
-Pano will finalize the installation and automatically redirect you to your new **admin panel**.
-
-> *You'll now be able to create posts, connect your Minecraft server, install addons, change themes, and much more!*
-
-
-## Connecting Your Minecraft Server (Optional)
-
-To enable game integrations and connect your Minecraft server to Pano, you'll need to install the **Pano MC Plugin**.
-
-### What is Pano MC Plugin?
-
-The Pano MC Plugin acts as a bridge between your Minecraft server and Pano, enabling:
-- Secure WebSocket communication (RSA + AES-256 encryption)
-- Real-time player data synchronization
-- Automatic plugin detection and integration (AuthMe, permissions, etc.)
-- Event system for in-game to web communication
-
-### Installation Steps
-
-1. **Download the Plugin**
-   - Visit [Pano MC Plugin Releases](https://github.com/PanoMC/pano-mc-plugin/releases)
-   - Download the appropriate JAR file for your server platform:
-     - `pano-spigot-<version>.jar` — For Spigot/Paper/Folia
-     - `pano-bungeecord-<version>.jar` — For Bungeecord
-     - `pano-velocity-<version>.jar` — For Velocity
-
-2. **Install the Plugin**
-   - Place the downloaded JAR file in your server's `plugins/` folder
-   - Restart your Minecraft server
-
-3. **Connect to Pano**
-   - After restart, open your **Pano Admin Panel**
-   - Open the **server switcher** in the top bar
-   - Click the **+** button beside it to add a new server
-   - A connection modal will appear with step-by-step instructions
-   - Follow the steps shown in the modal to link your Minecraft server
-   - The plugin will automatically establish a secure encrypted connection
-
-4. **Verify Connection**
-   - Once connected, your server will appear in the server switcher's list
-   - You should see server status (online/offline), player count, and other information
-   - The connection is now active and ready for integrations
-
-> **Note:** You can connect multiple Minecraft servers to a single Pano instance.
-
-### Supported Platforms
-
-- Spigot
-- Paper
-- Folia
-- Purpur
-- Bungeecord
-- Velocity
-
-### What's Next?
-
-Once your server is connected, you can:
-- Enable [game integrations](../integrations/) (like AuthMeReloaded)
-- View real-time player statistics
-- Manage players from the web panel
-- Sync in-game events with your website
-
-## After Installation
-
-Once installation is complete, you can customize your configuration file if needed.  
-Check out the [Configuration Guide →](../configuration) for detailed instructions.
-
-## Need Help?
+## Need help?
 
 If you encounter any issues:
-- Visit the [FAQ page](../FAQ)
+- Visit the [FAQ page](../FAQ/)
 - Ask for help on our [**Discord community**](https://discord.gg/6vVy72wgXT)
 - Or open an issue on [GitHub Issues](https://github.com/PanoMC/Pano/issues)
 

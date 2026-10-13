@@ -16,9 +16,14 @@ bun run dev
 
 ## Точка входа: `src/main.js`
 
-Всё начинается в `main.js`, который у шаблона уже есть. Он экспортирует один класс по умолчанию, наследующийся от `PanoPlugin`. Pano запускает его `onLoad()` **дважды** — один раз в теме (публичный сайт) и один раз в панели (панель администратора). Вы различаете их по `pano.isPanel`:
+Регистрации в коде живут в `src/main.js`. Каркас этот файл не создаёт — добавьте его сами. Он экспортирует один класс по умолчанию, наследующийся от `PanoPlugin`. Pano запускает его `onLoad()` **дважды** — один раз в теме (публичный сайт) и один раз в панели (панель администратора). Вы различаете их по `pano.isPanel`:
 
 ```js
+import { PanoPlugin } from '@panomc/sdk';
+import { viewComponent } from '@panomc/sdk/utils/component';
+
+const pluginId = 'pano-plugin-shoutbox';
+
 export default class ShoutboxUiPlugin extends PanoPlugin {
   onLoad() {
     const { pano } = this;
@@ -26,7 +31,7 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
     if (pano.isPanel) {
       // panel registrations go here
     } else {
-      // theme registrations go here
+      // conditional theme registrations go here (views register themselves)
     }
   }
 }
@@ -43,27 +48,31 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
 
 ## Шаг 1 — смонтируйте виджет на главной странице
 
-Тема предоставляет именованные **хуки** — места, куда аддоны могут вставить компонент. Чтобы поместить Shoutbox вверху главной страницы, зарегистрируйте компонент для хука `page:home:top` в ветке `else` (тема):
+Тема предоставляет именованные **хуки** — места, куда аддоны могут вставить компонент. На стороне сайта код регистрации не пишется: компонент — это **представление** (view), файл `.svelte` в `src/theme/views/`, который сам называет своё место в блоке `<script module>`. Чтобы поместить Shoutbox вверху главной страницы, создайте представление и укажите хук `page:home:top`:
 
-```js
-pano.ui.hook.register({
-  name: 'page:home:top',
-  component: viewComponent(() => import('./theme/ShoutboxWidget.svelte')),
-});
+```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
+<script module>
+  export const view = { hook: 'page:home:top' };
+</script>
+
+<div class="shoutbox"></div>
 ```
 
 ::: tip Проверка
-Откройте главную страницу сайта. Вы должны увидеть контейнер виджета в самом верху (осмотрите его через devtools). Он будет пустым до следующего шага — это ожидаемо. Если его нет вовсе, проверьте консоль браузера и убедитесь, что вы зарегистрировали его в ветке `else` с правильным `pluginId`.
+Откройте главную страницу сайта. Вы должны увидеть контейнер виджета в самом верху (осмотрите его через devtools). Он будет пустым до следующего шага — это ожидаемо. Если его нет вовсе, проверьте консоль браузера и убедитесь, что файл лежит в `src/theme/views/`, а `bun run dev` запущен.
 :::
 
 ## Шаг 2 — дайте виджету его данные через `load()`
 
-Виджету нужны данные, и они нужны ему в **первом ответе сервера**, чтобы посетители и поисковые системы видели выкрики сразу. Компонент-хук делает это, экспортируя `load(event)` из своего **модульного скрипта** — блока `<script module>`. Pano запускает `load()`, пока страница готовится, и передаёт то, что вы вернули, компоненту как пропсы:
+Виджету нужны данные, и они нужны ему в **первом ответе сервера**, чтобы посетители и поисковые системы видели выкрики сразу. Представление делает это, экспортируя `load(event)` из своего **модульного скрипта** — блока `<script module>`. Pano запускает `load()`, пока страница готовится, и передаёт то, что вы вернули, компоненту как пропсы:
 
 ```svelte
-<!-- src/theme/ShoutboxWidget.svelte -->
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script module>
   import { api } from '@panomc/sdk/plugin-api';
+
+  export const view = { hook: 'page:home:top' };
 
   export async function load(event) {
     const res = await api.get({ path: '/shouts', request: event });
@@ -72,7 +81,7 @@ pano.ui.hook.register({
 </script>
 
 <script>
-  export let shouts = [];
+  let { shouts = [] } = $props();
 </script>
 
 <div class="shoutbox">
@@ -141,7 +150,7 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 
 ## Остерегайтесь поддельных API
 
-Если ИИ-ассистент или старый туториал даёт вам вызов, которого нет в [Справочнике API фронтенда](/ru/addon/api-reference/), значит, его не существует. Частые подделки: `api.get('/shouts')` с простой строкой (каждый вызов принимает объект опций), библиотека компонентов `@panomc/sdk/components/panel` (её нет) и `onContextUpdate` (никакой хост его никогда не вызывает — удалите его, если его добавил каркас). Полный список — в [конце справочника по фронтенду](/ru/addon/frontend/#старые-и-выдуманные-ии-api-которых-не-существует).
+Если ИИ-ассистент или старый туториал даёт вам вызов, которого нет в [Справочнике API фронтенда](/ru/addon/api-reference/), значит, его не существует. Частые подделки: `api.get('/shouts')` с простой строкой (каждый вызов принимает объект опций), `Button` или `Card`, импортированные из `@panomc/sdk/components/panel` (таких общих компонентов в этом модуле нет) и `onContextUpdate` (никакой хост его никогда не вызывает — удалите его, если его добавил каркас). Полный список — в [конце справочника по фронтенду](/ru/addon/frontend/#старые-и-выдуманные-ии-api-которых-не-существует).
 
 ## Где мы находимся
 

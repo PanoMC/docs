@@ -30,5 +30,5 @@ Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak kodu
 
 ## Kurulum
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
-2. **Panel → Eklentiler → FAQ** yolunu izleyin.
+2. **Panel → S.S.S.** sayfasına gidin (kenar çubuğuna **Talepler**'in hemen ardından eklenir). Görüntüleme ayarları (ayrı sayfa veya destek sayfası, arama, soru sınırı) **Panel → Eklentiler → FAQ** sayfasındadır.
 3. Önce bir kategori oluşturun, ardından ilk soru ve cevabınızı ekleyin!

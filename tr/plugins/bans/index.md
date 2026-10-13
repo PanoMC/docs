@@ -10,13 +10,13 @@
 - **Detaylı Bilgi:** Yasaklama nedenlerini, sürelerini, bitiş tarihlerini ve yasaklamayı uygulayan yöneticiyi görüntüleyin.
 
 ### 2. Özelleştirme
-- **Görüntüleme Seçenekleri:** Yapılandırma üzerinden avatarların, yasaklama nedenlerinin, banner'ların ve daha fazlasının görünürlüğünü ayarlayın.
+- **Görüntüleme Seçenekleri:** Avatarların, yasaklama nedenlerinin, yasaklayan yetkilinin, sürenin, bitiş tarihinin, toplam sayının ve arama kutusunun görünürlüğünü ayarlayın.
 - **Düzenler:** Farklı görünüm düzenleri arasından seçim yapın (örneğin, Izgara veya Liste).
-- **Avatar Boyutları:** Listede görüntülenen oyuncu avatarlarının boyutunu özelleştirin.
+- **Avatar Boyutları:** Oyuncu avatarlarını 16, 32 veya 64 px olarak gösterin.
 
 ### 3. Entegrasyon
-- **Minecraft Arka Ucu:** Doğru bilgi sağlamak için sunucunuzun yasaklama yönetim sistemiyle doğrudan senkronize olur.
-- **Gerçek Zamanlı Güncellemeler:** En son yasaklama verilerini otomatik olarak yansıtır.
+- **Pano'nun Kendi Yasaklamaları:** Liste, Pano web sitenizde panelden yasaklanan kullanıcıları gösterir. Bir Minecraft yasaklama eklentisinin listesini okumaz.
+- **Geçmiş:** İsterseniz yalnızca etkin olanları değil, geçmiş yasaklamaları da listeleyin.
 
 ## Gerekli İzin
 Yasaklı listesi ayarlarını yapılandırmak için kullanıcıların aşağıdaki izne sahip olması gerekir:
@@ -28,5 +28,5 @@ Bu eklenti açık kaynaklıdır ve **GPLv3** ile lisanslanmıştır. Kaynak kodu
 
 ## Kurulum
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
-2. Görüntüleme ayarlarını yapılandırmak için **Panel → Eklentiler → Bans → Ayarlar** yolunu izleyin.
+2. Görüntüleme ayarlarını yapılandırmak için **Panel → Eklentiler → Bans** sayfasına gidin.
 3. Yasaklı listesi, temanıza bağlı olarak web sitenizdeki `/bans` rotasında mevcut olacaktır.

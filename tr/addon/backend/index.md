@@ -43,12 +43,13 @@ En yaygın çökmeden sizi kurtaran bir şey daha: **iki kutu** vardır.
 Kurucu enjeksiyonu yalnızca **sizin** kutunuza ulaşır. **Pano'nun** kutusundan bir şey almak için onu elle istersiniz: `applicationContext.getBean(SomeService::class.java)`. Bunu neredeyse her sayfada göreceksiniz.
 
 ::: warning Kotlin değişiklikleri asla sıcak değildir — yeniden derleyin ve yeniden başlatın
-Bir `.kt` dosyasını düzenlemek kendi başına hiçbir şeyi değiştirmez. Kotlin'e her dokunuşunuzda jar'ı yeniden derlemeli, örneğinizin `plugins/` klasörüne kopyalamalı ve **Pano'yu yeniden başlatmalısınız**:
+Bir `.kt` dosyasını düzenlemek kendi başına hiçbir şeyi değiştirmez. Kotlin'e her dokunuşunuzda jar'ı yeniden derlemeli ve **Pano'yu yeniden başlatmalısınız**:
 
 ```bash
 ./gradlew build -Pnoui
-cp build/libs/pano-plugin-shoutbox-local-build.jar <your-pano-instance>/plugins/
 ```
+
+Derleme `build/libs/pano-plugin-shoutbox-local-build.jar` dosyasını yazar ve `copyJar` adımı o jar'ı `gradle.properties`'teki `panoPluginsDir` ile belirtilen klasöre (`..`, yani eklentinizin içinde bulunduğu `plugins/` klasörü) kopyalar — elle kopyalanacak bir şey yoktur.
 
 `-Pnoui`, Kotlin üzerinde çalışırken ihtiyaç duymadığınız Svelte arayüzünü yeniden derlemeyi atlar — derlemeyi çok daha hızlı yapar.
 
@@ -118,7 +119,7 @@ Sınıfın ne yaptığı, yukarıdan aşağıya:
 :::
 
 ::: tip Kontrol noktası: yüklendi mi?
-Yeniden derleyip yeniden başlattıktan sonra, Pano'nun konsolunu izleyin — eklentinizin yüklendiğini günlüğe kaydetmeli — ve **Panel → Eklentiler**'i açın: **Shoutbox** listelenmeli. Yukarıdaki `cp` satırındaki jar adı gerçekten derlediğinizle eşleşmiyorsa, `build/libs/`'e bakın — ad `pluginId`'nizden gelir (bunu [Başlangıç](/tr/addon/getting-started/)'ta ayarladınız).
+Yeniden derleyip yeniden başlattıktan sonra, Pano'nun konsolunu izleyin — eklentinizin yüklendiğini günlüğe kaydetmeli — ve **Panel → Eklentiler**'i açın: **Shoutbox** listelenmeli. Listelenmiyorsa jar'ın `plugins/` klasörüne ulaştığını kontrol edin: adı `<pluginId>-local-build.jar`'dır, yani `pluginId`'nizden gelir (bunu [Başlangıç](/tr/addon/getting-started/)'ta ayarladınız).
 :::
 
 ## Geri kalanı, teker teker inşa edin

@@ -18,13 +18,12 @@ Pano listens to these commands and synchronizes the actions with your website da
 
 Due to integration limitations, the following AuthMe commands and features are **not supported**:
 
-- `/unregister` — Unregistering must be done through Pano's panel or website
-- `/authme unregister <player>` — Same as above
-- `/email` — Email management is handled by Pano
-- `/totp` — Two-factor authentication is not supported
-- `/totp` — Two-factor authentication is not supported
+- `/unregister` — Blocked. Unregistering must be done through Pano's panel or website
+- `/authme unregister <player>` — Blocked from the console; in game it needs the `authme.admin.unregister` permission
+- `/email` — Not synchronized: email management is handled by Pano
+- `/totp` — Not synchronized: AuthMe's two-factor authentication is not supported
 
-If a player tries to use an unsupported command, they will be notified to use the website instead.
+A blocked command answers **This command is unsupported by Pano!**. Pano does not block `/email` and `/totp`, so turn them off yourself (see below).
 
 > **Recommended:** To prevent confusion and ensure a seamless experience, it's recommended to **disable access to these unsupported commands** using a permission plugin or AuthMe's own command configuration. This way, players will only have access to Pano-compatible features.
 
@@ -51,11 +50,10 @@ For an even better user experience and enhanced security, consider **disabling o
 settings:
   registration:
     enabled: false  # Disable in-game registration
-  
-restrictions:
-  allowCommands:
-    - /login
-    # /register removed from allowed commands
+  restrictions:
+    allowCommands:
+      - /login
+      # /register removed from allowed commands
 ```
 
 Then configure a kick or join message pointing players to your website: `"Please register at https://yourserver.com/register"`
@@ -65,7 +63,7 @@ Unlike traditional web scripts that require complex configuration and manual syn
 
 | Feature | Traditional Scripts | Pano |
 |---------|---------------------|------|
-| **Setup Complexity** | High — requires manual database setup, config editing, and PHP scripts | Low — just enable the checkbox |
+| **Setup Complexity** | High — requires manual database setup, config editing, and PHP scripts | Low — on by default |
 | **Synchronization** | Manual or cron-based | Real-time via WebSocket |
 | **Password Hashing** | Often incompatible or insecure | Native CUSTOM hash support |
 | **Command Support** | Limited or none | Full command and event support |

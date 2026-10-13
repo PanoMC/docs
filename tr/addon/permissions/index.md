@@ -29,9 +29,9 @@ class ManageShoutboxPermission : PanelPermission("fa-bullhorn")
 O düğümü Kotlin'de asla yazmazsınız — `requirePermission`'a `ManageShoutboxPermission()` geçmek yeterlidir ([Endpoint'ler](/tr/addon/endpoints/) sayfasındaki panel uç noktası tam olarak bunu yapar). Ama panel sayfalarını ve gezinme bağlantılarını kapılamak (gate) için o tam dizeyi frontend kodunuzda **tekrarlarsınız**. Nerede olduğu için [Frontend Geliştirme](/tr/addon/frontend/) sayfasına bakın; Kotlin sınıfını yeniden adlandırırsanız, o kopyalanmış dizeyi güncellemeyi unutmayın.
 
 ::: tip Kontrol noktası: izni panelde görün
-Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Roller**'i açın ve bir rolü düzenleyin — bir **megafon** (bullhorn) simgeli yeni bir izin görmelisiniz (kurucudaki `fa-bullhorn` bu). Bir role vererek o rolün üyelerinin shout yayınlamasına izin verin.
+Bir yeniden derleme ve yeniden başlatmadan sonra, **Panel → Yetkiler**'i açın ve bir yetki grubunu düzenleyin — bir **megafon** (bullhorn) simgeli yeni bir izin görmelisiniz (kurucudaki `fa-bullhorn` bu). Bir gruba vererek o grubun üyelerinin shout yayınlamasına izin verin.
 
-İnsanları şaşırtan bir şey: **yöneticiler izin kontrollerini atlar** — bir yönetici hesabı `requirePermission`'ı her zaman geçer, dolayısıyla bir yönetici olarak kendinize hiçbir şey vermeden bile panel uç noktasını çağırabilirsiniz. `NO_PERMISSION` reddini gerçekten görmek için, izin verilmemiş **yönetici-olmayan** bir rolle test edin.
+İnsanları şaşırtan bir şey: **yöneticiler izin kontrollerini atlar** — bir yönetici hesabı `requirePermission`'ı her zaman geçer, dolayısıyla bir yönetici olarak kendinize hiçbir şey vermeden bile panel uç noktasını çağırabilirsiniz. `NO_PERMISSION` reddini gerçekten görmek için, grubuna bu izin verilmemiş **yönetici-olmayan** bir hesapla test edin.
 :::
 
 ## Etkinlik günlüğü
@@ -56,7 +56,7 @@ class CreatedShoutLog(
 )
 ```
 
-Panel uç noktası bunlardan birini `databaseManager.panelActivityLogDao.add(...)` ile yazar — bkz. [Endpoint'ler](/tr/addon/endpoints/). Panel sonra her günlük satırını **Etkinlik** sayfasında gösterir. Gösterilecek metni bulmak için, izinlerin düğümlerini türettiği aynı yolla, sınıf adınızdan bir yerelleştirme anahtarı türetir:
+Panel uç noktası bunlardan birini `databaseManager.panelActivityLogDao.add(...)` ile yazar — bkz. [Endpoint'ler](/tr/addon/endpoints/). Panel sonra her günlük satırını **Kayıtlar** sayfasında (*Aktivite Kayıtları*) gösterir. Gösterilecek metni bulmak için, izinlerin düğümlerini türettiği aynı yolla, sınıf adınızdan bir yerelleştirme anahtarı türetir:
 
 1. Sondaki `Log`'u düşürün → `CreatedShout`.
 2. `UPPER_SNAKE`'e çevirin → `CREATED_SHOUT`.
@@ -65,7 +65,7 @@ Panel uç noktası bunlardan birini `databaseManager.panelActivityLogDao.add(...
 O yerelleştirme dizesi, yukarıda oluşturduğunuz `details` yükünden gelen `{username}` ve `{target}` değerlerini kullanır. Kurulumu [Çeviriler](/tr/addon/localization/) sayfasında ele alınmıştır.
 
 ::: warning Yerelleştirme dizesini ekleyene kadar ham bir anahtar göreceksiniz
-Yerelleştirme dosyalarınıza `activity-logs.CREATED_SHOUT`'u ekleyene kadar, Etkinlik sayfası bir cümle yerine ham `CREATED_SHOUT` anahtarını gösterir. Bu beklenen bir durum — bir hata değil, yalnızca eksik çeviri.
+Yerelleştirme dosyalarınıza `activity-logs.CREATED_SHOUT`'u ekleyene kadar, Kayıtlar sayfası bir cümle yerine ham `CREATED_SHOUT` anahtarını gösterir. Bu beklenen bir durum — bir hata değil, yalnızca eksik çeviri.
 :::
 
 ## Sırada ne var

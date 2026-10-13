@@ -51,7 +51,7 @@ override suspend fun onStart() {
 `activeTier()` sahip olunan paket id'sini (yoksa `null`) döner; bir log satırı veya durum ekranı için kullanabilirsiniz. Asıl kilitleme için `hasTier` tercih edin.
 
 ::: warning Satın alma anında açmaz
-Eklentiniz paketleri başlarken sorar ve sonradan yapılan bir satın alma sunucuya kendiliğinden bildirilmez. Bir şey yeniden kontrol edene kadar özellik kilitli kalır. Eklentinin panel sayfasındaki **Yenile** butonu tam bunun içindir — bkz. [Panelde](#panelde). Cevaplar önbellekten geldiği için `hasTier` kodunuzu hiçbir zaman bekletmez.
+Eklentiniz paketleri başlarken sorar ve sonradan yapılan bir satın alma sunucuya kendiliğinden bildirilmez. Bir şey yeniden kontrol edene kadar özellik kilitli kalır. Eklentinin panel sayfasındaki **Yenile** butonu tam bunun içindir — bkz. [Panelde](#panelde). Cevaplar önbellekten geldiği için `hasTier` kodunuzu hiçbir zaman bekletmez; başlangıçtan sonraki ilk çağrı ise ilk sorgu arka planda sürerken "sahip değil" cevabını verir. Kontrolü `onStart` içinde bir kez değil, özelliğin kullanıldığı yerde yapın.
 :::
 
 Her iki metot da yalnızca `pluginFreemium=true` beyan eden bir eklentide çalışır; normal bir eklentiden çağırmak hata fırlatır, böylece yanlış model seçimi sessizce `false` dönmek yerine hemen ortaya çıkar.

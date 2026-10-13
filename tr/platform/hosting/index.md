@@ -10,7 +10,7 @@ modeli kendi sunucularınızda da uygulayabilirsiniz.
 - [İşletim](operations/): güncelleme ve geri alma, yedekler, çökmeler, loglar.
 
 > [!NOTE]
-> Bu sayfalar Pano **1.0.0-alpha.520** sürümünden itibaren yayınlanan [konteyner imajlarına](../containers/) dayanır.
+> Bu sayfalar Pano **1.0.0-alpha.522** sürümünden itibaren yayınlanan [konteyner imajlarına](../containers/) dayanır.
 
 ## Instance başına bir konteyner ve bir veritabanı {#model}
 
@@ -67,10 +67,11 @@ başkasına aittir, bu yüzden ona güvenilemez (bkz. [İzolasyon](isolation/)).
 ## Yapılandırma
 
 Veritabanı ve SMTP ayarlarını [ortam değişkenleri](../containers/configuration/#environment-variables)
-olarak verin. Pano bunları ilk açılışta `config.conf` dosyasına yazar. Pano kapanırken `config.conf`
-dosyasını yeniden yazar; elle değiştirmeniz gerekirse önce konteyneri durdurun, düzenleyin, sonra
+olarak verin. `PANO_HOSTED` yoksa Pano bunları yalnızca ilk açılışta `config.conf` dosyasına yazar; varsa her
+açılışta uygular. Pano kapanırken `config.conf` dosyasını yeniden yazar; elle değiştirmeniz gerekirse önce konteyneri durdurun, düzenleyin, sonra
 başlatın.
 
 Pano Host ayrıca `PANO_HOSTED` ve diğer [Pano Host değişkenlerini](../containers/configuration/#pano-host-variables)
-ayarlar. Bunlar yalnızca bilgilendirme amaçlıdır: destekleyen Pano sürümleri "Pano Host tarafından
-yönetiliyor" yazısı ve bir kota bandı gösterir. Pano içinde hiçbir şey bunlar yüzünden kilitlenmez.
+ayarlar. Bunları destekleyen Pano sürümleri "Pano Host tarafından yönetiliyor" yazısı ve bir kota bandı
+gösterir, ortam değişkenlerini her açılışta yeniden uygular ve panelde yapılan port ile SSL
+değişikliklerini dikkate almaz.

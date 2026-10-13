@@ -15,7 +15,7 @@ The **Social Login** plugin lets visitors sign in to your Pano-powered website w
 
 ## Configuration
 
-All settings live on the plugin's own detail page in the **Pano Admin Panel** (Plugins → Social Login) — there is no separate menu.
+All settings live on the plugin's own detail page in the **Pano Admin Panel** (Addons → Social Login) — there is no separate menu.
 
 - **Per Provider:** an enable toggle, **Client ID**, **Client Secret**, and a copy button for the exact **Redirect URI** to register. Each provider also has a built-in, step-by-step setup guide with the required scopes and direct links to that provider's developer console and official docs.
 - **Global Settings:** a **Redirect Base URL** (your public origin, e.g. `https://example.com`; leave empty to fall back to the platform website URL) and a **Debug Logging** toggle for step-by-step OAuth troubleshooting.

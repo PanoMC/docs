@@ -78,6 +78,7 @@ Bu dosyalar tema çekirdeği tarafından sizin **için** oluşturulur. Onları a
 |---|---|
 | `id` | Temanız için benzersiz bir ad. `vanilla-theme` **olamaz**. |
 | `title` | İnsanların gördüğü kullanıcı dostu ad. |
+| `description` | Tema hakkında bir iki cümle. |
 | `version` | Temanızın sürümü, örn. `1.0.0`. |
 | `author` | Adınız. |
 | `panoVersion` | Temanızın yapıldığı Pano sürümü. |

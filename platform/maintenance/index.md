@@ -75,8 +75,9 @@ maintenance page with no form, just a notice. A successful login resets the coun
   the panel activity log.
 
 > ⚠️ Behind a reverse proxy, set `server.trusted-proxies` — see the
-> [server configuration](../configuration/server/). Left empty, Pano ignores `X-Forwarded-For` entirely and every
-> request looks like it comes from the proxy, so one visitor's failures would block everyone.
+> [server configuration](../configuration/server/). The maintenance login believes `X-Forwarded-For` only from the
+> proxies listed there; left empty, every request looks like it comes from the proxy, so one visitor's failures would
+> block everyone.
 
 ## Editing the page
 

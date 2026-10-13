@@ -36,5 +36,5 @@ Yorumları yönetmek ve moderasyon yapmak için kullanıcıların aşağıdaki i
 
 ## Kurulum ve Yapılandırma
 1. Pano Yönetim Panelinden eklentiyi etkinleştirin.
-2. **Ayarları Yapılandırın:** Beğenileri açmak, izinleri veya bekleme sürelerini ayarlamak için **Panel → Eklentiler → Yorumlar** yolunu izleyin.
+2. **Ayarları Yapılandırın:** Beğenileri açmak, izinleri veya bekleme sürelerini ayarlamak için **Panel → Eklentiler → Comments** yolunu izleyin.
 3. **Moderasyona Başlayın:** Topluluğunuzun tartışmalarını yönetmek için **Panel → Yazılar → Yorumlar** sayfasını ziyaret edin.

@@ -37,7 +37,7 @@ Every release has a version like `1.0.0`. You do **not** bump it by hand. Versio
 - `feat:` → bumps the **minor** (`1.0.0` → `1.1.0`)
 - `feat:` with a `BREAKING CHANGE:` footer → bumps the **major** (`1.0.0` → `2.0.0`)
 
-Leave `version` in `gradle.properties` at `local-build` — CI injects the real number from your commit history. Hand-editing it breaks the automation.
+Do not add a `version` to `gradle.properties` — the build falls back to `local-build`, and CI passes the real number from your commit history (`-Pversion=`). Setting it by hand breaks the automation.
 
 ::: tip Two release channels, chosen by branch
 The boilerplate publishes a **prerelease** (`1.1.0-dev.3`) when you push to `dev`, and a **stable** release (`1.1.0`) when you push to `main`. Server owners only ever see stable. Publishing your first addon? Keep it simple and publish only to `main`.
@@ -62,7 +62,7 @@ For addons, the Marketplace `resourceId` is **exactly your `pluginId`** — `pan
 
 In your GitHub repo, go to **Settings → Secrets and variables → Actions** and add:
 
-- **`PANO_PROD_TOKEN`** — an API token from panomc.com (**Profile → Settings → API Tokens → Create**). It's shown only once; copy it immediately.
+- **`PANO_PROD_TOKEN`** — an API token from panomc.com (**Profile → Security → API Tokens → Create**). It's shown only once; copy it immediately.
 - **`TOKEN_GITHUB`** — a **Personal Access Token** (classic, with the `repo` scope) you generate under your GitHub **Settings → Developer settings**. The boilerplate workflow reads this in several places, including the version dry-run.
 
 ::: warning Miss `TOKEN_GITHUB` and every release fails at the very first step

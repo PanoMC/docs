@@ -2,21 +2,25 @@
 
 **Bu sayfa size ne verir:** eklentinizin ziyaretçiye dönük tarafı için her şey — temaya bir bileşen yerleştirin, ona sunucu tarafında işlenmiş veri verin ve backend'inizi çağırın. Sona geldiğinizde Shoutbox widget'ı ana sayfada en son shout'ları gösterir.
 
-Buradaki her şey, [`main.js`](/tr/addon/frontend/)'teki `onLoad()`'ın **`else` (tema) dalına** girer. `main.js`'i henüz kurmadıysanız, önce [Frontend Geliştirme](/tr/addon/frontend/)'yi okuyun.
+Site tarafı, `src/theme/views/` altındaki **görünüm dosyalarından** oluşur ([Frontend Geliştirme](/tr/addon/frontend/) sayfasındaki görünümler bölümüne bakın); bunlar için `main.js`'e kod yazılmaz. Yalnızca aşağıdaki "İleri düzey" bölümündeki kayıtlar, [`main.js`](/tr/addon/frontend/)'teki `onLoad()`'ın **`else` (tema) dalına** girer.
 
 ## Ana sayfaya bir widget yerleştirin
 
-Tema, adlandırılmış **kancalar** (hook) sunar — eklentilerin bir bileşen enjekte edebileceği noktalar (kanca adlarının tam listesi [Arayüz API Referansı](/tr/addon/api-reference/)'nda; bu eğitim `page:home:top`'u kullanır). Shoutbox'ı ana sayfada göstermek için, `else` (tema) dalında `page:home:top` kancası için bir bileşen kaydedin:
+Tema, adlandırılmış **kancalar** (hook) sunar — eklentilerin bir bileşen enjekte edebileceği noktalar (kanca adlarının tam listesi [Arayüz API Referansı](/tr/addon/api-reference/)'nda; bu eğitim `page:home:top`'u kullanır). Shoutbox'ı ana sayfada göstermek için, görünüm dosyasının `export const view` satırında `page:home:top` kancasını belirtin:
 
-```js
-pano.ui.hook.register({
-  name: 'page:home:top',
-  component: viewComponent(() => import('./theme/ShoutboxWidget.svelte')),
-});
+```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
+<script module>
+  export const view = { hook: 'page:home:top' };
+</script>
+
+<div class="shoutbox"></div>
 ```
 
+Kaydın tamamı budur. Site tarafında `pano.ui.hook.register({ name, component })` çalışmaz: `view` olmadan `component` ile kaydedilen bir öğe hata verilerek atılır.
+
 ::: tip Kontrol
-Geliştirme sunucuları çalışırken, sitenin ana sayfasını açın. Sayfanın en tepesinde `<div class="shoutbox">` kapsayıcısını görmelisiniz (tarayıcı geliştirici araçlarıyla inceleyin). Henüz `load()` eklemediyseniz — sonraki adım — boş olacaktır; bu beklenen bir durum. Onu hiç görmüyorsanız, tarayıcı konsolunda hataları kontrol edin ve `pluginId`'nizi ve `else` dalında kaydettiğinizi doğrulayın.
+Geliştirme sunucuları çalışırken, sitenin ana sayfasını açın. Sayfanın en tepesinde `<div class="shoutbox">` kapsayıcısını görmelisiniz (tarayıcı geliştirici araçlarıyla inceleyin). Henüz `load()` eklemediyseniz — sonraki adım — boş olacaktır; bu beklenen bir durum. Onu hiç görmüyorsanız, tarayıcı konsolunda hataları kontrol edin ve dosyanın `src/theme/views/` altında olduğunu ve kanca adının doğru yazıldığını doğrulayın.
 :::
 
 ### Widget'a `load()` ile sunucu tarafında işlenmiş veri verin
@@ -26,18 +30,20 @@ Geliştirme sunucuları çalışırken, sitenin ana sayfasını açın. Sayfanı
 Bir kanca bileşeni, **modül betiğinden** — `<script module>` bloğu — bir `load(event)` fonksiyonu dışa aktarabilir. O blok, dosya ilk yüklendiğinde, bileşenin herhangi bir örneği var olmadan önce bir kez çalışır ki `load()`'ın orada yaşamasının ve normal örnek-başına bileşen kodunuzun altındaki düz `<script>`'te yaşamasının nedeni budur. Tema, sayfa hazırlanırken `load()`'ı çalıştırır (SSR sırasında sunucuda ve sayfalar arasında gezinirken tekrar istemcide) ve döndürdüğünüz her şeyi bileşene props olarak verir. Shoutbox'ta, `load()` herkese açık uç noktamızı çağırır:
 
 ```svelte
-<!-- src/theme/ShoutboxWidget.svelte -->
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script module>
   import { api } from '@panomc/sdk/plugin-api';
 
+  export const view = { hook: 'page:home:top' };
+
   export async function load(event) {
     const res = await api.get({ path: '/shouts', request: event });
-    return { shouts: res.shouts ?? [] };
+    return { shouts: res.items ?? [] };
   }
 </script>
 
 <script>
-  export let shouts = [];
+  let { shouts = [] } = $props();
 </script>
 
 <div class="shoutbox">
@@ -47,12 +53,12 @@ Bir kanca bileşeni, **modül betiğinden** — `<script module>` bloğu — bir
 </div>
 ```
 
-`event`, gelen sayfa isteğidir — ziyaretçinin çerezlerini ve oturumunu taşır. Çoğunlukla onu API'nin kimin sorduğunu bilmesi için (yani `request: event` olarak) `ApiUtil`'e iletirsiniz.
+`event`, gelen sayfa isteğidir — ziyaretçinin çerezlerini ve oturumunu taşır. Çoğunlukla onu API'nin kimin sorduğunu bilmesi için (yani `request: event` olarak) `api`'ye iletirsiniz.
 
 Döndürdüğünüz nesne bileşenin props'u olur — burada `shouts` işlenmeye hazır olarak gelir. (Host bu props akışına `hookProps` der; o adla API referansında ve hata mesajlarında tanışacaksınız.)
 
 ::: warning `load()` sunucuda *ve* istemcide çalışır
-Aynı `load()`, SSR sırasında ve yeniden istemci tarafı gezinmede çalışır, dolayısıyla onu **iki kez çalışmaya güvenli** tutun: yalnızca veri getirmeli ve döndürmelidir. Global değişkenleri değiştirmeyin, hiçbir şey yazmayın ve size verilen nesneleri değiştirmeyin — çünkü aynı fonksiyon sunucuda bir kez ve tarayıcıda tekrar çalışır. ("Yan etkisi olmadan iki kez çalışmaya güvenli" için tek kelimelik ad *idempotent*'tir.) Sunucu tarafı çağrının ziyaretçinin oturumunu taşıması için `ApiUtil`'e her zaman `request: event` geçin (sonraki bölüm).
+Aynı `load()`, SSR sırasında ve yeniden istemci tarafı gezinmede çalışır, dolayısıyla onu **iki kez çalışmaya güvenli** tutun: yalnızca veri getirmeli ve döndürmelidir. Global değişkenleri değiştirmeyin, hiçbir şey yazmayın ve size verilen nesneleri değiştirmeyin — çünkü aynı fonksiyon sunucuda bir kez ve tarayıcıda tekrar çalışır. ("Yan etkisi olmadan iki kez çalışmaya güvenli" için tek kelimelik ad *idempotent*'tir.) Sunucu tarafı çağrının ziyaretçinin oturumunu taşıması için `api`'ye her zaman `request: event` geçin (sonraki bölüm).
 :::
 
 ::: tip Kontrol
@@ -65,7 +71,7 @@ Ana sayfayı yenileyin. `<div class="shoutbox">` artık her shout için bir `<p 
 
 ## API'nizi çağırma
 
-Tüm ağ çağrıları `ApiUtil` üzerinden gider. Varsayılan dışa aktarmayı içe aktarın ve her biri tek bir seçenek nesnesi alan fiil metotlarını kullanın:
+Kendi eklentinizin uç noktalarına yapılan çağrılar, eklenti kimliğinizi zaten bilen bir istemci olan `api` üzerinden gider. Yollar, Kotlin uç noktanızın bildirdiği göreli yollardır (`/shouts`); `api.panel` ise bir `PanelApi`'nin uç noktalarına ulaşır. Çekirdek uç noktalarına yapılan çağrılar, `/api/v1`'e göreli yollarla `ApiUtil`'i kullanır. Her metot tek bir seçenek nesnesi alır:
 
 ```js
 import { api } from '@panomc/sdk/plugin-api';
@@ -87,7 +93,7 @@ Kural: **bir `load()` içinde, her zaman `request: event` geçin** ki getirme (f
 :::
 
 ::: tip `ApiUtil` hataları nasıl bildirir
-`ApiUtil`, API hatalarında asla fırlatmaz — başarısız bir çağrı, `error` ayarlı bir nesneye çözümlenir (fırlatmaz ve bir HTTP durumunu kontrol etmezsiniz). Yanıtı kullanmadan önce her zaman `res.error`'ı kontrol edin; bunu aşağıdaki her örnekte göreceksiniz.
+`api` ve `ApiUtil`, API hatalarında asla fırlatmaz: başarısız bir çağrı `{ error: { code, message?, details?, fields? } }` nesnesine çözümlenir. Yanıtı kullanmadan önce her zaman `res.error`'ı kontrol edin (ve `res.error.code`'a göre dallanın). Listeler `{ items, page }` olarak döner; bkz. [Sayfalar](/tr/addon/api-reference/).
 :::
 
 ## İleri düzey — ilk okumada atlayın
@@ -96,9 +102,9 @@ Aşağıdaki her şey, ilk eklentinizde karşılaşmayacağınız durumlar için
 
 ### `pano.ui.app.onLoad` ile paylaşılan veriyi bir kez getirme
 
-`pano.ui.app.onLoad(callback)`, **temanın** her sayfa isteğinde, sayfa işlenmeden önce çalıştırdığı bir fonksiyon kaydeder. Geri çağırması `(data, event)` alır; burada `data`, paylaşılan bir sayfa verisi torbası ve `event`, istektir (`ApiUtil`'e geçtiğinizle aynı tür). Bir getirmenin aynı anda birkaç kaydı beslemesi gerektiğinde kullanın.
+`pano.ui.app.onLoad(callback)`, **temanın** her sayfa isteğinde, sayfa işlenmeden önce çalıştırdığı bir fonksiyon kaydeder. Geri çağırması `(data, event)` alır; burada `data`, paylaşılan bir sayfa verisi torbası ve `event`, istektir (`api`'ye geçtiğinizle aynı tür). Bir getirmenin aynı anda birkaç kaydı beslemesi gerektiğinde kullanın.
 
-Bileşen-başına bir `load()`'a alternatiftir: `skipLoad: true` ile bir kanca kaydedin ve verisini bunun yerine tek bir `pano.ui.app.onLoad(async (data, event) => { ... })`'tan getirin. FAQ ve Pages eklentileri, bir getirme birkaç kaydı beslediğinde bunu kullanır.
+Bileşen-başına bir `load()`'a alternatiftir: kanca görünümüne `skipLoad: true` verin ve verisini bunun yerine tek bir `pano.ui.app.onLoad(async (data, event) => { ... })`'tan getirin. Announcement eklentisi bunu yapar; FAQ ve Pages eklentileri ise `app.onLoad`'ı, getirdikleri veriden sayfa kaydetmek için kullanır.
 
 ### Dinamik sayfalar ve temizlik
 
@@ -112,11 +118,11 @@ Buradaki keskin kenar budur. `pano.ui.app.onLoad` her istekte çalışır, ama k
 
 ```js
 const registeredPaths = new Set();
-const customPageComponent = viewComponent(() => import('./theme/CustomPage.svelte'));
 
 pano.ui.app.onLoad(async (data, event) => {
-  const res = await ApiUtil.get({ path: '/pages', request: event });
-  const incoming = new Set(res.pages.map((p) => p.url));
+  const res = await api.get({ path: '/pages', request: event });
+  const pages = res.items ?? [];
+  const incoming = new Set(pages.map((p) => p.url));
 
   // Remove routes we registered before that are no longer present.
   for (const path of registeredPaths) {
@@ -126,8 +132,9 @@ pano.ui.app.onLoad(async (data, event) => {
     }
   }
 
-  for (const page of res.pages) {
-    pano.ui.page.register({ path: page.url, component: customPageComponent });
+  for (const page of pages) {
+    // the view file is src/theme/views/CustomPage.svelte; on the site a page names a view, not a component
+    pano.ui.page.register({ path: page.url, view: 'shoutbox:CustomPage' });
     registeredPaths.add(page.url);
   }
 });
@@ -145,5 +152,5 @@ Ziyaretçi tarafı bitti: SSR verili bir ana sayfa widget'ı, API çağrıları 
 
 - **Yönetici ekranları ekleyin → [Panel Arayüzü](/tr/addon/panel-ui/)** — ayarlar bölümleri, gezinme bağlantılı tam panel sayfaları ve toast'lar.
 - **[Arayüz API Referansı](/tr/addon/api-reference/)** — her kanca adı, görünüm yuvası ve yaşam döngüsü etkinliği tek bir yerde.
-- **[Metni çevirme](/tr/addon/frontend/#bilesenlerinizdeki-metni-cevirme)** — bileşenlerinizin etiketler için kullandığı `$_` yardımcısı.
-- **[Backend Geliştirme](/tr/addon/backend/)** — `load()` ve `ApiUtil` çağrılarınızın vurduğu Kotlin uç noktaları.
+- **[Metni çevirme](/tr/addon/frontend/#bilesenlerinizde-metni-cevirme)** — bileşenlerinizin etiketler için kullandığı `$_` yardımcısı.
+- **[Backend Geliştirme](/tr/addon/backend/)** — `load()` ve `api` çağrılarınızın vurduğu Kotlin uç noktaları.

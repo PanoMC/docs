@@ -60,7 +60,7 @@ Temalar sayesinde:
 Pano, temaları `themes/` dizininden bağımsız **UI uygulamaları** olarak yükler.  
 Her temanın, meta verilerini (id, sürüm, yazar, uyumluluk vb.) içeren **`manifest.json`** adlı bir bildirim dosyası
 vardır.  
-Bu dosya Pano tarafından otomatik oluşturulur ve yönetilir — **manuel olarak düzenlemeyin.**
+Bu dosyayı temanın geliştiricisi yazar ve tema paketinin içinde gelir — **yüklü bir temada düzenlemeyin.**
 
 Pano başlatıldığında:
 
@@ -104,12 +104,12 @@ Temaları **iki şekilde** yükleyebilirsiniz:
 
 ### 2. Pano Mağazasından
 
-1. **Tema Yükle** penceresinde **Mağazada Ara (Browse Store)**’a tıklayın.
+1. **Tema Yükle** penceresinde **Pano Mağazası'ndan Kur**’a tıklayın.
 2. Bir tema seçin — ücretsiz veya ücretli olabilir.
 3. **Yükle**’ye tıklayın ve kalan her şeyi Pano’nun otomatik olarak yapmasına izin verin.
 4. Tema, kurulum tamamlandıktan sonra otomatik olarak görünecektir.
 
-> Marketplace için bağlı bir [Pano Hesabı](./advanced/connect-pano-account.md) gerekir.
+> Marketplace için bağlı bir [Pano Hesabı](../configuration/services/) gerekir.
 
 ## Temaları Etkinleştirme ve Yönetme
 
@@ -121,8 +121,8 @@ Bu durumda, Pano’yu yeniden başlatmanız önerilir.
 Temaları yönetmek için:
 
 1. **Panel → Görünüm → Temalar**’a gidin.
-2. Bir tema seçin.
-3. **Başlat (Start)** veya **Durdur (Stop)** ile etkinleştirin ya da devre dışı bırakın.
+2. Bir temayı açın.
+3. Onu etkin tema yapmak için **Aktif Et**’e tıklayın. Etkin temada **Durdur** ve **Başlat**, temanın sürecini durdurur ve başlatır.
 
 > Etkin temayı durdurmak web sitesini geçici olarak devre dışı bırakır.  
 > Başka bir temayı durdurmadan önce her zaman geçerli bir temanın etkin olduğundan emin olun.
@@ -140,7 +140,7 @@ Genel olarak şunları özelleştirebilirsiniz:
 - Site logosu, favicon veya marka öğeleri
 
 Etkin tema ayarlarına şu bölümden erişebilir ve düzenleyebilirsiniz:  
-**Panel → Görünüm → Tema Ayarları**
+**Panel → Görünüm → Tema Seçenekleri**
 
 Değişiklikler anında uygulanır — yeniden başlatma gerekmez.
 
@@ -159,7 +159,7 @@ Kaldırırken:
 Özel (kullanıcı) temasını silmek için:
 
 1. **Panel → Görünüm → Temalar → [Tema Detayları]**’na gidin.
-2. **Sil**’e tıklayın.
+2. **Kaldır**’a (çöp kutusu simgesi) tıklayın.
 3. İşlemi onaylayın.
 
 ## Dizin Yapısı
@@ -190,16 +190,16 @@ Temalarla birlikte örnek Pano dizin yerleşimi:
 | İşlem                  | Konum                                                   | Açıklama                                 |
 |------------------------|---------------------------------------------------------|------------------------------------------|
 | **Yükle (yerel)**      | `Panel → Görünüm → Temalar → Tema Yükle`                | Sürükle-bırak veya yükleme               |
-| **Yükle (mağaza)**     | `Panel → Görünüm → Temalar → Tema Yükle → Mağazada Ara` | Doğrudan marketten indir                 |
-| **Etkinleştir/Durdur** | `Panel → Görünüm → Temalar → Başlat/Durdur`             | Temayı etkinleştir veya devre dışı bırak |
-| **Özelleştir**         | `Panel → Görünüm → Tema Ayarları`                       | Renkler, düzen, yazı tipleri             |
-| **Sil**                | `Panel → Görünüm → Temalar → Tema Detayları → Sil`      | Özel temayı güvenle kaldır               |
+| **Yükle (mağaza)**     | `Panel → Görünüm → Temalar → Tema Yükle → Pano Mağazası'ndan Kur` | Doğrudan marketten indir                 |
+| **Etkinleştir/Durdur** | `Panel → Görünüm → Temalar → Tema Detayları → Aktif Et, Başlat/Durdur` | Etkin temayı değiştir, durdur veya başlat |
+| **Özelleştir**         | `Panel → Görünüm → Tema Seçenekleri`                       | Renkler, düzen, yazı tipleri             |
+| **Kaldır**             | `Panel → Görünüm → Temalar → Tema Detayları → Kaldır`   | Özel temayı güvenle kaldır               |
 
 ## Gelişmiş Notlar
 
 - Yalnızca **geçerli temalar** listede görünür; bozuk veya eksik temalar yok sayılır.
 - Her tema, **SvelteKit derleme paketi (.zip)** olarak paketlenir.
-- Her temanın, otomatik oluşturulan bir **`manifest.json`** dosyası vardır — **manuel düzenlemeyin.**
+- Her temanın, geliştiricisinin yazdığı ve paketle gelen bir **`manifest.json`** dosyası vardır — **yüklü bir temada düzenlemeyin.**
 - Bazı eklentiler belirli temalara, bazı temalar da belirli eklentilere bağımlıdır.
 - Bazı temalar, gelişmiş işlevler için varsayılan API’leri ortaya çıkarır veya geçersiz kılar.
 - Yerleşik UI uygulamaları (`panel-ui`, `setup-ui`, `vanilla-theme`) **korunur** ve değiştirilemez.

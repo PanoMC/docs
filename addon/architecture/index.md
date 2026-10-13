@@ -79,10 +79,13 @@ If you have written Minecraft plugins before, note there is **no `plugin.yml`** 
 Open your built jar as a zip again and read `META-INF/MANIFEST.MF` in a text editor — you should see your addon's id and main class listed inside it.
 :::
 
-When Pano loads your jar, PF4J finds the main class named in the manifest, instantiates it, and calls your lifecycle hooks **in order**:
+When Pano loads your jar, PF4J finds the main class named in the manifest, instantiates it, and calls your lifecycle hooks. Which ones run depends on what happens to the addon:
 
 ```text
-jar load → onCreate() → onEnable() → onStart() → … running … → onStop() → onDisable() → onUninstall()
+server boot:    jar load → onCreate() → onStart() → … running … → onStop()
+panel Enable:   onEnable() → onStart()
+panel Disable:  onStop() → onDisable()
+panel Delete:   onUninstall() → onStop()
 ```
 
 - All hooks are `suspend` functions (`suspend` is Kotlin's async marker — in practice it means you can call Pano's database and network functions directly inside these hooks) and all do nothing by default — you only override the ones you need.
@@ -90,7 +93,7 @@ jar load → onCreate() → onEnable() → onStart() → … running … → onS
 - `onUninstall()` is called only when the site owner **deletes** the addon in the panel — not when they merely disable it. This is where `pano-plugin-shoutbox` would delete its `shout` table from the database.
 
 ::: tip See it for yourself
-Put a `logger.info(...)` line inside `onStart()`, rebuild, and reload the addon — the line appears in Pano's console. That is the simplest way to watch the lifecycle actually fire.
+Put a `logger.info(...)` line inside `onStart()`, rebuild, and restart Pano — the line appears in Pano's console. That is the simplest way to watch the lifecycle actually fire.
 :::
 
 ### Your classes are found automatically

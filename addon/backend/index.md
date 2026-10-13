@@ -43,12 +43,13 @@ One more thing that saves you the most common crash: there are **two boxes**.
 Constructor injection only reaches **your** box. To grab something out of **Pano's** box you ask for it by hand: `applicationContext.getBean(SomeService::class.java)`. You will see this on almost every page.
 
 ::: warning Kotlin changes are never hot — rebuild and restart
-Editing a `.kt` file changes nothing on its own. Every time you touch Kotlin you must rebuild the jar, copy it into your instance's `plugins/` folder, and **restart Pano**:
+Editing a `.kt` file changes nothing on its own. Every time you touch Kotlin you must rebuild the jar and **restart Pano**:
 
 ```bash
 ./gradlew build -Pnoui
-cp build/libs/pano-plugin-shoutbox-local-build.jar <your-pano-instance>/plugins/
 ```
+
+The build writes `build/libs/pano-plugin-shoutbox-local-build.jar`, and its `copyJar` step copies that jar into the folder named by `panoPluginsDir` in `gradle.properties` (`..`, the `plugins/` folder your addon lives in) — nothing to copy by hand.
 
 `-Pnoui` skips rebuilding the Svelte UI, which you don't need while working on Kotlin — it makes the build much faster.
 
@@ -118,7 +119,7 @@ Two different beans, both fetched with `getBean`:
 :::
 
 ::: tip Checkpoint: did it load?
-After you rebuild and restart, watch Pano's console — it should log your addon loading — and open **Panel → Addons**: **Shoutbox** should be listed. If the jar name in the `cp` line above doesn't match what you actually built, look in `build/libs/` — the name comes from your `pluginId` (which you set back in [Getting Started](/addon/getting-started/)).
+After you rebuild and restart, watch Pano's console — it should log your addon loading — and open **Panel → Addons**: **Shoutbox** should be listed. If it isn't, check that the jar reached `plugins/`: its name is `<pluginId>-local-build.jar`, so it comes from your `pluginId` (which you set back in [Getting Started](/addon/getting-started/)).
 :::
 
 ## Build the rest, one piece at a time

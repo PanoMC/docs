@@ -16,9 +16,14 @@ Aşağıdaki her değişiklik, Geliştirme Modu açık olduğu ve klonunuz kurul
 
 ## Giriş noktası: `src/main.js`
 
-Her şey `main.js`'te başlar, ki boilerplate onu zaten içerir. `PanoPlugin`'i genişleten tek bir varsayılan sınıf dışa aktarır. Pano onun `onLoad()`'ını **iki kez** çalıştırır — bir kez temada (herkese açık site) ve bir kez panelde (yönetici paneli). Bunları `pano.isPanel` ile ayırt edersiniz:
+Kodla yapılan kayıtlar `src/main.js` içinde durur. İskelet bu dosyayı oluşturmaz — kendiniz ekleyin. `PanoPlugin`'i genişleten tek bir varsayılan sınıf dışa aktarır. Pano onun `onLoad()`'ını **iki kez** çalıştırır — bir kez temada (herkese açık site) ve bir kez panelde (yönetici paneli). Bunları `pano.isPanel` ile ayırt edersiniz:
 
 ```js
+import { PanoPlugin } from '@panomc/sdk';
+import { viewComponent } from '@panomc/sdk/utils/component';
+
+const pluginId = 'pano-plugin-shoutbox';
+
 export default class ShoutboxUiPlugin extends PanoPlugin {
   onLoad() {
     const { pano } = this;
@@ -26,7 +31,7 @@ export default class ShoutboxUiPlugin extends PanoPlugin {
     if (pano.isPanel) {
       // panel registrations go here
     } else {
-      // theme registrations go here
+      // conditional theme registrations go here (views register themselves)
     }
   }
 }
@@ -43,27 +48,31 @@ Paketiniz Svelte, `svelte-i18n` veya `@panomc/sdk` göndermez — host onları s
 
 ## Adım 1 — widget'ı ana sayfaya yerleştirin
 
-Tema, adlandırılmış **kancalar** (hook) sunar — eklentilerin bir bileşen enjekte edebileceği noktalar. Shoutbox'ı ana sayfanın en üstüne koymak için, `else` (tema) dalında `page:home:top` kancası için bir bileşen kaydedin:
+Tema, adlandırılmış **kancalar** (hook) sunar — eklentilerin bir bileşen enjekte edebileceği noktalar. Site tarafında kayıt kodu yazmazsınız: bir bileşen bir **görünümdür** (view), yani `src/theme/views/` altında duran ve yerini kendi `<script module>` bloğunda söyleyen bir `.svelte` dosyası. Shoutbox'ı ana sayfanın en üstüne koymak için görünümü oluşturun ve `page:home:top` kancasını belirtin:
 
-```js
-pano.ui.hook.register({
-  name: 'page:home:top',
-  component: viewComponent(() => import('./theme/ShoutboxWidget.svelte')),
-});
+```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
+<script module>
+  export const view = { hook: 'page:home:top' };
+</script>
+
+<div class="shoutbox"></div>
 ```
 
 ::: tip Kontrol
-Sitenin ana sayfasını açın. Widget'ın kapsayıcısını en tepede görmelisiniz (devtools ile inceleyin). Sonraki adıma kadar boş olacak — bu beklenen bir durum. Tamamen eksikse, tarayıcı konsolunu kontrol edin ve doğru `pluginId` ile `else` dalında kaydettiğinizi doğrulayın.
+Sitenin ana sayfasını açın. Widget'ın kapsayıcısını en tepede görmelisiniz (devtools ile inceleyin). Sonraki adıma kadar boş olacak — bu beklenen bir durum. Tamamen eksikse, tarayıcı konsolunu kontrol edin, dosyanın `src/theme/views/` içinde durduğunu ve `bun run dev`'in çalıştığını doğrulayın.
 :::
 
 ## Adım 2 — widget'a `load()` ile verisini verin
 
-Bir widget veriye ihtiyaç duyar ve bu veriye **ilk sunucu yanıtında** ihtiyaç duyar ki ziyaretçiler ve arama motorları shout'ları hemen görsün. Bir kanca bileşeni bunu, **modül betiğinden** — `<script module>` bloğu — bir `load(event)` dışa aktararak yapar. Pano, sayfa hazırlanırken `load()`'ı çalıştırır ve döndürdüğünüz şeyi bileşene props olarak verir:
+Bir widget veriye ihtiyaç duyar ve bu veriye **ilk sunucu yanıtında** ihtiyaç duyar ki ziyaretçiler ve arama motorları shout'ları hemen görsün. Bir görünüm bunu, **modül betiğinden** — `<script module>` bloğu — bir `load(event)` dışa aktararak yapar. Pano, sayfa hazırlanırken `load()`'ı çalıştırır ve döndürdüğünüz şeyi bileşene props olarak verir:
 
 ```svelte
-<!-- src/theme/ShoutboxWidget.svelte -->
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script module>
   import { api } from '@panomc/sdk/plugin-api';
+
+  export const view = { hook: 'page:home:top' };
 
   export async function load(event) {
     const res = await api.get({ path: '/shouts', request: event });
@@ -72,7 +81,7 @@ Bir widget veriye ihtiyaç duyar ve bu veriye **ilk sunucu yanıtında** ihtiya�
 </script>
 
 <script>
-  export let shouts = [];
+  let { shouts = [] } = $props();
 </script>
 
 <div class="shoutbox">
@@ -141,7 +150,7 @@ Bütün bir sayfaya ihtiyacınız yoksa, bunun yerine eklentinizin detay sayfas�
 
 ## Sahte API'lere dikkat edin
 
-Bir YZ asistanı veya eski bir eğitim size [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir çağrı verirse, o çağrı yoktur. Yaygın sahteler: düz bir dizeyle `api.get('/shouts')` (her çağrı bir seçenek nesnesi alır), bir `@panomc/sdk/components/panel` bileşen kütüphanesi (öyle bir şey yok) ve `onContextUpdate` (hiçbir host onu asla çağırmaz — iskele eklediyse silin). Tam liste [Arayüz referansının altında](/tr/addon/frontend/#var-olmayan-eski-ve-yz-uydurması-api-ler).
+Bir YZ asistanı veya eski bir eğitim size [Arayüz API Referansı](/tr/addon/api-reference/)'nda olmayan bir çağrı verirse, o çağrı yoktur. Yaygın sahteler: düz bir dizeyle `api.get('/shouts')` (her çağrı bir seçenek nesnesi alır), `@panomc/sdk/components/panel` içinden içe aktarılan `Button` veya `Card` (o modülde böyle genel bileşenler yok) ve `onContextUpdate` (hiçbir host onu asla çağırmaz — iskele eklediyse silin). Tam liste [Arayüz referansının altında](/tr/addon/frontend/#var-olmayan-ai-tarafından-uydurulan-api-ler).
 
 ## Nerede olduğumuz
 

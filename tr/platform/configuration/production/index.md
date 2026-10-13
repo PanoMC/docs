@@ -11,9 +11,10 @@
 - Doğru tema ID’si ayarlanmış aksi taktirde Vanilla Tema çalışır
 - Veritabanı ve yüklemeler için düzenli yedekleme yapılmış
 - [Bakım modu](../../maintenance/) ihtiyaç duymadan önce bir kez denenmiş — atlama izninizi ve giriş URL'nizi biliyor olun
-- Pano bir ters vekil (reverse proxy) arkasındaysa `server.trusted-proxies` doldurulmuş. Boş bırakırsanız Pano
-  `X-Forwarded-For` başlığını tamamen yok sayar; o zaman her istek vekilden geliyormuş gibi görünür ve bakım
-  girişinin IP yasağı ile hız sınırı ziyaretçilerin adresi yerine tek bir adres görür
+- Pano bir ters vekil (reverse proxy) arkasındaysa `server.trusted-proxies` doldurulmuş (Cloudflare için
+  `"cloudflare"` yeterlidir). Boş bırakılırsa herkese açık bir vekilin adresi her ziyaretçinin adresi sayılır;
+  `X-Forwarded-For` başlığına yalnızca listelenen vekillerden güvenen bakım girişi de ziyaretçilerin adresi
+  yerine tek bir adresi yasaklar ve sınırlar
 - Aynı ters vekilden bağlanan **Minecraft sunucuları** varsa, WebSocket boşta kalma zaman aşımının Pano'nun
   heartbeat süresinden (`heartbeat-interval` / `heartbeat-timeout`, varsayılan **25s** / **75s**) uzun
   olduğundan emin olun — bkz.
@@ -56,7 +57,7 @@ email {
 
 server {
   host = "0.0.0.0"
-  port = 80
+  http-port = 80
 }
 ```
 ## Düzenleme Sonrası

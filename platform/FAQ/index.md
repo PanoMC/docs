@@ -20,10 +20,10 @@ No. Pano is optimized for performance. A basic VPS with 1GB of RAM and Java 11+ 
 ### Installation & Setup
 
 #### Which ports do I need to open?
-By default, Pano uses port **80** for HTTP. If you configure SSL/HTTPS, you will also need to open port **443**.
+By default, Pano uses port **80** for HTTP; installed with the [one-command installer](../installation/installer/) or [Docker](../containers/) it uses port **8088**. If you configure SSL/HTTPS, you will also need to open port **443**.
 
 #### Can I run Pano on Windows/Linux/macOS?
-Yes! Since Pano is a Java application (.jar), it runs on any system with a JVM installed.
+Yes! Since Pano is a Java application (.jar), it runs on any system with a JVM installed. The [one-command installer](../installation/installer/) covers all three and brings its own Java.
 
 #### What is the "Portable DB" option during setup?
 On Windows (x64/ARM64), Pano can automatically download and manage a portable MariaDB instance for you. This is perfect for local testing or small servers where you don't want to manually set up a database.
@@ -52,7 +52,7 @@ Yes, Pano supports both Bungeecord and Velocity proxies, as well as standalone S
 ### Addons & Themes
 
 #### Where can I find more addons and themes?
-Official and community resources will be available on the [Pano Market](https://panomc.com/market) (coming soon).
+Official and community resources are listed on panomc.com: [Addons](https://panomc.com/addons) and [Themes](https://panomc.com/themes).
 
 #### Can I develop my own addons?
 Absolutely! Check out our [Addon Development Guide](../../addon/getting-started/) to get started.

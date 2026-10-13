@@ -32,7 +32,7 @@
 | `PANO_DB_NAME`, `PANO_DB_USER`, `PANO_DB_PASSWORD` | База данных и её пользователь |
 | `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP-сервер |
 | `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | Вход SMTP |
-| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Адрес отправителя, STARTTLS вкл. или выкл. |
+| `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Адрес отправителя; режим STARTTLS: `DISABLED`, `OPTIONAL` или `REQUIRED` (по умолчанию выбирается по порту) |
 | `PANO_HTTP_PORT` | Порт, который Pano слушает внутри контейнера (8088) |
 | `PANO_JVM_ARGS` | Параметры Java через пробел (`-XX:MaxRAMPercentage=75`) |
 
@@ -49,6 +49,7 @@ docker run -d --name pano \
 ```
 
 Не оставляйте пароли в истории оболочки: используйте `--env-file` или секреты вашего оркестратора.
+[Установка одной командой](../../installation/installer/) задаёт те же переменные в своём `pano.env`.
 
 ### Переменные Pano Host {#pano-host-variables}
 
@@ -56,7 +57,7 @@ Pano Host задаёт ещё несколько переменных. Для с
 
 | Переменная | Назначение |
 | --- | --- |
-| `PANO_HOSTED` | `pano-host` помечает инстанс как управляемый Pano Host. Только информационно: панель показывает «управляется Pano Host» и уведомления о квотах, ничего не блокируется |
+| `PANO_HOSTED` | `pano-host` помечает инстанс как управляемый Pano Host: панель показывает «управляется Pano Host» и уведомления о квотах. Тогда переменные выше применяются при **каждом** запуске, а настройки порта и SSL в панели игнорируются |
 | `PANO_HOST_WORKLOAD_ID` | Идентификатор инстанса в Pano Host |
 | `PANO_HOST_INSTANCE_SECRET` | Позволяет инстансу принимать входы в панель с panomc.com и читать свои уведомления |
 | `PANO_HOST_API_URL` | Адрес API Pano Host |

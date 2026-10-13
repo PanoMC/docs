@@ -20,10 +20,10 @@ Hayır. Pano performans için optimize edilmiştir. 1 GB RAM ve Java 11+ yüklü
 ### Kurulum ve Yapılandırma
 
 #### Hangi portları açmam gerekiyor?
-Varsayılan olarak Pano, HTTP için **80** portunu kullanır. Eğer SSL/HTTPS yapılandırırsanız, **443** portunu da açmanız gerekecektir.
+Varsayılan olarak Pano, HTTP için **80** portunu kullanır; [tek komutla kurulum](../installation/installer/) veya [Docker](../containers/) ile kurulduğunda **8088** portunu kullanır. Eğer SSL/HTTPS yapılandırırsanız, **443** portunu da açmanız gerekecektir.
 
 #### Pano'yu Windows/Linux/macOS üzerinde çalıştırabilir miyim?
-Evet! Pano bir Java uygulaması (.jar) olduğu için, JVM yüklü olan her sistemde çalışır.
+Evet! Pano bir Java uygulaması (.jar) olduğu için, JVM yüklü olan her sistemde çalışır. [Tek komutla kurulum](../installation/installer/) üçünü de destekler ve kendi Java'sını getirir.
 
 #### Kurulum sırasındaki "Portable DB" seçeneği nedir?
 Windows (x64/ARM64) üzerinde Pano, sizin için taşınabilir bir MariaDB örneğini otomatik olarak indirip yönetebilir. Bu, veritabanını manuel olarak kurmak istemediğiniz yerel testler veya küçük sunucular için mükemmeldir.
@@ -52,7 +52,7 @@ Evet, Pano hem Bungeecord ve Velocity proxy'lerini hem de bağımsız Spigot/Pap
 ### Eklentiler ve Temalar
 
 #### Daha fazla eklenti ve temayı nerede bulabilirim?
-Resmi ve topluluk kaynakları [Pano Market](https://panomc.com/market) üzerinden erişilebilir olacaktır (yakında).
+Resmi ve topluluk kaynakları panomc.com üzerinde listelenir: [Eklentiler](https://panomc.com/addons) ve [Temalar](https://panomc.com/themes).
 
 #### Kendi eklentilerimi geliştirebilir miyim?
 Kesinlikle! Başlamak için [Eklenti Geliştirme Rehberimize](../../addon/getting-started/) göz atın.

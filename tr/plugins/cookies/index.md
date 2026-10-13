@@ -19,7 +19,7 @@ Bu, basit ve bilgilendirici bir onay bildirimidir. **Reddetme seçeneği, çerez
 Eklentinin özel bir menü girişi yoktur. Ayarları, eklentinin kendi detay sayfasında bir **Cookies Ayarları** kartı olarak görünür.
 
 1. Eklentiyi **Pano Yönetim Paneli**'nden etkinleştirin.
-2. **Eklentiler → Cookies**'e gidin.
+2. **Panel → Eklentiler → Cookies**'e gidin.
 3. **Cookies Ayarları** kartında mesajı, tasarımı, konumu ve renkleri ayarlayın.
 4. **Kaydet**'e basın — düğme siz bir şey değiştirene kadar devre dışı kalır ve bir bildirim sonucu onaylar.
 

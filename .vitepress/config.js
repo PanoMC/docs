@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -19,6 +20,12 @@ export default defineConfig({
     "README.md",
   ],
   vite: {
+    // llms.txt, llms-full.txt and a Markdown copy of every page (`<page>.md`) for AI agents; the
+    // website's docs MCP server (`/mcp`) reads llms-full.txt. English only: the translations
+    // would triple the files without adding facts.
+    plugins: [
+      llmstxt({ ignoreFiles: ["tr/**", "ru/**"], domain: "https://panomc.com" }),
+    ],
     server: {
       allowedHosts: ["f285-130-162-246-99.ngrok-free.app"]
     }
@@ -112,7 +119,16 @@ export default defineConfig({
                 text: "Getting Started",
                 link: "/platform/introduction/",
               },
-              { text: "Installation", link: "/platform/installation/" },
+              {
+                text: "Installation",
+                link: "/platform/installation/",
+                collapsed: true,
+                items: [
+                  { text: "One-Command Installer", link: "/platform/installation/installer/" },
+                  { text: "Manual (.jar)", link: "/platform/installation/manual/" },
+                  { text: "Setup Wizard", link: "/platform/installation/setup/" },
+                ],
+              },
               {
                 text: "Configuration",
                 link: "/platform/configuration/",
@@ -209,6 +225,16 @@ export default defineConfig({
               { text: "Social Login", link: "/plugins/social-login/" },
               { text: "Staff Page", link: "/plugins/staff-page/" },
               { text: "Whitelist", link: "/plugins/whitelist/" },
+            ],
+          },
+          {
+            text: "AI",
+            collapsed: true,
+            items: [
+              { text: "Overview", link: "/ai/" },
+              { text: "Docs for Agents", link: "/ai/docs-for-agents/" },
+              { text: "Building with an Agent", link: "/ai/building/" },
+              { text: "Using Pano's API with an Agent", link: "/ai/using-pano/" },
             ],
           },
           {
@@ -408,7 +434,16 @@ export default defineConfig({
                 text: "Başlangıç",
                 link: "/tr/platform/introduction/",
               },
-              { text: "Kurulum", link: "/tr/platform/installation/" },
+              {
+                text: "Kurulum",
+                link: "/tr/platform/installation/",
+                collapsed: true,
+                items: [
+                  { text: "Tek Komutla Kurulum", link: "/tr/platform/installation/installer/" },
+                  { text: "Elle Kurulum (.jar)", link: "/tr/platform/installation/manual/" },
+                  { text: "Kurulum Sihirbazı", link: "/tr/platform/installation/setup/" },
+                ],
+              },
               {
                 text: "Ayarlar",
                 link: "/tr/platform/configuration/",
@@ -505,6 +540,16 @@ export default defineConfig({
               { text: "Social Login", link: "/tr/plugins/social-login/" },
               { text: "Staff Page", link: "/tr/plugins/staff-page/" },
               { text: "Whitelist", link: "/tr/plugins/whitelist/" },
+            ],
+          },
+          {
+            text: "Yapay Zekâ",
+            collapsed: true,
+            items: [
+              { text: "Genel Bakış", link: "/tr/ai/" },
+              { text: "Ajanlar için Dokümanlar", link: "/tr/ai/docs-for-agents/" },
+              { text: "Ajanla Geliştirme", link: "/tr/ai/building/" },
+              { text: "Pano API'sini Ajanla Kullanma", link: "/tr/ai/using-pano/" },
             ],
           },
           {
@@ -704,7 +749,16 @@ export default defineConfig({
                 text: "Начало работы",
                 link: "/ru/platform/introduction/",
               },
-              { text: "Установка", link: "/ru/platform/installation/" },
+              {
+                text: "Установка",
+                link: "/ru/platform/installation/",
+                collapsed: true,
+                items: [
+                  { text: "Установка одной командой", link: "/ru/platform/installation/installer/" },
+                  { text: "Вручную (.jar)", link: "/ru/platform/installation/manual/" },
+                  { text: "Мастер настройки", link: "/ru/platform/installation/setup/" },
+                ],
+              },
               {
                 text: "Конфигурация",
                 link: "/ru/platform/configuration/",
@@ -801,6 +855,16 @@ export default defineConfig({
               { text: "Social Login", link: "/ru/plugins/social-login/" },
               { text: "Staff Page", link: "/ru/plugins/staff-page/" },
               { text: "Whitelist", link: "/ru/plugins/whitelist/" },
+            ],
+          },
+          {
+            text: "ИИ",
+            collapsed: true,
+            items: [
+              { text: "Обзор", link: "/ru/ai/" },
+              { text: "Документация для агентов", link: "/ru/ai/docs-for-agents/" },
+              { text: "Разработка с агентом", link: "/ru/ai/building/" },
+              { text: "API Pano и агент", link: "/ru/ai/using-pano/" },
             ],
           },
           {

@@ -25,7 +25,7 @@ Choose one of three ways to show the countdown:
 The Countdown Timer has no dedicated menu item. Its settings render as a single **Countdown Timer Settings** card on the plugin's own detail page:
 
 1. Enable the plugin in the **Pano Admin Panel**.
-2. Navigate to **Panel → Plugins → Countdown Timer**.
+2. Navigate to **Panel → Addons → Countdown Timer**.
 3. Configure the timer, display mode, appearance, and effects, then press **Save**.
 
 Every settings and background change is recorded in the panel activity log.

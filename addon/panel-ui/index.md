@@ -117,7 +117,7 @@ Wire this `save` up to a button and click it. You should see a toast slide in �
 
 ## Login widgets on a server-management install
 
-An install in **Server management** mode runs no theme, so admins sign in on the panel's own page. If your addon puts something on the theme's login (a captcha, a sign-in button), register it in the panel too — the calls are the same:
+An install in **Server management** mode runs no theme, so admins sign in on the panel's own page. If your addon puts something on the theme's login (a captcha, a sign-in button), register it in the panel too — the calls are the same, except that the panel takes `component` where the site takes `view`:
 
 ```js
 if (pano.isPanel && pano.ui.auth?.login) {
@@ -142,4 +142,4 @@ The admin side is done: a settings section, a full panel page with a nav link, a
 - **[Theme UI](/addon/theme-ui/)** — the visitor-facing side, including `api` in full.
 - **[Backend Development](/addon/backend/)** — the Kotlin endpoints and the permission this page gates on.
 - **[Building & Publishing](/addon/publishing/)** — turn the finished addon into a release jar. A release build **must** include the UI, so never use `-Pnoui` for it.
-- **Reference addons** — the built-in addons on the [PanoMC GitHub org](https://github.com/PanoMC) are the working reference for every pattern here: the **Announcement** addon (conditional `invisible`), the **FAQ** and **Pages** addons (`skipLoad` + `app.onLoad`), the **Comments** addon (`systemLayout`), and **`pano-plugin-link-redirects`** (dynamic pages + cleanup).
+- **Reference addons** — the built-in addons on the [PanoMC GitHub org](https://github.com/PanoMC) are the working reference for every pattern here: the **Announcement** addon (conditional `invisible`, `skipLoad`), the **FAQ** and **Pages** addons (`app.onLoad`), the **Comments** addon (`systemLayout`), and **`pano-plugin-link-redirects`** (dynamic pages + cleanup).

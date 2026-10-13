@@ -1,12 +1,15 @@
 # Docker ile Kurulum
 
-Docker, [`.jar` kurulumuna](../installation/) bir alternatiftir: tek bir imaj Java'yı, Pano'yu ve Pano'nun
+Docker, [tek komutla kuruluma](../installation/installer/) ve [`.jar` kurulumuna](../installation/manual/) bir alternatiftir: tek bir imaj Java'yı, Pano'yu ve Pano'nun
 çalışması için gereken her şeyi içerir. [Pano Host](https://panomc.com/host) her Pano Instance'ı aynı
 şekilde çalıştırır. [Yapılandırma](configuration/) ortam değişkenlerini ve `/data` birimini,
 [Çalışma Ortamı](runtime/) ise güncellemeyi, runtime imajını, Java'yı ve belleği anlatır.
 
+En hızlı yol, tek komutla kurulumun [Docker modudur](../installation/installer/#docker): `curl -fsSL https://panomc.com/install | bash -s -- --docker`
+aşağıdaki Compose dosyasını (ek olarak bir bellek sınırıyla) ve `.env` dosyasını yazar, ardından başlatır. Bu sayfa aynısını elle yapar.
+
 > [!NOTE]
-> İmajlar Pano **1.0.0-alpha.520** sürümünden itibaren yayınlanır. Daha eski sürümler yalnızca `.jar` olarak gelir.
+> İmajlar Pano **1.0.0-alpha.522** sürümünden itibaren yayınlanır. Daha eski sürümler yalnızca `.jar` olarak gelir.
 
 ## İmaj
 
@@ -16,7 +19,7 @@ Tüm etiketler herkese açık tek bir pakette, `ghcr.io/panomc/pano`, **amd64** 
 | --- | --- |
 | `latest` | En yeni kararlı sürüm. 1.0.0 çıkana kadar: en yeni beta (beta imajı yokken en yeni alpha) |
 | `beta`, `alpha` | O ön sürüm kanalının en yeni sürümü |
-| `<version>`, ör. `1.0.0-alpha.520` | Tam olarak o sürüm, hiç değişmez |
+| `<version>`, ör. `1.0.0-alpha.522` | Tam olarak o sürüm, hiç değişmez |
 | `runtime-jre<N>` | Java `N` ve başlatıcı, Pano **yok**. Bkz. [Runtime imajı](runtime/#runtime-image) |
 
 İmaj Pano'yu Java 11 üzerinde root olmayan bir kullanıcıyla çalıştırır. Pano yine de bir **MySQL veya
@@ -83,7 +86,7 @@ MariaDB** veritabanına ihtiyaç duyar; aşağıdaki iki örnek de yanında bir 
    Pano'yu 80 portunda sunmak için `.env` dosyasına `PANO_PORT=80`, başka bir etiket için
    `PANO_TAG=beta` (ya da bir sürüm) ekleyin.
 
-3. `http://<sunucu-ip-adresiniz>:8088/` adresini açın ve [Kurulum Sihirbazı](../installation/)'nı
+3. `http://<sunucu-ip-adresiniz>:8088/` adresini açın ve [Kurulum Sihirbazı](../installation/setup/)'nı
    izleyin. Veritabanı adımı ortam değişkenlerinden önceden doldurulmuştur; `PANO_DB_PASSWORD` kullanılsın diye şifreyi boş bırakın.
 
 ## docker run {#docker-run}

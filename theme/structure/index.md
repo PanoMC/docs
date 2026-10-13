@@ -80,6 +80,7 @@ If you edit a generated file, your work is gone the next time you install or upd
 |---|---|
 | `id` | A unique name for your theme. It **cannot** be `vanilla-theme`. |
 | `title` | The friendly name people see. |
+| `description` | One or two sentences about the theme. |
 | `version` | Your theme's version, e.g. `1.0.0`. |
 | `author` | Your name. |
 | `panoVersion` | The Pano version your theme is built for. |

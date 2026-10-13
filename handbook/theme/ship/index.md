@@ -81,7 +81,13 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
+    branches: [master, dev]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -92,7 +98,7 @@ jobs:
       TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-`GITHUB_TOKEN` is provided by GitHub Actions automatically — just pass it through. Versions come from your **[Conventional Commits](https://www.conventionalcommits.org/)** (`feat:`, `fix:`, `chore:`), so you never bump `version` by hand.
+`GITHUB_TOKEN` is provided by GitHub Actions automatically — just pass it through. The `permissions` block is needed because the shared workflow cannot get more rights than its caller grants. The stable branch is `master`: the shared workflow builds `master` against the production license server and any other branch against the dev one. Versions come from your **[Conventional Commits](https://www.conventionalcommits.org/)** (`feat:`, `fix:`, `chore:`), so you never bump `version` by hand.
 
 ## Step 5 — publish on the Marketplace
 
@@ -114,12 +120,12 @@ Your `manifest.json` `id` (`ember`) identifies the theme *package*. The Marketpl
 **Automate uploads with `semantic-release-pano`:**
 
 1. On panomc.com, create an **API token** under **Profile → Security → API tokens**, and add it to your GitHub repo as a secret named `PANO_TOKEN` (**Settings → Secrets → Actions**).
-2. Point `semantic-release-pano` at your resource ID in `.releaserc.json`:
+2. Point `semantic-release-pano` at your resource ID in `.releaserc.json` (the shared workflow names the release file `ember-v<version>.zip`):
 
 ```json
-["semantic-release-pano", {
+["@PanoMC/semantic-release-pano", {
   "resourceId": "YOUR-RESOURCE-UUID",
-  "file": "ember-${version}.zip",
+  "file": "ember-v${version}.zip",
   "panoVersion": "1.0.0",
   "useGitHubLink": true,
   "repositoryUrl": "https://github.com/YourName/ember.git"

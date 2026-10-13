@@ -86,12 +86,13 @@ Three of the rows below are Spring **contexts** — bean boxes. A **bean** is an
 
 ### Lifecycle hooks
 
-All are `open suspend fun` with a default no-op body (`open` = you may override it; *no-op* = does nothing until you override it; `suspend` = see the box at the top). Override only what you need. They run in this order:
+All are `open suspend fun` with a default no-op body (`open` = you may override it; *no-op* = does nothing until you override it; `suspend` = see the box at the top). Override only what you need. Which ones run depends on what happens to the addon:
 
 ```
-jar load → onCreate() → onEnable() → onStart()
-        …running…
-onStop() → onDisable() → onUninstall()
+server boot:    jar load → onCreate() → onStart() → …running… → onStop()
+panel Enable:   onEnable() → onStart()
+panel Disable:  onStop() → onDisable()
+panel Delete:   onUninstall() → onStop()
 ```
 
 `verifyLicense()` is **not** part of this sequence — it runs on demand, when a site admin clicks *Refresh license* in the panel (premium addons only).
@@ -99,11 +100,11 @@ onStop() → onDisable() → onUninstall()
 | Hook | Runs when |
 |---|---|
 | `onCreate()` | The plugin object is constructed — the first hook to run (your injected properties are already set by this point) |
-| `onEnable()` | The addon is enabled — at server boot, or when an admin clicks *Enable* in the panel |
+| `onEnable()` | An admin clicks *Enable* in the panel, or the addon was just installed. Not called on a normal server boot |
 | `onStart()` | The addon starts — put your setup code here. First check `setupManager.isSetupDone()` and return early if it is `false` (see §13), so you never touch the database before the site is installed |
-| `onStop()` | The addon is stopping — cancel timers/jobs here |
-| `onDisable()` | The addon is disabled, its data kept — at server shutdown, or when an admin clicks *Disable* |
-| `onUninstall()` | The addon is **deleted** (admin clicks *Delete*) — drop your tables here |
+| `onStop()` | The addon is stopping (server shutdown, *Disable*, *Delete*) — cancel timers/jobs here |
+| `onDisable()` | An admin clicks *Disable*; the addon's data is kept. Not called at server shutdown |
+| `onUninstall()` | The addon is **deleted** (admin clicks *Delete*) — drop your tables here. Runs before the addon is stopped |
 | `verifyLicense()` | Panel "Refresh license" button (premium addons) |
 
 ### Methods
@@ -112,8 +113,8 @@ onStop() → onDisable() → onUninstall()
 |---|---|---|
 | `registerSingletonGlobal` | `(bean: Any)` | Share a bean with other addons |
 | `unRegisterGlobal` | `(bean: Any)` | Remove a shared bean |
-| `register` | `(listener: PluginEventListener)` | Register a dynamic event listener |
-| `unRegister` | `(listener: PluginEventListener)` | Remove a dynamic event listener |
+| `register` | `(eventListener: PluginEventListener)` | Register a dynamic event listener |
+| `unRegister` | `(eventListener: PluginEventListener)` | Remove a dynamic event listener |
 | `registerCommands` | `(obj: Any)` | Register `@Command` methods on an object (`@Command` = an annotation that adds a console command — see §11) |
 | `unRegisterCommands` | `(obj: Any)` | Remove them |
 | `getLicenseManager` | `(): LicenseManager` | Host license service (premium) |
@@ -195,7 +196,6 @@ class GetShoutsAPI : Api() {
 | `Route.paths` | `val paths: List<Path>` | The paths this route handles (required) |
 | `Route.order` | `open val order = 1` | If two routes could match the same URL, the one with the lower `order` is tried first |
 | `Route.getValidationHandler` | `(schemaRepository): ValidationHandler?` | Request-body/query validation |
-| `Route.corsHandler` | `open fun corsHandler(): Handler?` | Override CORS (defaults provided) |
 | `Route.bodyHandler` | `open fun bodyHandler(): Handler?` | Override body parsing (see uploads) |
 
 ### Base classes — pick by who may call
@@ -228,9 +228,9 @@ Never write `/api`, `/v1`, `/panel` or your plugin id in a `Path`. Pano mounts t
 
 | Thing | Signature | Purpose |
 |---|---|---|
-| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Success → exactly your map (no `result` key) |
+| `Successful` | `Successful(responseMap: Map<String, Any?> = mapOf())` | Success → exactly your map (no `result` key) |
 | `InvalidFields` | `InvalidFields(mapOf("email" to "EXISTS"))` | Field-level errors → `{"error":{"code":"INVALID_FIELDS","fields":{"email":"EXISTS"}}}` |
-| `Error` subclasses | `throw NotFound()` / `BadRequest()` / … | ~100 predefined in `com.panomc.platform.error` (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
+| `Error` subclasses | `throw NotFound()` / `BadRequest()` / … | 130+ predefined in `com.panomc.platform.error` (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
 | Custom error | `class SlugTaken : Error("SLUG_TAKEN", 409)` | You declare the code literal (`^[A-Z][A-Z0-9_]*$`) and the status; the client receives `{"error":{"code":"SLUG_TAKEN"}}` |
 
 To fail a request you **throw** an `Error` (Pano's `com.panomc.platform.model.Error`, **not** Kotlin's built-in `Error`) — you do not return it. Validation failures are turned into `BadRequest` for you.
@@ -257,7 +257,7 @@ override fun getValidationHandler(schemaRepository: SchemaRepository): Validatio
 
 Each database table needs **three small files** (plus optional migrations):
 
-- `Shout.kt` — the row itself, a data class that extends `DBEntity`.
+- `Shout.kt` — the row itself, a class that extends `DBEntity`.
 - `ShoutDao.kt` — an abstract class that *declares* the queries. **This is the type you inject** into endpoints.
 - `ShoutDaoImpl.kt` — the `@Dao` class that holds the actual SQL.
 
@@ -275,7 +275,7 @@ The split lets your endpoints depend on the plain `ShoutDao` type while Pano sup
 | `Dao.fields` | `open val fields: List<String>` | Column names for query building |
 | `Dao.tableName` | `protected val tableName` | Derived automatically from your entity class name (`ShoutItem` → `shout_item`); read-only — you don't set it |
 | `Dao.getTablePrefix` | `fun getTablePrefix(): String` | The instance's table prefix |
-| `Row.toEntity()` | extension | One row → your model (via Gson). Extension function from `com.panomc.platform.db` — call `row.toEntity()` on a result row |
+| `Row.toEntity()` | extension | One row → your model (via Gson). Declared inside `Dao`, so it only works inside your DAO class — call `row.toEntity()` on a result row |
 | `RowSet.toEntities()` | extension | Many rows → `List<T>`. Same idea: call `rows.toEntities()` on a query result |
 | `List<String>.toTableQuery()` | extension | Backtick-quoted column list |
 | `DatabaseMigration` | `DatabaseMigration(from: Int, to: Int, info: String)` | A schema step; override `val handlers: List<suspend (SqlClient) -> Unit>` |
@@ -324,17 +324,18 @@ A config class extending `PluginConfig` is written to `plugins/<pluginId>/config
 |---|---|---|
 | `PluginConfig` | `open class PluginConfig` (has `version: Int`) | Base for your config; add your own fields with defaults |
 | `PluginConfigManager<T>` | `PluginConfigManager(plugin, T::class.java)` | Loads/saves the file for one config class |
-| `.config` | `val config: T` | The current typed values |
+| `.config` | `var config: T` (`private set`) | The current typed values |
 | `.saveConfig` | `fun saveConfig(config: JsonObject)` | Persist changes to disk |
 | `.configFilePath` | `val configFilePath: String` | Resolved path of `config.conf` |
 | `PluginConfigMigration` | `PluginConfigMigration(from: Int, to: Int, versionInfo: String)` | Override `fun migrate(config: JsonObject)`; annotate `@Migration` |
 | `@ConfigComment` | `@ConfigComment(vararg lines: String)` | Doc comment above a field in the generated file |
 | `@ConfigSection` | `@ConfigSection(title: String)` | Group keys under a banner |
 
-Why is `.config` a typed `T` but `.saveConfig` takes a `JsonObject`? Reading gives you your own typed class; saving takes a raw `JsonObject` so you can change just the keys you want. A save looks like:
+Why is `.config` a typed `T` but `.saveConfig` takes a `JsonObject`? Reading gives you your own typed class; saving takes a raw `JsonObject` and **rewrites the whole file from it** — a key you leave out is dropped from the file and falls back to its default. So start from the current config and change what you need:
 
 ```kotlin
-configManager.saveConfig(JsonObject().put("apiKey", "new-value"))
+val current = JsonObject.mapFrom(configManager.config)
+configManager.saveConfig(current.put("apiKey", "new-value"))
 ```
 
 Register the manager as a **singleton** (one shared instance) in your own `pluginBeanContext` during `onStart()`, then fetch it lazily when a request needs it. The two lines are:
@@ -360,7 +361,7 @@ Most event listeners work the same way. (1) Implement the interface. (2) Annotat
 | `RouterEventListener` | `onInitRouteList(routes: MutableList<Route>)`, `onRouterCreate(router: Router)` |
 | `AuthEventListener` | `onBeforeAuthenticate(context, sqlClient): LoginDecision?`, `onBeforeVerifyLinkCode(context, sqlClient): LoginDecision?`, `onBeforeLogin(user, context, sqlClient): LoginDecision?`, `onAfterLogin(user, context, sqlClient)`, `onAfterRegister(user, sqlClient)` |
 | `PlayerEventListener` | `onDelete(user: User)` — account-deletion cleanup |
-| `ProfilePictureEventListener` | `resolveProfilePictureUrl(user: User): String?` |
+| `ProfilePictureEventListener` | `resolveProfilePictureUrl(user: User): String?` (no default body — you must implement it) |
 | `PluginLifecycleListener` | `onPluginLoad/Enable/Disable/Unload/Uninstall(plugin: PanoPlugin)` |
 | `PluginEventListener` | Marker for your own cross-addon events |
 
@@ -413,8 +414,8 @@ A **permission node** is a dotted string (like `pano.plugin.x.manage`) that name
 
 | Type | Signature | Node it produces |
 |---|---|---|
-| `Permission` | `open class Permission(iconName: String)` | `pano.<key>` |
-| `PanelPermission` | `open class PanelPermission(iconName: String)` | `pano.plugin.<pluginId>.<dotted.key>` |
+| `Permission` | `open class Permission(iconName: String = "")` | `pano.<key>` |
+| `PanelPermission` | `open class PanelPermission(iconName: String = "")` | `pano.plugin.<pluginId>.<dotted.key>` |
 | `@PermissionDefinition` | class annotation | Auto-registers the permission |
 
 (`iconName` = a Font Awesome icon name shown next to the permission in the panel, e.g. `"fa-bullhorn"` or `"fa-comments"`.)
@@ -447,7 +448,7 @@ If the site owner runs the companion `pano-mc-plugin` on their Minecraft server,
 |---|---|---|
 | `ServerManager.registerEvent` | `fun registerEvent(event: ServerEvent<*, *>)` | Handle an inbound event type |
 | `ServerManager.unregisterEvent` | `fun unregisterEvent(event: ServerEvent<*, *>)` | Stop handling it |
-| `ServerManager.sendMessage` | `fun sendMessage(message: PlatformMessage, server: Server)` | Fire-and-forget to one server |
+| `ServerManager.sendMessage` | `fun sendMessage(platformMessage: PlatformMessage, server: Server)` | Fire-and-forget to one server |
 | `ServerManager.getConnectedServers` | `fun getConnectedServers(): Map<Server, ServerWebSocket>` | Currently connected servers (key = the `Server`, value = its live WebSocket) |
 | `ServerManager.isConnected` | `fun isConnected(id: Long): Boolean` | — |
 | `ServerEvent<R, M>` | `abstract suspend fun handle(request: R, server: Server): M?` | Inbound event handler (R = the request payload you receive, M = the message type you optionally reply with; `M?` means the reply is optional) |
@@ -467,7 +468,7 @@ A **token** here is a signed string in **JWT** format: anyone can read what's in
 |---|---|---|
 | `TokenType` | `interface` — `getName(): String`, `getExpireDate(): Long` (expiry as epoch millis) | Your token type (name defaults from class name minus `TokenType`, `UPPER_SNAKE`) |
 | `TokenTypeRegistry.registerPluginToken` | `fun registerPluginToken(pluginId: String, tokenType: TokenType)` | Register (auto-removed on unload) |
-| `TokenProvider.generateToken` | `fun generateToken(subject: String, tokenType: TokenType): Pair<String, Long>` | Returns `(tokenString, expiresAtEpochMillis)` — the signed token and when it expires (epoch milliseconds) |
+| `TokenProvider.generateToken` | `fun generateToken(subject: String, tokenType: TokenType, claims: Map<String, String> = emptyMap()): Pair<String, Long>` | Returns `(tokenString, expiresAtEpochMillis)` — the signed token and when it expires (epoch milliseconds) |
 | `TokenProvider.saveToken` | `suspend fun saveToken(token: String, subject: String, tokenType: TokenType, expireDate: Long, sqlClient: SqlClient, ipAddress: String? = null, userAgent: String? = null)` | Persist it |
 | `TokenProvider.isTokenValid` | `suspend fun isTokenValid(token: String, tokenType: TokenType, sqlClient: SqlClient): Boolean` | — |
 | `TokenProvider.invalidateToken` | `suspend fun invalidateToken(token: String, sqlClient: SqlClient)` | Revoke one |
@@ -484,8 +485,8 @@ A **token** here is a signed string in **JWT** format: anyone can read what's in
 |---|---|
 | `sendNotification(…)` | One user |
 | `sendPanelNotification(…)` | One user's panel |
-| `sendNotificationToAll(…)` | Every user |
-| `sendPanelNotificationToAll(…)` | Every user's panel |
+| `sendNotificationToAll(…)` | A list of users (`userIdList`) |
+| `sendPanelNotificationToAll(…)` | The panels of a list of users (`userIdList`) |
 | `sendNotificationToAllAdmins(…)` | All admins |
 | `sendNotificationToAllWithPermission(…)` | Everyone holding a permission |
 
@@ -532,16 +533,17 @@ Record admin actions so they appear on the panel's Activity feed. Subclass `Plug
 Inside an endpoint, wire it up like this — grab the SQL client, grab the host `DatabaseManager`, then add your log:
 
 ```kotlin
+// `plugin` is your plugin class, taken as a constructor parameter of the endpoint
 val sqlClient = getSqlClient()
-val databaseManager = applicationContext.getBean(DatabaseManager::class.java)
-databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, pluginId), sqlClient)
+val databaseManager = plugin.applicationContext.getBean(DatabaseManager::class.java)
+databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, username, plugin.pluginId, message), sqlClient)
 ```
 
 ::: tip Checkpoint
-The entry now shows up on the panel's **Activity** page.
+The entry now shows up on the panel's **Logs** page (*Activity Logs*).
 :::
 
-The panel renders each entry with a locale key derived from the class name (minus `Log`, `UPPER_SNAKE`) under an `activity-logs` object — `CreatedShoutLog` → `activity-logs.CREATED_SHOUT`. Each key in the `details` `JsonObject` you pass is substituted into the matching `{{placeholder}}` in that locale string. See [Localization](/addon/localization/).
+The panel renders each entry with a locale key derived from the class name (minus `Log`, `UPPER_SNAKE`) under an `activity-logs` object — `CreatedShoutLog` → `activity-logs.CREATED_SHOUT`. Each key in the `details` `JsonObject` you pass is substituted into the matching `{placeholder}` in that locale string. See [Localization](/addon/localization/).
 
 ## 13. Host beans
 

@@ -86,7 +86,7 @@ export default class extends PanoPlugin {
 
 | Экспорт | Назначение |
 |---|---|
-| `viewComponent(importer)` | **Правило: всегда пишите `viewComponent(() => import('./X.svelte'))`, когда передаёте компонент любому вызову `register`** — никогда голый `() => import(...)` и никогда сам компонент. (Он присоединяет правильные `mount`/`hydrate`/`unmount` общей среды выполнения для хоста; эта сантехника — причина, почему обёртка обязательна.) |
+| `viewComponent(importer)` | **Правило: всегда пишите `viewComponent(() => import('./X.svelte'))`, когда передаёте компонент любому вызову `register`** — никогда голый `() => import(...)` и никогда сам компонент. Это форма для панели; в теме регистрация вместо этого называет представление (`view: '<ns>:<Name>'`). (Он присоединяет правильные `mount`/`hydrate`/`unmount` общей среды выполнения для хоста; эта сантехника — причина, почему обёртка обязательна.) |
 | `getPanoContext()` | Возвращает текущий контекст хоста Pano. Можете игнорировать это, если только вам не нужен сырой контекст хоста из кода, который не является методом `PanoPlugin` (у обычного метода вместо этого есть `this.context`) — редко нужно. |
 
 ::: warning `onContextUpdate` не вызывается
@@ -108,7 +108,8 @@ export default class extends PanoPlugin {
 | Опция | Тип | Значение |
 |---|---|---|
 | `path` | string | Маршрут (смотрите формы пути ниже). |
-| `component` | `viewComponent(...)` | Компонент страницы. |
+| `component` | `viewComponent(...)` | **Панель.** Компонент страницы. |
+| `view` | string | **Тема.** Id представления вашего плагина (`shoutbox:ShoutboxPage`) вместо `component`. На стороне сайта элемент с `component` и без `view` отбрасывается с ошибкой. |
 | `systemLayout` | string | Обернуть вашу страницу в один из встроенных макетов хоста (имена перечислены ниже). Используйте `MainLayout` для обычной страницы; остальные имена соответствуют конкретным разделам хоста (например, `ProfileLayout`, `SettingsLayout`). |
 | `layout` | `viewComponent(...)` | Использовать собственный компонент макета вместо встроенного. |
 | `resetLayout` | boolean | Отрисовать **без** шапки, боковой панели или футера хоста — ваш компонент получает всю страницу. («Chrome» — общее слово для этого окружающего UI хоста.) |
@@ -136,7 +137,7 @@ export default class extends PanoPlugin {
 **Имена `systemLayout` — панель:** `AddonDetailLayout`, `AddonsLayout`, `AppLayout`, `AuthShell`, `MainLayout`, `MigrationLayout`, `PermissionsLayout`, `PlayerDetailLayout`, `PlayersLayout`, `PostsLayout`, `ServerDetailLayout`, `ServerSettingsLayout`, `ServersLayout`, `SettingsLayout`, `TicketsLayout`, `TranslationsLayout`, `ViewLayout`.
 
 ::: tip Контрольная точка — зарегистрировалась ли моя страница?
-После вызова `pano.ui.page.register({ path: '/your-path', component })` пересоберите ваше дополнение и перезагрузите сайт. Посещение `/your-path` теперь должно показывать ваш компонент. Ничего там нет? Проверьте, что `component` обёрнут в `viewComponent(() => import('./X.svelte'))` и что `register` выполнился внутри `onLoad()`.
+После вызова `pano.ui.page.register({ path: '/your-path', component })` в ветке панели пересоберите ваше дополнение и перезагрузите панель. Посещение `/panel/your-path` теперь должно показывать ваш компонент. (На стороне сайта передайте `view: '<ns>:<Name>'` вместо `component` и откройте `/your-path`.) Ничего там нет? Проверьте, что `component` обёрнут в `viewComponent(() => import('./X.svelte'))` и что `register` выполнился внутри `onLoad()`.
 :::
 
 ## 3. Хуки — `pano.ui.hook` (тема + панель)
@@ -154,7 +155,8 @@ export default class extends PanoPlugin {
 | Опция | Тип | Значение |
 |---|---|---|
 | `name` | string | Имя хука (таблицы ниже). |
-| `component` | `viewComponent(...)` | Компонент для монтирования. |
+| `component` | `viewComponent(...)` | **Панель.** Компонент для монтирования. |
+| `view` | string | **Тема.** Id представления вашего плагина (`shoutbox:ShoutboxPage`) вместо `component`. На стороне сайта элемент с `component` и без `view` отбрасывается с ошибкой. |
 | `permission` | string | Отрисовывать только для пользователей, держащих этот узел разрешения. |
 | `skipLoad` | boolean | Не выполнять `load()` компонента во время загрузки страницы. Используйте это, когда ваш хук получает собственные данные при монтировании, так что выполнение при загрузке страницы было бы потрачено впустую или упало бы. |
 | `invisible` | boolean | Зарегистрировать, но начать скрытым. |
@@ -237,7 +239,7 @@ Props `post`, `playerData`, `addon`, `player` и `category` выше — это 
 :::
 
 ::: tip Контрольная точка — отрисовался ли мой хук?
-После `pano.ui.hook.register({ name: 'theme:top', component })` пересоберите и перезагрузите страницу темы. Ваш компонент должен появиться в месте этого хука. Если нет, подтвердите, что вы использовали реальное имя хука из таблиц выше и обернули компонент в `viewComponent(...)`.
+После `pano.ui.hook.register({ name: 'theme:top', view: 'shoutbox:ShoutboxWidget' })` пересоберите и перезагрузите страницу темы. Ваше представление должно появиться в месте этого хука. Если нет, подтвердите, что вы использовали реальное имя хука из таблиц выше и что id представления существует (в панели: что компонент обёрнут в `viewComponent(...)`).
 :::
 
 ## 4. Слоты представлений — `pano.ui.view` (тема + панель)
@@ -260,7 +262,7 @@ Props `post`, `playerData`, `addon`, `player` и `category` выше — это 
 
 | Вызов | Назначение |
 |---|---|
-| `pano.ui.view.register({ viewId, id, component, priority })` | Добавить компонент в слот `viewId`. `priority` по умолчанию `10`; повторная регистрация того же `id` заменяет его. |
+| `pano.ui.view.register({ viewId, id, view, priority })` | Добавить представление в слот `viewId` (в панели: `component` вместо `view`). `priority` по умолчанию `10`; повторная регистрация того же `id` заменяет его. |
 | `pano.ui.view.hide(viewId, id)` | Скрыть элемент, не удаляя его. |
 | `pano.ui.view.show(viewId, id)` | Снова показать его. |
 | `pano.ui.view.move(viewId, id, priority)` | Изменить приоритет элемента. |
@@ -270,7 +272,7 @@ Props `post`, `playerData`, `addon`, `player` и `category` выше — это 
 
 `pano.ui.sidebar.*` — **псевдоним** того же реестра с теми же методами, за исключением того, что ключ контейнера — `sidebarId`, а не `viewId` (и `onLoad` срабатывает `theme:sidebar:<id>:load`).
 
-**Форма элемента слота:** `{ id, component, priority, props? }`. Более высокий `priority` отрисовывается первым. **Нет** поля `permission` на элемент — элементы слота не фильтруются по разрешениям. Чтобы ограничить один, проверьте разрешение **внутри вашего компонента** — `import { hasPermission } from '@panomc/sdk/utils/auth'` — и не отрисовывайте ничего, если оно не проходит. (Хуки и ссылки навигации *поддерживают* опцию `permission`.)
+**Форма элемента слота:** `{ id, view, priority, props? }` (в панели `component` вместо `view`). Более высокий `priority` отрисовывается первым. **Нет** поля `permission` на элемент — элементы слота не фильтруются по разрешениям. Чтобы ограничить один, проверьте разрешение **внутри вашего компонента** — `import { hasPermission } from '@panomc/sdk/utils/auth'` — и не отрисовывайте ничего, если оно не проходит. (Хуки и ссылки навигации *поддерживают* опцию `permission`.)
 
 ### ID слотов темы
 
@@ -445,18 +447,21 @@ pano.ui.nav.site.editNavLinks(async (links) => {
 | Спецификатор | Экспорты |
 |---|---|
 | `@panomc/sdk` | `PanoPlugin`, `viewComponent`, `getPanoContext` |
-| `@panomc/sdk/utils/api` | `ApiUtil` (по умолчанию), `NETWORK_ERROR`, `networkErrorBody`, `buildQueryParams` |
+| `@panomc/sdk/utils/api` | `ApiUtil` (по умолчанию), `NETWORK_ERROR`, `networkErrorBody`, `buildQueryParams`, `createPluginApi` |
 | `@panomc/sdk/utils/auth` | `hasPermission(permission, user)` |
 | `@panomc/sdk/utils/tooltip` | `tooltip` (также по умолчанию) |
 | `@panomc/sdk/utils/text` | `copy` |
 | `@panomc/sdk/utils/language` | `_`, `languageLoading`, `currentLanguage`, `Languages`, `init`, `getAcceptedLanguage`, `loadLanguage`, `changeLanguage`, `getLanguageByLocale` |
 | `@panomc/sdk/utils/component` | `viewComponent` |
 | `@panomc/sdk/toasts` | `showToast`, `limitTitle` |
-| `@panomc/sdk/components/theme` | `PlayerHead`, `NoContent`, `Date`, `Toast`, `PageTitle`, `PageActions`, `Pagination` |
+| `@panomc/sdk/components/theme` | `PlayerHead`, `NoContent`, `Date`, `Toast`, `PageTitle`, `PageActions`, `Pagination`, `PluginBlock`, `PluginSlot` |
 | `@panomc/sdk/components/panel` | `NoContent`, `Editor`, `DragAndDropZone`, `Date`, `Toast`, `PageLoading`, `PageActions`, `PageLoader`, `PageNavItem`, `PageNav`, `Pagination`, `CardFilters`, `CardFiltersItem`, `CardHeader`, `SearchInput` |
 | `@panomc/sdk/variables` | `API_URL`, `UI_URL`, `PANEL_URL`, `SETUP_URL`, `PANO_WEBSITE_URL`, `PANO_WEBSITE_API_URL`, `PRERELEASE`, `COOKIE_PREFIX`, `CSRF_TOKEN_COOKIE_NAME`, `JWT_COOKIE_NAME`, `CSRF_HEADER`, `updateApiUrl`, `updatePanoWebsiteUrl`, `updatePanoWebsiteApiUrl` |
 | `@panomc/sdk/svelte` | `page`, `base`, `navigating`, `browser`, `goto`, `invalidate`, `invalidateAll`, `error`, `redirect` |
 | `@panomc/sdk/internal` | `setPanoContext`, `getPanoContext` |
+| `@panomc/sdk/utils/route` | `route` |
+| `@panomc/sdk/controllers` | `plugin`, `useController`, `reactive` |
+| `@panomc/sdk/views` | `createViewProxy` |
 
 `viewComponent` появляется дважды — в `@panomc/sdk` и `@panomc/sdk/utils/component`. Это **та же функция**; импортируйте из любого (`@panomc/sdk` — обычный путь).
 
@@ -539,7 +544,7 @@ export async function load(event) {
 
 Разрешённые голые спецификаторы — это ровно:
 
-- Каждый спецификатор `@panomc/sdk` из таблицы §9.
+- Каждый спецификатор `@panomc/sdk` из таблицы §9, а также `@panomc/sdk/plugin-api` (§11), который ваша сборка разрешает сама.
 - Svelte: `svelte`, `svelte/store`, `svelte/transition`, `svelte/easing`, `svelte/motion`, `svelte/animate`, `svelte/legacy`, `svelte/events`, `svelte/attachments`, `svelte/reactivity`, `svelte/reactivity/window` и `svelte-i18n`.
 - **Фиксированный** набор внутренностей Svelte *(продвинутое — компилятор вставляет эти импорты в ваш собранный код за вас; вы никогда не пишете их вручную)*: `svelte/internal`, `svelte/internal/client`, `svelte/internal/disclose-version`, `svelte/internal/flags/legacy`, `svelte/internal/flags/async` и `svelte/internal/flags/tracing`. Это точный список, **не** шаблон `svelte/internal/*`; любой другой подпуть `svelte/internal/...` не разрешается.
 
@@ -557,8 +562,8 @@ SDK контролирует, с какой версией Svelte все ком�
 
 | Класс | Объявлено | Отдаётся по адресу |
 |---|---|---|
-| `Api`, `LoggedInApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/hello` |
-| `PanelApi` | `Path("/hello", GET)` | `/api/plugins/<pluginId>/panel/hello` |
+| `Api`, `LoggedInApi` | `Path("/hello", RouteType.GET)` | `/api/plugins/<pluginId>/hello` |
+| `PanelApi` | `Path("/hello", RouteType.GET)` | `/api/plugins/<pluginId>/panel/hello` |
 | ядро (не ваше) | `/posts` | `/api/v1/posts` |
 
 Объявленный путь, начинающийся с `/api` или `/panel`, пустой или начинающийся с параметра либо `_` (`/:id`), останавливает плагин при старте с сообщением, называющим класс и исправление. Каждый ответ несёт заголовок `Pano-Api-Level`.

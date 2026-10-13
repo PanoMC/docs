@@ -8,13 +8,13 @@ Pano uses AuthMe's **CUSTOM hash** type, which allows Pano to validate passwords
 
 ### Backup System
 
-Before modifying any AuthMe configuration, Pano **automatically creates a backup** of your `config.yml` file. You can find backups in:
+Before modifying any AuthMe configuration, Pano **automatically saves the previous values** of the settings it changes. You can find them in:
 
 ```
 plugins/Pano/authme-backup.yml
 ```
 
-If something goes wrong, you can always restore your previous configuration.
+Pano puts these values back by itself when the integration is turned off or the server is disconnected, and then deletes the file. Passwords are not part of it: AuthMe holds no real password hashes while Pano manages them, so after turning the integration off players have to register in AuthMe again.
 
 ### Plugin Conflicts
 
@@ -33,8 +33,8 @@ If you experience issues, try disabling conflicting plugins one by one to identi
 
 **Solutions:**
 1. Make sure AuthMeReloaded is installed and running (check `/plugins`)
-2. Verify the Pano MC Plugin is connected to Pano (check Panel → Server Status)
-3. Ensure the integration checkbox is enabled in Panel → Server Settings → Game Integration
+2. Verify the Pano MC Plugin is connected to Pano (the server's **Overview** page in the panel, or `/pano status` in game)
+3. Ensure **Auth Integration** is on in the server's **Settings → Game Integration**
 4. Restart your Minecraft server after enabling the integration
 5. Check server logs for any errors
 
@@ -43,7 +43,7 @@ If you experience issues, try disabling conflicting plugins one by one to identi
 **Symptoms:** AuthMe config values change back after restart
 
 **Solutions:**
-1. Do not manually edit `passwordHash` or `registration.type` in AuthMe's config
+1. Do not manually edit the five settings Pano manages (see the table on the [AuthMe page](../)) — Pano sets them again on every connect and `/authme reload`
 2. Let Pano manage these settings automatically
 3. If you need to change other AuthMe settings, edit them through AuthMe's config and reload
 
@@ -74,7 +74,7 @@ When reporting an issue, please include:
 ## Related Documentation
 
 - [Game Integrations](../)
-- [Installing Pano](../../installation/)
-- [Configuration Guide](../../configuration/)
-- [FAQ](../../FAQ/)
-- [Advanced Topics](../../advanced/)
+- [Installing Pano](../../../installation/)
+- [Configuration Guide](../../../configuration/)
+- [FAQ](../../../FAQ/)
+- [Advanced Topics](../../../advanced/)

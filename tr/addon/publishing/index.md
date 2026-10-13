@@ -55,7 +55,7 @@ Yerelde `<version>` her zaman `local-build`'dir (böylece dosya `pano-plugin-sho
 - **Arayüzü hiç derlemediyseniz:** jar **hiç arayüz olmadan** gönderilir — eklentiniz panel veya tema ekranları olmadan yüklenir.
 - **Eski bir tam derleme geride bir `plugin-ui.zip` bıraktıysa:** jar sessizce o **bayat** arayüzü gömer, böylece fark etmeden güncel olmayan bir arayüz gönderirsiniz.
 
-Hiçbir eski arayüz zip'inin yeniden kullanılmadığından emin olmak istiyorsanız, `./gradlew clean build` çalıştırın (`clean` görevi önce önceki derleme çıktısını siler). `-Pnoui` yalnızca hızlı yalnızca-backend dev döngüsü içindir (bkz. [Başlangıç](/tr/addon/getting-started/#dev-dongusu)).
+Hiçbir eski arayüz zip'inin yeniden kullanılmadığından emin olmak istiyorsanız, `./gradlew clean build` çalıştırın (`clean` görevi önce önceki derleme çıktısını siler). `-Pnoui` yalnızca hızlı yalnızca-backend dev döngüsü içindir (bkz. [Başlangıç](/tr/addon/getting-started/#the-dev-loop)).
 :::
 
 Jar tamamen kendi kendine yeter: Kotlin backend, gömülü arayüz paketi, diller ve `logo.png` hepsi içinde yaşar. Gönderilecek başka bir şey yoktur.
@@ -70,13 +70,13 @@ Bu projede dört farklı ad benzer geliyor ama farklı şeyler ifade ediyor. Ayr
 
 | Ad | Yaşadığı yer | Onu kim ayarlar | Ne anlama gelir |
 |---|---|---|---|
-| `version` | `gradle.properties` | CI, yayın zamanında | **Eklentinizin kendi sürümü** (`1.1.0` gibi). Çalışan kopyanızda `local-build` kalır; onu asla elle düzenlemeyin. |
+| `version` | `-Pversion` derleme özelliği | CI, yayın zamanında | **Eklentinizin kendi sürümü** (`1.1.0` gibi). `-Pversion` verilmezse derleme `local-build` kullanır (`build.gradle.kts`'teki varsayılan); onu asla elle ayarlamayın. |
 | `pluginPanoVersion` | `gradle.properties` | Siz (onu `local-build`'de bırakın) | Jar manifestine kopyalanır. CI ona **dokunmaz**. |
 | `pano-version` | jar'ın manifesti | doğrudan `pluginPanoVersion`'dan gelir | Yalnızca derlenen jar'ın içindeki `pluginPanoVersion`'ın gömülü kopyası. |
 | `panoVersion` | `.releaserc.json` | Siz | **Pazar Yeri** ilanınızda gösterilen Pano platform sürümü (aşağıdaki yapılandırma dosyasında ayarlanır). |
 
 ::: warning Sürümleri elle düzenlemeyin
-`gradle.properties`'teki hem `version`'ı hem de `pluginPanoVersion`'ı `local-build`'de bırakın. Yayın zamanında CI, commit geçmişinizden gerçek `version`'ı enjekte eder (`-Pversion` aracılığıyla — Gradle'ın komut satırından bir değeri kabul etme yolu, `-Pversion=1.1.0`). Onu elle artırmak veya etiketi (semantic-release'in her yayın için oluşturduğu git etiketi) düzenlemek otomasyonu bozar. CI `pluginPanoVersion`'ı enjekte **etmez**; manifestin `pano-version` özniteliği `local-build` kalır. *Pazar Yeri'nde duyurulan* Pano sürümü ayrı bir değerdir, `.releaserc.json`'daki `panoVersion` seçeneğiyle ayarlanır (aşağıda). Commit mesajlarınızın sürümü sürmesine izin verin. Ayrıntılar için [Manifest Yapılandırması](/tr/addon/manifest/)'na bakın.
+`gradle.properties`'te bir `version` anahtarı yoktur: `-Pversion` olmadan yapılan derleme `local-build` olur. `gradle.properties`'teki `pluginPanoVersion`'ı da `local-build`'de bırakın. Yayın zamanında CI, commit geçmişinizden gerçek `version`'ı enjekte eder (`-Pversion` aracılığıyla — Gradle'ın komut satırından bir değeri kabul etme yolu, `-Pversion=1.1.0`). Onu elle artırmak veya etiketi (semantic-release'in her yayın için oluşturduğu git etiketi) düzenlemek otomasyonu bozar. CI `pluginPanoVersion`'ı enjekte **etmez**; manifestin `pano-version` özniteliği `local-build` kalır. *Pazar Yeri'nde duyurulan* Pano sürümü ayrı bir değerdir, `.releaserc.json`'daki `panoVersion` seçeneğiyle ayarlanır (aşağıda). Commit mesajlarınızın sürümü sürmesine izin verin. Ayrıntılar için [Manifest Yapılandırması](/tr/addon/manifest/)'na bakın.
 :::
 
 ## Yayın kanalları
@@ -240,7 +240,7 @@ Eklentinizin Pazar Yeri `resourceId`'si **tam olarak sizin `pluginId`'nizdir** �
 
 ### 2. Bir API jetonu oluşturun
 
-1. panomc.com'da, **Profil → Ayarlar → API Jetonları**'nı açın ve **Oluştur**'a tıklayın.
+1. panomc.com'da, **Profil → Güvenlik → API Jetonları**'nı açın ve **Oluştur**'a tıklayın.
 2. Jetonu hemen kopyalayın — oluşturmadan hemen sonraki modalda **yalnızca bir kez** gösterilir.
 3. GitHub deponuzda, **Settings → Secrets and variables → Actions**'a gidin ve jetonu `tokenVar`'ınızla eşleşecek şekilde adlandırılmış bir **depo gizli anahtarı** (yalnızca Actions çalıştırmalarınızın okuyabileceği şifreli bir değer) olarak ekleyin:
    - `main` (üretim) kanalı için `PANO_PROD_TOKEN` — önce kurulacak olan.
@@ -296,9 +296,9 @@ Kullanıcının gördüğü fark: Pazar Yeri'nden indirilen eklentiler **doğrul
 
 ## Premium ilanlar
 
-Eklentinizi satmak aynı yayın akışıyla, artı bir derleme-zamanı lisans anahtarı ve kodunuza gömülü bir çalışma-zamanı lisans kontrolüyle çalışır. Tam adım adım kılavuz — anahtarı derleme zamanında gömme, çalışma-zamanı kontrolünü ekleme ve onu CI'a bağlama — **[Premium Eklentiler ve Lisanslama](/tr/addon/premium/)**'da yaşar. Doğrudan bu sayfanın üzerine inşa eder; kullandığı ekstra lisans bayrakları (`-PlicenseServer`, `-PpanoLicensePublicKey` ve `PANO_LICENSE_PUBLIC_KEY` ortam değişkeni) ayrıca [Manifest Yapılandırması](/tr/addon/manifest/) altında özetlenmiştir.
+Eklentinizi satmak aynı yayın akışıyla, artı bir derleme-zamanı lisans anahtarı ve kodunuza gömülü bir çalışma-zamanı lisans kontrolüyle çalışır. Tam adım adım kılavuz — anahtarı derleme zamanında gömme, çalışma-zamanı kontrolünü ekleme ve onu CI'a bağlama — **[Premium Eklentiler ve Lisanslama](/tr/addon/premium/)**'da yaşar. Doğrudan bu sayfanın üzerine inşa eder; kullandığı ekstra lisans bayrakları (`-PlicenseServer`, `-PpanoLicensePublicKey` ve `PANO_LICENSE_SERVER` / `PANO_LICENSE_PUBLIC_KEY` ortam değişkenleri) ayrıca [Manifest Yapılandırması](/tr/addon/manifest/) altında özetlenmiştir.
 
 ## Sırada ne var
 
-- **[Manifest Yapılandırması](/tr/addon/manifest/)** — CI'ın yayın zamanında enjekte ettiği `gradle.properties` alanları.
+- **[Manifest Yapılandırması](/tr/addon/manifest/)** — derlemenin jar manifestine yazdığı `gradle.properties` alanları.
 - **[Çeviriler](/tr/addon/localization/)** — yayınlamadan önce eklentinizi birden fazla dilde gönderin.

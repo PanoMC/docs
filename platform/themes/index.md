@@ -57,7 +57,7 @@ Themes let you:
 Pano loads themes as independent **UI applications** from its `themes/` directory.  
 Each theme has a manifest file called **`manifest.json`** that contains its metadata (id, version, author,
 compatibility, etc.).  
-This file is automatically created and managed by Pano — **do not edit it manually.**
+It is written by the theme's author and ships inside the theme package — **do not edit it on an installed theme.**
 
 When Pano starts:
 
@@ -101,12 +101,12 @@ You can install themes in **two ways**:
 
 ### 2. From the Pano Store
 
-1. In the **Install Theme** modal, click **Browse Store**.
+1. In the **Install Theme** modal, click **Install From Pano Store**.
 2. Choose a theme — free or premium.
 3. Click **Install** and let Pano handle everything automatically.
 4. The theme will appear automatically after installation.
 
-> The Marketplace requires a connected [Pano Account](./advanced/connect-pano-account.md).
+> The Marketplace requires a connected [Pano Account](../configuration/services/).
 
 ## Activating and Managing Themes
 
@@ -118,8 +118,8 @@ In that case, restarting Pano is recommended.
 To manage your themes:
 
 1. Go to **Panel → View → Themes**.
-2. Select a theme.
-3. Click **Start** or **Stop** to activate or deactivate it.
+2. Open a theme.
+3. Click **Activate** to make it the active theme. On the active theme, **Stop** and **Start** stop and start its process.
 
 > Stopping the active theme disables the website temporarily.  
 > Always ensure a valid theme is active before stopping another.
@@ -156,7 +156,7 @@ When deleting:
 To delete a custom theme:
 
 1. Go to **Panel → View → Themes → [Theme Details]**.
-2. Click **Delete**.
+2. Click **Remove** (the trash icon).
 3. Confirm your action.
 
 ## Directory Structure
@@ -186,16 +186,16 @@ Example Pano directory layout with themes:
 | Action              | Location                                               | Description                        |
 |---------------------|--------------------------------------------------------|------------------------------------|
 | **Install (local)** | `Panel → View → Themes → Install Theme`                | Drag & drop or upload              |
-| **Install (store)** | `Panel → View → Themes → Install Theme → Browse Store` | Download directly from marketplace |
-| **Activate / Stop** | `Panel → View → Themes → Start/Stop`                   | Enable or disable the theme        |
+| **Install (store)** | `Panel → View → Themes → Install Theme → Install From Pano Store` | Download directly from marketplace |
+| **Activate / Stop** | `Panel → View → Themes → Theme Details → Activate, Start/Stop` | Switch the active theme, stop or start it |
 | **Customize**       | `Panel → View → Theme Settings`                        | Change colors, layout, fonts       |
-| **Delete**          | `Panel → View → Themes → Theme Details → Delete`       | Remove a custom theme safely       |
+| **Remove**          | `Panel → View → Themes → Theme Details → Remove`       | Remove a custom theme safely       |
 
 ## Advanced Notes
 
 - Only **valid themes** appear in the list; broken or incomplete themes are ignored.
 - Each theme is packaged as a **SvelteKit build bundle (.zip)**.
-- Each theme has a **`manifest.json`**, automatically generated — **do not edit manually.**
+- Each theme has a **`manifest.json`**, written by its author and shipped in the package — **do not edit it on an installed theme.**
 - Some addons depend on certain themes, and vice versa.
 - Some themes expose or override default APIs for advanced functionality.
 - Built-in UI applications (`panel-ui`, `setup-ui`, `vanilla-theme`) are **protected** and cannot be changed.

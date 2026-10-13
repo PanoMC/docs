@@ -86,12 +86,13 @@ Aşağıdaki satırlardan üçü Spring **bağlamlarıdır** — bean kutuları.
 
 ### Yaşam döngüsü kancaları
 
-Hepsi varsayılan boş gövdeli `open suspend fun`'dır (`open` = onu geçersiz kılabilirsiniz; *boş* = onu geçersiz kılana kadar hiçbir şey yapmaz; `suspend` = en üstteki kutuya bakın). Yalnızca ihtiyacınız olanı geçersiz kılın. Bu sırayla çalışırlar:
+Hepsi varsayılan boş gövdeli `open suspend fun`'dır (`open` = onu geçersiz kılabilirsiniz; *boş* = onu geçersiz kılana kadar hiçbir şey yapmaz; `suspend` = en üstteki kutuya bakın). Yalnızca ihtiyacınız olanı geçersiz kılın. Hangilerinin çalışacağı eklentiye ne olduğuna bağlıdır:
 
 ```
-jar load → onCreate() → onEnable() → onStart()
-        …running…
-onStop() → onDisable() → onUninstall()
+server boot:    jar load → onCreate() → onStart() → …running… → onStop()
+panel Enable:   onEnable() → onStart()
+panel Disable:  onStop() → onDisable()
+panel Delete:   onUninstall() → onStop()
 ```
 
 `verifyLicense()` bu dizinin **parçası değildir** — talep üzerine çalışır, bir site yöneticisi panelde *Lisansı yenile*'ye tıkladığında (yalnızca premium eklentiler).
@@ -99,11 +100,11 @@ onStop() → onDisable() → onUninstall()
 | Kanca | Ne zaman çalışır |
 |---|---|
 | `onCreate()` | Eklenti nesnesi inşa edildiğinde — çalışan ilk kanca (enjekte edilen özellikleriniz bu noktada zaten ayarlanmış) |
-| `onEnable()` | Eklenti etkinleştirildiğinde — sunucu açılışında veya bir yönetici panelde *Etkinleştir*'e tıkladığında |
+| `onEnable()` | Bir yönetici panelde *Etkinleştir*'e tıkladığında veya eklenti yeni kurulduğunda. Normal bir sunucu açılışında çağrılmaz |
 | `onStart()` | Eklenti başladığında — kurulum kodunuzu buraya koyun. Önce `setupManager.isSetupDone()`'ı kontrol edin ve `false` ise erken dönün (§13'e bakın), böylece site kurulmadan önce veritabanına asla dokunmazsınız |
-| `onStop()` | Eklenti durduruluyor — zamanlayıcıları/işleri burada iptal edin |
-| `onDisable()` | Eklenti devre dışı bırakıldı, verisi tutuldu — sunucu kapanışında veya bir yönetici *Devre dışı bırak*'a tıkladığında |
-| `onUninstall()` | Eklenti **silindi** (yönetici *Sil*'e tıkladı) — tablolarınızı burada düşürün |
+| `onStop()` | Eklenti durduruluyor (sunucu kapanışı, *Devre dışı bırak*, *Sil*) — zamanlayıcıları/işleri burada iptal edin |
+| `onDisable()` | Bir yönetici *Devre dışı bırak*'a tıkladı; eklentinin verisi tutulur. Sunucu kapanışında çağrılmaz |
+| `onUninstall()` | Eklenti **silindi** (yönetici *Sil*'e tıkladı) — tablolarınızı burada düşürün. Eklenti durdurulmadan önce çalışır |
 | `verifyLicense()` | Panel "Lisansı yenile" düğmesi (premium eklentiler) |
 
 ### Metotlar
@@ -112,8 +113,8 @@ onStop() → onDisable() → onUninstall()
 |---|---|---|
 | `registerSingletonGlobal` | `(bean: Any)` | Bir bean'i diğer eklentilerle paylaş |
 | `unRegisterGlobal` | `(bean: Any)` | Paylaşılan bir bean'i kaldır |
-| `register` | `(listener: PluginEventListener)` | Dinamik bir olay dinleyicisi kaydet |
-| `unRegister` | `(listener: PluginEventListener)` | Dinamik bir olay dinleyicisini kaldır |
+| `register` | `(eventListener: PluginEventListener)` | Dinamik bir olay dinleyicisi kaydet |
+| `unRegister` | `(eventListener: PluginEventListener)` | Dinamik bir olay dinleyicisini kaldır |
 | `registerCommands` | `(obj: Any)` | Bir nesnedeki `@Command` metotlarını kaydet (`@Command` = bir konsol komutu ekleyen bir açıklama — §11'e bakın) |
 | `unRegisterCommands` | `(obj: Any)` | Onları kaldır |
 | `getLicenseManager` | `(): LicenseManager` | Host lisans servisi (premium) |
@@ -195,7 +196,6 @@ class GetShoutsAPI : Api() {
 | `Route.paths` | `val paths: List<Path>` | Bu rotanın işlediği yollar (gerekli) |
 | `Route.order` | `open val order = 1` | İki rota aynı URL ile eşleşebiliyorsa, daha düşük `order`'a sahip olan önce denenir |
 | `Route.getValidationHandler` | `(schemaRepository): ValidationHandler?` | İstek gövdesi/sorgu doğrulaması |
-| `Route.corsHandler` | `open fun corsHandler(): Handler?` | CORS'u geçersiz kıl (varsayılanlar sağlanır) |
 | `Route.bodyHandler` | `open fun bodyHandler(): Handler?` | Gövde ayrıştırmayı geçersiz kıl (yüklemelere bakın) |
 
 ### Temel sınıflar — kimin çağırabileceğine göre seçin
@@ -228,9 +228,9 @@ Bir `Path` içine asla `/api`, `/v1`, `/panel` ya da eklenti kimliğini yazmayı
 
 | Şey | İmza | Amaç |
 |---|---|---|
-| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Başarı → `{…map…}` |
+| `Successful` | `Successful(responseMap: Map<String, Any?> = mapOf())` | Başarı → `{…map…}` |
 | `InvalidFields` | `InvalidFields(mapOf("email" to "EXISTS"))` | Alan düzeyinde hatalar → `{"error":{"code":"INVALID_FIELDS","fields":{"email":"EXISTS"}}}` |
-| `Error` alt sınıfları | `throw NotFound()` / `BadRequest()` / … | `com.panomc.platform.error`'da ~100 önceden tanımlı (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
+| `Error` alt sınıfları | `throw NotFound()` / `BadRequest()` / … | `com.panomc.platform.error`'da 130'dan fazla önceden tanımlı (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
 | Özel hata | `class SlugTaken : Error("SLUG_TAKEN", 409)` | Kodu (`^[A-Z][A-Z0-9_]*$`) ve durumu siz bildirirsiniz; istemci `{"error":{"code":"SLUG_TAKEN"}}` alır |
 
 Bir isteği başarısız kılmak için bir `Error` (Pano'nun `com.panomc.platform.model.Error`'ı, Kotlin'in yerleşik `Error`'ı **değil**) **fırlatırsınız** — onu döndürmezsiniz. Doğrulama hataları sizin için `BadRequest`'e dönüştürülür.
@@ -257,7 +257,7 @@ override fun getValidationHandler(schemaRepository: SchemaRepository): Validatio
 
 Her veritabanı tablosu **üç küçük dosya** gerektirir (artı isteğe bağlı migration'lar):
 
-- `Shout.kt` — satırın kendisi, `DBEntity`'yi genişleten bir data class.
+- `Shout.kt` — satırın kendisi, `DBEntity`'yi genişleten bir sınıf.
 - `ShoutDao.kt` — sorguları *bildiren* bir soyut sınıf. **Endpoint'lere enjekte ettiğiniz tür budur.**
 - `ShoutDaoImpl.kt` — gerçek SQL'i tutan `@Dao` sınıfı.
 
@@ -275,7 +275,7 @@ Bu ayrım, endpoint'lerinizin düz `ShoutDao` türüne bağımlı olmasına izin
 | `Dao.fields` | `open val fields: List<String>` | Sorgu oluşturma için sütun adları |
 | `Dao.tableName` | `protected val tableName` | Entity sınıfı adınızdan otomatik türetilir (`ShoutItem` → `shout_item`); salt okunur — onu ayarlamazsınız |
 | `Dao.getTablePrefix` | `fun getTablePrefix(): String` | Örneğin tablo öneki |
-| `Row.toEntity()` | uzantı | Bir satır → modeliniz (Gson aracılığıyla). `com.panomc.platform.db`'den uzantı fonksiyonu — bir sonuç satırında `row.toEntity()` çağırın |
+| `Row.toEntity()` | uzantı | Bir satır → modeliniz (Gson aracılığıyla). `Dao`'nun içinde tanımlıdır, bu yüzden yalnızca DAO sınıfınızın içinde çalışır — bir sonuç satırında `row.toEntity()` çağırın |
 | `RowSet.toEntities()` | uzantı | Birçok satır → `List<T>`. Aynı fikir: bir sorgu sonucunda `rows.toEntities()` çağırın |
 | `List<String>.toTableQuery()` | uzantı | Ters tırnaklı sütun listesi |
 | `DatabaseMigration` | `DatabaseMigration(from: Int, to: Int, info: String)` | Bir şema adımı; `val handlers: List<suspend (SqlClient) -> Unit>`'i geçersiz kılın |
@@ -312,7 +312,7 @@ class ShoutMigration1to2(
 `pluginDatabaseManager.uninstall(this)`, **her DAO'nun `uninstall()`'ını** çalıştırır — bu panel **Sil** eylemidir, **Devre dışı bırak** değil. Devre dışı bırakmak veriyi tutar.
 :::
 
-Tam, derlenen bir sorgu için — bir DAO içine yazılmış gerçek bir `SELECT` ve `INSERT` — eğitimin [Veritabanı ve Migration'lar](/tr/addon/database/#the-implementation) sayfasını izleyin.
+Tam, derlenen bir sorgu için — bir DAO içine yazılmış gerçek bir `SELECT` ve `INSERT` — eğitimin [Veritabanı ve Migration'lar](/tr/addon/database/#uygulama-impl) sayfasını izleyin.
 
 ## 5. Yapılandırma
 
@@ -324,17 +324,18 @@ Tam, derlenen bir sorgu için — bir DAO içine yazılmış gerçek bir `SELECT
 |---|---|---|
 | `PluginConfig` | `open class PluginConfig` (`version: Int`'e sahip) | Yapılandırmanız için temel; kendi alanlarınızı varsayılanlarla ekleyin |
 | `PluginConfigManager<T>` | `PluginConfigManager(plugin, T::class.java)` | Bir yapılandırma sınıfı için dosyayı yükler/kaydeder |
-| `.config` | `val config: T` | Mevcut türlü değerler |
+| `.config` | `var config: T` (`private set`) | Mevcut türlü değerler |
 | `.saveConfig` | `fun saveConfig(config: JsonObject)` | Değişiklikleri diske kalıcı kıl |
 | `.configFilePath` | `val configFilePath: String` | `config.conf`'un çözümlenen yolu |
 | `PluginConfigMigration` | `PluginConfigMigration(from: Int, to: Int, versionInfo: String)` | `fun migrate(config: JsonObject)`'i geçersiz kılın; `@Migration` ile açıklama ekleyin |
 | `@ConfigComment` | `@ConfigComment(vararg lines: String)` | Üretilen dosyada bir alanın üstünde doküman yorumu |
 | `@ConfigSection` | `@ConfigSection(title: String)` | Anahtarları bir başlık altında grupla |
 
-`.config` neden türlü bir `T` ama `.saveConfig` bir `JsonObject` alıyor? Okumak size kendi türlü sınıfınızı verir; kaydetmek ham bir `JsonObject` alır, böylece yalnızca istediğiniz anahtarları değiştirebilirsiniz. Bir kaydetme şöyle görünür:
+`.config` neden türlü bir `T` ama `.saveConfig` bir `JsonObject` alıyor? Okumak size kendi türlü sınıfınızı verir; kaydetmek ham bir `JsonObject` alır ve **tüm dosyayı ondan yeniden yazar** — dışarıda bıraktığınız bir anahtar dosyadan düşer ve varsayılan değerine döner. Bu yüzden mevcut yapılandırmadan başlayın ve gerekeni değiştirin:
 
 ```kotlin
-configManager.saveConfig(JsonObject().put("apiKey", "new-value"))
+val current = JsonObject.mapFrom(configManager.config)
+configManager.saveConfig(current.put("apiKey", "new-value"))
 ```
 
 Yöneticiyi `onStart()` sırasında kendi `pluginBeanContext`'inizde bir **singleton** (bir paylaşılan örnek) olarak kaydedin, sonra bir istek ona ihtiyaç duyduğunda tembel olarak getirin. İki satır şudur:
@@ -360,7 +361,7 @@ pluginBeanContext.beanFactory.registerSingleton(PluginConfigManager::class.java.
 | `RouterEventListener` | `onInitRouteList(routes: MutableList<Route>)`, `onRouterCreate(router: Router)` |
 | `AuthEventListener` | `onBeforeAuthenticate(context, sqlClient): LoginDecision?`, `onBeforeVerifyLinkCode(context, sqlClient): LoginDecision?`, `onBeforeLogin(user, context, sqlClient): LoginDecision?`, `onAfterLogin(user, context, sqlClient)`, `onAfterRegister(user, sqlClient)` |
 | `PlayerEventListener` | `onDelete(user: User)` — hesap-silme temizliği |
-| `ProfilePictureEventListener` | `resolveProfilePictureUrl(user: User): String?` |
+| `ProfilePictureEventListener` | `resolveProfilePictureUrl(user: User): String?` (varsayılan gövdesi yoktur — uygulamanız gerekir) |
 | `PluginLifecycleListener` | `onPluginLoad/Enable/Disable/Unload/Uninstall(plugin: PanoPlugin)` |
 | `PluginEventListener` | Kendi eklentiler-arası olaylarınız için işaretleyici |
 
@@ -413,8 +414,8 @@ Bir **izin düğümü**, bir izni adlandıran noktalı bir dizedir (`pano.plugin
 
 | Tür | İmza | Ürettiği düğüm |
 |---|---|---|
-| `Permission` | `open class Permission(iconName: String)` | `pano.<key>` |
-| `PanelPermission` | `open class PanelPermission(iconName: String)` | `pano.plugin.<pluginId>.<dotted.key>` |
+| `Permission` | `open class Permission(iconName: String = "")` | `pano.<key>` |
+| `PanelPermission` | `open class PanelPermission(iconName: String = "")` | `pano.plugin.<pluginId>.<dotted.key>` |
 | `@PermissionDefinition` | sınıf açıklaması | İzni otomatik kaydeder |
 
 (`iconName` = panelde iznin yanında gösterilen bir Font Awesome ikon adı, örn. `"fa-bullhorn"` veya `"fa-comments"`.)
@@ -447,7 +448,7 @@ Site sahibi Minecraft sunucusunda tamamlayıcı `pano-mc-plugin`'i çalıştır�
 |---|---|---|
 | `ServerManager.registerEvent` | `fun registerEvent(event: ServerEvent<*, *>)` | Bir gelen olay türünü işle |
 | `ServerManager.unregisterEvent` | `fun unregisterEvent(event: ServerEvent<*, *>)` | Onu işlemeyi durdur |
-| `ServerManager.sendMessage` | `fun sendMessage(message: PlatformMessage, server: Server)` | Bir sunucuya gönder-ve-unut |
+| `ServerManager.sendMessage` | `fun sendMessage(platformMessage: PlatformMessage, server: Server)` | Bir sunucuya gönder-ve-unut |
 | `ServerManager.getConnectedServers` | `fun getConnectedServers(): Map<Server, ServerWebSocket>` | Şu anda bağlı sunucular (anahtar = `Server`, değer = canlı WebSocket'i) |
 | `ServerManager.isConnected` | `fun isConnected(id: Long): Boolean` | — |
 | `ServerEvent<R, M>` | `abstract suspend fun handle(request: R, server: Server): M?` | Gelen olay işleyicisi (R = aldığınız istek yükü, M = isteğe bağlı yanıt verdiğiniz mesaj türü; `M?` yanıtın isteğe bağlı olduğu anlamına gelir) |
@@ -467,7 +468,7 @@ Buradaki bir **jeton**, **JWT** formatında imzalı bir dizedir: herkes içindek
 |---|---|---|
 | `TokenType` | `interface` — `getName(): String`, `getExpireDate(): Long` (epoch milis olarak son kullanma) | Jeton türünüz (ad sınıf adı eksi `TokenType`'tan varsayılan alınır, `UPPER_SNAKE`) |
 | `TokenTypeRegistry.registerPluginToken` | `fun registerPluginToken(pluginId: String, tokenType: TokenType)` | Kaydet (kaldırmada otomatik silinir) |
-| `TokenProvider.generateToken` | `fun generateToken(subject: String, tokenType: TokenType): Pair<String, Long>` | `(tokenString, expiresAtEpochMillis)` döndürür — imzalı jeton ve ne zaman sona erdiği (epoch milisaniye) |
+| `TokenProvider.generateToken` | `fun generateToken(subject: String, tokenType: TokenType, claims: Map<String, String> = emptyMap()): Pair<String, Long>` | `(tokenString, expiresAtEpochMillis)` döndürür — imzalı jeton ve ne zaman sona erdiği (epoch milisaniye) |
 | `TokenProvider.saveToken` | `suspend fun saveToken(token: String, subject: String, tokenType: TokenType, expireDate: Long, sqlClient: SqlClient, ipAddress: String? = null, userAgent: String? = null)` | Onu kalıcı kıl |
 | `TokenProvider.isTokenValid` | `suspend fun isTokenValid(token: String, tokenType: TokenType, sqlClient: SqlClient): Boolean` | — |
 | `TokenProvider.invalidateToken` | `suspend fun invalidateToken(token: String, sqlClient: SqlClient)` | Birini iptal et |
@@ -484,8 +485,8 @@ Buradaki bir **jeton**, **JWT** formatında imzalı bir dizedir: herkes içindek
 |---|---|
 | `sendNotification(…)` | Bir kullanıcı |
 | `sendPanelNotification(…)` | Bir kullanıcının paneli |
-| `sendNotificationToAll(…)` | Her kullanıcı |
-| `sendPanelNotificationToAll(…)` | Her kullanıcının paneli |
+| `sendNotificationToAll(…)` | Bir kullanıcı listesi (`userIdList`) |
+| `sendPanelNotificationToAll(…)` | Bir kullanıcı listesinin panelleri (`userIdList`) |
 | `sendNotificationToAllAdmins(…)` | Tüm yöneticiler |
 | `sendNotificationToAllWithPermission(…)` | Bir izne sahip herkes |
 
@@ -532,16 +533,17 @@ Yönetici eylemlerini kaydedin, böylece panelin Etkinlik akışında görünür
 Bir endpoint içinde, onu şöyle bağlayın — SQL istemcisini alın, host `DatabaseManager`'ı alın, sonra günlüğünüzü ekleyin:
 
 ```kotlin
+// `plugin` is your plugin class, taken as a constructor parameter of the endpoint
 val sqlClient = getSqlClient()
-val databaseManager = applicationContext.getBean(DatabaseManager::class.java)
-databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, pluginId), sqlClient)
+val databaseManager = plugin.applicationContext.getBean(DatabaseManager::class.java)
+databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, username, plugin.pluginId, message), sqlClient)
 ```
 
 ::: tip Kontrol noktası
-Girdi artık panelin **Etkinlik** sayfasında görünüyor.
+Girdi artık panelin **Kayıtlar** sayfasında (*Aktivite Kayıtları*) görünüyor.
 :::
 
-Panel her girdiyi, bir `activity-logs` nesnesi altında sınıf adından türetilen bir dil anahtarıyla render eder (eksi `Log`, `UPPER_SNAKE`) — `CreatedShoutLog` → `activity-logs.CREATED_SHOUT`. Geçtiğiniz `details` `JsonObject`'indeki her anahtar, o dil dizesindeki eşleşen `{{placeholder}}`'a yerleştirilir. [Çeviriler](/tr/addon/localization/)'e bakın.
+Panel her girdiyi, bir `activity-logs` nesnesi altında sınıf adından türetilen bir dil anahtarıyla render eder (eksi `Log`, `UPPER_SNAKE`) — `CreatedShoutLog` → `activity-logs.CREATED_SHOUT`. Geçtiğiniz `details` `JsonObject`'indeki her anahtar, o dil dizesindeki eşleşen `{placeholder}`'a yerleştirilir. [Çeviriler](/tr/addon/localization/)'e bakın.
 
 ## 13. Host bean'leri
 

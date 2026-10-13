@@ -4,7 +4,7 @@ Tema ayarları, bir **site sahibinin** hiçbir koda dokunmadan değiştirebilece
 
 ## Site sahibi bunları nerede görür
 
-Bir site yöneticisi **`<siteniz>/theme-settings`** adresini açar (buraya panelde **Görüntüle → Tema Ayarları** üzerinden de bağlantı verilir). Sayfa, **sekmeler** içeren bir formdur — Genel, Logo, Üst Bilgi, Gezinme Çubuğu vb. — ve üzerindeki her giriş alanı canlı temayı değiştirir.
+Bir site yöneticisi **`<siteniz>/theme-settings`** adresini açar (buraya panelde **Görünüm → Tema Seçenekleri** üzerinden de bağlantı verilir). Sayfa, **sekmeler** içeren bir formdur — Genel, Logo, Üst Bilgi, Gezinme Çubuğu vb. — ve üzerindeki her giriş alanı canlı temayı değiştirir.
 
 Nasıl davrandığına dair bilinmesi gereken iki önemli nokta var:
 

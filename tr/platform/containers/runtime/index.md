@@ -38,7 +38,7 @@ Daha eski bir etikete dönmek eski jar'ı kurar, ancak **veritabanı geri alınm
 
 ## `-bg` kullanmayın {#never-use-bg}
 
-[`-bg`](../../installation/), Pano'nun kendisini bağımsız bir süreç olarak yeniden başlatıp kapanmasını
+[`-bg`](../../installation/manual/#background-mode-bg), Pano'nun kendisini bağımsız bir süreç olarak yeniden başlatıp kapanmasını
 sağlar. Konteynerde bu kapanış konteyneri sonlandırır. İmajlar hiçbir zaman `-bg` vermez; siz de eklemeyin.
 
 ## Runtime imajı (ileri düzey) {#runtime-image}
@@ -61,8 +61,8 @@ Hiçbir şey otomatik kurulmaz: Pano sürümünü jar'ı ve `.pano-jar`'ı deği
 ## Java sürümü {#java-version}
 
 Pano **Java 11**'i hedefler; bu yüzden minimumu Java 11'dir ve tam imaj onu kullanır. Kullandığınız bir
-eklenti gerektiriyorsa daha yeni bir `runtime-jre<N>` seçin. Yerel `pano-node` üzerindeki
-[yönetilen sunucular](../../server-management/managed-servers/) Java 17 veya daha yenisini ister.
+eklenti gerektiriyorsa daha yeni bir `runtime-jre<N>` seçin. [Yönetilen sunucular](../../server-management/managed-servers/)
+için yerel `pano-node` aynı Java ile çalışır; onun için de Java 11 yeterlidir.
 
 İmajlar **glibc** tabanlıdır (Ubuntu üzerinde Eclipse Temurin). Argon2 şifre hashleme gibi Pano'nun bazı
 yerel kütüphaneleri yalnızca glibc için derlenmiştir; **Alpine** gibi musl tabanlı bir imajda giriş

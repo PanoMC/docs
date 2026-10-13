@@ -11,9 +11,9 @@
 - Correct theme ID set or falls back to Vanilla Theme
 - Regular backups for database and uploads
 - [Maintenance mode](../../maintenance/) tested once before you need it — know your bypass permission and your login URL
-- `server.trusted-proxies` filled in **if Pano sits behind a reverse proxy**. Leave it empty and Pano ignores
-  `X-Forwarded-For` entirely, so every request looks like it comes from the proxy — the maintenance login's
-  IP ban and rate limit then see one address instead of your visitors'
+- `server.trusted-proxies` filled in **if Pano sits behind a reverse proxy** (`"cloudflare"` covers Cloudflare).
+  Left empty, a public proxy's address is taken for every visitor, and the maintenance login — which believes
+  `X-Forwarded-For` only from listed proxies — bans and rate-limits one address instead of your visitors'
 - If any **Minecraft servers** connect through that same reverse proxy, its WebSocket idle timeout is longer
   than Pano's heartbeat (`heartbeat-interval` / `heartbeat-timeout`, default **25s** / **75s**) — see
   [Reverse Proxy WebSocket Keepalive](../server/#reverse-proxy-websocket-keepalive). If you tune those
@@ -54,7 +54,7 @@ email {
 
 server {
   host = "0.0.0.0"
-  port = 80
+  http-port = 80
 }
 ```
 ## After Editing

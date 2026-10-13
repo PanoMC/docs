@@ -12,7 +12,7 @@ Sürümünün her zaman uyması için onu kendi Pano'nuzdan indirin — her
 ister.
 
 ```bash
-curl -fsSL https://panel.example.com/api/node/pano-node.jar -o pano-node.jar
+curl -fsSL https://panel.example.com/api/v1/node/pano-node.jar -o pano-node.jar
 
 # İlk başlatma: Düğümler → Düğüm ekle → Elle ekranındaki kodla eşleştirin
 java -jar pano-node.jar --pano https://panel.example.com --code 123456 --data ./node-data
@@ -85,7 +85,7 @@ konsolunu terminalinizde tutar ve gerisini Pano'nun yönetmesini sağlar. Hiçbi
 
 ```bash
 cd /home/mc/survival
-curl -fLo pano-agent.jar 'https://panel.example.com/api/node/pano-agent.jar'
+curl -fLo pano-agent.jar 'https://panel.example.com/api/v1/node/pano-agent.jar'
 
 # Sunucuyu durdurun, ardından penceredeki komutu bir kez çalıştırın (kod bir kez ve 1 dakika geçerlidir)
 java -jar pano-agent.jar --pano 'https://panel.example.com' --code k7m2x9qa4tj3n8wp

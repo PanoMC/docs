@@ -70,13 +70,13 @@ Four different names in this project sound alike but mean different things. This
 
 | Name | Lives in | Who sets it | What it means |
 |---|---|---|---|
-| `version` | `gradle.properties` | CI, at release time | **Your addon's own version** (like `1.1.0`). Stays `local-build` in your working copy; never edit it by hand. |
+| `version` | the `-Pversion` build property | CI, at release time | **Your addon's own version** (like `1.1.0`). Without `-Pversion` the build uses `local-build` (the default in `build.gradle.kts`); never set it by hand. |
 | `pluginPanoVersion` | `gradle.properties` | You (leave it at `local-build`) | Copied into the jar manifest. CI does **not** touch it. |
 | `pano-version` | the jar's manifest | comes straight from `pluginPanoVersion` | Just the baked-in copy of `pluginPanoVersion` inside the built jar. |
 | `panoVersion` | `.releaserc.json` | You | The Pano platform version shown on your **Marketplace** listing (set in the config file below). |
 
 ::: warning Do not hand-edit versions
-Leave both `version` and `pluginPanoVersion` in `gradle.properties` at `local-build`. At release time CI injects the real `version` (via `-Pversion` — the way Gradle accepts a value from the command line, `-Pversion=1.1.0`) from your commit history. Hand-bumping it, or editing the tag (the git tag semantic-release creates for each release), breaks the automation. CI does **not** inject `pluginPanoVersion`; the manifest's `pano-version` attribute stays `local-build`. The Pano version *advertised on the Marketplace* is a separate value, set by the `panoVersion` option in `.releaserc.json` (below). Let your commit messages drive the version. See [Manifest Configuration](/addon/manifest/) for details.
+There is no `version` key in `gradle.properties`: a build without `-Pversion` is `local-build`. Leave `pluginPanoVersion` in `gradle.properties` at `local-build` too. At release time CI injects the real `version` (via `-Pversion` — the way Gradle accepts a value from the command line, `-Pversion=1.1.0`) from your commit history. Hand-bumping it, or editing the tag (the git tag semantic-release creates for each release), breaks the automation. CI does **not** inject `pluginPanoVersion`; the manifest's `pano-version` attribute stays `local-build`. The Pano version *advertised on the Marketplace* is a separate value, set by the `panoVersion` option in `.releaserc.json` (below). Let your commit messages drive the version. See [Manifest Configuration](/addon/manifest/) for details.
 :::
 
 ## Release channels
@@ -240,7 +240,7 @@ Your addon's Marketplace `resourceId` is **exactly your `pluginId`** — for Sho
 
 ### 2. Create an API token
 
-1. On panomc.com, open **Profile → Settings → API Tokens** and click **Create**.
+1. On panomc.com, open **Profile → Security → API Tokens** and click **Create**.
 2. Copy the token immediately — it is shown **only once**, in the modal right after creation.
 3. In your GitHub repository, go to **Settings → Secrets and variables → Actions** and add the token as a **repository secret** (an encrypted value that only your Actions runs can read), named to match your `tokenVar`:
    - `PANO_PROD_TOKEN` for the `main` (production) channel — the one to set up first.
@@ -296,9 +296,9 @@ The difference the user sees: addons downloaded from the Marketplace are marked 
 
 ## Premium listings
 
-Selling your addon works through the same release flow, plus a build-time license key and a runtime license check baked into your code. The full walkthrough — embedding the key at build time, adding the runtime check, and wiring it into CI — lives in **[Premium Addons & Licensing](/addon/premium/)**. It builds directly on this page; the extra license flags it uses (`-PlicenseServer`, `-PpanoLicensePublicKey`, and the `PANO_LICENSE_PUBLIC_KEY` environment variable) are also summarized under [Manifest Configuration](/addon/manifest/).
+Selling your addon works through the same release flow, plus a build-time license key and a runtime license check baked into your code. The full walkthrough — embedding the key at build time, adding the runtime check, and wiring it into CI — lives in **[Premium Addons & Licensing](/addon/premium/)**. It builds directly on this page; the extra license flags it uses (`-PlicenseServer`, `-PpanoLicensePublicKey`, and the `PANO_LICENSE_SERVER` / `PANO_LICENSE_PUBLIC_KEY` environment variables) are also summarized under [Manifest Configuration](/addon/manifest/).
 
 ## Where to next
 
-- **[Manifest Configuration](/addon/manifest/)** — the `gradle.properties` fields CI injects at release time.
+- **[Manifest Configuration](/addon/manifest/)** — the `gradle.properties` fields the build writes into the jar manifest.
 - **[Localization](/addon/localization/)** — ship your addon in more than one language before you publish.

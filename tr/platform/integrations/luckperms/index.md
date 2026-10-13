@@ -21,9 +21,9 @@ Pano'nun LuckPerms entegrasyonu, sunucunuzun **Gruplarını**, **Tracklerini** v
 
 ## Gereksinimler
 
-1. Minecraft sunucunuzda (Spigot, Paper, Folia vb.) **LuckPerms** (v5.0+) kurulu olmalıdır.
+1. Minecraft sunucunuzda (Spigot, Paper, Folia, BungeeCord, Velocity veya Fabric) **LuckPerms** (v5.0+) kurulu olmalıdır.
 2. **Pano MC Eklentisi** kurulu ve Pano örneğinize bağlı olmalıdır.
-3. Pano ayarlarınızda **İzin Entegrasyonu** etkin olmalıdır.
+3. O sunucu için **Yetki Entegrasyonu** etkin olmalıdır (varsayılan olarak etkindir).
 
 ## Kurulum Rehberi
 
@@ -31,23 +31,23 @@ Pano'nun LuckPerms entegrasyonu, sunucunuzun **Gruplarını**, **Tracklerini** v
 LuckPerms'in Minecraft sunucunuzda kurulu ve çalışıyor olduğundan emin olun.
 - [LuckPerms İndir →](https://luckperms.net/download)
 
-### Adım 2: Entegrasyonu Etkinleştirin
+### Adım 2: Entegrasyonu Kontrol Edin
 1. **Pano Yönetici Panelinize** giriş yapın.
-2. **Panel → Sunucu Ayarları → Oyun Entegrasyonu** bölümüne gidin.
-3. **İzin Entegrasyonu** anahtarını etkinleştirin.
-4. **Kaydet**'e tıklayın.
+2. Sunucuyu seçin ve **Ayarlar → Oyun Entegrasyonu** sekmesini açın (ayarlar sunucu başınadır).
+3. **Yetki Entegrasyonu** anahtarının açık olduğundan emin olun — varsayılan olarak açıktır.
+4. Değiştirdiyseniz **Kaydet**'e tıklayın.
 
 ### Adım 3: Senkronizasyonu Bekleyin
 Etkinleştirildiğinde, Pano MC Eklentisi LuckPerms'i otomatik olarak tespit edecektir.
-- Mevcut LuckPerms verilerinizi Pano'ya çekmek için ilk senkronizasyonu gerçekleştirecektir.
-- Daha sonra gelecekteki değişiklikleri dinlemek için LuckPerms Event Bus'a kanca atacaktır.
+- Değişiklikleri dinlemek için LuckPerms Event Bus'a kanca atar.
+- Ardından Pano'daki izin verilerini LuckPerms'e uygular; sonrasında LuckPerms'te yapılan değişiklikler Pano'ya gönderilir.
 
 ## Pano-Özel İzinler
 
 > [!IMPORTANT]
-> Pano Paneli aracılığıyla bir izin nodu eklediğinizde, bu node otomatik olarak bir **`pano: true`** context'i içerir. Bu, izin nodunun Pano platformuna özel olduğunu ve **oyuna yansıtılmadığını** gösterir.
+> Pano Paneli aracılığıyla bir izin nodu eklediğinizde, bu node otomatik olarak bir **`pano: true`** context'i içerir. Bu, izin nodunun Pano platformuna özel olduğunu gösterir. Node LuckPerms'e `pano=true` context'iyle kaydedilir; bu context oyunda hiçbir zaman geçerli olmadığından node'un **oyun içinde etkisi yoktur**.
 >
-> Bu özellik, Minecraft sunucunuzun dahili izinlerini karıştırmadan veya oyun içinde çakışmalara neden olmadan web'e özel izinleri (panel erişim seviyeleri veya belirli web sitesi özellikleri gibi) yönetmenize olanak tanır.
+> Bu özellik, oyun içinde çakışmalara neden olmadan web'e özel izinleri (panel erişim seviyeleri veya belirli web sitesi özellikleri gibi) yönetmenize olanak tanır.
 
 ## Senkronizasyon Nasıl Çalışır?
 
@@ -69,18 +69,17 @@ Oyun içinde bir izin değişikliği gerçekleştiğinde (örneğin `/lp user ..
 Pano, manuel LuckPerms kullanımıyla birlikte çalışacak şekilde tasarlanmıştır:
 - **Yönetilen İşaretçiler:** Pano, yönettiği varlıklara bir `meta.pano-managed.true` nodu ekler.
 - **Silme Koruması:** Senkronizasyon sırasında Pano, manuel olarak oluşturulmuş sunucu verilerinizi yanlışlıkla silmemek için hangi grupları ve trackleri yönetmesi gerektiğini dikkatlice belirler.
-- **Doğrulama:** Pano, transferler sırasında veri bütünlüğünü sağlamak için her nodun hash değerini doğrular.
 
 ## Sorun Giderme
 
 ### Entegrasyon Yüklenmiyor
 - LuckPerms'in kurulu olup olmadığını kontrol edin (oyun içinde `/plugins` yazın).
 - Sunucu konsolunuzda `[Pano] Permission integration is enabled, loading...` mesajını arayın.
-- Panelde **İzin Entegrasyonu** anahtarının AÇIK olduğundan emin olun.
+- Panelde **Yetki Entegrasyonu** anahtarının AÇIK olduğundan emin olun.
 
 ### Senkronizasyon Gecikmesi
 - Pano, ağ yoğunluğunu önlemek için giden senkronizasyonlarda kısa bir bekleme süresi (yaklaşık 1.5 saniye) kullanır.
-- Değişiklikler görünmüyorsa, **Pano MC Eklentisi**nin bağlı olup olmadığını kontrol edin (Panel → Sunucular).
+- Değişiklikler görünmüyorsa, **Pano MC Eklentisi**nin bağlı olup olmadığını kontrol edin (sunucunun **Panel** sayfası ya da oyun içinde `/pano status`).
 
 ## Yardıma mı İhtiyacınız Var?
 Sorunlarla karşılaşırsanız veya geri bildiriminiz varsa:

@@ -5,7 +5,7 @@ The `pano-mc-plugin` is the bridge between your Minecraft server and the Pano we
 ## Communication (WebSocket)
 Communication is handled over WebSocket for real-time performance. To ensure security, we use a hybrid encryption method:
 - **RSA**: Used for the initial key exchange.
-- **AES-256**: Used for encrypting all subsequent messages.
+- **AES-256-GCM**: Used for encrypting all subsequent messages.
 
 ## Supported Platforms
 We support a wide range of Minecraft server platforms:
@@ -22,7 +22,7 @@ If you want to add, change, or remove translations for the Minecraft plugin (or 
 `Pano/src/main/resources/locales`
 
 ## Development
-The plugin repository uses a modular structure where common logic is shared in a `core` module, while platform-specific implementations reside in their respective modules.
+The plugin repository uses a modular structure where common logic is shared in the `Core` module, while platform-specific implementations reside in their respective modules.
 
 ### Branching Policy
 Just like the Pano Core, this project follows a three-branch release cycle.

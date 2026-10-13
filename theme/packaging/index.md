@@ -4,7 +4,7 @@ When you are happy with how your theme looks, you turn it into a single file tha
 
 ## Dev build vs. production build
 
-While you work, you run `bun run dev`. This is the **dev build**: it is fast, it updates the moment you save a file, and it skips slow steps you do not need while designing. It is meant for your eyes only, on your own computer.
+While you work, you run `bun run dev:ui`. This is the **dev build**: it is fast, it updates the moment you save a file, and it skips slow steps you do not need while designing. It is meant for your eyes only, on your own computer.
 
 When you are ready to ship, you make a **production build**. This is the polished version: everything is optimized, packed small, and prepared to run on a real server. Visitors to a real Pano site always see a production build.
 
@@ -98,7 +98,7 @@ Now wrap the build into a single installable file:
 bun run package
 ```
 
-This produces a **`.zip`** file — a self-contained package that a Pano server can install directly from the panel. That one file is your whole theme.
+This produces a **`.zip`** file — a self-contained package that a Pano server can install directly from the panel. That one file is your whole theme. `package` first runs the check again in strict mode, where warnings count as errors, and packages nothing until it passes.
 
 ## Install and test on your own server
 
@@ -106,7 +106,7 @@ Before you share your theme, install it on your own Pano to make sure it works e
 
 1. Open your Pano panel in a browser and log in as an administrator.
 2. Go to **View → Themes**.
-3. Choose **Install** (or **Install Theme**) and upload the `.zip` you just built.
+3. Click **Install Theme** and upload the `.zip` you just built.
 4. Activate your theme and open the site to see it live.
 
 ::: tip

@@ -135,7 +135,7 @@ Notice the columns above are `message`, `username`, `date` — the **same names*
 :::
 
 ::: tip Checkpoint: build once and look around
-Once you have the plugin class, the config, the model, the DAO, and its impl in place, prove they work: rebuild, copy the jar into `plugins/`, and restart Pano (the rebuild-and-restart step). Then confirm all three of these:
+Once you have the plugin class, the config, the model, the DAO, and its impl in place, prove they work: rebuild and restart Pano (the rebuild-and-restart step). Then confirm all three of these:
 
 - **Panel → Addons** lists **Shoutbox**.
 - `plugins/pano-plugin-shoutbox/config.conf` exists on disk (see [Configuration](/addon/configuration/)).

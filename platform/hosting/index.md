@@ -10,7 +10,7 @@ servers.
 - [Operations](operations/): updates and rollback, backups, crashes, logs.
 
 > [!NOTE]
-> These pages rely on the [container images](../containers/), published from Pano **1.0.0-alpha.520** on.
+> These pages rely on the [container images](../containers/), published from Pano **1.0.0-alpha.522** on.
 
 ## One container and one database per instance {#model}
 
@@ -66,9 +66,10 @@ belongs to someone else, so it cannot be trusted (see [Isolation](isolation/)).
 ## Configuration
 
 Pass the database and SMTP settings as [environment variables](../containers/configuration/#environment-variables).
-Pano writes them into `config.conf` on first boot. Pano rewrites `config.conf` on shutdown, so if you
-must change it by hand, stop the container first, edit, then start it.
+Without `PANO_HOSTED` Pano writes them into `config.conf` on first boot only; with it they are applied on
+every boot. Pano rewrites `config.conf` on shutdown, so if you must change it by hand, stop the container
+first, edit, then start it.
 
 Pano Host also sets `PANO_HOSTED` and the other [Pano Host variables](../containers/configuration/#pano-host-variables).
-They are informational only: Pano versions that support them show "managed by Pano Host" and a quota
-banner. Nothing inside Pano is locked by them.
+Pano versions that support them show "managed by Pano Host" and a quota banner, re-apply the environment
+on every boot and ignore port and SSL changes made in the panel.

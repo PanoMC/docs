@@ -38,7 +38,7 @@ docker compose pull && docker compose up -d
 
 ## Не используйте `-bg` {#never-use-bg}
 
-[`-bg`](../../installation/) заставляет Pano перезапустить себя отдельным процессом и завершиться. В
+[`-bg`](../../installation/manual/#background-mode-bg) заставляет Pano перезапустить себя отдельным процессом и завершиться. В
 контейнере это завершение останавливает контейнер. Образы никогда не передают `-bg`; не добавляйте его.
 
 ## Runtime-образ (для опытных) {#runtime-image}
@@ -60,8 +60,8 @@ docker run -d --name pano --user "$(id -u):$(id -g)" --memory 1g \
 ## Версия Java {#java-version}
 
 Pano нацелен на **Java 11**, поэтому Java 11 — его минимум, и полный образ использует её. Выберите более
-новый `runtime-jre<N>`, если этого требует ваш плагин. [Управляемым серверам](../../server-management/managed-servers/)
-на локальном `pano-node` нужна Java 17 или новее.
+новый `runtime-jre<N>`, если этого требует ваш плагин. Локальный `pano-node` для
+[управляемых серверов](../../server-management/managed-servers/) работает на той же Java, так что и ему достаточно Java 11.
 
 Образы построены на **glibc** (Eclipse Temurin на Ubuntu). Некоторые нативные библиотеки Pano, например
 хеширование паролей Argon2, есть только в сборках для glibc; в musl-образе вроде **Alpine** вход в

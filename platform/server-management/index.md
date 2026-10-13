@@ -32,8 +32,8 @@ server, or bring the node back online.
 
 1. Put the [Pano MC Plugin](https://github.com/PanoMC/pano-mc-plugin/releases) jar for your platform
    into the server's `plugins/` (or `mods/`) folder and restart the server.
-2. In the panel, open the **server switcher** in the top bar → **Add server** → **Link with the Pano
-   plugin**, and run the command it shows in the server console:
+2. In the panel, press **Servers** at the top of the sidebar (the server switcher) → **Add server** →
+   **Link with the Pano plugin**, and run the command it shows in the server console:
 
    ```
    /pano connect <platform-address> <platform-code>
@@ -60,15 +60,18 @@ already run to Pano without moving it — see [Pano Agent](pano-node/#pano-agent
 | OP, gamemode | Yes | Yes | — | Yes |
 | Toggle plugins in game | Yes | Yes | — | — |
 
-Vanilla has no plugin, so it runs only as a managed server, with console and power from the node.
-The Fabric mod needs Minecraft 26.1 or newer. Forge and NeoForge are not in the catalog yet. The plugin must speak **protocol 2**: an older one
-still connects, but its pages stay disabled until you update it.
+Vanilla, Forge and NeoForge have no Pano plugin, so they run only as managed servers, with console
+and power from the node. The Fabric mod needs Minecraft 26.1 or newer. The plugin must speak
+**protocol 3**: an older one cannot reach this Pano at all, and its server shows **The Pano plugin is
+too old to reach this Pano** until the jar is replaced — by its node on a managed server, by hand on
+a linked one.
 
 ## Finding your way
 
 - **Server** in the panel sidebar lists the pages of the selected server — see
   [Server Pages](server-pages/).
-- **The server switcher** in the top bar changes the server, searches, and has **Add server**. A red
+- **The server switcher** — the **Servers** button at the top of the sidebar — changes the server,
+  searches, and has **Add server**. A red
   **!** marks a server that crashed, or whose plugin, node or Pano Agent is too old for this Pano.
 - **The node icon** next to it opens the Nodes page (needs **Manage Nodes**).
 

@@ -37,7 +37,7 @@ Her yayının `1.0.0` gibi bir sürümü vardır. Onu elle yükseltmezsiniz. Sü
 - `feat:` → **minör'ü** yükseltir (`1.0.0` → `1.1.0`)
 - bir `BREAKING CHANGE:` altbilgisiyle `feat:` → **majör'ü** yükseltir (`1.0.0` → `2.0.0`)
 
-`gradle.properties`'deki `version`'ı `local-build`'te bırakın — CI, gerçek numarayı commit geçmişinizden enjekte eder. Onu elle düzenlemek otomasyonu bozar.
+`gradle.properties`'e bir `version` eklemeyin — derleme varsayılan olarak `local-build` kullanır, CI ise gerçek numarayı commit geçmişinizden geçirir (`-Pversion=`). Onu elle ayarlamak otomasyonu bozar.
 
 ::: tip Dal tarafından seçilen iki yayın kanalı
 Boilerplate, `dev`'e push'ladığınızda bir **ön yayın** (`1.1.0-dev.3`), `main`'e push'ladığınızda ise bir **kararlı** yayın (`1.1.0`) yayınlar. Sunucu sahipleri yalnızca kararlıyı görür. İlk eklentinizi mi yayınlıyorsunuz? Basit tutun ve yalnızca `main`'e yayınlayın.
@@ -62,7 +62,7 @@ Eklentiler için, Marketplace `resourceId`'si **tam olarak `pluginId`'nizdir** �
 
 GitHub deponuzda, **Settings → Secrets and variables → Actions**'a gidin ve ekleyin:
 
-- **`PANO_PROD_TOKEN`** — panomc.com'dan bir API token'ı (**Profile → Settings → API Tokens → Create**). Yalnızca bir kez gösterilir; onu hemen kopyalayın.
+- **`PANO_PROD_TOKEN`** — panomc.com'dan bir API token'ı (**Profile → Security → API Tokens → Create**). Yalnızca bir kez gösterilir; onu hemen kopyalayın.
 - **`TOKEN_GITHUB`** — GitHub **Settings → Developer settings** altında oluşturduğunuz bir **Personal Access Token** (klasik, `repo` kapsamıyla). Boilerplate workflow'u bunu, sürüm dry-run'ı dahil birkaç yerde okur.
 
 ::: warning `TOKEN_GITHUB`'ı kaçırın ve her yayın en ilk adımda başarısız olur

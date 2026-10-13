@@ -135,7 +135,7 @@ Yukarıdaki sütunların `message`, `username`, `date` olduğuna dikkat edin —
 :::
 
 ::: tip Kontrol noktası: bir kez derleyin ve etrafa bakının
-Eklenti sınıfı, yapılandırma, model, DAO ve impl'i yerine koyduğunuzda, çalıştıklarını kanıtlayın: yeniden derleyin, jar'ı `plugins/` içine kopyalayın ve Pano'yu yeniden başlatın (yeniden-derle-ve-yeniden-başlat adımı). Sonra şu üçünü de doğrulayın:
+Eklenti sınıfı, yapılandırma, model, DAO ve impl'i yerine koyduğunuzda, çalıştıklarını kanıtlayın: yeniden derleyin ve Pano'yu yeniden başlatın (yeniden-derle-ve-yeniden-başlat adımı). Sonra şu üçünü de doğrulayın:
 
 - **Panel → Eklentiler**, **Shoutbox**'ı listeliyor.
 - `plugins/pano-plugin-shoutbox/config.conf` diskte var (bkz. [Yapılandırma](/tr/addon/configuration/)).

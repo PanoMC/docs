@@ -10,7 +10,7 @@ This plugin is an early-stage scaffold. Today it only adds a single, **display-o
 
 What you get after enabling the plugin right now:
 
-- A **Whitelist** item in the panel sidebar (scroll icon, placed just above **Players**).
+- A **Whitelist** item in the panel sidebar (scroll icon, placed just above **Users**).
 - A single page at **Panel → Whitelist** with one **Overview** tab.
 - A **Modes** card showing a horizontal timeline of access modes. This currently renders two hardcoded demo entries — **Closed Beta** (inactive) → **Open Beta** (marked *Active*) — as a static diagram. There is no way to create, edit, or activate modes yet.
 

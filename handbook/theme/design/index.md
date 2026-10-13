@@ -2,7 +2,7 @@
 
 Ember is alive and orange. Now let's make it *feel* like Ember — warm, cozy, and unmistakably its own. This whole page is the **no-code path**: we only change values in two SCSS files. No Svelte required.
 
-Keep `bun run dev` running from the last page, and open `bun run dev:ui` in a second terminal so your styles recompile the moment you save:
+Keep `bun run dev:ui` running from the last page — it serves the theme and recompiles your styles the moment you save (plain `bun run dev` starts only the server, so do not run both):
 
 ```sh
 bun run dev:ui

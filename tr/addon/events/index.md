@@ -41,10 +41,10 @@ Veritabanına dokunan her eklenti tam olarak bu kurulum-kapısı desenine ihtiya
 - **hesap silme** — bir kullanıcı kaldırıldığında kendi tablolarınızı temizleyin.
 - **kendi eklentiler-arası olaylarınız** — *başka* eklentilerin, eklentinizin yaptığı bir şeye tepki vermesine izin verin ve onlarınkine tepki verin.
 
-Tam katalog — kimlik doğrulama kancaları, hesap-silme temizliği, eklenti-yaşam-döngüsü dinleyicileri ve kendi eklentiler-arası olaylarınızı tetikleme (`getEventListeners` companion-object çağrısı ve `PluginLifecycleListener` `ClassCastException` tuzağı dâhil) — [Backend API Referansı § 6](/tr/addon/backend-reference/#_6-etkinlik-dinleyicileri)'da imzalarıyla listelenmiştir.
+Tam katalog — kimlik doğrulama kancaları, hesap-silme temizliği, eklenti-yaşam-döngüsü dinleyicileri ve kendi eklentiler-arası olaylarınızı tetikleme (`getEventListeners` companion-object çağrısı ve `PluginLifecycleListener` `ClassCastException` tuzağı dâhil) — [Backend API Referansı § 6](/tr/addon/backend-reference/#_6-olay-dinleyicileri)'da imzalarıyla listelenmiştir.
 
 ## Sırada ne var
 
-- **[Backend API Referansı § 6](/tr/addon/backend-reference/#_6-etkinlik-dinleyicileri)** — her etkinlik-dinleyici arayüzü, metotları ve olağan deseni bozan ikisi.
+- **[Backend API Referansı § 6](/tr/addon/backend-reference/#_6-olay-dinleyicileri)** — her etkinlik-dinleyici arayüzü, metotları ve olağan deseni bozan ikisi.
 - **[Backend genel bakışı](/tr/addon/backend/#giris-sınıfı)** — bu dinleyicinin yeniden başlattığı `ShoutboxPlugin` giriş sınıfı.
 - **[İzinler ve Etkinlik Günlükleri](/tr/addon/permissions/)** — bir yönetici eyleminin diğer yarısı: onu kapılamak ve günlüğe kaydetmek.

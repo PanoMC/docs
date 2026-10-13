@@ -19,7 +19,7 @@ curl -s http://localhost:8088/api/v1/openapi.json -o pano-openapi.json
 Fetch the market plugin's:
 
 ```sh
-curl -s http://localhost:8088/api/plugins/pano-plugin-market/_/openapi.json -o market-openapi.json
+curl -s http://localhost:8088/api/v1/plugins/pano-plugin-market/_/openapi.json -o market-openapi.json
 ```
 
 Plugins need nothing extra: Pano builds the document from the plugin's endpoints, closed-source plugins included. Plugins that are installed but stopped have no document.
@@ -29,7 +29,7 @@ Plugins need nothing extra: Pano builds the document from the plugin's endpoints
 - `servers[0].url` is the prefix: `/api/v1` for core, `/api/plugins/<pluginId>` for a plugin. Operation paths come after it.
 - `operationId` is the endpoint class name without `API`, for example `GetPosts`. The [typed client](../client/) names its functions after it.
 - `parameters` and `requestBody` are JSON Schema, taken from the endpoint's own validation.
-- `responses` lists the success body and the error envelope. The common error codes (`NOT_LOGGED_IN`, `NO_PERMISSION`, `INVALID_CSRF_TOKEN`, `TOO_MANY_REQUESTS`, `MAINTENANCE_MODE_ENABLED`) are shared.
+- `responses` lists the success body and the error envelope. The common error codes (`NOT_LOGGED_IN`, `NO_PERMISSION`, `INVALID_CSRF_TOKEN`, `RATE_LIMIT_EXCEEDED`, `MAINTENANCE_MODE_ENABLED`) are shared.
 - `deprecated: true` means a replacement exists; `x-pano-removal` is the earliest removal date.
 - `x-pano-stability` is `public` or `internal`. Only public operations carry the promise of [API Basics](../api-basics/).
 - `x-pano-undocumented: true` means the author gave no description: the path and inputs are real, the response is free-form.

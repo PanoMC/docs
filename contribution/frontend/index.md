@@ -5,7 +5,7 @@ Pano's frontend is split into several SvelteKit projects. While they are develop
 ::: info PREREQUISITE: RUNNING BACKEND
 Before you start frontend development, you **must** have a running Pano backend.
 - **Frontend Only Development**: Download the latest Pano `.jar` from our [Releases](https://github.com/PanoMC/Pano/releases).
-- **Full-Stack Development**: If you plan to modify the backend as well, please follow the [Backend Development](./backend) guide to run it from source.
+- **Full-Stack Development**: If you plan to modify the backend as well, please follow the [Backend Development](../backend/) guide to run it from source.
 :::
 
 ## Tech Stack
@@ -32,10 +32,10 @@ When developing frontend components, you **must** ensure they are SSR-compatible
 - **vanilla-theme**: The built-in reference (system) theme that ships with Pano. It is **not** a starter template — new themes are scaffolded with `bunx @panomc/theme-core new`.
 
 ## Cloning & Submodules
-Our themes and **panel-ui** carry the [**theme-core engine**](https://github.com/PanoMC/sdk) as a `theme-core` git submodule (it publishes both `@panomc/theme-core` and `@panomc/sdk`). **setup-ui** and the **website** need no submodule — they consume `@panomc/sdk` straight from npm.
+Our themes, **panel-ui** and **setup-ui** carry the [**theme-core engine**](https://github.com/PanoMC/sdk) as a `theme-core` git submodule (it publishes both `@panomc/theme-core` and `@panomc/sdk`). The **website** needs no submodule — it consumes `@panomc/sdk` straight from npm.
 
 ### Recommended Cloning Method
-For projects that carry the submodule (themes, panel-ui), use the `--recursive` flag so you get the engine too:
+For projects that carry the submodule (themes, panel-ui, setup-ui), use the `--recursive` flag so you get the engine too:
 ```bash
 git clone https://github.com/PanoMC/panel-ui.git --recursive
 ```
@@ -46,7 +46,7 @@ If you missed the `--recursive` flag, initialize and update the submodule manual
 git submodule update --init
 ```
 
-Theme repositories are mostly **generated**: routes, bridges, and language files are produced by `theme-core sync`, so a theme author only edits `theme.config.js`, `tokens.scss`, `src/views/`, and `lang-overrides/`. See the [Theme Development Guide](/theme/getting-started) to get started.
+Theme repositories are mostly **generated**: routes, bridges, and language files are produced by `theme-core sync`, so a theme author only edits `theme.config.js`, `src/styles/tokens.scss`, `src/views/`, and `lang-overrides/`. See the [Theme Development Guide](/theme/getting-started) to get started.
 
 ## Development Guide
 After cloning the repository and submodules, follow these steps:
@@ -81,7 +81,7 @@ Each interface runs on a specific port. **Do not change these ports**, and ensur
 ## Packaging Process
 1. Each UI project is built and compressed into a `.zip` file.
 2. During the Pano build process, these ZIPs are downloaded and embedded into the final JAR.
-3. At runtime, Pano extracts these to the `ui/` directory and serves them using Bun as a micro-service.
+3. At runtime, Pano extracts these next to the JAR (`setup-ui/`, `panel-ui/` and `themes/`) and serves them using Bun as a micro-service.
 
 ## UI Addon System
 You can create addons that inject features into the Panel or Themes.
@@ -91,7 +91,7 @@ You can create addons that inject features into the Panel or Themes.
 ### Developing UI Addons
 To test UI changes quickly:
 1. Place your addon files in the `plugins/` directory of your Pano installation.
-2. Enable **Dev Mode** in `Panel -> Settings`.
+2. Enable **Developer Mode** in `Panel -> Settings`.
 3. Use `bun dev` to see changes instantly with Hot Module Replacement.
 
 ---

@@ -29,9 +29,9 @@ The **permission node** — the string you check against everywhere else — is 
 You never type that node in Kotlin — passing `ManageShoutboxPermission()` to `requirePermission` is enough (the panel endpoint on [Endpoints](/addon/endpoints/) does exactly that). But you **do** repeat the exact string in your frontend code to gate panel pages and nav links. See [Frontend Development](/addon/frontend/) for where; if you rename the Kotlin class, remember to update that copied string.
 
 ::: tip Checkpoint: see the permission in the panel
-After a rebuild and restart, open **Panel → Roles** and edit a role — you should see a new permission with a **bullhorn** icon (that's the `fa-bullhorn` from the constructor). Grant it to a role to let that role's members post shouts.
+After a rebuild and restart, open **Panel → Permissions** and edit a permission group — you should see a new permission with a **bullhorn** icon (that's the `fa-bullhorn` from the constructor). Grant it to a group to let that group's members post shouts.
 
-One thing that surprises people: **admins bypass permission checks** — an admin account always passes `requirePermission`, so as an admin you can call the panel endpoint even without granting yourself anything. To actually see the `NO_PERMISSION` rejection, test with a **non-admin** role that has *not* been granted the permission.
+One thing that surprises people: **admins bypass permission checks** — an admin account always passes `requirePermission`, so as an admin you can call the panel endpoint even without granting yourself anything. To actually see the `NO_PERMISSION` rejection, test with a **non-admin** account whose group has *not* been granted the permission.
 :::
 
 ## The activity log
@@ -56,7 +56,7 @@ class CreatedShoutLog(
 )
 ```
 
-The panel endpoint writes one of these with `databaseManager.panelActivityLogDao.add(...)` — see [Endpoints](/addon/endpoints/). The panel then shows each log line on its **Activity** page. To find the text to display, it derives a locale key from your class name, the same way permissions derive their node:
+The panel endpoint writes one of these with `databaseManager.panelActivityLogDao.add(...)` — see [Endpoints](/addon/endpoints/). The panel then shows each log line on its **Logs** page (*Activity Logs*). To find the text to display, it derives a locale key from your class name, the same way permissions derive their node:
 
 1. Drop the trailing `Log` → `CreatedShout`.
 2. Convert to `UPPER_SNAKE` → `CREATED_SHOUT`.
@@ -65,7 +65,7 @@ The panel endpoint writes one of these with `databaseManager.panelActivityLogDao
 That locale string uses the `{username}` and `{target}` values from the `details` payload you built above. Setting it up is covered in [Localization](/addon/localization/).
 
 ::: warning You'll see a raw key until you add the locale string
-Until you add `activity-logs.CREATED_SHOUT` to your locale files, the Activity page shows the raw key `CREATED_SHOUT` instead of a sentence. That's expected — it's not a bug, just the missing translation.
+Until you add `activity-logs.CREATED_SHOUT` to your locale files, the Logs page shows the raw key `CREATED_SHOUT` instead of a sentence. That's expected — it's not a bug, just the missing translation.
 :::
 
 ## Where to next

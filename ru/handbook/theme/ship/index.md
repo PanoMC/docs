@@ -81,7 +81,13 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
+    branches: [master, dev]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -92,7 +98,7 @@ jobs:
       TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-`GITHUB_TOKEN` предоставляется GitHub Actions автоматически — просто передайте его. Версии приходят из ваших **[Conventional Commits](https://www.conventionalcommits.org/)** (`feat:`, `fix:`, `chore:`), так что вы никогда не повышаете `version` вручную.
+`GITHUB_TOKEN` предоставляется GitHub Actions автоматически — просто передайте его. Блок `permissions` нужен, потому что общий workflow не может получить больше прав, чем даёт вызывающий. Стабильная ветка — `master`: общий workflow собирает `master` с боевым сервером лицензий, а любую другую ветку — с dev-сервером. Версии приходят из ваших **[Conventional Commits](https://www.conventionalcommits.org/)** (`feat:`, `fix:`, `chore:`), так что вы никогда не повышаете `version` вручную.
 
 ## Шаг 5 — опубликуйте на Marketplace
 
@@ -114,12 +120,12 @@ Marketplace на [panomc.com](https://panomc.com) — это место, где 
 **Автоматизируйте загрузки с помощью `semantic-release-pano`:**
 
 1. На panomc.com создайте **API-токен** под **Profile → Security → API tokens** и добавьте его в ваш GitHub-репозиторий как секрет с именем `PANO_TOKEN` (**Settings → Secrets → Actions**).
-2. Укажите `semantic-release-pano` на ваш resource ID в `.releaserc.json`:
+2. Укажите `semantic-release-pano` на ваш resource ID в `.releaserc.json` (общий workflow называет файл выпуска `ember-v<version>.zip`):
 
 ```json
-["semantic-release-pano", {
+["@PanoMC/semantic-release-pano", {
   "resourceId": "YOUR-RESOURCE-UUID",
-  "file": "ember-${version}.zip",
+  "file": "ember-v${version}.zip",
   "panoVersion": "1.0.0",
   "useGitHubLink": true,
   "repositoryUrl": "https://github.com/YourName/ember.git"

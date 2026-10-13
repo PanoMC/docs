@@ -11,7 +11,7 @@ Every page in Pano is made of two parts:
 
 Because the two are separate, you can **take ownership of any page's look without touching its logic**. The data still arrives, plugins still work, logins still happen — you only restyle the presentation.
 
-There are **26 engine views** you can take over, one for each kind of page (home, login, register, profile, and so on), plus every view that installed plugins offer.
+There are **57 engine views** you can take over: 26 page and layout views, one for each kind of page (home, login, register, profile, and so on), and 31 smaller parts (navbar, header, footer, post card, sidebars, and so on), plus every view that installed plugins offer.
 
 ## Step 1 — see what's available
 
@@ -49,7 +49,7 @@ Every ejected view begins with a comment header that documents **every prop** �
     data.posts       array — posts of the current page
     data.postCount   number — total number of posts
     data.page        number — current page number
-    data.totalPage   number — total page count for pagination
+    data.totalPages  number — total page count for pagination
     themeSettings    object — theme settings from context
     onPageClick      function(data, page) — pagination handler
 -->
@@ -72,7 +72,7 @@ Let's actually do it. After `eject-view HomeView`, your `src/views/HomeView.svel
   {#if data.postCount > 0}
     <Pagination
       page={data.page}
-      totalPage={data.totalPage}
+      totalPages={data.totalPages}
       on:pageLinkClick={(event) => onPageClick(data, event.detail.page)} />
   {/if}
 </div>
@@ -352,4 +352,4 @@ Remember: you are never starting from a blank page. Every ejected view is a work
 
 ## What's next?
 
-Once your theme looks the way you want, the [Getting Started](../getting-started) guide covers building, checking the contract, packaging, and shipping.
+Once your theme looks the way you want, [Building & Packaging](../packaging) covers checking, building and packaging, and [Publishing & Premium](../publishing) covers shipping.

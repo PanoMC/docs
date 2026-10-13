@@ -17,7 +17,7 @@ database {
 
 - **Database Types:**
     - `mariadb`: Default type, compatible with both **MySQL 5.5+** and **MariaDB**.
-    - `portable`: Only supported on **Windows (x64 and ARM64)**. Automatically managed by Pano (see [Installation Guide →](../installation) for details).
+    - `portable`: Only supported on **Windows (x64 and ARM64)**. Automatically managed by Pano (see [Setup Wizard →](../../installation/setup/) for details).
 - Password can be blank if authentication is disabled.
 - **Warning:** Changing `type` or `prefix` after installation is not supported and will require a **reinstallation**.
 ## Pano Account (Optional)
@@ -42,7 +42,6 @@ pano-account {
 - If unsure what this does, **do not edit manually**.
 - Manage linking in **Panel → Settings → Platform**.
 - Required for **Marketplace features** (updates, store installs).
-- See [Connect Your Pano Account →](./advanced/connect-pano-account) for more info.
 ## Email (SMTP)
 
 ```jsonc
@@ -55,7 +54,7 @@ email {
   username = ""    # e.g., "no-reply@domain.com"
   password = ""
   ssl = true
-  starttls = ""    # "DISABLED" or "OPTIONAL" or "REQUIRED
+  starttls = ""    # "DISABLED" or "OPTIONAL" or "REQUIRED"
   authMethods = "" # optional, mostly "PLAIN"
   host-managed = true # Pano Host only
   host-sender = null  # Pano Host only

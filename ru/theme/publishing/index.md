@@ -36,7 +36,13 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev, master]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -54,7 +60,7 @@ jobs:
 3. Упаковывает детерминированный `.zip`.
 4. Создаёт выпуск на GitHub и автоматически прикрепляет этот `.zip`.
 
-Замените `my-theme` на значение `id` вашей темы из `manifest.json`.
+Замените `my-theme` на значение `id` вашей темы из `manifest.json`. Имена веток не меняйте: `master` — стабильный выпуск, `dev` — предварительный, и только сборка из `master` использует production-сервер лицензий. Блок `permissions` обязателен, потому что общий workflow не может получить больше прав, чем даёт ваш workflow. Workflow запускает semantic-release, поэтому в репозитории также нужен `.releaserc.json` с обеими ветками; прикреплённый файл называется `my-theme-v<версия>.zip`.
 
 ::: tip
 `GITHUB_TOKEN` предоставляется GitHub Actions автоматически — создавать его не нужно. Просто передайте его, как показано.
@@ -89,7 +95,7 @@ Marketplace на [panomc.com](https://panomc.com) — это место, где 
 ```json
 ["semantic-release-pano", {
   "resourceId": "YOUR-RESOURCE-UUID",
-  "file": "my-theme-${version}.zip",
+  "file": "my-theme-v${version}.zip",
   "panoVersion": "1.0.0",
   "useGitHubLink": true,
   "repositoryUrl": "https://github.com/YourName/my-theme.git"

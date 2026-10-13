@@ -19,11 +19,11 @@ Her adım kopyala-yapıştırdır. Biraz **HTML**, **CSS**, **JavaScript** ve **
 ## Hızlı başlangıç
 
 ```sh
-bunx @panomc/theme-core new my-theme     # dört soru sorar, sonra kurar
+bunx @panomc/theme-core new              # dört soru sorar, sonra kurar
 cd my-theme && bun run dev:ui            # bir kez ayarlanacak tek panel alanını yazdırır
 ```
 
-Sonra panelde **Platform Ayarları → Geliştirme Modu**'nu açın ve **Görünüm → Ön yüz → Tema geliştirme sunucusu** alanına komutun yazdırdığı adresi (`http://localhost:3000`) girin. Kaydedin ve Pano adresinizi açın. Temanız çalışıyor.
+Sonra panelde **Ayarlar → Platform** sayfasını açın, **Geliştirici Modu**'nu açın ve hemen altında beliren **Tema Geliştirme Sunucusu** alanına komutun yazdırdığı adresi (`http://localhost:3000`) girin. Kaydedin ve Pano adresinizi açın. Temanız çalışıyor.
 
 Hepsi bu: **üç adım** (iskele, dev, bir panel alanı). Pano yapılandırma dosyasını düzenlemezsiniz ve Pano'yu yeniden başlatmazsınız; böylece çalışırken panel erişilebilir kalır.
 
@@ -41,7 +41,7 @@ Bir tema her zaman Pano'nun arkasında çalışır. Pano adresinizi açın (örn
 
 ## Panel alanı ne yapar
 
-**Tema geliştirme sunucusu** alanı doluyken ön yüz modu `THEME`'dir ve Geliştirme Modu açıktır: Pano kendi tema sürecini başlatmaz ve siteyi geliştirme sunucunuza yönlendirir. Panel, kurulum ve eklenti arayüzleri her zamanki gibi çalışır. Alanı boşaltırsanız Pano yüklü temaya döner.
+**Tema Geliştirme Sunucusu** alanı doluyken, ön yüz modu `THEME` ve Geliştirici Modu açıkken: Pano kendi tema sürecini başlatmaz ve siteyi geliştirme sunucunuza yönlendirir. Panel, kurulum ve eklenti arayüzleri her zamanki gibi çalışır. Alanı boşaltırsanız Pano yüklü temaya döner.
 
 ## İlk değişiklik
 

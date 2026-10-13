@@ -2,7 +2,7 @@
 
 Ember canlı ve turuncu. Şimdi onun gerçekten *Ember gibi hissettirmesini* sağlayalım — sıcak, samimi ve şüphesiz kendine özgü. Bu sayfanın tamamı **kod gerektirmeyen yoldur**: yalnızca iki SCSS dosyasındaki değerleri değiştiriyoruz. Svelte gerekmez.
 
-Önceki sayfadan `bun run dev` çalışır durumda kalsın ve stillerinizin kaydettiğiniz anda yeniden derlenmesi için ikinci bir terminalde `bun run dev:ui` açın:
+Önceki sayfadan `bun run dev:ui` çalışır durumda kalsın — temayı sunar ve stillerinizi kaydettiğiniz anda yeniden derler (yalın `bun run dev` yalnızca sunucuyu başlatır, ikisini birlikte çalıştırmayın):
 
 ```sh
 bun run dev:ui

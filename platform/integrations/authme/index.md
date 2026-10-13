@@ -2,7 +2,7 @@
 
 **AuthMe** and **AuthMeReloaded** are the same plugin — both names are used interchangeably in the Minecraft community. **AuthMeReloaded** is an advanced fork of the original AuthMe plugin and is the **recommended authentication management solution** for Minecraft servers.
 
-> **Note:** This integration is only available for **Spigot** and its forks (Paper, Folia, Purpur, etc.). It is not available for proxy servers like Bungeecord or Velocity.
+> **Note:** This integration is only available for **Spigot** and its forks (Paper, Folia, Purpur, etc.). AuthMe itself does not run on proxy servers like BungeeCord or Velocity; on Velocity the same **Auth Integration** switch works with the `pano-limbo-auth` fork of LimboAuth instead.
 
 ## What is AuthMeReloaded?
 
@@ -17,7 +17,6 @@ When AuthMeReloaded integration is enabled, Pano provides:
 - **Password Management** — Change passwords from the website
 - **Admin Controls** — Admins can reset player passwords from the panel
 - **Automatic Synchronization** — Player data stays in sync between game and web
-- **Plugin Command Support** — Execute specific AuthMe commands from Pano
 - **Zero-Touch Auto-Configuration** — Pano automatically adjusts AuthMe settings with no manual configuration required
 ## Requirements
 
@@ -44,20 +43,20 @@ Place the **`AuthMe-<version>.jar`** file in your server's **`plugins/`** folder
 If you haven't already, install the **Pano MC Plugin** on your Minecraft server and connect it to your Pano instance:
 
 1. Install the Pano MC Plugin on your Minecraft server
-2. In the panel, go to **Servers** → Click **+** button
+2. In the panel, press **Servers** at the top of the sidebar → **Add server** → **Link with the Pano plugin**
 3. Follow the connection steps in the modal
 
-For detailed instructions, see the [Installation Guide](../../installation/).
+For detailed instructions, see [Linking a server](../../server-management/#linking-a-server).
 
 > This documentation assumes you already have the Pano MC Plugin installed and connected.
 
 ### Step 3: Verify Auth Integration is Enabled in Panel
 
 1. Log in to your **Pano Admin Panel**
-2. Navigate to **Panel → Server Settings → Game Integration**
+2. Select the server, then open its **Settings → Game Integration** (the settings are per server)
 3. Find the **Auth Integration** section. Here you can configure:
    - **Auth Integration (Enabled by default):** The main toggle for the integration.
-   - **Require Verified (Enabled by default):** If enabled, players must have a verified email address to log in to the server.
+   - **Require Email Verification (Enabled by default):** If enabled, players must have a verified email address to log in to the server. It only works while email verification is on for the whole platform (`auth.require-email-verification`, **Settings → Platform**).
    - **Kick After Register (Enabled by default):** If enabled, players are automatically kicked from the server immediately after successful in-game registration. This is primarily used to ensure players verify their email addresses before being allowed to log in and play.
 4. **Verify your preferred settings** and click save.
 
@@ -74,7 +73,7 @@ The Pano MC Plugin automatically detects if AuthMeReloaded is installed on your 
 
 ### 2. Modify AuthMe Configuration (Zero-Touch)
 
-Pano uses a **zero-touch configuration approach** — it automatically adjusts specific AuthMe configuration values to ensure compatibility without requiring any manual intervention. **Before making any changes, Pano creates a backup** of your `config.yml` file as **`authme-backup.yml`** in the **Pano plugin folder** (`plugins/Pano/`).
+Pano uses a **zero-touch configuration approach** — it automatically adjusts specific AuthMe configuration values to ensure compatibility without requiring any manual intervention. **Before making any changes, Pano saves the previous values** of the settings it changes to **`authme-backup.yml`** in the **Pano plugin folder** (`plugins/Pano/`), and puts them back when the integration is turned off or the server is disconnected.
 
 The following settings are modified:
 
@@ -92,7 +91,7 @@ The following settings are modified:
 
 With the integration active, Pano manages:
 
-- **Player Registration** — New players register through your website
+- **Player Registration** — New players register on your website or with `/register` in game; both create the Pano account
 - **Player Login** — Authentication is handled by Pano and synchronized with AuthMe
 - **Password Changes** — Players can change their passwords from the website
 - **Password Recovery** — Forgotten passwords can be reset via email (if SMTP is configured)

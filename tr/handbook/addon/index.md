@@ -43,11 +43,11 @@ Buradaki her şey, Pano'nun **kod yazacağınız makinenin aynısında** çalı�
 
 | İhtiyacın olan | Nedir |
 |---|---|
-| **Bir JDK, sürüm 11 veya daha yenisi** | Gradle derlemesini çalıştırır. Herhangi bir Java 11+ işini görür — derleme, ihtiyaç duyduğu tam iç Java'yı kendi başına getirir. `java -version` ile doğrulayın. |
+| **Bir JDK, sürüm 17 veya daha yenisi** | Gradle derlemesini çalıştırır. Herhangi bir Java 17+ işini görür — derleme, kodu derlediği Java 11 araç zincirini kendi başına indirir. `java -version` ile doğrulayın. |
 | **Bun** | Arayüzü kurar ve derler, ayrıca geliştirme izleyicisini çalıştırır. [bun.sh](https://bun.sh) adresinden edinin. `bun --version` ile doğrulayın. |
 | **Git** | Şablonu indirir. `git --version` ile doğrulayın. |
 | **Çalışan bir Pano** | Çalışırken eklentiniz canlı bir Pano ile konuşur. Henüz yoksa önce [Kurulum](/tr/platform/installation/) sayfasını izleyin — ve **Geliştirme Modu'nu açın** (bunu sonraki sayfada yapacağız). |
-| **Bir kod editörü** | Her şey işe yarar, ama Kotlin için tam bir IDE baş ağrısından kurtarır — [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/) ücretsizdir ve şablonun proje dosyalarıyla birlikte gelir. |
+| **Bir kod editörü** | Her şey işe yarar, ama Kotlin için tam bir IDE baş ağrısından kurtarır — [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/) ücretsizdir ve şablonun Gradle projesini doğrudan açar. |
 
 Uzman olmanıza **gerek yok**. Biraz Kotlin ve biraz Svelte yardımcı olur, ama buradaki her adım kopyala-yapıştır yapılabilir. Nazik bir giriş isterseniz [Svelte eğitimi](https://svelte.dev/tutorial) mükemmel ve ücretsizdir.
 

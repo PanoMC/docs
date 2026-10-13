@@ -96,7 +96,7 @@ Paneli yeniden yükleyin. Kenar çubuğunda, **Gönderiler**'in hemen altında, 
 
 ## Toast'ları gösterme
 
-Bir eylemi yöneticiye doğrulamak için, bir toast gösterin (küçük bir açılır mesaj). `showToast`'ı `@panomc/sdk/toasts`'tan içe aktarın — ve [Metni çevirme](/tr/addon/frontend/#bilesenlerinizdeki-metni-cevirme) bölümündeki `$_` çeviri yardımcısını kullandığına dikkat edin:
+Bir eylemi yöneticiye doğrulamak için, bir toast gösterin (küçük bir açılır mesaj). `showToast`'ı `@panomc/sdk/toasts`'tan içe aktarın — ve [Metni çevirme](/tr/addon/frontend/#bilesenlerinizde-metni-cevirme) bölümündeki `$_` çeviri yardımcısını kullandığına dikkat edin:
 
 ```svelte
 <script>
@@ -117,7 +117,7 @@ Bu `save`'i bir düğmeye bağlayın ve ona tıklayın. Bir toast'ın kayarak ge
 
 ## Sunucu yönetimi kurulumunda giriş öğeleri
 
-**Sunucu Yönetimi** modundaki bir kurulum tema çalıştırmaz; yöneticiler panelin kendi sayfasında giriş yapar. Eklentiniz temanın giriş sayfasına bir şey koyuyorsa (captcha, giriş düğmesi), onu panelde de kaydedin — çağrılar aynıdır:
+**Sunucu Yönetimi** modundaki bir kurulum tema çalıştırmaz; yöneticiler panelin kendi sayfasında giriş yapar. Eklentiniz temanın giriş sayfasına bir şey koyuyorsa (captcha, giriş düğmesi), onu panelde de kaydedin — çağrılar aynıdır; tek fark, site tarafının `view` aldığı yerde panelin `component` almasıdır:
 
 ```js
 if (pano.isPanel && pano.ui.auth?.login) {
@@ -142,4 +142,4 @@ Yönetici tarafı bitti: bir ayarlar bölümü, gezinme bağlantısı olan tam b
 - **[Tema Arayüzü](/tr/addon/theme-ui/)** — ziyaretçiye dönük taraf, `ApiUtil` dâhil eksiksiz.
 - **[Backend Geliştirme](/tr/addon/backend/)** — Kotlin uç noktaları ve bu sayfanın kapıladığı izin.
 - **[Derleme ve Yayınlama](/tr/addon/publishing/)** — bitmiş eklentiyi bir yayın jar'ına dönüştürün. Bir yayın derlemesi arayüzü **içermek zorundadır**, dolayısıyla onun için asla `-Pnoui` kullanmayın.
-- **Referans eklentiler** — [PanoMC GitHub org](https://github.com/PanoMC)'undaki yerleşik eklentiler, buradaki her desen için çalışan referanstır: **Announcement** eklentisi (koşullu `invisible`), **FAQ** ve **Pages** eklentileri (`skipLoad` + `app.onLoad`), **Comments** eklentisi (`systemLayout`) ve **`pano-plugin-link-redirects`** (dinamik sayfalar + temizlik).
+- **Referans eklentiler** — [PanoMC GitHub org](https://github.com/PanoMC)'undaki yerleşik eklentiler, buradaki her desen için çalışan referanstır: **Announcement** eklentisi (koşullu `invisible`, `skipLoad`), **FAQ** ve **Pages** eklentileri (`app.onLoad`), **Comments** eklentisi (`systemLayout`) ve **`pano-plugin-link-redirects`** (dinamik sayfalar + temizlik).

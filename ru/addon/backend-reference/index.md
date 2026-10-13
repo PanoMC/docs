@@ -86,12 +86,13 @@ Pano заполняет их за вас до того, как выполнит�
 
 ### Хуки жизненного цикла
 
-Все являются `open suspend fun` с пустым телом по умолчанию (`open` = вы можете переопределить его; *no-op* = ничего не делает, пока вы не переопределите; `suspend` = смотрите блок вверху). Переопределяйте только то, что нужно. Они выполняются в таком порядке:
+Все являются `open suspend fun` с пустым телом по умолчанию (`open` = вы можете переопределить его; *no-op* = ничего не делает, пока вы не переопределите; `suspend` = смотрите блок вверху). Переопределяйте только то, что нужно. Какие из них выполняются, зависит от того, что происходит с дополнением:
 
 ```
-jar load → onCreate() → onEnable() → onStart()
-        …running…
-onStop() → onDisable() → onUninstall()
+server boot:    jar load → onCreate() → onStart() → …running… → onStop()
+panel Enable:   onEnable() → onStart()
+panel Disable:  onStop() → onDisable()
+panel Delete:   onUninstall() → onStop()
 ```
 
 `verifyLicense()` **не** часть этой последовательности — он выполняется по требованию, когда админ сайта нажимает *Обновить лицензию* в панели (только премиум-дополнения).
@@ -99,11 +100,11 @@ onStop() → onDisable() → onUninstall()
 | Хук | Выполняется когда |
 |---|---|
 | `onCreate()` | Объект плагина сконструирован — первый выполняющийся хук (ваши внедрённые свойства к этому моменту уже установлены) |
-| `onEnable()` | Дополнение включено — при загрузке сервера или когда админ нажимает *Включить* в панели |
+| `onEnable()` | Админ нажимает *Включить* в панели, или дополнение только что установлено. При обычной загрузке сервера не вызывается |
 | `onStart()` | Дополнение стартует — поместите сюда код настройки. Сначала проверьте `setupManager.isSetupDone()` и вернитесь рано, если `false` (смотрите §13), чтобы никогда не трогать базу данных до установки сайта |
-| `onStop()` | Дополнение останавливается — отменяйте здесь таймеры/задачи |
-| `onDisable()` | Дополнение отключено, его данные сохранены — при выключении сервера или когда админ нажимает *Отключить* |
-| `onUninstall()` | Дополнение **удалено** (админ нажимает *Удалить*) — сбрасывайте здесь ваши таблицы |
+| `onStop()` | Дополнение останавливается (выключение сервера, *Отключить*, *Удалить*) — отменяйте здесь таймеры/задачи |
+| `onDisable()` | Админ нажимает *Отключить*; данные дополнения сохраняются. При выключении сервера не вызывается |
+| `onUninstall()` | Дополнение **удалено** (админ нажимает *Удалить*) — сбрасывайте здесь ваши таблицы. Выполняется до остановки дополнения |
 | `verifyLicense()` | Кнопка «Обновить лицензию» в панели (премиум-дополнения) |
 
 ### Методы
@@ -112,8 +113,8 @@ onStop() → onDisable() → onUninstall()
 |---|---|---|
 | `registerSingletonGlobal` | `(bean: Any)` | Поделиться bean-ом с другими дополнениями |
 | `unRegisterGlobal` | `(bean: Any)` | Убрать общий bean |
-| `register` | `(listener: PluginEventListener)` | Зарегистрировать динамический слушатель событий |
-| `unRegister` | `(listener: PluginEventListener)` | Убрать динамический слушатель событий |
+| `register` | `(eventListener: PluginEventListener)` | Зарегистрировать динамический слушатель событий |
+| `unRegister` | `(eventListener: PluginEventListener)` | Убрать динамический слушатель событий |
 | `registerCommands` | `(obj: Any)` | Зарегистрировать методы `@Command` на объекте (`@Command` = аннотация, добавляющая консольную команду — смотрите §11) |
 | `unRegisterCommands` | `(obj: Any)` | Убрать их |
 | `getLicenseManager` | `(): LicenseManager` | Сервис лицензий хоста (премиум) |
@@ -195,7 +196,6 @@ class GetShoutsAPI : Api() {
 | `Route.paths` | `val paths: List<Path>` | Пути, которые обрабатывает этот маршрут (обязательно) |
 | `Route.order` | `open val order = 1` | Если два маршрута могут совпасть с одним URL, тот, у кого `order` меньше, пробуется первым |
 | `Route.getValidationHandler` | `(schemaRepository): ValidationHandler?` | Валидация тела/query запроса |
-| `Route.corsHandler` | `open fun corsHandler(): Handler?` | Переопределить CORS (значения по умолчанию предоставлены) |
 | `Route.bodyHandler` | `open fun bodyHandler(): Handler?` | Переопределить парсинг тела (смотрите загрузки) |
 
 ### Базовые классы — выбирайте по тому, кто может вызывать
@@ -228,9 +228,9 @@ class GetShoutsAPI : Api() {
 
 | Вещь | Сигнатура | Назначение |
 |---|---|---|
-| `Successful` | `Successful(map: Map<String, Any?> = emptyMap())` | Успех → `{…map…}` |
+| `Successful` | `Successful(responseMap: Map<String, Any?> = mapOf())` | Успех → `{…map…}` |
 | `InvalidFields` | `InvalidFields(mapOf("email" to "EXISTS"))` | Ошибки на уровне полей → `{"error":{"code":"INVALID_FIELDS","fields":{"email":"EXISTS"}}}` |
-| Подклассы `Error` | `throw NotFound()` / `BadRequest()` / … | ~100 предопределённых в `com.panomc.platform.error` (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
+| Подклассы `Error` | `throw NotFound()` / `BadRequest()` / … | более 130 предопределённых в `com.panomc.platform.error` (`NotFound`, `BadRequest`, `NoPermission`, `NotLoggedIn`, `InternalServerError`, …) |
 | Своя ошибка | `class SlugTaken : Error("SLUG_TAKEN", 409)` | Код (`^[A-Z][A-Z0-9_]*$`) и статус объявляете вы; клиент получает `{"error":{"code":"SLUG_TAKEN"}}` |
 
 Чтобы сообщить об ошибке запроса, вы **бросаете** `Error` (Pano `com.panomc.platform.model.Error`, **не** встроенный `Error` Kotlin) — вы не возвращаете её. Сбои валидации превращаются в `BadRequest` за вас.
@@ -257,7 +257,7 @@ override fun getValidationHandler(schemaRepository: SchemaRepository): Validatio
 
 Каждой таблице базы данных нужны **три небольших файла** (плюс необязательные миграции):
 
-- `Shout.kt` — сама строка, data-класс, расширяющий `DBEntity`.
+- `Shout.kt` — сама строка, класс, расширяющий `DBEntity`.
 - `ShoutDao.kt` — абстрактный класс, который *объявляет* запросы. **Это тип, который вы внедряете** в эндпоинты.
 - `ShoutDaoImpl.kt` — класс `@Dao`, содержащий реальный SQL.
 
@@ -275,7 +275,7 @@ override fun getValidationHandler(schemaRepository: SchemaRepository): Validatio
 | `Dao.fields` | `open val fields: List<String>` | Имена столбцов для построения запросов |
 | `Dao.tableName` | `protected val tableName` | Выводится автоматически из имени класса вашей сущности (`ShoutItem` → `shout_item`); только для чтения — вы его не задаёте |
 | `Dao.getTablePrefix` | `fun getTablePrefix(): String` | Префикс таблиц экземпляра |
-| `Row.toEntity()` | расширение | Одна строка → ваша модель (через Gson). Функция-расширение из `com.panomc.platform.db` — вызывайте `row.toEntity()` на строке результата |
+| `Row.toEntity()` | расширение | Одна строка → ваша модель (через Gson). Объявлена внутри `Dao`, поэтому работает только внутри вашего DAO-класса — вызывайте `row.toEntity()` на строке результата |
 | `RowSet.toEntities()` | расширение | Много строк → `List<T>`. Та же идея: вызывайте `rows.toEntities()` на результате запроса |
 | `List<String>.toTableQuery()` | расширение | Список столбцов в обратных кавычках |
 | `DatabaseMigration` | `DatabaseMigration(from: Int, to: Int, info: String)` | Шаг схемы; переопределите `val handlers: List<suspend (SqlClient) -> Unit>` |
@@ -324,17 +324,18 @@ class ShoutMigration1to2(
 |---|---|---|
 | `PluginConfig` | `open class PluginConfig` (имеет `version: Int`) | База для вашей конфигурации; добавляйте свои поля со значениями по умолчанию |
 | `PluginConfigManager<T>` | `PluginConfigManager(plugin, T::class.java)` | Загружает/сохраняет файл для одного класса конфигурации |
-| `.config` | `val config: T` | Текущие типизированные значения |
+| `.config` | `var config: T` (`private set`) | Текущие типизированные значения |
 | `.saveConfig` | `fun saveConfig(config: JsonObject)` | Сохранить изменения на диск |
 | `.configFilePath` | `val configFilePath: String` | Разрешённый путь к `config.conf` |
 | `PluginConfigMigration` | `PluginConfigMigration(from: Int, to: Int, versionInfo: String)` | Переопределите `fun migrate(config: JsonObject)`; аннотируйте `@Migration` |
 | `@ConfigComment` | `@ConfigComment(vararg lines: String)` | Комментарий-документация над полем в сгенерированном файле |
 | `@ConfigSection` | `@ConfigSection(title: String)` | Сгруппировать ключи под баннером |
 
-Почему `.config` — типизированный `T`, а `.saveConfig` принимает `JsonObject`? Чтение даёт вам ваш собственный типизированный класс; сохранение принимает сырой `JsonObject`, чтобы вы могли менять только нужные ключи. Сохранение выглядит так:
+Почему `.config` — типизированный `T`, а `.saveConfig` принимает `JsonObject`? Чтение даёт вам ваш собственный типизированный класс; сохранение принимает сырой `JsonObject` и **переписывает из него весь файл** — пропущенный ключ исчезает из файла и возвращается к значению по умолчанию. Поэтому начинайте с текущей конфигурации и меняйте нужное:
 
 ```kotlin
-configManager.saveConfig(JsonObject().put("apiKey", "new-value"))
+val current = JsonObject.mapFrom(configManager.config)
+configManager.saveConfig(current.put("apiKey", "new-value"))
 ```
 
 Зарегистрируйте менеджер как **синглтон** (один общий экземпляр) в вашем собственном `pluginBeanContext` во время `onStart()`, затем извлекайте его лениво, когда запрос нуждается в нём. Две строки:
@@ -360,7 +361,7 @@ pluginBeanContext.beanFactory.registerSingleton(PluginConfigManager::class.java.
 | `RouterEventListener` | `onInitRouteList(routes: MutableList<Route>)`, `onRouterCreate(router: Router)` |
 | `AuthEventListener` | `onBeforeAuthenticate(context, sqlClient): LoginDecision?`, `onBeforeVerifyLinkCode(context, sqlClient): LoginDecision?`, `onBeforeLogin(user, context, sqlClient): LoginDecision?`, `onAfterLogin(user, context, sqlClient)`, `onAfterRegister(user, sqlClient)` |
 | `PlayerEventListener` | `onDelete(user: User)` — очистка при удалении аккаунта |
-| `ProfilePictureEventListener` | `resolveProfilePictureUrl(user: User): String?` |
+| `ProfilePictureEventListener` | `resolveProfilePictureUrl(user: User): String?` (тела по умолчанию нет — его нужно реализовать) |
 | `PluginLifecycleListener` | `onPluginLoad/Enable/Disable/Unload/Uninstall(plugin: PanoPlugin)` |
 | `PluginEventListener` | Маркер для ваших собственных межаддонных событий |
 
@@ -413,8 +414,8 @@ class MyShoutListener : ShoutCreatedListener {
 
 | Тип | Сигнатура | Узел, который он производит |
 |---|---|---|
-| `Permission` | `open class Permission(iconName: String)` | `pano.<key>` |
-| `PanelPermission` | `open class PanelPermission(iconName: String)` | `pano.plugin.<pluginId>.<dotted.key>` |
+| `Permission` | `open class Permission(iconName: String = "")` | `pano.<key>` |
+| `PanelPermission` | `open class PanelPermission(iconName: String = "")` | `pano.plugin.<pluginId>.<dotted.key>` |
 | `@PermissionDefinition` | аннотация класса | Автоматически регистрирует разрешение |
 
 (`iconName` = имя иконки Font Awesome, показываемой рядом с разрешением в панели, например `"fa-bullhorn"` или `"fa-comments"`.)
@@ -447,7 +448,7 @@ class MyShoutListener : ShoutCreatedListener {
 |---|---|---|
 | `ServerManager.registerEvent` | `fun registerEvent(event: ServerEvent<*, *>)` | Обработать тип входящего события |
 | `ServerManager.unregisterEvent` | `fun unregisterEvent(event: ServerEvent<*, *>)` | Прекратить обрабатывать его |
-| `ServerManager.sendMessage` | `fun sendMessage(message: PlatformMessage, server: Server)` | Отправить-и-забыть на один сервер |
+| `ServerManager.sendMessage` | `fun sendMessage(platformMessage: PlatformMessage, server: Server)` | Отправить-и-забыть на один сервер |
 | `ServerManager.getConnectedServers` | `fun getConnectedServers(): Map<Server, ServerWebSocket>` | Подключённые в данный момент серверы (ключ = `Server`, значение = его живой WebSocket) |
 | `ServerManager.isConnected` | `fun isConnected(id: Long): Boolean` | — |
 | `ServerEvent<R, M>` | `abstract suspend fun handle(request: R, server: Server): M?` | Обработчик входящего события (R = полезная нагрузка запроса, которую вы получаете, M = тип сообщения, которым вы можете ответить; `M?` означает, что ответ необязателен) |
@@ -467,7 +468,7 @@ class MyShoutListener : ShoutCreatedListener {
 |---|---|---|
 | `TokenType` | `interface` — `getName(): String`, `getExpireDate(): Long` (истечение как epoch millis) | Ваш тип токена (имя по умолчанию из имени класса минус `TokenType`, `UPPER_SNAKE`) |
 | `TokenTypeRegistry.registerPluginToken` | `fun registerPluginToken(pluginId: String, tokenType: TokenType)` | Зарегистрировать (автоматически убирается при выгрузке) |
-| `TokenProvider.generateToken` | `fun generateToken(subject: String, tokenType: TokenType): Pair<String, Long>` | Возвращает `(tokenString, expiresAtEpochMillis)` — подписанный токен и когда он истекает (epoch миллисекунды) |
+| `TokenProvider.generateToken` | `fun generateToken(subject: String, tokenType: TokenType, claims: Map<String, String> = emptyMap()): Pair<String, Long>` | Возвращает `(tokenString, expiresAtEpochMillis)` — подписанный токен и когда он истекает (epoch миллисекунды) |
 | `TokenProvider.saveToken` | `suspend fun saveToken(token: String, subject: String, tokenType: TokenType, expireDate: Long, sqlClient: SqlClient, ipAddress: String? = null, userAgent: String? = null)` | Сохранить его |
 | `TokenProvider.isTokenValid` | `suspend fun isTokenValid(token: String, tokenType: TokenType, sqlClient: SqlClient): Boolean` | — |
 | `TokenProvider.invalidateToken` | `suspend fun invalidateToken(token: String, sqlClient: SqlClient)` | Отозвать один |
@@ -484,8 +485,8 @@ class MyShoutListener : ShoutCreatedListener {
 |---|---|
 | `sendNotification(…)` | Одному пользователю |
 | `sendPanelNotification(…)` | В панель одного пользователя |
-| `sendNotificationToAll(…)` | Каждому пользователю |
-| `sendPanelNotificationToAll(…)` | В панель каждого пользователя |
+| `sendNotificationToAll(…)` | Списку пользователей (`userIdList`) |
+| `sendPanelNotificationToAll(…)` | В панели списка пользователей (`userIdList`) |
 | `sendNotificationToAllAdmins(…)` | Всем админам |
 | `sendNotificationToAllWithPermission(…)` | Всем, кто держит разрешение |
 
@@ -532,16 +533,17 @@ class MyShoutListener : ShoutCreatedListener {
 Внутри эндпоинта свяжите это так — возьмите SQL-клиент, возьмите хост `DatabaseManager`, затем добавьте ваш журнал:
 
 ```kotlin
+// `plugin` is your plugin class, taken as a constructor parameter of the endpoint
 val sqlClient = getSqlClient()
-val databaseManager = applicationContext.getBean(DatabaseManager::class.java)
-databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, pluginId), sqlClient)
+val databaseManager = plugin.applicationContext.getBean(DatabaseManager::class.java)
+databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, username, plugin.pluginId, message), sqlClient)
 ```
 
 ::: tip Контрольная точка
-Запись теперь появляется на странице **Активность** панели.
+Запись теперь появляется на странице **Логи** (*Логи активности*) панели.
 :::
 
-Панель отрисовывает каждую запись с ключом локализации, выведенным из имени класса (минус `Log`, `UPPER_SNAKE`) под объектом `activity-logs` — `CreatedShoutLog` → `activity-logs.CREATED_SHOUT`. Каждый ключ в `JsonObject` `details`, который вы передаёте, подставляется в соответствующий `{{placeholder}}` в этой строке локализации. Смотрите [Локализация](/ru/addon/localization/).
+Панель отрисовывает каждую запись с ключом локализации, выведенным из имени класса (минус `Log`, `UPPER_SNAKE`) под объектом `activity-logs` — `CreatedShoutLog` → `activity-logs.CREATED_SHOUT`. Каждый ключ в `JsonObject` `details`, который вы передаёте, подставляется в соответствующий `{placeholder}` в этой строке локализации. Смотрите [Локализация](/ru/addon/localization/).
 
 ## 13. Bean-ы хоста
 

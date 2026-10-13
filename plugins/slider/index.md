@@ -18,7 +18,7 @@ The slider's behavior can be globally configured from the settings panel:
 
 ### Visual Controls
 - **Indicators & Controls:** Toggle the visibility of navigation dots (indicators) and previous/next arrows.
-- **Caption Styles:** Choose from `SOLID`, `GLASS`, or `GRADIENT` caption backgrounds.
+- **Caption Styles:** Choose from `NONE`, `SOLID`, `GLASS`, or `GRADIENT` caption backgrounds.
 - **Transparency & Blur:** Adjust the caption opacity and background blur (for Glass effect).
 - **Typography:** Custom colors for titles and subtitles, and select the appropriate SEO heading tag (`H1`–`H6`).
 

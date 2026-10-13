@@ -2,21 +2,25 @@
 
 **What this page gives you:** everything for the visitor-facing side of your addon — mount a component on the theme, give it server-rendered data, and call your backend. By the end the Shoutbox widget shows recent shouts on the home page.
 
-Everything here goes in the **`else` (theme) branch** of `onLoad()` in [`main.js`](/addon/frontend/). If you have not set up `main.js` yet, read [Frontend Development](/addon/frontend/) first.
+The site side is made of **view files** under `src/theme/views/` (see [Views](/addon/frontend/#views-one-file-per-page-or-widget)); they need no code in `main.js`. Only the registrations in the [Advanced](#advanced-—-skip-on-first-read) part go in the **`else` (theme) branch** of `onLoad()` in [`main.js`](/addon/frontend/).
 
 ## Mount a widget on the home page
 
-The theme exposes named **hooks** — spots where addons can inject a component (the full list of hook names is in the [Frontend API Reference](/addon/api-reference/); this tutorial uses `page:home:top`). To show the Shoutbox on the home page, register a component for the `page:home:top` hook, in the `else` (theme) branch:
+The theme exposes named **hooks** — spots where addons can inject a component (the full list of hook names is in the [Frontend API Reference](/addon/api-reference/); this tutorial uses `page:home:top`). To show the Shoutbox on the home page, name the `page:home:top` hook in the view file's `export const view`:
 
-```js
-pano.ui.hook.register({
-  name: 'page:home:top',
-  component: viewComponent(() => import('./theme/ShoutboxWidget.svelte')),
-});
+```svelte
+<!-- src/theme/views/ShoutboxWidget.svelte -->
+<script module>
+  export const view = { hook: 'page:home:top' };
+</script>
+
+<div class="shoutbox"></div>
 ```
 
+That is the whole registration. On the site, `pano.ui.hook.register({ name, component })` does not work: an item with `component` and no `view` is dropped with an error.
+
 ::: tip Check
-With the dev servers running, open the site's home page. You should see the `<div class="shoutbox">` container at the very top of the page (inspect it with your browser devtools). If you have not added `load()` yet — the next step — it will be empty; that is expected. If you don't see it at all, check the browser console for errors and confirm your `pluginId` and that you registered in the `else` branch.
+With the dev servers running, open the site's home page. You should see the `<div class="shoutbox">` container at the very top of the page (inspect it with your browser devtools). If you have not added `load()` yet — the next step — it will be empty; that is expected. If you don't see it at all, check the browser console for errors and confirm that the file is under `src/theme/views/` and the hook name is spelled right.
 :::
 
 ### Give the widget server-rendered data with `load()`
@@ -26,18 +30,20 @@ A good widget needs data, and it needs that data to be there in the **first serv
 A hook component can export a `load(event)` function from its **module script** — the `<script module>` block. That block runs once when the file is first loaded, before any instance of the component exists, which is why `load()` lives there and your normal per-instance component code lives in the plain `<script>` below it. The theme runs `load()` while the page is being prepared (on the server during SSR, and again on the client when navigating between pages) and hands whatever you return to the component as props. In Shoutbox, `load()` calls our public endpoint:
 
 ```svelte
-<!-- src/theme/ShoutboxWidget.svelte -->
+<!-- src/theme/views/ShoutboxWidget.svelte -->
 <script module>
   import { api } from '@panomc/sdk/plugin-api';
 
+  export const view = { hook: 'page:home:top' };
+
   export async function load(event) {
     const res = await api.get({ path: '/shouts', request: event });
-    return { shouts: res.shouts ?? [] };
+    return { shouts: res.items ?? [] };
   }
 </script>
 
 <script>
-  export let shouts = [];
+  let { shouts = [] } = $props();
 </script>
 
 <div class="shoutbox">
@@ -96,9 +102,9 @@ Everything below is for cases you will not hit on your first addon. Come back wh
 
 ### Fetch shared data once with `pano.ui.app.onLoad`
 
-`pano.ui.app.onLoad(callback)` registers a function the **theme** runs on every page request, before the page renders. Its callback receives `(data, event)`, where `data` is a shared bag of page data and `event` is the request (the same kind you pass to `ApiUtil`). Use it when one fetch needs to feed several registrations at once.
+`pano.ui.app.onLoad(callback)` registers a function the **theme** runs on every page request, before the page renders. Its callback receives `(data, event)`, where `data` is a shared bag of page data and `event` is the request (the same kind you pass to `api`). Use it when one fetch needs to feed several registrations at once.
 
-It is the alternative to a per-component `load()`: register a hook with `skipLoad: true` and fetch its data from a single `pano.ui.app.onLoad(async (data, event) => { ... })` instead. The FAQ and Pages addons use this when one fetch feeds several registrations.
+It is the alternative to a per-component `load()`: give the hook view `skipLoad: true` and fetch its data from a single `pano.ui.app.onLoad(async (data, event) => { ... })` instead. The Announcement addon does this; the FAQ and Pages addons use `app.onLoad` to register pages from what they fetch.
 
 ### Dynamic pages and cleanup
 
@@ -112,11 +118,11 @@ The fix is to track what you registered and remove entries that are gone, using 
 
 ```js
 const registeredPaths = new Set();
-const customPageComponent = viewComponent(() => import('./theme/CustomPage.svelte'));
 
 pano.ui.app.onLoad(async (data, event) => {
-  const res = await ApiUtil.get({ path: '/pages', request: event });
-  const incoming = new Set(res.pages.map((p) => p.url));
+  const res = await api.get({ path: '/pages', request: event });
+  const pages = res.items ?? [];
+  const incoming = new Set(pages.map((p) => p.url));
 
   // Remove routes we registered before that are no longer present.
   for (const path of registeredPaths) {
@@ -126,8 +132,9 @@ pano.ui.app.onLoad(async (data, event) => {
     }
   }
 
-  for (const page of res.pages) {
-    pano.ui.page.register({ path: page.url, component: customPageComponent });
+  for (const page of pages) {
+    // the view file is src/theme/views/CustomPage.svelte; on the site a page names a view, not a component
+    pano.ui.page.register({ path: page.url, view: 'shoutbox:CustomPage' });
     registeredPaths.add(page.url);
   }
 });

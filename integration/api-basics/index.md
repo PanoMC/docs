@@ -70,7 +70,7 @@ curl "http://localhost:8088/api/v1/posts?page=2&pageSize=20"
 
 ## Rate limits
 
-Calls are limited per visitor address. Limited calls answer `429 TOO_MANY_REQUESTS` and the headers `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `Retry-After`. A front-end that serves many visitors uses a [front-end key](../access/) so it gets its own buckets.
+Calls are limited per visitor address. Limited calls answer `429 RATE_LIMIT_EXCEEDED` and the headers `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `Retry-After`. A front-end that serves many visitors uses a [front-end key](../access/) so it gets its own buckets.
 
 ## Next
 
