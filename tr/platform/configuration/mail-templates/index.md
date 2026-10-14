@@ -40,9 +40,10 @@ oluşur:
 
 **Değişken ekleme.** Yan listede seçili e-postanın bildiği değerler durur (kullanıcı adı, bağlantılar, tutarlar…).
 Birine tıklayınca imlecin olduğu yere `{{username}}` olarak eklenir. Değişkenler
-konu ve buton URL'si dahil her alanda çalışır. Bazı değişkenler eklentinin sizin için hazırladığı **bloklardır**;
-örneğin Market'in ürün tablosu veya havale talimatları. Bunlar `{{{items}}}` (üç süslü parantez) olarak eklenir ve kendi
-satırlarında kalmalıdır.
+konu ve buton URL'si dahil her alanda çalışır. Bazı değişkenler **listedir** (ör. Market'in
+sipariş kalemleri): döngü olarak, `{{#each items}}…{{/each}}` şeklinde eklenir ve listede her satırın alanları görünür.
+Birkaçı hazır **HTML bloğudur** (ör. bir ödeme yönteminde yazılan havale talimatları); bunlar `{{{instructions}}}` (üç
+süslü parantez) olarak eklenir.
 
 Şunlar her e-postada kullanılabilir: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}`, `{{year}}`, `{{locale}}`.
 

@@ -38,9 +38,10 @@ The shared look (logo, white card, button, footer line) comes from the layout, s
 
 **Inserting variables.** The side list shows what the selected mail knows (username, links, amounts…). Click one to
 insert it at the cursor as `{{username}}`. Variables work in every
-field, including the subject and the button URL. Some variables are ready-made **blocks** the plugin builds for you,
-such as the Market's items table or bank transfer instructions; they are inserted as `{{{items}}}` (three braces) and
-should stay on a line of their own.
+field, including the subject and the button URL. Some variables are **lists** (e.g. the Market's
+order items): they are inserted as a loop, `{{#each items}}…{{/each}}`, and the list shows the fields each row has. A
+few are ready-made **HTML blocks** (e.g. the bank transfer instructions written in a payment method); they are inserted
+as `{{{instructions}}}` (three braces).
 
 These are available in every mail: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}`, `{{year}}`, `{{locale}}`.
 

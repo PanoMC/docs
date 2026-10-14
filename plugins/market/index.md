@@ -38,13 +38,18 @@ Payment API keys, merchant keys, and other secrets are stored **masked**. Reveal
 
 ## Emails
 
+::: v-pre
+
 The store's mails (the store's **E-Mail** settings choose which order mails go out) are one mail in **Panel → Settings →
 Mail templates** (Market group) with one variant per kind: order received, bank transfer instructions, order
 confirmation, gift received, order delivered, order refunded, expiry reminder, subscription reminder, subscription
 payment failed, subscription cancelled, subscription ended, shipment shipped, shipment delivered, and the test mail.
-Each variant has its own subject, text, button and footer in every language. The parts the store computes (the items
-table, totals, order details, bank transfer instructions, the address and the test-mode banner) are ready-made blocks you
-place in the text; their labels follow the plugin's translations. See [Mail Templates](../../platform/configuration/mail-templates/).
+Each variant has its own subject, text, button and footer in every language, and every word in it can be edited,
+the table labels included: the store passes the values (items, totals, order details, address…) and each language's
+template draws the tables itself, e.g. `{{#each items}}…{{/each}}`. Only the bank transfer instructions you wrote in the
+payment method stay a ready-made block. See [Mail Templates](../../platform/configuration/mail-templates/).
+
+:::
 
 ## What Visitors See
 

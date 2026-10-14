@@ -38,13 +38,18 @@ Ayarlar, eklentinin yapılandırmasında saklanır ve tamamen panelden düzenlen
 
 ## E-postalar
 
+::: v-pre
+
 Mağazanın e-postaları (hangi sipariş e-postalarının gideceğini mağazanın **E-Posta** ayarları belirler) **Panel → Ayarlar → E-posta şablonları**'nda
 (Market grubu) tek bir e-postadır ve her tür için bir varyantı vardır: sipariş alındı, havale talimatları, sipariş onayı,
 hediye alındı, sipariş teslim edildi, sipariş iade edildi, süre bitiş hatırlatması, abonelik hatırlatması, abonelik
 ödemesi başarısız, abonelik iptal edildi, abonelik sona erdi, kargoya verildi, kargo teslim edildi ve test e-postası.
-Her varyantın her dilde kendi konusu, metni, butonu ve alt bilgisi vardır. Mağazanın hesapladığı kısımlar (ürün tablosu,
-toplamlar, sipariş ayrıntıları, havale talimatları, adres ve test modu şeridi) metne yerleştirdiğiniz hazır bloklardır;
-etiketleri eklentinin çevirilerinden gelir. Bkz. [E-posta Şablonları](../../platform/configuration/mail-templates/).
+Her varyantın her dilde kendi konusu, metni, butonu ve alt bilgisi vardır ve tablo etiketleri dahil her kelimesi
+düzenlenebilir: mağaza değerleri verir (ürünler, toplamlar, sipariş ayrıntıları, adres…), tabloları her dilin şablonu
+kendisi çizer, ör. `{{#each items}}…{{/each}}`. Yalnızca ödeme yönteminde yazdığın havale talimatları hazır blok olarak
+kalır. Bkz. [E-posta Şablonları](../../platform/configuration/mail-templates/).
+
+:::
 
 ## Ziyaretçiler Ne Görür
 
