@@ -66,6 +66,7 @@ email {
 
 - Optional during setup; configurable later via **Panel → Settings → Platform**.
 - Without SMTP, password recovery and verification emails will not work.
+- The wording and look of every mail are edited in **Panel → Settings → Mail templates**; see [Mail Templates](../mail-templates/).
 - `provider`: how mail is sent. `SMTP` uses the settings in this block. `PANO_MAIL` sends through the [Pano Mail](#pano-mail) of the Pano account this installation is connected to, and the SMTP settings are not used. Default **SMTP**. Switch it in **Panel → Settings → Platform** instead of editing the file.
 - `host-managed`, `host-sender` and `custom` only matter on a **Pano Host** instance; leave them alone elsewhere.
     - `host-managed`: `true` means this block follows the instance's Pano Host mail and is rewritten on every boot. Saving other mail settings in **Panel → Settings** sets it to `false`, so they stay. Default **true**.

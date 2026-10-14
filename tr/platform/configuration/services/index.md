@@ -66,6 +66,7 @@ email {
 
 - Kurulum sırasında opsiyoneldir; sonradan **Panel → Ayarlar → Platform** üzerinden yapılandırılabilir.
 - SMTP olmadan, şifre sıfırlama ve doğrulama e-postaları çalışmaz.
+- Her e-postanın metni ve görünümü **Panel → Ayarlar → E-posta şablonları**'ndan düzenlenir; bkz. [E-posta Şablonları](../mail-templates/).
 - `provider`: e-postanın nasıl gönderileceği. `SMTP` bu bloktaki ayarları kullanır. `PANO_MAIL`, kurulumun bağlı olduğu Pano hesabının [Pano Mail](#pano-mail) hizmetiyle gönderir; SMTP ayarları kullanılmaz. Varsayılan **SMTP**. Dosyayı düzenlemek yerine **Panel → Ayarlar → Platform**'dan değiştirin.
 - `host-managed`, `host-sender` ve `custom` yalnızca bir **Pano Host** kurulumunda işe yarar; başka yerde dokunmayın.
     - `host-managed`: `true` ise bu blok kurulumun Pano Host e-postasını izler ve her açılışta yeniden yazılır. **Panel → Ayarlar**'da başka e-posta ayarları kaydetmek bunu `false` yapar, böylece ayarlarınız kalır. Varsayılan **true**.

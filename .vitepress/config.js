@@ -135,6 +135,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: "Services", link: "/platform/configuration/services/" },
+                  { text: "Mail Templates", link: "/platform/configuration/mail-templates/" },
                   { text: "Server", link: "/platform/configuration/server/" },
                   { text: "Production", link: "/platform/configuration/production/" },
                   { text: "Memory & Limits", link: "/platform/configuration/memory/" },
@@ -450,6 +451,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: "Servisler", link: "/tr/platform/configuration/services/" },
+                  { text: "E-posta Şablonları", link: "/tr/platform/configuration/mail-templates/" },
                   { text: "Sunucu", link: "/tr/platform/configuration/server/" },
                   { text: "Üretim", link: "/tr/platform/configuration/production/" },
                   { text: "Bellek ve Limitler", link: "/tr/platform/configuration/memory/" },
@@ -765,6 +767,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: "Сервисы", link: "/ru/platform/configuration/services/" },
+                  { text: "Шаблоны писем", link: "/ru/platform/configuration/mail-templates/" },
                   { text: "Сервер", link: "/ru/platform/configuration/server/" },
                   { text: "Production", link: "/ru/platform/configuration/production/" },
                   { text: "Память и лимиты", link: "/ru/platform/configuration/memory/" },
