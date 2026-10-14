@@ -527,6 +527,24 @@ the single variant `default`. Names and labels are per language and fall back to
 }
 ```
 
+::: v-pre
+
+*Layouts (optional).* A mail is wrapped in Pano's main layout unless it says otherwise: add `"layout"` to the mail in
+`index.json` — another layout id or `"none"`. A plugin can ship its own layouts: list them under `"layouts"` and put each
+in `mail-templates/layouts/<key>.hbs`; its id is `<pluginId>:<key>`. A layout must contain `{{{content}}}` and can use
+the same slots as the main one (`subject`, `preheader`, `buttonLabel`, `buttonUrl`, `footer`, `websiteName`,
+`websiteUrl`, `websiteLogo`, `year`, `locale`). Admins can edit and reset your layouts and pick another layout per mail,
+but they cannot delete them.
+
+```json
+{
+  "layouts": [{ "key": "plain", "name": { "en-US": "Plain", "tr": "Sade", "ru": "Простой" } }],
+  "mails": [{ "key": "magic-login", "layout": "pano-plugin-auth-guard:plain", "...": "..." }]
+}
+```
+
+:::
+
 *2. Write each `<locale>.hbs`*: a header of single-line `key: value` pairs between `---` lines (values are taken
 literally, no quotes), then the body as an HTML fragment:
 

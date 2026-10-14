@@ -494,7 +494,7 @@ Yaygın olan, tam hâliyle: `suspend fun sendNotification(userId: Long, userNoti
 
 **Posta** — `MailManager` ile bir `TemplateMail` gönderin. Metinleri Kotlin'de de `locales/*.json`'da da değildir: her
 dilin jar'ınızda kendi Handlebars dosyası vardır ve yöneticiler bunları **Ayarlar → E-posta şablonları**'ndan yeniden
-yazabilir (bkz. [E-posta Şablonları](/tr/platform/configuration/mail-templates/)). Ortak yerleşimi (logo, kart, buton,
+yazabilir (bkz. [E-posta Şablonları](/tr/platform/configuration/mail-templates/)). Ortak düzeni (logo, kart, buton,
 alt bilgi) Pano ekler.
 
 *1. Varsayılanları paketleyin:* `src/main/resources/mail-templates/` altında, her e-posta × varyant × dil için bir dosya:
@@ -528,6 +528,25 @@ olmayan bir e-postanın tek varyantı `default`'tur. Adlar ve etiketler dil baş
 }
 ```
 
+::: v-pre
+
+*Düzenler (isteğe bağlı).* Bir e-posta, aksi belirtilmedikçe Pano'nun ana düzenine yerleştirilir: `index.json` içinde
+e-postaya `"layout"` ekleyin — başka bir düzen kimliği ya da `"none"`. Bir eklenti kendi düzenlerini getirebilir:
+bunları `"layouts"` altında listeleyin ve her birini `mail-templates/layouts/<key>.hbs` dosyasına koyun; kimliği
+`<pluginId>:<key>` olur. Bir düzen `{{{content}}}` içermek zorundadır ve ana düzenle aynı yuvaları kullanabilir
+(`subject`, `preheader`, `buttonLabel`, `buttonUrl`, `footer`, `websiteName`, `websiteUrl`, `websiteLogo`, `year`,
+`locale`). Yöneticiler düzenlerinizi düzenleyip sıfırlayabilir ve e-posta başına başka bir düzen seçebilir, ama
+silemez.
+
+```json
+{
+  "layouts": [{ "key": "plain", "name": { "en-US": "Plain", "tr": "Sade", "ru": "Простой" } }],
+  "mails": [{ "key": "magic-login", "layout": "pano-plugin-auth-guard:plain", "...": "..." }]
+}
+```
+
+:::
+
 *2. Her `<locale>.hbs` dosyasını yazın:* `---` satırları arasında tek satırlık `anahtar: değer` çiftlerinden oluşan bir
 başlık (değerler olduğu gibi alınır, tırnak yok), ardından HTML parçası olarak gövde:
 
@@ -544,7 +563,7 @@ footer: Bu bağlantıyı sen istemediysen bu e-postayı yok sayabilirsin. Bağla
 ```
 
 Başlık anahtarları: `subject` (zorunlu), `preheader`, `buttonLabel`, `buttonUrl`, `footer` ve `mode` — `fields`
-(varsayılan) ya da `html`; ikincisinde gövde, yerleşim olmadan gönderilen eksiksiz bir HTML belgesidir. Her alan bir
+(varsayılan) ya da `html`; ikincisinde gövde, düzen olmadan gönderilen eksiksiz bir HTML belgesidir. Her alan bir
 [Handlebars](https://handlebarsjs.com/guide/) şablonudur; yalnızca yerleşik yardımcılar (`if`, `unless`, `each`, `with`,
 `lookup`) kullanılabilir.
 

@@ -25,7 +25,7 @@ Her seferinde bir **e-posta × varyant × dil** düzenlersiniz. Değiştirdiğin
 
 ## Düzenleyici
 
-Ortak görünüm (logo, beyaz kart, buton, alt bilgi satırı) yerleşimden gelir; bu yüzden bir şablon yalnızca metinlerinden
+Ortak görünüm (logo, beyaz kart, buton, alt bilgi satırı) düzenden gelir; bu yüzden bir şablon yalnızca metinlerinden
 oluşur:
 
 | Alan | Ne işe yarar |
@@ -48,10 +48,10 @@ süslü parantez) olarak eklenir.
 Şunlar her e-postada kullanılabilir: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}`, `{{year}}`, `{{locale}}`.
 
 **Gelişmiş (HTML).** **Gelişmiş** sekmesi e-postanın tamamını tek bir HTML belgesi olarak gösterir: alanlarınızın
-yerleştirildiği ortak yerleşim. Orada kaydederseniz bu tam HTML saklanır ve e-posta artık ortak yerleşimi izlemez.
+yerleştirildiği ortak düzen. Orada kaydederseniz bu tam HTML saklanır ve e-posta artık ortak düzeni izlemez.
 
 
-**Handlebars.** Tüm alanlar, gövde, tam HTML ve yerleşim birer [Handlebars](https://handlebarsjs.com/guide/) şablonudur:
+**Handlebars.** Tüm alanlar, gövde, tam HTML ve düzen birer [Handlebars](https://handlebarsjs.com/guide/) şablonudur:
 `{{name}}` bir değişkeni yazar, `{{{name}}}` hazır bir HTML bloğunu yazar, `{{#if name}}…{{else}}…{{/if}}` bir kısmı
 yalnızca değer varsa gösterir, `{{#each list}}…{{/each}}` bir kısmı tekrarlar. Yalnızca yerleşik yardımcılar çalışır
 (`if`, `unless`, `each`, `with`, `lookup`); özel yardımcılar kullanılamaz. Sözdiziminin tamamı için
@@ -65,13 +65,25 @@ uzun konu ya da derlenmeyen Handlebars).
 
 **Varsayılana sıfırla** o dildeki sürümünüzü siler ve varsayılan metin geri gelir.
 
-### Yerleşim
+### Düzenler
 
 ::: v-pre
 
-**Yerleşimi düzenle**, her e-postanın içine yerleştirildiği tek HTML yerleşimini açar: logo başlığı, kart, buton ve alt
-bilgi. Kendi metni yoktur, böylece tek yerleşim her dile hizmet eder. Her e-postanın gövdesinin girdiği `{{{content}}}`
-yuvasını içermek zorundadır. **Varsayılana sıfırla** Pano'nun yerleşimini geri getirir.
+Düzen, e-postanın içine yerleştirildiği HTML'dir: logo başlığı, kart, buton ve alt bilgi. Kendi metni yoktur, böylece
+tek düzen her dile hizmet eder; e-postanın gövdesinin girdiği `{{{content}}}` yuvasını içermek zorundadır. Buton yalnızca
+e-postanın bir buton URL'si varsa görünür.
+
+**Düzenler** kartı her düzeni nereden geldiği ve kaç e-postanın kullandığıyla listeler:
+
+- **Ana düzen** — Pano'nun kendi düzeni; aksi seçilmedikçe her e-posta bunu kullanır.
+- **Eklenti düzenleri** — bir eklentinin kendi e-postaları için getirdiği düzenler.
+- **Özel düzenler** — **Yeni düzen** ile boş ya da başka bir düzenin kopyası olarak oluşturduğun düzenler.
+
+Her düzen düzenlenebilir; **Varsayılana sıfırla** ana düzenin ve eklenti düzenlerinin gelen halini geri getirir. Yalnızca
+özel düzenler silinebilir; onu kullanan e-postalar ana düzene döner (onay penceresi bunları listeler).
+
+Bir e-postanın düzenleyicisinde **Düzen**, o e-postanın tüm dilleri ve türleri için düzeni seçer: varsayılanı, başka bir
+düzen ya da **Yok** — bu durumda gövde başlık, kart ve alt bilgi olmadan e-postanın tamamı olarak gönderilir.
 
 :::
 

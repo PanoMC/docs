@@ -63,13 +63,25 @@ a subject that is too long, or Handlebars that does not compile).
 
 **Reset to default** drops your version of that language, and the default text comes back.
 
-### The layout
+### Layouts
 
 ::: v-pre
 
-**Edit layout** opens the one HTML layout every mail is wrapped in: the logo header, the card, the button and the
-footer. It holds no text of its own, so one layout serves every language. It must keep the `{{{content}}}` slot,
-where each mail's body goes. **Reset to default** brings back Pano's layout.
+A layout is the HTML a mail is wrapped in: the logo header, the card, the button and the footer. It holds no text of its
+own, so one layout serves every language, and it must keep the `{{{content}}}` slot where the mail's body goes. The
+button only shows when the mail has a button URL.
+
+The **Layouts** card lists every layout with where it comes from and how many mails use it:
+
+- **Main layout** — Pano's own; every mail uses it unless told otherwise.
+- **Plugin layouts** — shipped by a plugin for its mails.
+- **Custom layouts** — made with **New layout**, empty or as a copy of another one.
+
+Every layout can be edited, and **Reset to default** brings back the shipped version of the main and plugin layouts.
+Only custom layouts can be deleted; the mails that used one go back to the main layout (the confirmation lists them).
+
+In a mail's editor, **Layout** picks the layout for that mail in every language and variant: its default, any other
+layout, or **None** — the body is then sent as the whole mail, with no header, card or footer.
 
 :::
 
