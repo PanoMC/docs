@@ -477,7 +477,7 @@ A **token** here is a signed string in **JWT** format: anyone can read what's in
 
 ## 10. Notifications & mail
 
-*Source: `com.panomc.platform.notification` (`NotificationManager`, `UserNotificationType`, `PanelUserNotificationType`), `com.panomc.platform.mail` (`MailManager`, `Mail`)*
+*Source: `com.panomc.platform.notification` (`NotificationManager`, `UserNotificationType`, `PanelUserNotificationType`), `com.panomc.platform.mail` (`MailManager`, `TemplateMail`, `Mail`)*
 
 **Notifications** appear under the bell icon in the theme and panel top bar. Subclass `UserNotificationType` or `PanelUserNotificationType`, annotate `@NotificationDefinition`, then send via `NotificationManager`:
 
@@ -492,14 +492,105 @@ A **token** here is a signed string in **JWT** format: anyone can read what's in
 
 The common one, in full: `suspend fun sendNotification(userId: Long, userNotificationType: UserNotificationType, sqlClient: SqlClient)`. The other five follow the same shape (see `NotificationManager`, from source line 33).
 
-**Mail** — implement `Mail`, send with `MailManager` (see `pano-plugin-auth-guard` `MagicLoginMail`):
+**Mail** — send a `TemplateMail` with `MailManager`. Its texts are not in Kotlin and not in `locales/*.json`: every
+language has its own Handlebars file in your jar, and admins can rewrite them in **Settings → Mail templates** (see
+[Mail Templates](/platform/configuration/mail-templates/)). Pano adds the shared layout (logo, card, button, footer).
+
+*1. Bundle the defaults* under `src/main/resources/mail-templates/`, one file per mail × variant × language:
+
+```text
+mail-templates/
+  index.json
+  magic-login/default/en-US.hbs     # <key>/<variant>/<locale>.hbs
+  magic-login/default/tr.hbs
+  magic-login/default/ru.hbs
+```
+
+`index.json` describes your mails for the panel. Keys and variant keys are `[a-z0-9-]+`; a mail without sub-kinds has
+the single variant `default`. Names and labels are per language and fall back to `en-US`:
+
+```json
+{
+  "mails": [{
+    "key": "magic-login",
+    "name": { "en-US": "Magic login link", "tr": "Sihirli giriş bağlantısı", "ru": "Ссылка для входа" },
+    "description": { "en-US": "Sent when a visitor asks for a sign-in link." },
+    "variants": [{
+      "key": "default",
+      "name": { "en-US": "Default", "tr": "Varsayılan", "ru": "По умолчанию" },
+      "variables": [
+        { "name": "username", "type": "text", "label": { "en-US": "Username" }, "sample": "Steve" },
+        { "name": "magicLoginLink", "type": "url", "label": { "en-US": "Sign-in link" }, "sample": "https://example.com/auth-guard/magic-login?token=abc" }
+      ]
+    }]
+  }]
+}
+```
+
+*2. Write each `<locale>.hbs`*: a header of single-line `key: value` pairs between `---` lines (values are taken
+literally, no quotes), then the body as an HTML fragment:
+
+```handlebars
+---
+subject: {{websiteName}} — your sign-in link
+preheader: One click and you are in
+buttonLabel: Sign in
+buttonUrl: {{magicLoginLink}}
+footer: If you did not ask for this link, ignore this mail. It expires in 15 minutes.
+---
+<p>Hi <strong>{{username}}</strong>,</p>
+<p>Use the button below to sign in to {{websiteName}} without your password.</p>
+```
+
+Header keys: `subject` (required), `preheader`, `buttonLabel`, `buttonUrl`, `footer`, and `mode` — `fields` (default)
+or `html`, where the body is a complete HTML document sent without the layout. Every field is a Handlebars template.
+
+::: v-pre
+
+| Variable `type` | Use it as |
+|---|---|
+| `text`, `url`, `number` | `{{name}}` (escaped) |
+| `boolean` | `{{#if name}}…{{/if}}` |
+| `html` | `{{{name}}}` — a ready, safe HTML block **your code** builds (an items table, an address); never user input as-is |
+
+System variables need no declaration: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}` (`cid:logo`), `{{year}}`,
+`{{locale}}`.
+
+:::
+
+*3. Send it:*
 
 | Member | Signature | Purpose |
 |---|---|---|
-| `MailManager.sendMail` | `suspend fun sendMail(sqlClient, userId: Long?, mail: Mail, email: String? = null)` | Render + send |
-| `Mail.templatePath` | `val templatePath: String` | Path to your Handlebars template (Handlebars = an HTML template language with `{{placeholders}}`). The path points inside your jar's resources — see §15 "Jar resource read" |
-| `Mail.subject` | `val subject: String` | Subject line |
-| `Mail.generateParameters` | `suspend fun generateParameters(systemParameters, i18nManager, locale): MailParameters` | Template variables |
+| `TemplateMail.of` | `fun of(owner: String, key: String, variant: String = "default", variables: Map<String, Any?> = emptyMap())` | A mail whose variables you already have |
+| `TemplateMail.variables` | `open suspend fun variables(locale: String, system: SystemParameters): Map<String, Any?>` | Override in a subclass when a value needs the locale or a front-end link (`system.linkTo(…)`) |
+| `MailManager.sendTemplate` | `suspend fun sendTemplate(sqlClient, userId: Long?, mail: TemplateMail, options: MailOptions = MailOptions()): MailResult` | Render + send; `DISABLED` when mail is off |
+| `MailManager.sendRequiredTemplate` | `suspend fun sendRequiredTemplate(sqlClient, userId: Long?, mail: TemplateMail, options: MailOptions = MailOptions())` | Same, but a mail that did not go out throws (`MailDisabled`, `PanoMailUnavailable`, `PanoMailConnectRequired`) |
+
+```kotlin
+class MagicLoginMail(pluginId: String, private val token: String, private val username: String) :
+    TemplateMail(pluginId, "magic-login") {
+    override suspend fun variables(locale: String, system: MailManager.Companion.SystemParameters) = mapOf(
+        "username" to username,
+        "magicLoginLink" to system.linkTo("auth-guard.magic-login", mapOf("token" to token), "/auth-guard/magic-login?token=$token")
+    )
+}
+
+mailManager.sendTemplate(sqlClient, userId, MagicLoginMail(pluginId, token, username))
+```
+
+`owner` is your plugin id (`PanoPlugin.pluginId`). The recipient and language are chosen like before (`MailOptions.email`
+/ `locale`, else the user's, else the site's); the text then falls back to the base language and `en-US`, and an
+admin's edit wins over your file. `MailOptions.subject` and `text` still override the subject and the plain-text part.
+In **Development Mode**, with your addon cloned into the running Pano's `plugins/<pluginId>/` folder (as for
+[locales](/addon/localization/)), the bundled `.hbs` files are read from your source folder, so a change shows on the
+next send without a rebuild.
+
+::: warning `Mail` is deprecated
+The old `Mail` interface (`templatePath`, `subject`, `generateParameters`) and both `sendMail` overloads still work, so
+shipped plugins keep running, but they are marked `@Deprecated`: their mails cannot be edited in the panel. Move to
+`TemplateMail` and drop the `mail.*` keys from your locale files.
+:::
 
 ## 11. Console commands
 
@@ -592,7 +683,7 @@ Small utilities and two recurring idioms that are not single APIs but are worth 
 
 | Thing | Where | Purpose |
 |---|---|---|
-| Jar resource read | your class loader | Files you bundle inside your jar (mail templates, keys) are read with `javaClass.classLoader.getResourceAsStream(path)` (a *class loader* is the thing that reads files packed in the jar). Note: `PanoPlugin` has no `getResource` helper of its own. See `pano-plugin-auth-guard` `MagicLoginMail` |
+| Jar resource read | your class loader | Files you bundle inside your jar (keys, data files) are read with `javaClass.classLoader.getResourceAsStream(path)` (a *class loader* is the thing that reads files packed in the jar). Note: `PanoPlugin` has no `getResource` helper of its own. Mail templates are the exception: Pano reads `mail-templates/` itself (§10) |
 | `pluginDataFolder` | `PanoPlugin` | Your `plugins/<pluginId>/` dir (uploads, `config.conf`) |
 | `logger` | `PanoPlugin` | Class-scoped SLF4J logger |
 

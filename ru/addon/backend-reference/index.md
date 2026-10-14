@@ -477,7 +477,7 @@ class MyShoutListener : ShoutCreatedListener {
 
 ## 10. Уведомления и почта
 
-*Source: `com.panomc.platform.notification` (`NotificationManager`, `UserNotificationType`, `PanelUserNotificationType`), `com.panomc.platform.mail` (`MailManager`, `Mail`)*
+*Source: `com.panomc.platform.notification` (`NotificationManager`, `UserNotificationType`, `PanelUserNotificationType`), `com.panomc.platform.mail` (`MailManager`, `TemplateMail`, `Mail`)*
 
 **Уведомления** появляются под иконкой колокольчика в верхней панели темы и панели. Подкласс `UserNotificationType` или `PanelUserNotificationType`, аннотируйте `@NotificationDefinition`, затем отправляйте через `NotificationManager`:
 
@@ -492,14 +492,106 @@ class MyShoutListener : ShoutCreatedListener {
 
 Самый частый, полностью: `suspend fun sendNotification(userId: Long, userNotificationType: UserNotificationType, sqlClient: SqlClient)`. Остальные пять следуют той же форме (смотрите `NotificationManager`, начиная со строки исходника 33).
 
-**Почта** — реализуйте `Mail`, отправляйте через `MailManager` (смотрите `pano-plugin-auth-guard` `MagicLoginMail`):
+**Почта** — отправляйте `TemplateMail` через `MailManager`. Его тексты лежат не в Kotlin и не в `locales/*.json`: у
+каждого языка свой файл Handlebars в вашем jar, и админы могут переписать их в **Настройки → Шаблоны писем** (смотрите
+[Шаблоны писем](/ru/platform/configuration/mail-templates/)). Общий макет (логотип, карточку, кнопку, подвал) добавляет
+Pano.
+
+*1. Положите тексты по умолчанию* в `src/main/resources/mail-templates/`, по файлу на письмо × вариант × язык:
+
+```text
+mail-templates/
+  index.json
+  magic-login/default/en-US.hbs     # <key>/<variant>/<locale>.hbs
+  magic-login/default/tr.hbs
+  magic-login/default/ru.hbs
+```
+
+`index.json` описывает ваши письма для панели. Ключи писем и вариантов — `[a-z0-9-]+`; у письма без подвидов один
+вариант `default`. Названия и подписи задаются по языкам и откатываются к `en-US`:
+
+```json
+{
+  "mails": [{
+    "key": "magic-login",
+    "name": { "en-US": "Magic login link", "tr": "Sihirli giriş bağlantısı", "ru": "Ссылка для входа" },
+    "description": { "en-US": "Sent when a visitor asks for a sign-in link." },
+    "variants": [{
+      "key": "default",
+      "name": { "en-US": "Default", "tr": "Varsayılan", "ru": "По умолчанию" },
+      "variables": [
+        { "name": "username", "type": "text", "label": { "en-US": "Username" }, "sample": "Steve" },
+        { "name": "magicLoginLink", "type": "url", "label": { "en-US": "Sign-in link" }, "sample": "https://example.com/auth-guard/magic-login?token=abc" }
+      ]
+    }]
+  }]
+}
+```
+
+*2. Напишите каждый `<locale>.hbs`*: заголовок из однострочных пар `ключ: значение` между строками `---` (значения
+берутся как есть, без кавычек), затем текст письма как фрагмент HTML:
+
+```handlebars
+---
+subject: {{websiteName}} — ссылка для входа
+preheader: Один клик — и вы на сайте
+buttonLabel: Войти
+buttonUrl: {{magicLoginLink}}
+footer: Если вы не запрашивали эту ссылку, просто проигнорируйте письмо. Ссылка действует 15 минут.
+---
+<p>Здравствуйте, <strong>{{username}}</strong>!</p>
+<p>Нажмите кнопку ниже, чтобы войти на {{websiteName}} без пароля.</p>
+```
+
+Ключи заголовка: `subject` (обязательно), `preheader`, `buttonLabel`, `buttonUrl`, `footer` и `mode` — `fields`
+(по умолчанию) или `html`, когда текст — это полный HTML-документ, который отправляется без макета. Каждое поле —
+шаблон Handlebars.
+
+::: v-pre
+
+| `type` переменной | Как использовать |
+|---|---|
+| `text`, `url`, `number` | `{{name}}` (с экранированием) |
+| `boolean` | `{{#if name}}…{{/if}}` |
+| `html` | `{{{name}}}` — готовый безопасный HTML-блок, который собирает **ваш код** (таблица товаров, адрес); пользовательский ввод как есть сюда не попадает |
+
+Системные переменные объявлять не нужно: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}` (`cid:logo`),
+`{{year}}`, `{{locale}}`.
+
+:::
+
+*3. Отправьте:*
 
 | Член | Сигнатура | Назначение |
 |---|---|---|
-| `MailManager.sendMail` | `suspend fun sendMail(sqlClient, userId: Long?, mail: Mail, email: String? = null)` | Отрисовать + отправить |
-| `Mail.templatePath` | `val templatePath: String` | Путь к вашему шаблону Handlebars (Handlebars = язык HTML-шаблонов с `{{placeholders}}`). Путь указывает внутрь ресурсов вашего jar — смотрите §15 «Чтение ресурса jar» |
-| `Mail.subject` | `val subject: String` | Строка темы |
-| `Mail.generateParameters` | `suspend fun generateParameters(systemParameters, i18nManager, locale): MailParameters` | Переменные шаблона |
+| `TemplateMail.of` | `fun of(owner: String, key: String, variant: String = "default", variables: Map<String, Any?> = emptyMap())` | Письмо, переменные которого уже известны |
+| `TemplateMail.variables` | `open suspend fun variables(locale: String, system: SystemParameters): Map<String, Any?>` | Переопределите в подклассе, если значению нужен язык или ссылка на фронтенд (`system.linkTo(…)`) |
+| `MailManager.sendTemplate` | `suspend fun sendTemplate(sqlClient, userId: Long?, mail: TemplateMail, options: MailOptions = MailOptions()): MailResult` | Отрисовать + отправить; `DISABLED`, если почта выключена |
+| `MailManager.sendRequiredTemplate` | `suspend fun sendRequiredTemplate(sqlClient, userId: Long?, mail: TemplateMail, options: MailOptions = MailOptions())` | То же, но неотправленное письмо — исключение (`MailDisabled`, `PanoMailUnavailable`, `PanoMailConnectRequired`) |
+
+```kotlin
+class MagicLoginMail(pluginId: String, private val token: String, private val username: String) :
+    TemplateMail(pluginId, "magic-login") {
+    override suspend fun variables(locale: String, system: MailManager.Companion.SystemParameters) = mapOf(
+        "username" to username,
+        "magicLoginLink" to system.linkTo("auth-guard.magic-login", mapOf("token" to token), "/auth-guard/magic-login?token=$token")
+    )
+}
+
+mailManager.sendTemplate(sqlClient, userId, MagicLoginMail(pluginId, token, username))
+```
+
+`owner` — id вашего плагина (`PanoPlugin.pluginId`). Получатель и язык выбираются как раньше (`MailOptions.email` /
+`locale`, иначе язык пользователя, иначе сайта); затем текст откатывается к базовому языку и к `en-US`, а правка админа
+важнее вашего файла. `MailOptions.subject` и `text` по-прежнему заменяют тему и текстовую часть. В **режиме разработки**,
+если ваш аддон склонирован в папку `plugins/<pluginId>/` запущенного Pano (как для [локализаций](/ru/addon/localization/)),
+файлы `.hbs` читаются из исходников, и правка видна при следующей отправке без пересборки.
+
+::: warning `Mail` устарел
+Старый интерфейс `Mail` (`templatePath`, `subject`, `generateParameters`) и обе перегрузки `sendMail` по-прежнему
+работают, так что выпущенные плагины не ломаются, но они помечены `@Deprecated`: их письма нельзя редактировать в
+панели. Переходите на `TemplateMail` и уберите ключи `mail.*` из файлов локализации.
+:::
 
 ## 11. Консольные команды
 
@@ -592,7 +684,7 @@ databaseManager.panelActivityLogDao.add(CreatedShoutLog(userId, username, plugin
 
 | Вещь | Где | Назначение |
 |---|---|---|
-| Чтение ресурса jar | ваш class loader | Файлы, которые вы упаковываете внутрь вашего jar (шаблоны писем, ключи), читаются через `javaClass.classLoader.getResourceAsStream(path)` (*class loader* — то, что читает файлы, упакованные в jar). Примечание: у `PanoPlugin` нет собственного помощника `getResource`. Смотрите `pano-plugin-auth-guard` `MagicLoginMail` |
+| Чтение ресурса jar | ваш class loader | Файлы, которые вы упаковываете внутрь вашего jar (ключи, файлы данных), читаются через `javaClass.classLoader.getResourceAsStream(path)` (*class loader* — то, что читает файлы, упакованные в jar). Примечание: у `PanoPlugin` нет собственного помощника `getResource`. Исключение — шаблоны писем: папку `mail-templates/` Pano читает сам (§10) |
 | `pluginDataFolder` | `PanoPlugin` | Ваша директория `plugins/<pluginId>/` (загрузки, `config.conf`) |
 | `logger` | `PanoPlugin` | Логгер SLF4J, привязанный к классу |
 

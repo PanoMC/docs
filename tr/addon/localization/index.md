@@ -243,10 +243,11 @@ Yukarıdaki örnekler parçalardı. İşte tek bir dosyada nasıl bir araya geld
 
 ## Backend (Kotlin)
 
-İki backend sistemi — ve *yalnızca* bu ikisi — dil dosyalarınızı okur. Kendi Kotlin kodunuz asla doğrudan bir çeviri aramaz; backend'de metne ihtiyacınız varsa, bunlardan biri aracılığıyla akar:
+Dil dosyalarınızı yalnızca bir backend sistemi okur: **etkinlik günlükleri**. Kendi Kotlin kodunuz asla doğrudan bir çeviri aramaz.
 
 - **Etkinlik günlükleri.** Eklentiniz bir yönetici eylemini kaydettiğinde, bir `PluginActivityLog` alt sınıfı eklersiniz (bkz. [Backend Geliştirme](/tr/addon/backend/)). Etkinlik sayfası onu `activity-logs.<KEY>`'i arayarak ve `{...}` yer tutucularını günlüğün `details` yükünden doldurarak render eder. Yerelleştirilmiş metin *burada*, dil dosyasında yaşar — asla Kotlin'de değil.
-- **E-posta.** Eklentiniz posta gönderiyorsa, konu ve gövde **Handlebars** şablonlarından gelir. (Handlebars bir şablon dilidir; `{{name}}` doldurulacak bir değişkeni işaretler.) Bu şablonlar `locales/*.json`'unuzun **parçası değildir** — dil dosyalarında değil, eklentinizin posta kodunun yanında yaşarlar. `pano-plugin-auth-guard` eklentisi şablonlanmış e-posta göndermek için referanstır (bkz. [Backend Geliştirme](/tr/addon/backend/)).
+
+**E-postalar dil dosyalarınızda değildir.** Her e-postanın jar'ınızda dil başına bir Handlebars dosyası vardır: `mail-templates/<key>/<variant>/<locale>.hbs` (`en-US.hbs`'in yanında `tr.hbs` ve `ru.hbs`); konu, buton ve alt bilgi dosyanın başlığında, metin altındadır. Bir e-postayı çevirmek için `mail.*` anahtarları değil, bir `<locale>.hbs` dosyası ekleyin; dosyası olmayan dil `en-US`'e düşer. Yöneticiler bu metinleri çeviriler sayfasında değil, **Ayarlar → E-posta şablonları**'nda düzenler. Biçim ve gönderim: [Backend Referansı §10](/tr/addon/backend-reference/#_10-bildirimler-ve-posta). Eklentinizin eski bir sürümü e-posta metinlerini `mail.*` anahtarlarında tutuyorsa, onları `.hbs` dosyalarına taşıyın ve anahtarları silin.
 
 ::: warning Tek vs çift süslü parantez
 Arayüzün render ettiği her şey — özel anahtarlar, izin başlıkları, etkinlik-günlüğü satırları — svelte-i18n'den geçer ve **tek** süslü parantezle enterpole eder: `{username}`. **Çift** süslü parantez `{{variable}}` yazdığınız **tek** yer backend e-posta (Handlebars) şablonlarının içidir. Yanlış stili kullanmak ekranda ham `{...}`'yı görünür bırakır.

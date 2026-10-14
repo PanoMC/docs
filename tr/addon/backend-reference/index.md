@@ -477,7 +477,7 @@ Buradaki bir **jeton**, **JWT** formatında imzalı bir dizedir: herkes içindek
 
 ## 10. Bildirimler ve posta
 
-*Source: `com.panomc.platform.notification` (`NotificationManager`, `UserNotificationType`, `PanelUserNotificationType`), `com.panomc.platform.mail` (`MailManager`, `Mail`)*
+*Source: `com.panomc.platform.notification` (`NotificationManager`, `UserNotificationType`, `PanelUserNotificationType`), `com.panomc.platform.mail` (`MailManager`, `TemplateMail`, `Mail`)*
 
 **Bildirimler** temadaki ve panel üst çubuğundaki zil simgesi altında görünür. `UserNotificationType` veya `PanelUserNotificationType`'ı alt sınıflayın, `@NotificationDefinition` ile açıklama yapın, sonra `NotificationManager` aracılığıyla gönderin:
 
@@ -492,14 +492,107 @@ Buradaki bir **jeton**, **JWT** formatında imzalı bir dizedir: herkes içindek
 
 Yaygın olan, tam hâliyle: `suspend fun sendNotification(userId: Long, userNotificationType: UserNotificationType, sqlClient: SqlClient)`. Diğer beşi aynı şekli izler (bkz. `NotificationManager`, kaynak satır 33'ten).
 
-**Posta** — `Mail`'i uygulayın, `MailManager` ile gönderin (bkz. `pano-plugin-auth-guard` `MagicLoginMail`):
+**Posta** — `MailManager` ile bir `TemplateMail` gönderin. Metinleri Kotlin'de de `locales/*.json`'da da değildir: her
+dilin jar'ınızda kendi Handlebars dosyası vardır ve yöneticiler bunları **Ayarlar → E-posta şablonları**'ndan yeniden
+yazabilir (bkz. [E-posta Şablonları](/tr/platform/configuration/mail-templates/)). Ortak yerleşimi (logo, kart, buton,
+alt bilgi) Pano ekler.
+
+*1. Varsayılanları paketleyin:* `src/main/resources/mail-templates/` altında, her e-posta × varyant × dil için bir dosya:
+
+```text
+mail-templates/
+  index.json
+  magic-login/default/en-US.hbs     # <key>/<variant>/<locale>.hbs
+  magic-login/default/tr.hbs
+  magic-login/default/ru.hbs
+```
+
+`index.json` e-postalarınızı panele tanıtır. Anahtarlar ve varyant anahtarları `[a-z0-9-]+` biçimindedir; alt türü
+olmayan bir e-postanın tek varyantı `default`'tur. Adlar ve etiketler dil başınadır ve `en-US`'e düşer:
+
+```json
+{
+  "mails": [{
+    "key": "magic-login",
+    "name": { "en-US": "Magic login link", "tr": "Sihirli giriş bağlantısı", "ru": "Ссылка для входа" },
+    "description": { "en-US": "Sent when a visitor asks for a sign-in link." },
+    "variants": [{
+      "key": "default",
+      "name": { "en-US": "Default", "tr": "Varsayılan", "ru": "По умолчанию" },
+      "variables": [
+        { "name": "username", "type": "text", "label": { "en-US": "Username" }, "sample": "Steve" },
+        { "name": "magicLoginLink", "type": "url", "label": { "en-US": "Sign-in link" }, "sample": "https://example.com/auth-guard/magic-login?token=abc" }
+      ]
+    }]
+  }]
+}
+```
+
+*2. Her `<locale>.hbs` dosyasını yazın:* `---` satırları arasında tek satırlık `anahtar: değer` çiftlerinden oluşan bir
+başlık (değerler olduğu gibi alınır, tırnak yok), ardından HTML parçası olarak gövde:
+
+```handlebars
+---
+subject: {{websiteName}} — giriş bağlantın
+preheader: Tek tıkla içeridesin
+buttonLabel: Giriş yap
+buttonUrl: {{magicLoginLink}}
+footer: Bu bağlantıyı sen istemediysen bu e-postayı yok sayabilirsin. Bağlantı 15 dakika geçerlidir.
+---
+<p>Merhaba <strong>{{username}}</strong>,</p>
+<p>{{websiteName}} sitesine şifresiz giriş yapmak için aşağıdaki butonu kullan.</p>
+```
+
+Başlık anahtarları: `subject` (zorunlu), `preheader`, `buttonLabel`, `buttonUrl`, `footer` ve `mode` — `fields`
+(varsayılan) ya da `html`; ikincisinde gövde, yerleşim olmadan gönderilen eksiksiz bir HTML belgesidir. Her alan bir
+Handlebars şablonudur.
+
+::: v-pre
+
+| Değişken `type` | Kullanımı |
+|---|---|
+| `text`, `url`, `number` | `{{name}}` (kaçışlı) |
+| `boolean` | `{{#if name}}…{{/if}}` |
+| `html` | `{{{name}}}` — **sizin kodunuzun** ürettiği hazır, güvenli bir HTML bloğu (ürün tablosu, adres); kullanıcı girdisi asla olduğu gibi konmaz |
+
+Sistem değişkenleri tanımlanmadan kullanılabilir: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}` (`cid:logo`),
+`{{year}}`, `{{locale}}`.
+
+:::
+
+*3. Gönderin:*
 
 | Üye | İmza | Amaç |
 |---|---|---|
-| `MailManager.sendMail` | `suspend fun sendMail(sqlClient, userId: Long?, mail: Mail, email: String? = null)` | Render + gönder |
-| `Mail.templatePath` | `val templatePath: String` | Handlebars şablonunuza yol (Handlebars = `{{placeholders}}` içeren bir HTML şablon dili). Yol jar'ınızın kaynaklarının içine işaret eder — §15 "Jar kaynağı okuma"ya bakın |
-| `Mail.subject` | `val subject: String` | Konu satırı |
-| `Mail.generateParameters` | `suspend fun generateParameters(systemParameters, i18nManager, locale): MailParameters` | Şablon değişkenleri |
+| `TemplateMail.of` | `fun of(owner: String, key: String, variant: String = "default", variables: Map<String, Any?> = emptyMap())` | Değişkenleri elinizde olan bir e-posta |
+| `TemplateMail.variables` | `open suspend fun variables(locale: String, system: SystemParameters): Map<String, Any?>` | Bir değer dile ya da bir ön yüz bağlantısına (`system.linkTo(…)`) ihtiyaç duyuyorsa alt sınıfta ezin |
+| `MailManager.sendTemplate` | `suspend fun sendTemplate(sqlClient, userId: Long?, mail: TemplateMail, options: MailOptions = MailOptions()): MailResult` | Render + gönder; e-posta kapalıysa `DISABLED` |
+| `MailManager.sendRequiredTemplate` | `suspend fun sendRequiredTemplate(sqlClient, userId: Long?, mail: TemplateMail, options: MailOptions = MailOptions())` | Aynısı, ama gitmeyen e-posta hata fırlatır (`MailDisabled`, `PanoMailUnavailable`, `PanoMailConnectRequired`) |
+
+```kotlin
+class MagicLoginMail(pluginId: String, private val token: String, private val username: String) :
+    TemplateMail(pluginId, "magic-login") {
+    override suspend fun variables(locale: String, system: MailManager.Companion.SystemParameters) = mapOf(
+        "username" to username,
+        "magicLoginLink" to system.linkTo("auth-guard.magic-login", mapOf("token" to token), "/auth-guard/magic-login?token=$token")
+    )
+}
+
+mailManager.sendTemplate(sqlClient, userId, MagicLoginMail(pluginId, token, username))
+```
+
+`owner` eklenti kimliğinizdir (`PanoPlugin.pluginId`). Alıcı ve dil eskisi gibi seçilir (`MailOptions.email` /
+`locale`, yoksa kullanıcınınki, yoksa sitenin); metin sonra ana dile ve `en-US`'e düşer, bir yöneticinin düzenlemesi de
+dosyanızın önüne geçer. `MailOptions.subject` ve `text` hâlâ konuyu ve düz metin kısmını ezer. **Geliştirme Modu**'nda,
+eklentiniz çalışan Pano'nun `plugins/<pluginId>/` klasörüne klonlanmışsa ([yerel ayarlarda](/tr/addon/localization/)
+olduğu gibi), paketlenen `.hbs` dosyaları kaynak klasörünüzden okunur; bir değişiklik yeniden derlemeden bir sonraki
+gönderimde görünür.
+
+::: warning `Mail` kullanımdan kaldırıldı
+Eski `Mail` arayüzü (`templatePath`, `subject`, `generateParameters`) ve iki `sendMail` aşırı yüklemesi hâlâ çalışır;
+yayımlanmış eklentiler çalışmaya devam eder. Ama `@Deprecated` olarak işaretlidir: e-postaları panelden düzenlenemez.
+`TemplateMail`'e geçin ve `mail.*` anahtarlarını yerel ayar dosyalarınızdan kaldırın.
+:::
 
 ## 11. Konsol komutları
 
@@ -592,7 +685,7 @@ Küçük yardımcı araçlar ve tek API olmayan ama adlandırılmayı hak eden i
 
 | Şey | Nerede | Amaç |
 |---|---|---|
-| Jar kaynağı okuma | sınıf yükleyiciniz | Jar'ınızın içine paketlediğiniz dosyalar (posta şablonları, anahtarlar) `javaClass.classLoader.getResourceAsStream(path)` ile okunur (bir *sınıf yükleyici*, jar'a paketlenmiş dosyaları okuyan şeydir). Not: `PanoPlugin`'in kendi `getResource` yardımcısı yoktur. Bkz. `pano-plugin-auth-guard` `MagicLoginMail` |
+| Jar kaynağı okuma | sınıf yükleyiciniz | Jar'ınızın içine paketlediğiniz dosyalar (anahtarlar, veri dosyaları) `javaClass.classLoader.getResourceAsStream(path)` ile okunur (bir *sınıf yükleyici*, jar'a paketlenmiş dosyaları okuyan şeydir). Not: `PanoPlugin`'in kendi `getResource` yardımcısı yoktur. Posta şablonları istisnadır: `mail-templates/` klasörünü Pano kendisi okur (§10) |
 | `pluginDataFolder` | `PanoPlugin` | `plugins/<pluginId>/` diziniz (yüklemeler, `config.conf`) |
 | `logger` | `PanoPlugin` | Sınıfa kapsamlanmış SLF4J logger |
 

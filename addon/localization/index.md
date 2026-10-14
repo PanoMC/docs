@@ -243,10 +243,11 @@ The examples above were fragments. Here is how they fit together in a single fil
 
 ## Backend (Kotlin)
 
-Two backend systems — and *only* these two — read your locale files. Your own Kotlin code never looks a translation up directly; if you need text on the backend, it flows through one of these:
+Only one backend system reads your locale files: **activity logs**. Your own Kotlin code never looks a translation up directly.
 
 - **Activity logs.** When your addon records an admin action, you insert a `PluginActivityLog` subclass (see [Backend Development](/addon/backend/)). The Activity page renders it by looking up `activity-logs.<KEY>` and filling the `{...}` placeholders from the log's `details` payload. The localized text lives *here*, in the locale file — never in Kotlin.
-- **Email.** If your addon sends mail, the subject and body come from **Handlebars** templates. (Handlebars is a template language; `{{name}}` marks a variable to fill in.) These templates are **not** part of your `locales/*.json` — they live alongside your addon's mail code, not in the locale files. The `pano-plugin-auth-guard` addon is the reference for sending templated email (see [Backend Development](/addon/backend/)).
+
+**E-mail is not in your locale files.** Every mail has one Handlebars file per language in your jar, `mail-templates/<key>/<variant>/<locale>.hbs` (`tr.hbs` and `ru.hbs` next to `en-US.hbs`), with the subject, button and footer in its header and the text below. To translate a mail, add a `<locale>.hbs` file, not `mail.*` keys; a language without a file falls back to `en-US`. Admins edit these texts in **Settings → Mail templates**, not on the translations page. Format and sending: [Backend Reference §10](/addon/backend-reference/#_10-notifications-mail). If an older version of your addon kept mail texts as `mail.*` keys, move them into the `.hbs` files and delete the keys.
 
 ::: warning Single vs double braces
 Everything the UI renders — custom keys, permission titles, activity-log lines — goes through svelte-i18n and interpolates with **single** braces: `{username}`. The **only** place you write **double** braces `{{variable}}` is inside backend email (Handlebars) templates. Using the wrong style leaves the raw `{...}` visible on screen.
