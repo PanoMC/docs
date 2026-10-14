@@ -59,9 +59,13 @@ a subject that is too long, or Handlebars that does not compile).
 
 ### The layout
 
+::: v-pre
+
 **Edit layout** opens the one HTML layout every mail is wrapped in: the logo header, the card, the button and the
 footer. It holds no text of its own, so one layout serves every language. It must keep the `{{{content}}}` slot,
 where each mail's body goes. **Reset to default** brings back Pano's layout.
+
+:::
 
 ## Which language is sent
 

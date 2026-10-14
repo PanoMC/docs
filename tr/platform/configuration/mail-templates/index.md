@@ -61,9 +61,13 @@ uzun konu ya da derlenmeyen Handlebars).
 
 ### Yerleşim
 
+::: v-pre
+
 **Yerleşimi düzenle**, her e-postanın içine yerleştirildiği tek HTML yerleşimini açar: logo başlığı, kart, buton ve alt
 bilgi. Kendi metni yoktur, böylece tek yerleşim her dile hizmet eder. Her e-postanın gövdesinin girdiği `{{{content}}}`
 yuvasını içermek zorundadır. **Varsayılana sıfırla** Pano'nun yerleşimini geri getirir.
+
+:::
 
 ## Hangi dil gönderilir
 
