@@ -30,23 +30,22 @@ The shared look (logo, white card, button, footer line) comes from the layout, s
 | --- | --- |
 | **Subject** | The subject line (required, at most 255 characters) |
 | **Preheader** | The short preview line mail apps show next to the subject; hidden in the mail itself |
-| **Body** | The message, in a rich text editor |
+| **Body** | The message, as HTML in a code editor (shown formatted, saved compact) |
 | **Button label / URL** | The main button; leave the URL empty for a mail without a button |
 | **Footer** | A small note under the card, e.g. "If you did not ask for this, ignore this mail" |
 
 ::: v-pre
 
 **Inserting variables.** The side list shows what the selected mail knows (username, links, amounts…). Click one to
-insert it at the cursor; it appears as a chip and becomes `{{username}}` in the template. Variables work in every
+insert it at the cursor as `{{username}}`. Variables work in every
 field, including the subject and the button URL. Some variables are ready-made **blocks** the plugin builds for you,
 such as the Market's items table or bank transfer instructions; they are inserted as `{{{items}}}` (three braces) and
 should stay on a line of their own.
 
 These are available in every mail: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}`, `{{year}}`, `{{locale}}`.
 
-**Advanced (HTML).** The **Advanced** tab shows the body as HTML with Handlebars, for things the rich text editor
-cannot do, e.g. `{{#if exitCode}}…{{/if}}` to show a sentence only when a value is there. Switching the mail to
-**full HTML** makes the body a complete HTML document of its own, sent without the shared layout.
+**Advanced (HTML).** The **Advanced** tab shows the whole mail as one HTML document: the shared layout with your
+fields already in it. Saving there stores that full HTML, and the mail then no longer follows the shared layout.
 
 
 **Handlebars.** Every field, the body, the full HTML and the layout are [Handlebars](https://handlebarsjs.com/guide/)

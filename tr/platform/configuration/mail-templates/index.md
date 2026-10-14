@@ -32,23 +32,22 @@ oluşur:
 | --- | --- |
 | **Konu** | Konu satırı (zorunlu, en fazla 255 karakter) |
 | **Ön başlık** | E-posta uygulamalarının konunun yanında gösterdiği kısa önizleme satırı; e-postanın içinde görünmez |
-| **Gövde** | Mesajın kendisi, zengin metin düzenleyicide |
+| **Gövde** | Mesajın kendisi, kod düzenleyicide HTML olarak (düzenli gösterilir, sıkıştırılarak kaydedilir) |
 | **Buton metni / URL** | Ana buton; butonsuz bir e-posta için URL'yi boş bırakın |
 | **Alt bilgi** | Kartın altındaki küçük not, ör. "Bunu siz istemediyseniz bu e-postayı yok sayın" |
 
 ::: v-pre
 
 **Değişken ekleme.** Yan listede seçili e-postanın bildiği değerler durur (kullanıcı adı, bağlantılar, tutarlar…).
-Birine tıklayınca imlecin olduğu yere eklenir; bir etiket olarak görünür ve şablonda `{{username}}` olur. Değişkenler
+Birine tıklayınca imlecin olduğu yere `{{username}}` olarak eklenir. Değişkenler
 konu ve buton URL'si dahil her alanda çalışır. Bazı değişkenler eklentinin sizin için hazırladığı **bloklardır**;
 örneğin Market'in ürün tablosu veya havale talimatları. Bunlar `{{{items}}}` (üç süslü parantez) olarak eklenir ve kendi
 satırlarında kalmalıdır.
 
 Şunlar her e-postada kullanılabilir: `{{websiteName}}`, `{{websiteUrl}}`, `{{websiteLogo}}`, `{{year}}`, `{{locale}}`.
 
-**Gelişmiş (HTML).** **Gelişmiş** sekmesi gövdeyi Handlebars'lı HTML olarak gösterir; zengin metin düzenleyicinin
-yapamadığı şeyler için, ör. bir cümleyi yalnızca değer varsa göstermek için `{{#if exitCode}}…{{/if}}`. E-postayı
-**tam HTML**'e geçirirseniz gövde kendi başına eksiksiz bir HTML belgesi olur ve ortak yerleşim olmadan gönderilir.
+**Gelişmiş (HTML).** **Gelişmiş** sekmesi e-postanın tamamını tek bir HTML belgesi olarak gösterir: alanlarınızın
+yerleştirildiği ortak yerleşim. Orada kaydederseniz bu tam HTML saklanır ve e-posta artık ortak yerleşimi izlemez.
 
 
 **Handlebars.** Tüm alanlar, gövde, tam HTML ve yerleşim birer [Handlebars](https://handlebarsjs.com/guide/) şablonudur:
