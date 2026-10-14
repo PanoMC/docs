@@ -545,7 +545,8 @@ footer: Bu bağlantıyı sen istemediysen bu e-postayı yok sayabilirsin. Bağla
 
 Başlık anahtarları: `subject` (zorunlu), `preheader`, `buttonLabel`, `buttonUrl`, `footer` ve `mode` — `fields`
 (varsayılan) ya da `html`; ikincisinde gövde, yerleşim olmadan gönderilen eksiksiz bir HTML belgesidir. Her alan bir
-Handlebars şablonudur.
+[Handlebars](https://handlebarsjs.com/guide/) şablonudur; yalnızca yerleşik yardımcılar (`if`, `unless`, `each`, `with`,
+`lookup`) kullanılabilir.
 
 ::: v-pre
 

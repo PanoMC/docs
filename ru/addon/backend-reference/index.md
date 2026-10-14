@@ -545,7 +545,8 @@ footer: Если вы не запрашивали эту ссылку, прос�
 
 Ключи заголовка: `subject` (обязательно), `preheader`, `buttonLabel`, `buttonUrl`, `footer` и `mode` — `fields`
 (по умолчанию) или `html`, когда текст — это полный HTML-документ, который отправляется без макета. Каждое поле —
-шаблон Handlebars.
+шаблон [Handlebars](https://handlebarsjs.com/guide/); доступны только встроенные хелперы (`if`, `unless`, `each`,
+`with`, `lookup`).
 
 ::: v-pre
 

@@ -50,6 +50,12 @@ satırlarında kalmalıdır.
 yapamadığı şeyler için, ör. bir cümleyi yalnızca değer varsa göstermek için `{{#if exitCode}}…{{/if}}`. E-postayı
 **tam HTML**'e geçirirseniz gövde kendi başına eksiksiz bir HTML belgesi olur ve ortak yerleşim olmadan gönderilir.
 
+
+**Handlebars.** Tüm alanlar, gövde, tam HTML ve yerleşim birer [Handlebars](https://handlebarsjs.com/guide/) şablonudur:
+`{{name}}` bir değişkeni yazar, `{{{name}}}` hazır bir HTML bloğunu yazar, `{{#if name}}…{{else}}…{{/if}}` bir kısmı
+yalnızca değer varsa gösterir, `{{#each list}}…{{/each}}` bir kısmı tekrarlar. Yalnızca yerleşik yardımcılar çalışır
+(`if`, `unless`, `each`, `with`, `lookup`); özel yardımcılar kullanılamaz. Sözdiziminin tamamı için
+[Handlebars rehberine](https://handlebarsjs.com/guide/) bakın.
 :::
 
 **Önizleme** kaydedilmemiş değişikliklerinizi örnek değerlerle gösterir; e-postayı kimse almadan önce görürsünüz.

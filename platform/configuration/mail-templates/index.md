@@ -48,6 +48,12 @@ These are available in every mail: `{{websiteName}}`, `{{websiteUrl}}`, `{{websi
 cannot do, e.g. `{{#if exitCode}}…{{/if}}` to show a sentence only when a value is there. Switching the mail to
 **full HTML** makes the body a complete HTML document of its own, sent without the shared layout.
 
+
+**Handlebars.** Every field, the body, the full HTML and the layout are [Handlebars](https://handlebarsjs.com/guide/)
+templates: `{{name}}` prints a variable, `{{{name}}}` prints a ready-made HTML block, `{{#if name}}…{{else}}…{{/if}}`
+shows a part only when a value is there, and `{{#each list}}…{{/each}}` repeats a part. Only the built-in helpers work
+(`if`, `unless`, `each`, `with`, `lookup`); custom helpers are not available. See the
+[Handlebars guide](https://handlebarsjs.com/guide/) for the full syntax.
 :::
 
 **Preview** renders your unsaved changes with sample values, so you see the mail before anyone gets it. **Send test

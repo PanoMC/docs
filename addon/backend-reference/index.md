@@ -543,7 +543,9 @@ footer: If you did not ask for this link, ignore this mail. It expires in 15 min
 ```
 
 Header keys: `subject` (required), `preheader`, `buttonLabel`, `buttonUrl`, `footer`, and `mode` — `fields` (default)
-or `html`, where the body is a complete HTML document sent without the layout. Every field is a Handlebars template.
+or `html`, where the body is a complete HTML document sent without the layout. Every field is a
+[Handlebars](https://handlebarsjs.com/guide/) template; only the built-in helpers (`if`, `unless`, `each`, `with`,
+`lookup`) are available.
 
 ::: v-pre
 
