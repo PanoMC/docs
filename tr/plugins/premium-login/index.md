@@ -14,6 +14,7 @@ Aynı jar, hem bir **Pano platform eklentisi** (web sitenize kurulur) hem de Spi
 - **Kimlik Doğrulama Durumu:** Her oyuncunun, eklentinin kendi veritabanında saklanan, kaynak izlemeli (PANEL, SERVER, FASTLOGIN, USER, MICROSOFT) bir **PREMIUM / CRACKED / AUTO** durumu vardır. Kullanıcılar, ayarlarından sade dilli bir açılır menü aracılığıyla kendi durumlarını seçebilir.
 - **Canlı Sunucu Senkronizasyonu:** Eklenti, kimlik doğrulama modu belirlenmeden önce Pano'nun yetkili durumunu enjekte etmek için FastLogin'in ön-giriş olayını yakalar, FastLogin'in otomatik algıladığı premium girişlerini Pano'ya geri iletir ve bir yönetici panelde bir durumu değiştirdiğinde anında güncellemeler uygular.
 - **Yerelleştirme:** İngilizce, Türkçe ve Rusça olarak mevcuttur.
+- **Düzenlenebilir e-posta:** Kullanıcı adı değişikliği e-postası her dilde **Panel → Ayarlar → E-posta şablonları**'ndan (Premium Login grubu) düzenlenir — bkz. [E-posta Şablonları](../../platform/configuration/mail-templates/).
 
 ## Panel Ayarları
 

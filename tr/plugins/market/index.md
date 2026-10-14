@@ -36,6 +36,16 @@ Ayarlar, eklentinin yapılandırmasında saklanır ve tamamen panelden düzenlen
 Ödeme API anahtarları, satıcı anahtarları ve diğer gizli bilgiler **maskeli** olarak saklanır. Birini açığa çıkarmak, yönetici şifrenizi yeniden girmenizi gerektirir ve her açığa çıkarma etkinlik günlüğüne kaydedilir.
 :::
 
+## E-postalar
+
+Mağazanın e-postaları (hangi sipariş e-postalarının gideceğini mağazanın **E-Posta** ayarları belirler) **Panel → Ayarlar → E-posta şablonları**'nda
+(Market grubu) tek bir e-postadır ve her tür için bir varyantı vardır: sipariş alındı, havale talimatları, sipariş onayı,
+hediye alındı, sipariş teslim edildi, sipariş iade edildi, süre bitiş hatırlatması, abonelik hatırlatması, abonelik
+ödemesi başarısız, abonelik iptal edildi, abonelik sona erdi, kargoya verildi, kargo teslim edildi ve test e-postası.
+Her varyantın her dilde kendi konusu, metni, butonu ve alt bilgisi vardır. Mağazanın hesapladığı kısımlar (ürün tablosu,
+toplamlar, sipariş ayrıntıları, havale talimatları, adres ve test modu şeridi) metne yerleştirdiğiniz hazır bloklardır;
+etiketleri eklentinin çevirilerinden gelir. Bkz. [E-posta Şablonları](../../platform/configuration/mail-templates/).
+
 ## Ziyaretçiler Ne Görür
 
 Site gezinmesine, `/store`'a yönlendiren bir **Mağaza** bağlantısı eklenir: bir kategori kenar çubuğu (ürün sayılarıyla bir ağaç), ürün araması, açılıp kapanabilen **Öne Çıkanlar** ve **En Çok Satanlar** bölümleri, fiyat / kredi-fiyatı / stok / öne-çıkan rozetli bir ürün ızgarası, bir ürün-detay penceresi, karşılaştırma tabloları ve tarayıcıda saklanan kayan bir sepet. Kategori seçimi `?category=` ile derin bağlantı verilebilir ve mağaza adınız ile açıklamanız sayfa başlığı ve alt başlığı olarak görünür. Mağaza vitrini giriş gerektirmez. Yukarıda belirtildiği gibi, sepetin **Ödeme** düğmesi devre dışıdır — *"Ödeme yakında geliyor."*

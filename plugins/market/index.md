@@ -36,6 +36,16 @@ Settings are stored in the plugin's config and edited entirely from the panel �
 Payment API keys, merchant keys, and other secrets are stored **masked**. Revealing one requires re-entering your admin password, and every reveal is recorded in the activity log.
 :::
 
+## Emails
+
+The store's mails (the store's **E-Mail** settings choose which order mails go out) are one mail in **Panel → Settings →
+Mail templates** (Market group) with one variant per kind: order received, bank transfer instructions, order
+confirmation, gift received, order delivered, order refunded, expiry reminder, subscription reminder, subscription
+payment failed, subscription cancelled, subscription ended, shipment shipped, shipment delivered, and the test mail.
+Each variant has its own subject, text, button and footer in every language. The parts the store computes (the items
+table, totals, order details, bank transfer instructions, the address and the test-mode banner) are ready-made blocks you
+place in the text; their labels follow the plugin's translations. See [Mail Templates](../../platform/configuration/mail-templates/).
+
 ## What Visitors See
 
 A **Store** link is added to the site navigation, leading to `/store`: a category sidebar (a tree with product counts), product search, toggleable **Featured** and **Bestsellers** sections, a product grid with price / credit-price / stock / featured badges, a product-detail modal, comparison tables, and a slide-out cart persisted in the browser. Category selection is deep-linkable via `?category=`, and your store name and description appear as the page title and subtitle. The storefront requires no login. As noted above, the cart's **Checkout** button is disabled — *"Payment is coming soon."*

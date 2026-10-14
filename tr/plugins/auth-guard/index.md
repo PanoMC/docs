@@ -23,6 +23,7 @@ Pano Auth Guard ücretli bir eklentidir. Resmi derlemeler başlangıçta bir pan
 ### Sihirli Giriş (Magic Login — şifresiz)
 - Giriş sayfasındaki bir **E-posta Bağlantısıyla Giriş Yap** düğmesi, kullanıcıyı doğrudan oturuma sokan, markalı, tek kullanımlık bir bağlantıyı e-postayla gönderir.
 - İstekler her zaman başarılı olarak raporlanır (e-posta numaralandırmasını önlemek için) ve her yeni istek önceki bağlantıyı geçersiz kılar. Bağlantılar **15 dakika** boyunca geçerlidir.
+- E-postanın metni her dilde **Panel → Ayarlar → E-posta şablonları**'ndan (Auth Guard grubu) düzenlenir — bkz. [E-posta Şablonları](../../platform/configuration/mail-templates/).
 
 ### Yönetim ve Denetim
 - **Oyuncu 2FA araçları:** Bir oyuncunun 2FA durumunu görüntüleyin, kaldırın/sıfırlayın ya da panelden onun adına 2FA kurup doğrulayın.

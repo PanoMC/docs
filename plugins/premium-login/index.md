@@ -14,6 +14,7 @@ The same jar is both a **Pano platform plugin** (installed on your website) and 
 - **Authentication Status:** Each player has a **PREMIUM / CRACKED / AUTO** status with source tracking (PANEL, SERVER, FASTLOGIN, USER, MICROSOFT), stored in the plugin's own database. Users can pick their own status from their settings via a plain-language dropdown.
 - **Live Server Sync:** The plugin intercepts FastLogin's pre-login event to inject Pano's authoritative status before the auth mode is decided, pushes FastLogin's auto-detected premium logins back to Pano, and applies instant updates when an admin changes a status in the panel.
 - **Localized:** Available in English, Turkish, and Russian.
+- **Editable mail:** The username-change mail is edited in **Panel → Settings → Mail templates** (Premium Login group), in every language — see [Mail Templates](../../platform/configuration/mail-templates/).
 
 ## Panel Settings
 

@@ -23,6 +23,7 @@ Pano Auth Guard is a paid plugin. Official builds verify a panomc.com license at
 ### Magic Login (passwordless)
 - A **Sign in with Email Link** button on the login page emails a branded one-time link that logs the user straight in.
 - Requests always report success (to prevent email enumeration), and each new request invalidates any previous link. Links are valid for **15 minutes**.
+- The mail's wording is edited in **Panel → Settings → Mail templates** (Auth Guard group), in every language — see [Mail Templates](../../platform/configuration/mail-templates/).
 
 ### Admin & Auditing
 - **Player 2FA tooling:** View a player's 2FA status, remove/reset it, or set up and verify 2FA on their behalf from the panel.
