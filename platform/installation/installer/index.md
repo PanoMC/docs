@@ -110,6 +110,9 @@ folder, and `docker compose down -v` to remove it with its data. See [Install wi
 On Windows open a new terminal first. If the installer says the command's folder is not in your
 `PATH`, call `<folder>/bin/pano` instead.
 
+The install folder also has `run.sh` (Windows: `run.bat`): it starts Pano like `pano start`, for
+when you would rather open the folder than type a command.
+
 ## Uninstall {#uninstall}
 
 `pano uninstall` removes the program, its Java runtime, the service and the `pano` command, and

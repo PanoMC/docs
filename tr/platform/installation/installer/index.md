@@ -113,6 +113,9 @@ kaldırmak için `docker compose down -v` komutunu kullanın. Bkz. [Docker ile K
 Windows'ta önce yeni bir terminal açın. Kurulum, komutun klasörünün `PATH` içinde olmadığını söylerse
 bunun yerine `<klasör>/bin/pano` yolunu kullanın.
 
+Kurulum klasöründe ayrıca `run.sh` (Windows'ta `run.bat`) bulunur: Pano'yu `pano start` gibi başlatır;
+komut yazmak yerine klasörü açmayı tercih ederseniz bunu kullanın.
+
 ## Kaldırma {#uninstall}
 
 `pano uninstall` programı, Java çalışma ortamını, servisi ve `pano` komutunu kaldırır;
