@@ -17,9 +17,9 @@ Tüm etiketler herkese açık tek bir pakette, `ghcr.io/panomc/pano`, **amd64** 
 
 | Etiket | Ne alırsınız |
 | --- | --- |
-| `latest` | En yeni kararlı sürüm. 1.0.0 çıkana kadar: en yeni beta (beta imajı yokken en yeni alpha) |
+| `latest` | En yeni kararlı sürüm (önerilen) |
 | `beta`, `alpha` | O ön sürüm kanalının en yeni sürümü |
-| `<version>`, ör. `1.0.0-alpha.522` | Tam olarak o sürüm, hiç değişmez |
+| `<version>`, ör. `1.0.0` | Tam olarak o sürüm, hiç değişmez |
 | `runtime-jre<N>` | Java `N` ve başlatıcı, Pano **yok**. Bkz. [Runtime imajı](runtime/#runtime-image) |
 
 İmaj Pano'yu Java 11 üzerinde root olmayan bir kullanıcıyla çalıştırır. Pano yine de bir **MySQL veya

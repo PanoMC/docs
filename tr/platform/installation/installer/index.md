@@ -60,8 +60,7 @@ powershell -c "& ([scriptblock]::Create((irm https://panomc.com/install.ps1))) -
 | `-y`, `--yes` | `-Yes` | Hiçbir şey sormaz |
 | `-h`, `--help` | `-Help` | Seçenekleri gösterir |
 
-- **Sürüm:** `--version` veya `--channel` verilmezse en yeni kararlı sürüm kurulur; kararlı sürüm yoksa
-  en yeni beta, o da yoksa en yeni alpha. İndirilen dosya SHA-256 ile doğrulanır.
+- **Sürüm:** `--version` veya `--channel` verilmezse en yeni kararlı sürüm kurulur. İndirilen dosya SHA-256 ile doğrulanır.
 - **Kapsam:** root / yönetici olarak çalıştırıldığında tüm sistem için, aksi halde geçerli kullanıcı için
   kurar. Sistem kurulumu `sudo` ister (Windows: yönetici yetkisi).
 - **Bellek:** 1 GB'ın altında Pano çalışır, ancak belleği yetmeyebilir.

@@ -7,8 +7,8 @@ It is available in the **Server management** and **Both** [usage modes](../confi
 In **Website** mode it is turned off; linking a server through the plugin still works, and nodes that
 are already paired keep their servers running until you switch back.
 
-> ⚠️ Server management ships on the **alpha** channel first, together with matching
-> `pano-mc-plugin` and `pano-node` releases. A stable installation may not have it yet.
+> Server management is part of the stable release since Pano 1.0.0. Keep `pano-mc-plugin` and
+> `pano-node` up to date together with Pano.
 
 ## How a server is attached {#linked-and-managed-servers}
 

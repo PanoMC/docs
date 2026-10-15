@@ -59,8 +59,7 @@ powershell -c "& ([scriptblock]::Create((irm https://panomc.com/install.ps1))) -
 | `-y`, `--yes` | `-Yes` | Do not ask anything |
 | `-h`, `--help` | `-Help` | Show the options |
 
-- **Version:** without `--version` or `--channel` you get the newest stable release; while there is
-  none, the newest beta, else the newest alpha. The download is checked against its SHA-256.
+- **Version:** without `--version` or `--channel` you get the newest stable release. The download is checked against its SHA-256.
 - **Scope:** run as root / administrator it installs for the whole system, otherwise for the current
   user. A system install asks for `sudo` (Windows: administrator rights).
 - **Memory:** under 1 GB Pano runs, but it may run out of memory.

@@ -7,8 +7,8 @@ zamanlanmış görevler ve güç. Pano'nun içinde yerleşiktir — Pano tarafı
 **Web sitesi** modunda kapalıdır; eklentiyle sunucu bağlamak yine çalışır, zaten eşleşmiş düğümler de
 siz geri geçene kadar sunucularını çalıştırmaya devam eder.
 
-> ⚠️ Sunucu yönetimi önce **alpha** kanalında, uyumlu `pano-mc-plugin` ve `pano-node` sürümleriyle
-> birlikte yayınlanır. Kararlı bir kurulumda henüz bulunmayabilir.
+> Sunucu yönetimi Pano 1.0.0'dan beri kararlı sürümün bir parçasıdır. `pano-mc-plugin` ve `pano-node`
+> sürümlerini Pano ile birlikte güncel tutun.
 
 ## Sunucu Pano'ya nasıl bağlanır {#linked-and-managed-servers}
 

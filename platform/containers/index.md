@@ -17,9 +17,9 @@ All tags live in one public package, `ghcr.io/panomc/pano`, built for **amd64** 
 
 | Tag | What you get |
 | --- | --- |
-| `latest` | The newest stable release. Until 1.0.0 ships: the newest beta (or alpha while no beta image exists) |
+| `latest` | The newest stable release (recommended) |
 | `beta`, `alpha` | The newest release of that prerelease channel |
-| `<version>`, e.g. `1.0.0-alpha.522` | Exactly that release, never moves |
+| `<version>`, e.g. `1.0.0` | Exactly that release, never moves |
 | `runtime-jre<N>` | Java `N` and the launcher, **no** Pano. See [The runtime image](runtime/#runtime-image) |
 
 The image runs Pano as a non-root user on Java 11. Pano still needs a **MySQL or MariaDB** database;
