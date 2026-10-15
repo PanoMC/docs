@@ -407,7 +407,7 @@ export default defineConfig({
           },
         ],
         editLink: {
-          pattern: "https://github.com/PanoMC/docs/edit/main/:path",
+          pattern: "https://github.com/PanoMC/docs/edit/dev/:path",
           text: "Edit this page on GitHub",
         },
       },
@@ -723,7 +723,7 @@ export default defineConfig({
           },
         ],
         editLink: {
-          pattern: "https://github.com/PanoMC/pano/edit/main/:path",
+          pattern: "https://github.com/PanoMC/docs/edit/dev/:path",
           text: "Bu sayfayı GitHub'da düzenle",
         },
       },
@@ -1039,7 +1039,7 @@ export default defineConfig({
           },
         ],
         editLink: {
-          pattern: "https://github.com/PanoMC/pano/edit/main/:path",
+          pattern: "https://github.com/PanoMC/docs/edit/dev/:path",
           text: "Редактировать эту страницу на GitHub",
         },
       },
