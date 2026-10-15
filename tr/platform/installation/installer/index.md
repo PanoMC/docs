@@ -26,7 +26,7 @@ Kurulum önce dili sorar (İngilizce, Türkçe veya Rusça), ardından seçenekl
 çıkarsınız. `-y` verildiğinde ya da terminal olmadığında hiçbir şey sormaz; varsayılanlar ve verdiğiniz
 seçeneklerle kurar.
 
-Kurulum bitince `http://localhost:8088` (veya `http://<sunucu-ip-adresiniz>:8088`) adresini açın ve
+Kurulum bitince yazdığı adresi, `http://localhost` (veya `http://<sunucu-ip-adresiniz>`), açın ve
 [Kurulum Sihirbazı](../setup/)'nı izleyin.
 
 ## Seçenekler {#options}
@@ -50,7 +50,7 @@ powershell -c "& ([scriptblock]::Create((irm https://panomc.com/install.ps1))) -
 | `--channel <kanal>` | `-Channel` | Bir kanalın en yeni sürümü: `release`, `beta` veya `alpha` |
 | `--system`, `--user` | `-System`, `-User` | Tüm sistem için ya da yalnızca geçerli kullanıcı için kurar |
 | `--dir <klasör>`, `--here` | `-Dir`, `-Here` | Bu klasöre ya da bulunduğunuz klasöre kurar |
-| `--port <port>` | `-Port` | Pano'nun dinlediği port. Varsayılan: `8088` |
+| `--port <port>` | `-Port` | Pano'nun dinlediği port. Varsayılan: `80`; 80 doluysa ya da Linux'ta tek kullanıcılık kurulumda `8088` |
 | `--java <sürüm>` | `-Java` | Pano'nun çalışacağı Java: `11` (varsayılan), `17`, `21` veya `25` |
 | `--system-java` | — | Bu Java'yı Pano'nun klasörü yerine paket yöneticisiyle sisteme kurar |
 | `--memory <miktar>` | `-Memory` | Pano'nun Java'sının kullanabileceği en fazla bellek, MB veya GB (`1024`, `2g`). Varsayılan `1g`, en az `512` |

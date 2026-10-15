@@ -25,7 +25,7 @@ The installer first asks for a language (English, Turkish or Russian), then show
 **Up / Down** move, **Enter** changes a row or starts the install, **q** quits. With `-y`, or without a
 terminal, it asks nothing and installs with the defaults and the options you passed.
 
-When it is done, open `http://localhost:8088` (or `http://<your-server-ip>:8088`) and follow the
+When it is done, open the address it prints, `http://localhost` (or `http://<your-server-ip>`), and follow the
 [Setup Wizard](../setup/).
 
 ## Options {#options}
@@ -49,7 +49,7 @@ powershell -c "& ([scriptblock]::Create((irm https://panomc.com/install.ps1))) -
 | `--channel <channel>` | `-Channel` | Newest version of a channel: `release`, `beta` or `alpha` |
 | `--system`, `--user` | `-System`, `-User` | Install for the whole system or only for the current user |
 | `--dir <folder>`, `--here` | `-Dir`, `-Here` | Install into this folder, or into the current one |
-| `--port <port>` | `-Port` | Port Pano listens on. Default: `8088` |
+| `--port <port>` | `-Port` | Port Pano listens on. Default: `80`; `8088` when 80 is taken or, on Linux, for a one-user install |
 | `--java <version>` | `-Java` | Java Pano runs on: `11` (default), `17`, `21` or `25` |
 | `--system-java` | — | Install that Java with the package manager instead of in Pano's folder |
 | `--memory <amount>` | `-Memory` | The most memory Pano's Java may use, in MB or GB (`1024`, `2g`). Default `1g`, at least `512` |

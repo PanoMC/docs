@@ -20,7 +20,7 @@ powershell -c "irm https://panomc.com/install.ps1 | iex"
 :::
 
 `--mariadb` (Windows: `-MariaDB`) eklerseniz Pano için bir veritabanı da kurar. Ardından
-`http://localhost:8088` adresini açın ve [Kurulum Sihirbazı](setup/)'nı izleyin.
+`http://localhost` adresini (ya da kurulumun yazdığı adresi) açın ve [Kurulum Sihirbazı](setup/)'nı izleyin.
 
 ## Yöntem seçimi {#methods}
 
@@ -50,7 +50,9 @@ Hiç sunucu işletmek istemiyor musunuz? [Pano Host](https://panomc.com/host) Pa
     - Kurulum sırasında gereklidir, çünkü Pano ilk başlangıçta arayüzünü ve bağımlılıklarını indirir.
 
 4. **Açık bir port**
-    - Tek komutla kurulum ve Docker Pano'yu **8088** portunda, elle çalıştırılan `.jar` ise **80** portunda sunar.
+    - Tek komutla kurulum ve elle çalıştırılan `.jar` Pano'yu **80** portunda, Docker ise **8088** portunda sunar.
+      80 portu doluysa ya da Linux'ta yalnızca bir kullanıcı için kuruluyorsa (orada 80'i yalnızca sistem
+      kurulumu kullanabilir) kurulum **8088**'e geçer.
     - **Opsiyonel:** Kurulumdan sonra SSL yapılandırırsanız, **443 (HTTPS)** portunun da açık olması gerekir.
 
 5. **İşletim sistemi**
