@@ -50,9 +50,9 @@ All three end at the same place: the [Setup Wizard](setup/) in your browser.
    - Required during the setup, as Pano downloads its interface and dependencies on the first start.
 
 4. **An open port**
-   - The installer and the manual `.jar` serve Pano on port **80**, Docker on port **8088**. The installer
-     falls back to **8088** when port 80 is taken, or when it installs for one user on Linux (only the
-     system install may use port 80 there).
+   - The installer, Docker and the manual `.jar` serve Pano on port **80**. The installer falls back to
+     **8088** when port 80 is taken, or when it installs for one user on Linux (only the system install
+     may use port 80 there).
    - **Optional:** if you configure SSL after installation, port **443 (HTTPS)** must also be open.
 
 5. **Operating system**

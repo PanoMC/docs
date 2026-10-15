@@ -51,7 +51,7 @@ mkdir pano && cd pano
 # скачайте Pano-<version>.jar с https://panomc.com/download в эту папку
 echo "Pano-<version>.jar" > .pano-jar
 docker run -d --name pano --user "$(id -u):$(id -g)" --memory 1g \
-  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano:runtime-jre11
+  -v "$PWD":/data -p 80:8088 ghcr.io/panomc/pano:runtime-jre11
 ```
 
 Ничего не устанавливается автоматически: версию Pano меняют заменой jar и `.pano-jar`. `<N>` — 11, 17,

@@ -32,7 +32,7 @@ Docker — альтернатива [установщику](../installation/ins
    ```yaml
    # Pano with MariaDB, the self-host Docker install (docs mirror this file 1:1).
    #   echo "PANO_DB_PASSWORD=$(openssl rand -hex 24)" > .env
-   #   docker compose up -d        # then open http://<server>:8088 and finish the setup wizard
+   #   docker compose up -d        # then open http://<server> and finish the setup wizard
    # PANO_TAG picks the image tag (latest, beta, alpha or a version such as 1.0.0), PANO_PORT the host port.
    # latest = newest stable release, or the most stable prerelease channel until 1.0.0 ships.
    name: pano
@@ -51,7 +51,7 @@ Docker — альтернатива [установщику](../installation/ins
          PANO_DB_USER: pano
          PANO_DB_PASSWORD: ${PANO_DB_PASSWORD:?set PANO_DB_PASSWORD in .env}
        ports:
-         - "${PANO_PORT:-8088}:8088"
+         - "${PANO_PORT:-80}:8088"
        volumes:
          - pano-data:/data
 
@@ -83,10 +83,10 @@ Docker — альтернатива [установщику](../installation/ins
    docker compose up -d
    ```
 
-   Добавьте в `.env` строку `PANO_PORT=80`, чтобы Pano работал на порту 80, и `PANO_TAG=beta` (или версию),
-   чтобы выбрать тег.
+   Pano работает на порту 80. Если порт 80 занят, добавьте в `.env` строку `PANO_PORT=8088` (или другой порт),
+   а `PANO_TAG=beta` (или версию) — чтобы выбрать тег.
 
-3. Откройте `http://<ip-вашего-сервера>:8088/` и пройдите [мастер настройки](../installation/setup/).
+3. Откройте `http://<ip-вашего-сервера>/` и пройдите [мастер настройки](../installation/setup/).
    Шаг базы данных уже заполнен из переменных окружения; оставьте пароль пустым, чтобы использовать `PANO_DB_PASSWORD`.
 
 ## docker run {#docker-run}
@@ -98,7 +98,7 @@ docker network create pano
 docker run -d --name pano-db --network pano --restart unless-stopped \
   -e MARIADB_DATABASE=pano -e MARIADB_USER=pano -e MARIADB_PASSWORD=change-me \
   -e MARIADB_RANDOM_ROOT_PASSWORD=1 -v pano-db:/var/lib/mysql mariadb:11.4
-docker run -d --name pano --network pano --restart unless-stopped -p 8088:8088 \
+docker run -d --name pano --network pano --restart unless-stopped -p 80:8088 \
   -e PANO_DB_HOST=pano-db -e PANO_DB_NAME=pano -e PANO_DB_USER=pano -e PANO_DB_PASSWORD=change-me \
   -v pano-data:/data ghcr.io/panomc/pano:latest
 ```

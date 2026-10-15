@@ -51,7 +51,7 @@ mkdir pano && cd pano
 # download Pano-<version>.jar from https://panomc.com/download into this folder
 echo "Pano-<version>.jar" > .pano-jar
 docker run -d --name pano --user "$(id -u):$(id -g)" --memory 1g \
-  -v "$PWD":/data -p 8088:8088 ghcr.io/panomc/pano:runtime-jre11
+  -v "$PWD":/data -p 80:8088 ghcr.io/panomc/pano:runtime-jre11
 ```
 
 Nothing is seeded: you change the Pano version by replacing the jar and `.pano-jar`. `<N>` is 11, 17,
