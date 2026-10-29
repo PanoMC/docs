@@ -33,7 +33,7 @@ Hepsi isteğe bağlıdır.
 | `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP sunucusu |
 | `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | SMTP girişi |
 | `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Gönderen adresi; STARTTLS modu `DISABLED`, `OPTIONAL` veya `REQUIRED` (varsayılan: porta göre seçilir) |
-| `PANO_HTTP_PORT` | Pano'nun konteyner içinde dinlediği port (8088) |
+| `PANO_HTTP_PORT` | Pano'nun konteyner içinde dinlediği port (8088). Açıkça verilirse sadece ilk açılışta değil, her açılışta uygulanır |
 | `PANO_JVM_ARGS` | Boşlukla ayrılmış Java seçenekleri (`-XX:MaxRAMPercentage=75`) |
 
 Örnek:

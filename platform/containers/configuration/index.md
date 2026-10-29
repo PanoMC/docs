@@ -32,7 +32,7 @@ mail server. Later changes to them are ignored; change the settings in the panel
 | `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP server |
 | `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | SMTP login |
 | `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Sender address; STARTTLS mode `DISABLED`, `OPTIONAL` or `REQUIRED` (default: chosen from the port) |
-| `PANO_HTTP_PORT` | Port Pano listens on inside the container (8088) |
+| `PANO_HTTP_PORT` | Port Pano listens on inside the container (8088). Set explicitly, it is applied on every start, not only the first |
 | `PANO_JVM_ARGS` | Java options, space separated (`-XX:MaxRAMPercentage=75`) |
 
 Example:

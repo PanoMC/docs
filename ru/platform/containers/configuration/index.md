@@ -33,7 +33,7 @@
 | `PANO_SMTP_HOST`, `PANO_SMTP_PORT` (587) | SMTP-сервер |
 | `PANO_SMTP_USER`, `PANO_SMTP_PASSWORD` | Вход SMTP |
 | `PANO_SMTP_FROM`, `PANO_SMTP_STARTTLS` | Адрес отправителя; режим STARTTLS: `DISABLED`, `OPTIONAL` или `REQUIRED` (по умолчанию выбирается по порту) |
-| `PANO_HTTP_PORT` | Порт, который Pano слушает внутри контейнера (8088) |
+| `PANO_HTTP_PORT` | Порт, который Pano слушает внутри контейнера (8088). Если задан явно, применяется при каждом запуске, а не только при первом |
 | `PANO_JVM_ARGS` | Параметры Java через пробел (`-XX:MaxRAMPercentage=75`) |
 
 Пример:
