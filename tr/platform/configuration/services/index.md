@@ -17,7 +17,7 @@ database {
 
 - **Veritabanı Türleri:**
     - `mariadb`: Varsayılan tür, hem **MySQL 5.5+** hem de **MariaDB** ile uyumludur.
-    - `portable`: Yalnızca **Windows (x64 ve ARM64)** üzerinde desteklenir. Pano tarafından otomatik olarak yönetilir (detaylar için [Kurulum Sihirbazı →](../../installation/setup/) sayfasına bakın).
+    - `portable`: Windows, macOS ve Linux üzerinde (x64, ARM ve diğer çoğu mimari) desteklenir. Pano tarafından indirilir ve yönetilir (detaylar için [Kurulum Sihirbazı →](../../installation/setup/) sayfasına bakın).
 - Şifre boş bırakılabilir (kimlik doğrulama devre dışıysa).
 - **Uyarı:** Kurulumdan sonra `type` veya `prefix` değiştirmek desteklenmez ve **yeniden kurulum** gerektirebilir.
 ## Pano Hesabı (Opsiyonel)

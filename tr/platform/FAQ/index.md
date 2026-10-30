@@ -26,7 +26,7 @@ Varsayılan olarak Pano, HTTP için **80** portunu kullanır; [tek komutla kurul
 Evet! Pano bir Java uygulaması (.jar) olduğu için, JVM yüklü olan her sistemde çalışır. [Tek komutla kurulum](../installation/installer/) üçünü de destekler ve kendi Java'sını getirir.
 
 #### Kurulum sırasındaki "Portable DB" seçeneği nedir?
-Windows (x64/ARM64) üzerinde Pano, sizin için taşınabilir bir MariaDB örneğini otomatik olarak indirip yönetebilir. Bu, veritabanını manuel olarak kurmak istemediğiniz yerel testler veya küçük sunucular için mükemmeldir.
+Windows, macOS ve Linux üzerinde Pano, sizin için taşınabilir bir MariaDB örneğini otomatik olarak indirip yönetebilir. Bu, veritabanını manuel olarak kurmak istemediğiniz yerel testler veya küçük sunucular için mükemmeldir.
 
 #### Pano "Başlatılıyor..." veya "Çıkartılıyor..." ekranında takılı kaldı.
 İlk çalıştırmada Pano'nun bağımlılıkları indirmesi ve gerekli dosyaları çıkarması gerekir. İnternet hızınıza bağlı olarak bu işlem birkaç dakika sürebilir. Lütfen sabırlı olun!

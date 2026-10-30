@@ -33,7 +33,7 @@ You’ll see the **Setup Wizard**, guiding you through five simple steps:
 3. **Database Setup**  
    Enter your **MySQL** or **MariaDB** credentials.  
    Default table prefix: `pano_` (you can change it if needed).  
-   > **Portable DB Option:** On **Windows (x64 or ARM64)** systems, you'll see an option to use a **Portable Database**. Selecting this will cause Pano to automatically download, configure, and manage a portable MariaDB instance for you.
+   > **Portable DB Option:** On Windows, macOS and Linux (x64, ARM and most other architectures), you'll see an option to use a **Portable Database**. Selecting this will cause Pano to automatically download, configure, and manage a portable MariaDB instance for you.
 
 4. **SMTP Settings (Optional)**  
    Configure email sending if you wish.  

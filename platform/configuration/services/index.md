@@ -17,7 +17,7 @@ database {
 
 - **Database Types:**
     - `mariadb`: Default type, compatible with both **MySQL 5.5+** and **MariaDB**.
-    - `portable`: Only supported on **Windows (x64 and ARM64)**. Automatically managed by Pano (see [Setup Wizard →](../../installation/setup/) for details).
+    - `portable`: Supported on Windows, macOS and Linux (x64, ARM and most other architectures). Downloaded and managed by Pano (see [Setup Wizard →](../../installation/setup/) for details).
 - Password can be blank if authentication is disabled.
 - **Warning:** Changing `type` or `prefix` after installation is not supported and will require a **reinstallation**.
 ## Pano Account (Optional)

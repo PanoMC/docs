@@ -26,7 +26,7 @@ By default, Pano uses port **80** for HTTP; installed with the [one-command inst
 Yes! Since Pano is a Java application (.jar), it runs on any system with a JVM installed. The [one-command installer](../installation/installer/) covers all three and brings its own Java.
 
 #### What is the "Portable DB" option during setup?
-On Windows (x64/ARM64), Pano can automatically download and manage a portable MariaDB instance for you. This is perfect for local testing or small servers where you don't want to manually set up a database.
+On Windows, macOS and Linux, Pano can automatically download and manage a portable MariaDB instance for you. This is perfect for local testing or small servers where you don't want to manually set up a database.
 
 #### Pano is stuck on "Starting..." or "Extracting..."
 On the first run, Pano needs to download dependencies and extract necessary files. Depending on your internet speed, this may take a few minutes. Please be patient!

@@ -33,7 +33,7 @@ Ekranda sizi beş basit adımdan geçiren **Kurulum Sihirbazı** görünecektir:
 3. **Veritabanı Ayarları**  
    **MySQL** veya **MariaDB** bilgilerinizi girin.  
    Varsayılan tablo ön eki: `pano_` (isterseniz değiştirebilirsiniz).  
-   > **Portable DB Seçeneği:** **Windows (x64 veya ARM64)** sistemlerde, **Portable Database** kullanma seçeneğini göreceksiniz. Bunu seçmek, Pano'nun sizin için otomatik olarak taşınabilir bir MariaDB örneği indirmesine, yapılandırmasına ve yönetmesine neden olacaktır.
+   > **Portable DB Seçeneği:** Windows, macOS ve Linux sistemlerde (x64, ARM ve diğer çoğu mimari), **Portable Database** kullanma seçeneğini göreceksiniz. Bunu seçmek, Pano'nun sizin için otomatik olarak taşınabilir bir MariaDB örneği indirmesine, yapılandırmasına ve yönetmesine neden olacaktır.
 
 4. **SMTP Ayarları (Opsiyonel)**  
    E-posta gönderimi için SMTP ayarlarını yapabilirsiniz.  
