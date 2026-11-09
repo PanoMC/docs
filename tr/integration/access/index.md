@@ -80,4 +80,4 @@ Soketi `?ticket=<ticket>` ile açın. Kullanılmış veya süresi dolmuş bilet 
 
 ## Ters vekil sunucunun arkasında
 
-Pano ziyaretçi adresini `X-Forwarded-For` başlığından yalnızca güvenilir bir eşten okur (`server.trusted-proxies`, ayrıca loopback ve özel adresler). Tüm ziyaretçiler tek adres gibi görünüyorsa panel, eklenecek satırı gösteren bir uyarı çıkarır.
+Pano ziyaretçi adresini `X-Forwarded-For` başlığından yalnızca güvenilir bir eşten okur (`server.trusted-proxies`, `server.trust-private-proxies = false` değilse ayrıca loopback ve özel adresler). Tüm ziyaretçiler tek adres gibi görünüyorsa panel, eklenecek satırı gösteren bir uyarı çıkarır.

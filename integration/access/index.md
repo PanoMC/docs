@@ -80,4 +80,4 @@ Open the socket with `?ticket=<ticket>`. A used or expired ticket answers `401 I
 
 ## Behind a reverse proxy
 
-Pano reads the visitor address from `X-Forwarded-For` only from a trusted peer (`server.trusted-proxies`, plus loopback and private addresses). If every visitor looks like one address, the panel shows a banner with the exact line to add.
+Pano reads the visitor address from `X-Forwarded-For` only from a trusted peer (`server.trusted-proxies`, plus loopback and private addresses unless `server.trust-private-proxies = false`). If every visitor looks like one address, the panel shows a banner with the exact line to add.

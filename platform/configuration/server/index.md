@@ -13,6 +13,7 @@ server {
   ssl-key = null  # Raw private key content (if MANUAL)
   ui-max-memory-mb = 200 # Max MB per spawned UI runtime (setup-ui, panel-ui, theme); 0 disables
   trusted-proxies = [] # e.g. ["203.0.113.7", "203.0.113.0/24", "cloudflare"] — proxies allowed to set X-Forwarded-For
+  trust-private-proxies = true # Believe X-Forwarded-For from loopback / private-network peers without listing them
 }
 ```
 
@@ -26,6 +27,7 @@ server {
 - `redirect-https`: If set to `true`, all HTTP traffic will be automatically redirected to HTTPS.
 - `ui-max-memory-mb`: Memory ceiling (MB) for **each** spawned UI runtime (setup-ui, panel-ui, active theme); Pano restarts a UI that exceeds it. Default **200**, `0` disables. See [Memory & Limits](../memory/).
 - `trusted-proxies`: the reverse proxies allowed to set `X-Forwarded-For` — single IP addresses, CIDR ranges, or the word `"cloudflare"` for Cloudflare's published ranges. **Empty by default.** A proxy on the same machine or a private network (loopback, `10.x`, `192.168.x`, a Docker bridge) is believed without being listed; a public proxy or Cloudflare must be listed, or every visitor looks like the proxy. [Maintenance mode](../../maintenance/) is stricter: its login bans and rate limit believe the header **only** from the addresses listed here, so behind any reverse proxy — a local Nginx too — list it.
+- `trust-private-proxies`: `true` by default. Pano then believes `X-Forwarded-For` / `X-Real-IP` from loopback and private-network peers without listing them (Docker, Traefik, Pano Host). Set it to `false` if a NAT or container bridge on your network could hide real visitors: the headers are then believed **only** from the peers in `trusted-proxies`, loopback included, so list your local proxy (e.g. `"127.0.0.1"`).
 - **Advanced:** For complex setups, you can still use a **reverse proxy** (Nginx, Apache) or Cloudflare.
 ## Reverse Proxy WebSocket Keepalive
 

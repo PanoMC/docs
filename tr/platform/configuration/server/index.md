@@ -13,6 +13,7 @@ server {
   ssl-key = null  # Ham özel anahtar içeriği (MANUAL ise)
   ui-max-memory-mb = 200 # Spawn edilen her UI runtime'ı için maksimum MB; 0 kapatır
   trusted-proxies = [] # örn. ["203.0.113.7", "203.0.113.0/24", "cloudflare"] — X-Forwarded-For ayarlamasına izin verilen vekiller
+  trust-private-proxies = true # Loopback / özel ağdaki eşlerden gelen X-Forwarded-For başlığına listelemeden güven
 }
 ```
 
@@ -26,6 +27,7 @@ server {
 - `redirect-https`: `true` olarak ayarlanırsa, tüm HTTP trafiği otomatik olarak HTTPS'ye yönlendirilir.
 - `ui-max-memory-mb`: Spawn edilen **her** UI runtime'ı (setup-ui, panel-ui, aktif tema) için bellek tavanı (MB); Pano aşan UI'ı yeniden başlatır. Varsayılan **200**, `0` kapatır. Bkz. [Bellek ve Limitler](../memory/).
 - `trusted-proxies`: `X-Forwarded-For` başlığını ayarlamasına izin verilen ters vekiller (reverse proxy) — tek tek IP adresleri, CIDR aralıkları ya da Cloudflare'in yayımladığı aralıklar için `"cloudflare"` sözcüğü. **Varsayılan olarak boştur.** Aynı makinedeki ya da özel ağdaki bir vekile (loopback, `10.x`, `192.168.x`, Docker köprüsü) listede olmasa da güvenilir; herkese açık bir vekil ya da Cloudflare ise listelenmelidir, yoksa her ziyaretçi vekil gibi görünür. [Bakım modu](../../maintenance/) daha katıdır: giriş yasakları ve hız sınırı başlığa **yalnızca** burada listelenen adreslerden geldiğinde güvenir; bu yüzden herhangi bir ters vekilin arkasındaysanız — yerel bir Nginx olsa bile — onu listeleyin.
+- `trust-private-proxies`: varsayılanı `true`. Bu durumda Pano, loopback ve özel ağdaki eşlerden gelen `X-Forwarded-For` / `X-Real-IP` başlıklarına listelemeye gerek kalmadan güvenir (Docker, Traefik, Pano Host). Ağınızdaki bir NAT ya da container köprüsü gerçek ziyaretçileri gizleyebiliyorsa `false` yapın: başlıklara artık **yalnızca** `trusted-proxies` içindeki eşlerden gelince güvenilir, loopback dahil; bu yüzden yerel vekilinizi de ekleyin (örn. `"127.0.0.1"`).
 - **Gelişmiş:** Karmaşık kurulumlar için hala bir **reverse proxy** (Nginx, Apache) veya Cloudflare kullanabilirsiniz.
 ## Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma
 
