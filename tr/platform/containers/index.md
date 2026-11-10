@@ -105,6 +105,71 @@ docker run -d --name pano --network pano --restart unless-stopped -p 80:8088 \
 
 Zaten bir veritabanı sunucunuz mu var? İlk iki komutu atlayın ve `PANO_DB_HOST`'u ona yönlendirin.
 
+## Coolify {#coolify}
+
+[Coolify](https://coolify.io) ile yönetilen bir sunucuda Pano tek bir Compose dosyasıyla çalışır. Coolify'ın proxy'si
+onu alan adınızda HTTPS ile sunar, veritabanı kullanıcısını ve şifrelerini de kendisi oluşturur.
+
+1. Coolify'da projenizi açın, **New Resource**'a tıklayın ve **Docker Compose Empty**'yi seçin.
+2. Bu dosyayı yapıştırın:
+
+   ```yaml
+   # documentation: https://panomc.com/docs/
+   # slogan: Pano is a website, store and server panel for Minecraft servers.
+   # category: cms
+   # tags: minecraft,cms,website,forum,store,server,panel,game
+   # logo: svgs/pano.svg
+   # port: 8088
+   #
+   # Pano on Coolify: New Resource -> Docker Compose Empty, paste this file, set the domain of `pano`, deploy.
+   # Coolify generates the database user and passwords. To pin a release, change the image tag (beta, alpha or a
+   # version such as 1.2.1). The header above is Coolify's one-click template metadata.
+
+   services:
+     pano:
+       image: ghcr.io/panomc/pano:latest
+       environment:
+         - SERVICE_URL_PANO_8088
+         - PANO_DB_HOST=mariadb
+         - PANO_DB_PORT=3306
+         - PANO_DB_NAME=${MARIADB_DATABASE:-pano}
+         - PANO_DB_USER=${SERVICE_USER_MARIADB}
+         - PANO_DB_PASSWORD=${SERVICE_PASSWORD_MARIADB}
+         - PANO_JVM_ARGS=${PANO_JVM_ARGS:--XX:MaxRAMPercentage=75}
+       volumes:
+         - pano-data:/data
+       depends_on:
+         mariadb:
+           condition: service_healthy
+       healthcheck:
+         test: ["CMD-SHELL", "curl -so /dev/null http://127.0.0.1:8088/api/v1/setup/step"]
+         interval: 10s
+         timeout: 5s
+         retries: 10
+         start_period: 60s
+
+     mariadb:
+       image: mariadb:11.4
+       environment:
+         - MARIADB_DATABASE=${MARIADB_DATABASE:-pano}
+         - MARIADB_USER=${SERVICE_USER_MARIADB}
+         - MARIADB_PASSWORD=${SERVICE_PASSWORD_MARIADB}
+         - MARIADB_ROOT_PASSWORD=${SERVICE_PASSWORD_MARIADBROOT}
+       volumes:
+         - pano-mariadb-data:/var/lib/mysql
+       healthcheck:
+         test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+         interval: 5s
+         timeout: 5s
+         retries: 30
+   ```
+
+3. `pano` servisinin alan adını girin, örneğin `https://mc.example.com`, ve **Deploy**'a tıklayın.
+   Önce alan adının DNS kaydını sunucuya yönlendirin.
+4. Alan adını açın ve [Kurulum Sihirbazı](../installation/setup/)'nı izleyin. Veritabanı adımı zaten doldurulmuştur.
+
+`latest` en yeni kararlı sürümdür. Bir sürüme sabitlemek için imaj etiketini değiştirin, örneğin `ghcr.io/panomc/pano:1.2.1`.
+
 ## Bilmekte fayda var
 
 - Pano'nun yazdığı her şey **`/data`** biriminde durur. Onu veritabanıyla birlikte yedekleyin. Bkz.

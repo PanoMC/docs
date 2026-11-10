@@ -105,6 +105,71 @@ docker run -d --name pano --network pano --restart unless-stopped -p 80:8088 \
 
 Уже есть сервер баз данных? Пропустите первые две команды и укажите его в `PANO_DB_HOST`.
 
+## Coolify {#coolify}
+
+На сервере под управлением [Coolify](https://coolify.io) Pano запускается из одного Compose-файла. Прокси Coolify
+отдаёт его по HTTPS на вашем домене и сам создаёт пользователя и пароли базы данных.
+
+1. В Coolify откройте проект, нажмите **New Resource** и выберите **Docker Compose Empty**.
+2. Вставьте этот файл:
+
+   ```yaml
+   # documentation: https://panomc.com/docs/
+   # slogan: Pano is a website, store and server panel for Minecraft servers.
+   # category: cms
+   # tags: minecraft,cms,website,forum,store,server,panel,game
+   # logo: svgs/pano.svg
+   # port: 8088
+   #
+   # Pano on Coolify: New Resource -> Docker Compose Empty, paste this file, set the domain of `pano`, deploy.
+   # Coolify generates the database user and passwords. To pin a release, change the image tag (beta, alpha or a
+   # version such as 1.2.1). The header above is Coolify's one-click template metadata.
+
+   services:
+     pano:
+       image: ghcr.io/panomc/pano:latest
+       environment:
+         - SERVICE_URL_PANO_8088
+         - PANO_DB_HOST=mariadb
+         - PANO_DB_PORT=3306
+         - PANO_DB_NAME=${MARIADB_DATABASE:-pano}
+         - PANO_DB_USER=${SERVICE_USER_MARIADB}
+         - PANO_DB_PASSWORD=${SERVICE_PASSWORD_MARIADB}
+         - PANO_JVM_ARGS=${PANO_JVM_ARGS:--XX:MaxRAMPercentage=75}
+       volumes:
+         - pano-data:/data
+       depends_on:
+         mariadb:
+           condition: service_healthy
+       healthcheck:
+         test: ["CMD-SHELL", "curl -so /dev/null http://127.0.0.1:8088/api/v1/setup/step"]
+         interval: 10s
+         timeout: 5s
+         retries: 10
+         start_period: 60s
+
+     mariadb:
+       image: mariadb:11.4
+       environment:
+         - MARIADB_DATABASE=${MARIADB_DATABASE:-pano}
+         - MARIADB_USER=${SERVICE_USER_MARIADB}
+         - MARIADB_PASSWORD=${SERVICE_PASSWORD_MARIADB}
+         - MARIADB_ROOT_PASSWORD=${SERVICE_PASSWORD_MARIADBROOT}
+       volumes:
+         - pano-mariadb-data:/var/lib/mysql
+       healthcheck:
+         test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+         interval: 5s
+         timeout: 5s
+         retries: 30
+   ```
+
+3. Укажите домен сервиса `pano`, например `https://mc.example.com`, и нажмите **Deploy**.
+   Сначала направьте DNS-запись домена на сервер.
+4. Откройте домен и пройдите [мастер настройки](../installation/setup/). Шаг базы данных уже заполнен.
+
+`latest` — новейший стабильный релиз. Чтобы закрепить версию, измените тег образа, например на `ghcr.io/panomc/pano:1.2.1`.
+
 ## Полезно знать
 
 - Всё, что пишет Pano, лежит в томе **`/data`**. Делайте его резервную копию вместе с базой данных. См.
