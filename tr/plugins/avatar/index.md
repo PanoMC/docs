@@ -5,7 +5,7 @@
 ## Özellikler
 
 - **Üç avatar kaynağı:**
-  - **Minotar** — oyuncunun Minecraft skin yüzü, `minotar.net` üzerinden yüklenir. Bu, hiç kaynak seçmemiş kullanıcılar için varsayılandır.
+  - **Minotar** — oyuncunun Minecraft skin yüzü, `minotar.net` üzerinden yüklenir. Bu, hiç kaynak seçmemiş kullanıcılar için varsayılandır. Kullanıcılar başka bir Minecraft kullanıcı adı yazıp o oyuncunun kafasını gösterebilir (boş bırakılırsa kendi adı kullanılır); yöneticiler bunu kapatabilir.
   - **Gravatar** — kullanıcının hesap e-postasına bağlı, küresel olarak tanınan avatar (bir `identicon` yedeğiyle).
   - **Özel Yükleme** — kullanıcının sağladığı bir görsel.
 - **Optimize edilmiş yüklemeler:** JPG, PNG ve GIF kabul edilir (yapılandırılabilir). Görseller sıkıştırılıp en fazla 256 piksele küçültülürken, GIF'ler animasyonlarını korumak için olduğu gibi saklanır. Bir kullanıcı görselini değiştirdiğinde veya kaynak değiştirdiğinde eski dosyalar otomatik olarak temizlenir.
@@ -15,7 +15,7 @@
 - **Temiz kaldırma:** Eklenti kaldırıldığında veritabanı tablosunu ve yüklenen tüm dosyaları siler.
 
 ::: tip
-Minotar avatarları yalnızca web sitesi kullanıcı adlarınız gerçek Minecraft hesaplarıyla eşleştiğinde anlamlıdır. Minotar ve Gravatar görselleri her ziyaretçinin tarayıcısı tarafından doğrudan `minotar.net` / `gravatar.com` üzerinden yüklenir; bu nedenle bu servislerin ziyaretçilerinizden erişilebilir olması gerekir.
+Minotar avatarları yalnızca web sitesi kullanıcı adlarınız gerçek Minecraft hesaplarıyla eşleştiğinde ya da kullanıcılar Minecraft kullanıcı adlarını yazdığında anlamlıdır. Minotar ve Gravatar görselleri her ziyaretçinin tarayıcısı tarafından doğrudan `minotar.net` / `gravatar.com` üzerinden yüklenir; bu nedenle bu servislerin ziyaretçilerinizden erişilebilir olması gerekir.
 :::
 
 ## Kullanıcılarınız için
@@ -24,7 +24,7 @@ Eklenti etkinleştirildiğinde, giriş yapmış kullanıcılar hesap **Ayarlar**
 
 ## Yönetici ayarları
 
-- **Eklenti ayarları:** **Panel → Eklentiler → Avatar**'ı açın. **Avatar Ayarları** kartı, **Maksimum Yükleme Boyutu**'nu (MB cinsinden), **İzin Verilen Görsel Türleri**'ni (PNG / JPEG / GIF) ve **İzin Verilen Avatar Kaynakları**'nı (Minotar / Gravatar / Özel Yükleme) belirlemenizi sağlar.
+- **Eklenti ayarları:** **Panel → Eklentiler → Avatar**'ı açın. **Avatar Ayarları** kartı, **Maksimum Yükleme Boyutu**'nu (MB cinsinden), **İzin Verilen Görsel Türleri**'ni (PNG / JPEG / GIF) **İzin Verilen Avatar Kaynakları**'nı (Minotar / Gravatar / Özel Yükleme) ve **Başka Oyuncuların Minecraft Kafaları** ayarını (varsayılan açık) belirlemenizi sağlar. Bu ayar Minotar kullananların başka bir Minecraft kullanıcı adı yazıp yazamayacağını belirler; kapatıldığında daha önce ad yazmış olanlar dahil herkes yeniden kendi kafasını gösterir.
 - **Bir oyuncunun avatarını düzenleme:** Bir oyuncunun detay sayfasını açın ve resmini değiştirmek veya kaldırmak için düzenleme penceresindeki **Profil Avatarı** satırını kullanın.
 
 ## Gerekli İzinler
