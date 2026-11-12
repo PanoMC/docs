@@ -58,7 +58,21 @@ export function verify(rawBody, header, secret) {
 }
 ```
 
-Başka yoldan güvendiğiniz uç noktalar için imza kapatılabilir. Discord biçimi imzasız bir embed gönderir.
+Başka yoldan güvendiğiniz uç noktalar için imza kapatılabilir. Sohbet biçimleri (Discord, Slack, Telegram, Teams) imzasız mesaj gönderir.
+
+## Sohbet servisleri için mesajlar
+
+Düz `JSON` dışında bir uç nokta hazır bir biçim kullanabilir: **Discord**, **Slack** (Mattermost ve Rocket.Chat da
+olur), **Telegram** (bot token'ı ve sohbet id'si), **Microsoft Teams** (Workflows webhook'u) veya **Özel JSON**
+(n8n, Zapier, Home Assistant gibi her alıcı). Her event sitenin dilinde okunaklı bir mesaj olarak gelir. Bir
+event'in görünümünü değiştirmek için uç noktayı açın, **Event başına mesaj** altından event'i seçin ve görsel
+düzenleyicide ya da JSON olarak düzenleyin. Sağdaki önizleme mesajı örnek verilerle gösterir.
+
+Şablon, `{data.username}`, `{site.name}` veya `{event.iso}` gibi değerler içeren servis JSON gövdesidir; düzenleyici
+event'in değerlerini listeler. `{ad|yedek}` değer boşsa `yedek` yazar, bir metnin dışında `{json.data}` tüm veri
+nesnesini yazar. Geçerli bir mesaj vermeyen şablonun yerine varsayılan mesaj gönderilir ve kayıtta `TEMPLATE_ERROR`
+görünür. Oyuncu metni asla `@everyone` ya da bir kanalı etiketleyemez. Sohbet biçimleri imzasız gönderilir; Özel JSON
+`JSON` gibi imzalanabilir.
 
 ## Yeniden denemeler
 

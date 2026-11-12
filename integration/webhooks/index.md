@@ -58,7 +58,21 @@ export function verify(rawBody, header, secret) {
 }
 ```
 
-Signing can be switched to none for endpoints you trust by other means. The Discord format sends an unsigned embed.
+Signing can be switched to none for endpoints you trust by other means. The chat formats (Discord, Slack, Telegram, Teams) send unsigned messages.
+
+## Messages for chat services
+
+Besides plain `JSON`, an endpoint can use a ready format: **Discord**, **Slack** (also Mattermost and Rocket.Chat),
+**Telegram** (a bot token and a chat id), **Microsoft Teams** (a Workflows webhook) or **Custom JSON** (any receiver,
+such as n8n, Zapier or Home Assistant). Every event then arrives as a readable message in the site's language. To
+change how one event looks, open the endpoint, pick the event under **Message per event** and edit it in the visual
+editor or as JSON. The preview on the right shows the message with sample data.
+
+A template is the JSON body of the service with tokens such as `{data.username}`, `{site.name}` or `{event.iso}`;
+the editor lists the tokens of the event. `{name|fallback}` writes `fallback` when the value is empty, and outside a
+string `{json.data}` writes the whole data object. A template that does not give a valid message is replaced by the
+default one, and the log says `TEMPLATE_ERROR`. Player text can never mention `@everyone` or a channel. The chat
+formats are sent unsigned; Custom JSON can be signed like `JSON`.
 
 ## Retries
 
