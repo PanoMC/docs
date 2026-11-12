@@ -5,7 +5,7 @@ The **Avatar** plugin lets every registered user choose where their profile pict
 ## Features
 
 - **Three avatar sources:**
-  - **Minotar** — the player's Minecraft skin face, loaded from `minotar.net`. This is the default for users who have never picked a source.
+  - **Minotar** — the player's Minecraft skin face, loaded from `minotar.net`. This is the default for users who have never picked a source. Users can type another Minecraft username to show that player's head instead (leave it empty to use their own); admins can turn this off.
   - **Gravatar** — the globally recognized avatar tied to the user's account email (with an `identicon` fallback).
   - **Custom Upload** — a user-supplied image.
 - **Optimized uploads:** JPG, PNG and GIF are accepted (configurable). Images are compressed and downscaled to a maximum of 256px, while GIFs are stored as-is to keep their animation. Old files are cleaned up automatically when a user replaces their image or switches sources.
@@ -15,7 +15,7 @@ The **Avatar** plugin lets every registered user choose where their profile pict
 - **Clean uninstall:** removes its database table and all uploaded files when the plugin is removed.
 
 ::: tip
-Minotar avatars only make sense when your website usernames match real Minecraft accounts. Minotar and Gravatar images are loaded by each visitor's browser directly from `minotar.net` / `gravatar.com`, so those services need to be reachable from your visitors.
+Minotar avatars only make sense when your website usernames match real Minecraft accounts, or when users type their Minecraft username. Minotar and Gravatar images are loaded by each visitor's browser directly from `minotar.net` / `gravatar.com`, so those services need to be reachable from your visitors.
 :::
 
 ## For your users
@@ -24,7 +24,7 @@ Once the plugin is enabled, logged-in users find a **Profile Avatar Settings** s
 
 ## Admin settings
 
-- **Plugin settings:** open **Panel → Addons → Avatar**. The **Avatar Settings** card lets you set the **Max Upload Size** (in MB), the **Allowed Image Types** (PNG / JPEG / GIF), and the **Allowed Avatar Sources** (Minotar / Gravatar / Custom Upload).
+- **Plugin settings:** open **Panel → Addons → Avatar**. The **Avatar Settings** card lets you set the **Max Upload Size** (in MB), the **Allowed Image Types** (PNG / JPEG / GIF), the **Allowed Avatar Sources** (Minotar / Gravatar / Custom Upload), and **Other Players' Minecraft Heads** (on by default): whether Minotar users may type another Minecraft username. Turning it off makes everyone show their own head again, including users who had typed a name.
 - **Editing a player's avatar:** open a player's detail page and use the **Profile Avatar** row in the edit modal to change or remove their picture.
 
 ## Required Permissions
