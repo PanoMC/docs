@@ -12,7 +12,7 @@ Bir ajan, okuduğu kadar iyidir. Pano'nun paketleri yeni ve sık değişiyor; ez
 | Tüm dokümantasyon tek dosyada | `https://panomc.com/docs/llms-full.txt` | Araç web'de gezemiyorsa yapıştırın ya da ekleyin |
 | Her sayfa Markdown olarak | sayfa adresinin sonuna `.md` | Ajana tek bir sayfayı tam olarak verin |
 | Doküman MCP sunucusu | `https://panomc.com/mcp` | Ajan dokümanlarda kendisi arar ve okur |
-| Şablon depolarındaki ajan rehberi | `AGENTS.md`, `CLAUDE.md` ve `agent-guide/` | Eklenti, tema ya da headless site yazma kuralları |
+| Şablon depolarındaki ajan rehberi | `AGENTS.md` ve `docs/` alt modülü (`guidelines/`) | Eklenti, tema ya da headless site yazma kuralları |
 | Kendi Pano'nuzun OpenAPI belgesi | sitenizde `/api/v1/openapi.json` | Sitenizin tam API'si, eklentiler dahil |
 
 ## Şunu yapmak istiyorum...

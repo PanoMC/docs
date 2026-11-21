@@ -4,24 +4,21 @@
 
 ## Руководство для агентов
 
-Правила Pano для агентов лежат в папке `agent-guide/`: короткий `README.md`, который направляет по задаче («создание нового плагина», «смена вида без правки разметки», «headless-фронтенд»...), и по одному небольшому файлу на задачу. Файлы `AGENTS.md` и `CLAUDE.md` в корне репозитория говорят агенту сначала прочитать этот README, а затем только файл своей задачи.
+Правила Pano для агентов лежат в этом репозитории документации, [`PanoMC/docs`](https://github.com/PanoMC/docs/tree/dev/guidelines), в папке `guidelines/`: `agent-guide/` (короткий `README.md`, который направляет по задаче: «создание нового плагина», «смена вида без правки разметки», «headless-фронтенд»..., и по одному небольшому файлу на задачу) и `design/` (правила дизайна панели). Во всех официальных репозиториях Pano этот репозиторий подключён как git-подмодуль `docs/`; `AGENTS.md` только направляет агента туда, а `CLAUDE.md`, `GEMINI.md` и `.github/copilot-instructions.md` указывают на `AGENTS.md`.
 
-| Репозиторий | Есть ли в нём руководство |
+| Репозиторий | Есть подмодуль `docs/` |
 |---|---|
-| [`PanoMC/pano-starter-sveltekit`](https://github.com/PanoMC/pano-starter-sveltekit) (стартовый шаблон headless) | да, и `client-gen new` копирует его в ваш проект |
-| [`PanoMC/pano-boilerplate-plugin`](https://github.com/PanoMC/pano-boilerplate-plugin) (шаблон плагина) | да, вместе с `design/` для страниц панели |
+| [`PanoMC/pano-starter-sveltekit`](https://github.com/PanoMC/pano-starter-sveltekit) (стартовый headless-проект) | да |
+| [`PanoMC/pano-boilerplate-plugin`](https://github.com/PanoMC/pano-boilerplate-plugin) (шаблон плагина) | да |
 | [`PanoMC/vanilla-theme`](https://github.com/PanoMC/vanilla-theme) (тема по умолчанию) | да |
-| [`PanoMC/sdk`](https://github.com/PanoMC/sdk) | источник руководства |
 
-Команды создания плагина и темы не записывают эти файлы в новый проект. Скопируйте их один раз:
+Команды создания плагина и темы не добавляют его в новый проект. Добавьте его один раз в git-репозитории проекта:
 
 ```sh
-git clone --depth 1 https://github.com/PanoMC/pano-boilerplate-plugin /tmp/pano-boilerplate
-cp -r /tmp/pano-boilerplate/agent-guide /tmp/pano-boilerplate/design my-plugin/    # a plugin
-cp -r /tmp/pano-boilerplate/agent-guide my-theme/                                  # a theme
+git submodule add -b dev https://github.com/PanoMC/docs.git docs
 ```
 
-После этого начинайте запросы словами «Сначала прочитай `agent-guide/README.md`» или запишите эту фразу в свой `AGENTS.md`.
+После этого начинайте запросы словами «Сначала прочитай `docs/guidelines/agent-guide/README.md`» или запишите эту фразу в свой `AGENTS.md`.
 
 ## Плагин {#plugin}
 
@@ -35,14 +32,14 @@ cd my-plugin && bun run dev
 Примеры запросов:
 
 ```text
-Сначала прочитай agent-guide/README.md. Добавь страницу сайта по адресу /my-plugin/rules со
+Сначала прочитай docs/guidelines/agent-guide/README.md. Добавь страницу сайта по адресу /my-plugin/rules со
 списком правил сервера. Храни правила в собственной таблице плагина и добавь эндпоинт,
 который их отдаёт.
 ```
 
 ```text
-Сначала прочитай agent-guide/README.md. Добавь страницу панели, где администратор может
-добавлять, изменять и удалять правила; защити её правом этого плагина. Следуй design/README.md.
+Сначала прочитай docs/guidelines/agent-guide/README.md. Добавь страницу панели, где администратор может
+добавлять, изменять и удалять правила; защити её правом этого плагина. Следуй docs/guidelines/design/README.md.
 ```
 
 ```text
@@ -63,12 +60,12 @@ cd my-theme && bun install && bun run dev:ui
 Примеры запросов:
 
 ```text
-Сначала прочитай agent-guide/README.md. Сделай эту тему тёмной с зелёным акцентом.
+Сначала прочитай docs/guidelines/agent-guide/README.md. Сделай эту тему тёмной с зелёным акцентом.
 Меняй только src/styles/tokens.scss и src/styles/style.scss; не делай eject ни одного view.
 ```
 
 ```text
-Сначала прочитай agent-guide/README.md. Замени главную страницу лендингом: блок с адресом
+Сначала прочитай docs/guidelines/agent-guide/README.md. Замени главную страницу лендингом: блок с адресом
 сервера, затем три последние записи. Сохрани все слоты плагинов.
 ```
 
@@ -81,7 +78,7 @@ cd my-theme && bun install && bun run dev:ui
 
 ## Headless-фронтенд {#headless-front-end}
 
-Начните, как описано в разделе [Быстрый старт фронтенда (headless)](../../integration/headless/). В этой заготовке уже есть `AGENTS.md`, `CLAUDE.md` и `agent-guide/`:
+Начните, как описано в разделе [Быстрый старт фронтенда (headless)](../../integration/headless/). В этой заготовке уже есть `AGENTS.md`, `CLAUDE.md` и запись `docs/` в `.gitmodules` (добавьте подмодуль, как описано выше):
 
 ```sh
 bunx @panomc/client-gen new my-site --url http://localhost:8088

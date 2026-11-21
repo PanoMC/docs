@@ -86,4 +86,4 @@ Doğru cevap `X-Pano-Frontend-Key` başlığını ve [Erişim](../../integration
 
 - Ajandan kullandığı **sayfanın adını** isteyin. Böylece açıp denetleyebilirsiniz.
 - Bu dokümanlar Pano'yu genel olarak anlatır. **Kendi** sitenizin, kendi eklentilerinizle API'si için ajana kendi OpenAPI belgenizi verin: [Pano API'sini Ajanla Kullanma](../using-pano/).
-- Bir eklenti, tema ya da başlangıç şablonu deposunda ajan önce `agent-guide/` klasörünü okumalıdır: [Ajanla Geliştirme](../building/).
+- Bir eklenti, tema ya da başlangıç şablonu deposunda ajan önce `docs/guidelines/agent-guide/README.md` dosyasını okumalıdır: [Ajanla Geliştirme](../building/).

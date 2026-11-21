@@ -4,24 +4,21 @@ How to have an AI agent build a plugin, a theme or a headless site for Pano. The
 
 ## The agent guide
 
-Pano's rules for agents are a folder named `agent-guide/`: a short `README.md` that routes by task ("making a new plugin", "restyling without touching markup", "a headless front-end"...) and one small file per task. An `AGENTS.md` and a `CLAUDE.md` at the repository root tell the agent to read that README first and then only the file for its task.
+Pano's rules for agents live in this docs repository, [`PanoMC/docs`](https://github.com/PanoMC/docs/tree/dev/guidelines), under `guidelines/`: `agent-guide/` (a short `README.md` that routes by task, "making a new plugin", "restyling without touching markup", "a headless front-end"..., and one small file per task) and `design/` (the panel design rules). Every official Pano repository has this repository as its git submodule `docs/`, and its `AGENTS.md` only routes the agent there; `CLAUDE.md`, `GEMINI.md` and `.github/copilot-instructions.md` point to `AGENTS.md`.
 
-| Repository | Carries the guide |
+| Repository | Has the `docs/` submodule |
 |---|---|
-| [`PanoMC/pano-starter-sveltekit`](https://github.com/PanoMC/pano-starter-sveltekit) (headless starter) | yes, and `client-gen new` copies it into your project |
-| [`PanoMC/pano-boilerplate-plugin`](https://github.com/PanoMC/pano-boilerplate-plugin) (plugin template) | yes, plus `design/` for panel pages |
+| [`PanoMC/pano-starter-sveltekit`](https://github.com/PanoMC/pano-starter-sveltekit) (headless starter) | yes |
+| [`PanoMC/pano-boilerplate-plugin`](https://github.com/PanoMC/pano-boilerplate-plugin) (plugin template) | yes |
 | [`PanoMC/vanilla-theme`](https://github.com/PanoMC/vanilla-theme) (default theme) | yes |
-| [`PanoMC/sdk`](https://github.com/PanoMC/sdk) | the source of the guide |
 
-The plugin and theme scaffold commands do not write these files into a new project. Copy them once:
+The plugin and theme scaffold commands do not add it to a new project. Add it once, in your project's git repository:
 
 ```sh
-git clone --depth 1 https://github.com/PanoMC/pano-boilerplate-plugin /tmp/pano-boilerplate
-cp -r /tmp/pano-boilerplate/agent-guide /tmp/pano-boilerplate/design my-plugin/    # a plugin
-cp -r /tmp/pano-boilerplate/agent-guide my-theme/                                  # a theme
+git submodule add -b dev https://github.com/PanoMC/docs.git docs
 ```
 
-Then start your prompts with "Read `agent-guide/README.md` first", or put that sentence in your own `AGENTS.md`.
+Then start your prompts with "Read `docs/guidelines/agent-guide/README.md` first", or put that sentence in your own `AGENTS.md`.
 
 ## Plugin
 
@@ -35,13 +32,13 @@ cd my-plugin && bun run dev
 Example prompts:
 
 ```text
-Read agent-guide/README.md first. Add a site page at /my-plugin/rules that shows a list of
+Read docs/guidelines/agent-guide/README.md first. Add a site page at /my-plugin/rules that shows a list of
 server rules. Store the rules in the plugin's own table and add the endpoint that lists them.
 ```
 
 ```text
-Read agent-guide/README.md first. Add a panel page where an admin can add, edit and delete
-the rules, protected by a permission of this plugin. Follow design/README.md.
+Read docs/guidelines/agent-guide/README.md first. Add a panel page where an admin can add, edit and delete
+the rules, protected by a permission of this plugin. Follow docs/guidelines/design/README.md.
 ```
 
 ```text
@@ -62,12 +59,12 @@ cd my-theme && bun install && bun run dev:ui
 Example prompts:
 
 ```text
-Read agent-guide/README.md first. Give this theme a dark look with a green accent.
+Read docs/guidelines/agent-guide/README.md first. Give this theme a dark look with a green accent.
 Change only src/styles/tokens.scss and src/styles/style.scss; do not eject any view.
 ```
 
 ```text
-Read agent-guide/README.md first. Replace the home page with a landing page: a hero with the
+Read docs/guidelines/agent-guide/README.md first. Replace the home page with a landing page: a hero with the
 server address, then the latest three posts. Keep every plugin slot.
 ```
 
@@ -80,7 +77,7 @@ Check the result: `bunx @panomc/theme-core check --strict`, `bun run build`, and
 
 ## Headless front-end
 
-Start as [Headless Quick Start](../../integration/headless/) describes. This scaffold already contains `AGENTS.md`, `CLAUDE.md` and `agent-guide/`:
+Start as [Headless Quick Start](../../integration/headless/) describes. This scaffold already contains `AGENTS.md`, `CLAUDE.md` and a `.gitmodules` entry for `docs/`; add the submodule as above to fill it:
 
 ```sh
 bunx @panomc/client-gen new my-site --url http://localhost:8088

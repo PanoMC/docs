@@ -4,24 +4,21 @@ Bir yapay zekâ ajanına Pano için eklenti, tema ya da headless site yaptırman
 
 ## Ajan rehberi
 
-Pano'nun ajanlar için kuralları `agent-guide/` adlı bir klasördür: işe göre yönlendiren kısa bir `README.md` ("yeni eklenti yapmak", "işaretlemeye dokunmadan görünümü değiştirmek", "headless ön yüz"...) ve her iş için küçük bir dosya. Depo kökündeki `AGENTS.md` ve `CLAUDE.md`, ajana önce o README'yi, sonra yalnızca kendi işinin dosyasını okumasını söyler.
+Pano'nun ajanlar için kuralları bu doküman deposunda, [`PanoMC/docs`](https://github.com/PanoMC/docs/tree/dev/guidelines) içindeki `guidelines/` klasöründedir: `agent-guide/` (işe göre yönlendiren kısa bir `README.md`, "yeni eklenti yapmak", "işaretlemeye dokunmadan görünümü değiştirmek", "headless ön yüz"..., ve her iş için küçük bir dosya) ve `design/` (panel tasarım kuralları). Resmi Pano depolarının hepsinde bu depo `docs/` git alt modülü olarak durur; `AGENTS.md` ajanı yalnızca oraya yönlendirir, `CLAUDE.md`, `GEMINI.md` ve `.github/copilot-instructions.md` de `AGENTS.md`'yi gösterir.
 
-| Depo | Rehberi taşıyor mu |
+| Depo | `docs/` alt modülü var mı |
 |---|---|
-| [`PanoMC/pano-starter-sveltekit`](https://github.com/PanoMC/pano-starter-sveltekit) (headless başlangıç şablonu) | evet; `client-gen new` onu projenize de kopyalar |
-| [`PanoMC/pano-boilerplate-plugin`](https://github.com/PanoMC/pano-boilerplate-plugin) (eklenti şablonu) | evet, panel sayfaları için `design/` ile birlikte |
+| [`PanoMC/pano-starter-sveltekit`](https://github.com/PanoMC/pano-starter-sveltekit) (headless başlangıç) | evet |
+| [`PanoMC/pano-boilerplate-plugin`](https://github.com/PanoMC/pano-boilerplate-plugin) (eklenti şablonu) | evet |
 | [`PanoMC/vanilla-theme`](https://github.com/PanoMC/vanilla-theme) (varsayılan tema) | evet |
-| [`PanoMC/sdk`](https://github.com/PanoMC/sdk) | rehberin kaynağı |
 
-Eklenti ve tema iskelet komutları bu dosyaları yeni projeye yazmaz. Bir kez kopyalayın:
+Eklenti ve tema iskelet komutları bunu yeni projeye eklemez. Projenizin git deposunda bir kez ekleyin:
 
 ```sh
-git clone --depth 1 https://github.com/PanoMC/pano-boilerplate-plugin /tmp/pano-boilerplate
-cp -r /tmp/pano-boilerplate/agent-guide /tmp/pano-boilerplate/design my-plugin/    # a plugin
-cp -r /tmp/pano-boilerplate/agent-guide my-theme/                                  # a theme
+git submodule add -b dev https://github.com/PanoMC/docs.git docs
 ```
 
-Sonra isteklerinize "Önce `agent-guide/README.md` dosyasını oku" diye başlayın ya da bu cümleyi kendi `AGENTS.md` dosyanıza yazın.
+Sonra isteklerinize "Önce `docs/guidelines/agent-guide/README.md` dosyasını oku" diye başlayın ya da bu cümleyi kendi `AGENTS.md` dosyanıza yazın.
 
 ## Eklenti {#plugin}
 
@@ -35,14 +32,14 @@ cd my-plugin && bun run dev
 Örnek istekler:
 
 ```text
-Önce agent-guide/README.md dosyasını oku. /my-plugin/rules adresinde sunucu kurallarının
+Önce docs/guidelines/agent-guide/README.md dosyasını oku. /my-plugin/rules adresinde sunucu kurallarının
 listesini gösteren bir site sayfası ekle. Kuralları eklentinin kendi tablosunda sakla ve
 onları listeleyen uç noktayı ekle.
 ```
 
 ```text
-Önce agent-guide/README.md dosyasını oku. Yöneticinin kuralları ekleyip düzenleyip
-silebileceği, bu eklentinin bir izniyle korunan bir panel sayfası ekle. design/README.md'ye uy.
+Önce docs/guidelines/agent-guide/README.md dosyasını oku. Yöneticinin kuralları ekleyip düzenleyip
+silebileceği, bu eklentinin bir izniyle korunan bir panel sayfası ekle. docs/guidelines/design/README.md'ye uy.
 ```
 
 ```text
@@ -63,12 +60,12 @@ cd my-theme && bun install && bun run dev:ui
 Örnek istekler:
 
 ```text
-Önce agent-guide/README.md dosyasını oku. Bu temaya yeşil vurgulu koyu bir görünüm ver.
+Önce docs/guidelines/agent-guide/README.md dosyasını oku. Bu temaya yeşil vurgulu koyu bir görünüm ver.
 Yalnızca src/styles/tokens.scss ve src/styles/style.scss dosyalarını değiştir; hiçbir view'ı eject etme.
 ```
 
 ```text
-Önce agent-guide/README.md dosyasını oku. Ana sayfayı bir karşılama sayfasıyla değiştir:
+Önce docs/guidelines/agent-guide/README.md dosyasını oku. Ana sayfayı bir karşılama sayfasıyla değiştir:
 sunucu adresini gösteren bir üst bölüm, ardından son üç yazı. Bütün eklenti slotlarını koru.
 ```
 
@@ -81,7 +78,7 @@ Sonucu denetleyin: `bunx @panomc/theme-core check --strict`, `bun run build`; ay
 
 ## Headless ön yüz {#headless-front-end}
 
-[Ön Yüz Hızlı Başlangıç (Headless)](../../integration/headless/) sayfasındaki gibi başlayın. Bu iskelet `AGENTS.md`, `CLAUDE.md` ve `agent-guide/` ile gelir:
+[Ön Yüz Hızlı Başlangıç (Headless)](../../integration/headless/) sayfasındaki gibi başlayın. Bu iskelet `AGENTS.md`, `CLAUDE.md` ve `docs/` için bir `.gitmodules` kaydıyla gelir (alt modülü yukarıdaki gibi ekleyin):
 
 ```sh
 bunx @panomc/client-gen new my-site --url http://localhost:8088

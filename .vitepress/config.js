@@ -18,13 +18,18 @@ export default defineConfig({
     "PROJECT_SUMMARY.md",
     "DRM_LICENSE_SYSTEM.md",
     "README.md",
+    // Agent entry points and the guidelines every Pano repo reads through its `docs` submodule.
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "guidelines/**",
   ],
   vite: {
     // llms.txt, llms-full.txt and a Markdown copy of every page (`<page>.md`) for AI agents; the
     // website's docs MCP server (`/mcp`) reads llms-full.txt. English only: the translations
     // would triple the files without adding facts.
     plugins: [
-      llmstxt({ ignoreFiles: ["tr/**", "ru/**"], domain: "https://panomc.com" }),
+      llmstxt({ ignoreFiles: ["tr/**", "ru/**", "AGENTS.md", "CLAUDE.md", "GEMINI.md", "guidelines/**"], domain: "https://panomc.com" }),
     ],
     server: {
       allowedHosts: ["f285-130-162-246-99.ngrok-free.app"]
