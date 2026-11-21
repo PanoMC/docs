@@ -5,7 +5,7 @@ no theme can override it.
 
 ## Rules
 
-1. Read `docs/guidelines/design/README.md` (the repo's `docs` submodule) first, then only the design topic for what you build (alerts, modals,
+1. Read the panel design rules first ([`design/README.md`](../design/README.md); in a plugin repo the `docs` submodule's `guidelines/design/`), then only the design topic for what you build (alerts, modals,
    tables, cards). Those rules are mandatory for every panel screen.
 2. Register in `src/main.js`, inside `if (pano.isPanel) { ... }`:
    - a page: `pano.ui.page.register({ path: '/faq', component: viewComponent(() => import('./panel/pages/FAQPage.svelte')) })`

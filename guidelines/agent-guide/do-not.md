@@ -55,5 +55,5 @@ Each line is something an agent has done or is likely to do. The file to read in
 
 ## Panel
 
-- Do not design a panel screen without reading `docs/guidelines/design/README.md` and its topic file. [`plugin-panel-ui.md`]
+- Do not design a panel screen without reading the panel design rules ([`design/README.md`](../design/README.md)) and their topic file. [`plugin-panel-ui.md`]
 - Do not try to make panel pages overridable by themes: the panel is out of scope of the view model.
