@@ -88,3 +88,10 @@ sihirbazının e-posta adımında ya da sonradan **Panel → Ayarlar → Platfor
   limite yaklaştığınızda uyarılırsınız; e-posta, limit sıfırlanana ya da daha büyük bir pakete geçene kadar durur.
 - **Pano web sitesinde.** Hesabınızın **E-posta** sekmesi paketi, tüm Pano'larınızın kullanımını ve son 30 günde
   gönderilen e-postaların kaydını gösterir.
+- **Her uygulamadan SMTP (ücretli paketler).** Ücretli pakette her aktif gönderici adresi kendi SMTP girişini
+  alabilir; böylece herhangi bir uygulama, web sitesi ya da sunucudan gönderebilirsiniz: **E-posta** sekmesinde
+  adresin yanındaki **SMTP**'yi açın, etkinleştirin, bağlanabilecek IP adreslerini yazın ve şifreyi kopyalayın
+  (bir kez gösterilir). Sunucu ve portlar (SSL ve STARTTLS) orada görünür. Bir giriş yalnızca kendi alan adından
+  gönderir; limitler ve kayıt Pano'larınızla ortaktır.
+- **Pano Host sunucuları.** Pano Host sunucularınız da paketi kullanabilir (e-posta ayarlarında **Pano Host ile
+  paylaşımlı kullan**); bunun için ücretli bir paket ya da Pano+ gerekir.
