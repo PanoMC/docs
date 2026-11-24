@@ -49,8 +49,14 @@ Yazılım → Ayarlar → Özet** adımlarından geçirir.
   ister; daha eski sürümlerde ya da Fabric API yapısı yoksa kurulmaz ve görev bunu belirtir.
 
 **İçe aktarma:** kaynak olarak **düğümdeki mevcut bir klasörü** (kopyalanır, asla taşınmaz), bir
-**`.zip` yüklemesini** (1 GB'a kadar) ya da bir **Modrinth modpack**'ini de seçebilirsiniz. Yazılımı ve
-sürümü Pano kendisi algılar. Sunucusu hâlâ çalışan bir klasörü asla içe aktarmayın.
+**arşiv yüklemesini** ya da bir **Modrinth modpack**'ini de seçebilirsiniz. Yazılımı ve sürümü Pano kendisi
+algılar. Sunucusu hâlâ çalışan bir klasörü asla içe aktarmayın.
+
+Arşiv `.zip`, `.tar`, `.tar.gz`, `.tar.bz2`, `.tar.xz`, `.gz`, `.7z` ya da `.rar` olabilir, boyut sınırı yoktur.
+Sihirbazda arşivi yalnızca seçersiniz; yükleme **Oluştur**'a bastığınızda başlar, Pano'dan geçip doğrudan düğüme gider
+ve gelirken açılır (`.7z` ve `.rar` önce kaydedilir, sonra açılır). Tek sınır düğümün diskidir: arşiv 256 MB pay ile
+sığmalıdır ve disk dolmak üzereyse içe aktarma durur. Başarısız ya da iptal edilen bir yükleme sunucuyu geri siler.
+`.rar` için düğümün makinesinde 7-Zip, `unrar` ya da `bsdtar` gerekir (Windows'ta `tar.exe` vardır).
 
 > Proxy arkasındaki bir arka uç sunucu genellikle `online-mode=false` ile çalışır — onu internetten
 > erişilemez tutun, yoksa herkes istediği kimlikle girebilir.

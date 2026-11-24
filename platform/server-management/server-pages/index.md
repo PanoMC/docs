@@ -55,7 +55,7 @@ Proxies report no TPS or MSPT, and Spigot no MSPT.
   `.jar.disabled` and the change applies on the next start (**Restart required** shows until then);
   a linked server without a node switches it in game, on Paper, Spigot, Folia and Purpur only. The
   Pano plugin cannot be switched off.
-- **Upload** adds `.jar` files (up to 256 MB each) to `plugins/`, or `mods/` on modded servers.
+- **Upload** adds `.jar` files of any size to `plugins/`, or `mods/` on modded servers.
 - **Browse** opens on the most downloaded plugins and searches **Modrinth**, **Hangar** and
   **CurseForge**, filtered to this server's loader and version, with a **Compatible** or **May not
   fit** badge. CurseForge needs your own key in
@@ -68,8 +68,9 @@ Proxies report no TPS or MSPT, and Spigot no MSPT.
 ## Files {#files}
 
 A file manager for the server's folder: browse, edit (files up to 256 KB), preview media, create,
-rename, delete, extract `.zip`, change permissions, upload (up to 1 GB) and download files or whole
-folders as a zip. Files that hold credentials are hidden, and nothing outside the folder can be
+rename, delete, extract archives (zip, tar, tar.gz/bz2/xz, gz, 7z, rar), change permissions, upload and
+download files of any size or whole folders as a zip. Uploads show the speed and the time left, can be cancelled,
+and go straight to the node; only its disk limits them (with 256 MB to spare). Files that hold credentials are hidden, and nothing outside the folder can be
 reached.
 
 ## Backups {#backups}

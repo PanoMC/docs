@@ -99,6 +99,13 @@ olarak düşüyorsa:
   artırıldığından emin olun — bkz.
   [Ters Vekil Arkasında WebSocket Bağlantısını Canlı Tutma](../../configuration/server/#ters-vekil-arkasında-websocket-baglantısını-canlı-tutma).
 
+## Büyük yüklemeler
+
+Cloudflare tek bir isteğin gövdesini sınırlar: Free ve Pro planlarında **100 MB**, Business'ta 200 MB, Enterprise'da
+500 MB. Turuncu bulut üzerinden yapılan ve bundan büyük bir yükleme (sunucu arşivi, dünya, büyük bir eklenti), Pano'nun
+izin verdiğinden bağımsız olarak Pano'ya ulaşmadan Cloudflare tarafından `413` ile reddedilir. Bu tür yüklemeler için
+paneli aynı sunucuyu gösteren, **yalnızca DNS** (gri bulut) olan bir alan adı üzerinden açın.
+
 ## Yardım ve Destek
 
 - [SSS sayfasını](../../FAQ/) ziyaret edin

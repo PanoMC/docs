@@ -202,6 +202,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: "Cloudflare", link: "/platform/advanced/cloudflare/" },
+                  { text: "Coolify / Traefik", link: "/platform/advanced/coolify/" },
                   { text: "Backups", link: "/platform/backups/" },
                   { text: "Maintenance Mode", link: "/platform/maintenance/" },
                 ],
@@ -518,6 +519,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: "Cloudflare", link: "/tr/platform/advanced/cloudflare/" },
+                  { text: "Coolify / Traefik", link: "/tr/platform/advanced/coolify/" },
                   { text: "Yedekler", link: "/tr/platform/backups/" },
                   { text: "Bakım Modu", link: "/tr/platform/maintenance/" },
                 ],
@@ -834,6 +836,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: "Cloudflare", link: "/ru/platform/advanced/cloudflare/" },
+                  { text: "Coolify / Traefik", link: "/ru/platform/advanced/coolify/" },
                   { text: "Резервные копии", link: "/ru/platform/backups/" },
                   { text: "Режим обслуживания", link: "/ru/platform/maintenance/" },
                 ],
