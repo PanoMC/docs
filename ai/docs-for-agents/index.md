@@ -86,4 +86,4 @@ A correct answer names `X-Pano-Frontend-Key` and the panel path from [Access](..
 
 - Ask the agent to **name the page** it used. You can then open it and check.
 - These docs describe Pano in general. For the API of **your** site, with your plugins, give the agent your own OpenAPI document: see [Using Pano's API with an Agent](../using-pano/).
-- Inside a plugin, theme or starter repository the agent should read the `agent-guide/` folder first: see [Building with an Agent](../building/).
+- Inside a plugin, theme or starter repository the agent should read `docs/guidelines/agent-guide/README.md` first: see [Building with an Agent](../building/).

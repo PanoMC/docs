@@ -88,3 +88,9 @@ your own. Pick **Pano Mail** instead of **Own mail server** in the e-mail step o
   close to a limit, and e-mail pauses until it resets or you choose a bigger plan.
 - **On the Pano website.** The **E-mail** tab of your account shows the plan, the usage of all your Panos and a log of the
   e-mails sent in the last 30 days.
+- **SMTP from any app (paid plans).** On a paid plan every active sender address can get its own SMTP login, to
+  send from any app, website or server: open **SMTP** next to the address on the **E-mail** tab, switch it on, list
+  the IP addresses that may connect and copy the password (it is shown once). The host and the ports (SSL and
+  STARTTLS) are shown there. A login sends from its own domain only, with the same limits and log as your Panos.
+- **Pano Host instances.** Your Pano Host instances can use the plan too (**Shared with Pano Host** in the e-mail
+  settings), on a paid plan or with Pano+.

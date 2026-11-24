@@ -12,7 +12,7 @@ An agent is only as good as what it reads. Pano's packages are young and change 
 | Whole documentation in one file | `https://panomc.com/docs/llms-full.txt` | Paste or attach when the tool cannot browse |
 | Every page as Markdown | the page address with `.md` at the end | Give the agent one exact page |
 | Docs MCP server | `https://panomc.com/mcp` | The agent searches and reads the docs by itself |
-| Agent guide in the template repositories | `AGENTS.md`, `CLAUDE.md` and `agent-guide/` | Rules for writing a plugin, a theme or a headless site |
+| Agent guide in the template repositories | `AGENTS.md` and the `docs/` submodule (`guidelines/`) | Rules for writing a plugin, a theme or a headless site |
 | OpenAPI document of your own Pano | `/api/v1/openapi.json` on your site | The exact API of your site, plugins included |
 
 ## I want to...
