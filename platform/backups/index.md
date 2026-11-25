@@ -64,6 +64,13 @@ and use **Restore from file**.
 
 If your browser cannot save a large backup, restore it from the panel of the Pano instead.
 
+A download from the panel goes straight from Pano Backup to your browser: nothing is stored on your server on the
+way, and an encrypted archive is opened with your passphrase as it passes. A server backup brought back from Pano
+Backup goes the same way, straight onto its server's disk.
+
+Pano always keeps **256 MB** free on the disks it writes to. A backup, restore or download that would use that
+space stops with **Not enough disk space**, and what it had written is removed.
+
 ## Moving to Pano Host {#transfer}
 
 You can move this Pano to an instance on your [Pano Host](https://panomc.com/host) account. Nothing needs
