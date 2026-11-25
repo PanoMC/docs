@@ -24,6 +24,26 @@ Engine views (`Navbar`, `LoginView`) and plugin views (`market:ProductCard`) are
 10. When the plugin raises the contract, the default renders and the panel warns until you update: `eject-view <id>`
     again (writes `<file>.new`), merge, `bunx @panomc/theme-core accept <id>`.
 
+## The settings page (`ThemeSettingsView`)
+
+The theme settings page runs in an iframe inside the panel and must look like the panel. The engine removes every theme
+stylesheet and unmarked `<style>` there (`removeExistingStyles()` in `ThemeSettingsLayoutLogics.js`) and the panel injects
+its own, so only panel / Bootstrap classes apply.
+
+1. Eject `ThemeSettingsView` and extend the engine markup: one `card`, the `card-header` tab row
+   (`nav nav-tabs card-header-tabs`), the base tabs, the theme's tabs as more `nav-item`s in the same row (label them
+   `<Theme>: <Tab>`), Advanced last, one `card-body` with `tab-content`. Base tabs keep `data-bs-toggle="tab"`.
+2. Theme fields use the engine's field rows (label and help left, control right), its separators and its Save / Reset
+   buttons. Build colour inputs, presets and lists from Bootstrap classes the panel has (`form-control-color`,
+   `list-group`, `btn btn-sm btn-outline-secondary`).
+3. No theme CSS on this page: no component `<style>`, no `{@html '<style …>'}`, no `data-svelte-h` trick to keep a style,
+   no classes that need theme CSS for layout, no theme fonts or colours. Show and hide panes with Bootstrap classes or
+   JS (`active show`), never with CSS.
+4. Do not wrap the engine view and hide its tab row: two tab rows, or panes that need theme CSS, break in the panel.
+
+Check it in the panel (View → Theme Settings), not on `/theme-settings` alone: every tab opens, there is one tab row, and
+it looks like the default settings page. Worked example: `themes/horizon-theme/src/views/ThemeSettingsView.svelte`.
+
 ## Verify
 
 ```sh

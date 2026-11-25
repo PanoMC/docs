@@ -41,6 +41,8 @@ Each line is something an agent has done or is likely to do. The file to read in
 - Do not import a file from a plugin's source into a theme; reference views as `pluginView("<ns>:<Name>")` and place them
   with `<PluginBlock>`.
 - Do not select on a plugin's Bootstrap utility classes. [`theme-restyle.md`]
+- Do not style the theme settings page: it must look like the panel (engine markup, Bootstrap classes, no theme CSS,
+  one tab row). [`theme-override-view.md`]
 - Do not add, edit or delete a file under `src/routes/` to add, rename or remove a page. [`theme-routes-home.md`]
 - Do not hard-code a link to a renamed path; write `route("/canonical")`.
 - Do not use `--bare` unless a theme without Bootstrap was asked for.

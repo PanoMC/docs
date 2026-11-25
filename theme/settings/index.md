@@ -10,6 +10,7 @@ Two things are important to know about how it behaves:
 
 - **Save and Reset work per tab.** Each tab saves its own keys and resets its own keys. That is why a setting key always belongs to exactly one tab.
 - The values land in the **`themeSettings`** object your views receive — the same one you have already seen in view headers.
+- **It looks like the panel, not like your theme.** In the panel the page runs in a frame that drops your theme's CSS and uses the panel's styles. Add your tabs and inputs with the same markup and Bootstrap classes the built-in tabs use (one tab row, your tabs after the built-in ones), and do not add CSS, fonts or colours for this page.
 
 ## What you get for free
 
