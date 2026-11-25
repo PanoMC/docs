@@ -64,6 +64,13 @@ yedeklerini listeler. Başka bir Pano'nuzda alınmış bir yedeği geri yükleme
 
 Tarayıcınız büyük bir yedeği kaydedemiyorsa Pano'nun panelinden geri yükleyin.
 
+Panelden indirme, Pano Backup'tan doğrudan tarayıcınıza akar: yolda sunucunuzda hiçbir şey saklanmaz, şifreli bir
+arşiv geçerken parolanızla açılır. Pano Backup'tan geri getirilen bir sunucu yedeği de aynı yoldan, doğrudan o
+sunucunun diskine gider.
+
+Pano, yazdığı disklerde her zaman **256 MB** boş alan bırakır. Bu alanı kullanacak bir yedekleme, geri yükleme ya da
+indirme **Yeterli disk alanı yok** diyerek durur ve yazdıkları silinir.
+
 ## Pano Host'a taşıma {#transfer}
 
 Bu Pano'yu [Pano Host](https://panomc.com/host) hesabınızdaki bir örneğe taşıyabilirsiniz. Web sitesinde

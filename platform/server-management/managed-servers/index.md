@@ -49,8 +49,14 @@ Software → Settings → Review**.
   so.
 
 **Importing:** as the source you can also pick an **existing folder on the node** (copied, never
-moved), a **`.zip` upload** (up to 1 GB) or a **Modrinth modpack**. Pano detects the software and
-version itself. Never import a folder whose server is still running.
+moved), an **archive upload** or a **Modrinth modpack**. Pano detects the software and version
+itself. Never import a folder whose server is still running.
+
+An archive can be `.zip`, `.tar`, `.tar.gz`, `.tar.bz2`, `.tar.xz`, `.gz`, `.7z` or `.rar`, of any size. You only pick
+it in the wizard; the upload starts when you press **Create**, goes straight through Pano to the node, and is unpacked
+while it arrives (`.7z` and `.rar` are saved first, then unpacked). The node's disk is the only limit: the archive must
+fit with 256 MB to spare, and the import stops when the disk would run out. A failed or cancelled upload removes the
+server again. `.rar` needs 7-Zip, `unrar` or `bsdtar` on the node's machine (Windows has `tar.exe`).
 
 > A backend behind a proxy usually runs with `online-mode=false` — keep it unreachable from the
 > internet, or anyone can join as anyone.

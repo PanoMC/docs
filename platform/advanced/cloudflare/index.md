@@ -96,6 +96,13 @@ If a connected Minecraft server's connection still drops periodically behind Clo
   raised too — see
   [Reverse Proxy WebSocket Keepalive](../../configuration/server/#reverse-proxy-websocket-keepalive).
 
+## Large uploads
+
+Cloudflare limits the body of one request: **100 MB** on the Free and Pro plans, 200 MB on Business, 500 MB on
+Enterprise. An upload through the orange cloud that is bigger than that (a server archive, a world, a big plugin) is
+refused by Cloudflare with `413` before it reaches Pano, whatever Pano allows. For such uploads, open the panel through
+a hostname that is **DNS only** (grey cloud) and points at the same server.
+
 ## Need help?
 
 - Visit the [FAQ page](../../FAQ/)

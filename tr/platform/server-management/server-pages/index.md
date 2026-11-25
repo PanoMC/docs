@@ -57,7 +57,7 @@ ekler. Proxy'ler TPS ya da MSPT bildirmez, Spigot da MSPT bildirmez.
   `.jar.disabled` olarak yeniden adlandırır ve değişiklik bir sonraki başlatmada geçerli olur (o
   zamana kadar **Yeniden başlatma gerekiyor** görünür); düğümü olmayan bağlı sunucu bunu oyun içinde
   yapar, yalnızca Paper, Spigot, Folia ve Purpur'da. Pano eklentisi kapatılamaz.
-- **Yükle**, `.jar` dosyalarını (her biri en fazla 256 MB) `plugins/` klasörüne, modlu sunucularda
+- **Yükle**, her boyuttan `.jar` dosyalarını `plugins/` klasörüne, modlu sunucularda
   `mods/` klasörüne ekler.
 - **Keşfet** en çok indirilen eklentilerle açılır; **Modrinth**, **Hangar** ve **CurseForge**'da bu
   sunucunun yükleyicisine ve sürümüne göre süzülmüş olarak arar ve her sonuca **Uyumlu** ya da
@@ -72,8 +72,9 @@ ekler. Proxy'ler TPS ya da MSPT bildirmez, Spigot da MSPT bildirmez.
 ## Dosyalar {#files}
 
 Sunucunun klasörü için bir dosya yöneticisi: gezinme, düzenleme (256 KB'a kadar dosyalar), medya
-önizleme, oluşturma, yeniden adlandırma, silme, `.zip` çıkarma, izinleri değiştirme, yükleme (1 GB'a
-kadar) ve dosyaları ya da bütün klasörleri zip olarak indirme. Kimlik bilgisi taşıyan dosyalar
+önizleme, oluşturma, yeniden adlandırma, silme, arşiv çıkarma (zip, tar, tar.gz/bz2/xz, gz, 7z, rar),
+izinleri değiştirme, her boyutta dosya yükleme ve indirme, bütün klasörleri zip olarak indirme. Yüklemeler hızı ve kalan
+süreyi gösterir, iptal edilebilir ve doğrudan düğüme gider; tek sınır düğümün diskidir (256 MB pay ile). Kimlik bilgisi taşıyan dosyalar
 gizlenir ve klasörün dışındaki hiçbir şeye ulaşılamaz.
 
 ## Yedekler {#backups}
